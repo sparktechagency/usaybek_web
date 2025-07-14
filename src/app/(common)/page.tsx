@@ -1,18 +1,21 @@
-import Image from 'next/image'
-import React from 'react'
-import bgImg from "@/assets/bg-img.png"
+"use client"
+import VideoBox from "@/components/common/video-box";
+import FilterBox from "@/components/reuseable/filter-box";
+import { useState } from "react";
+
 
 export default function Home() {
+  const [selectedCategory, setSelectedCategory] = useState("All")
+
   return (
-    <div className="relative min-h-96 w-full">
-      <Image
-        src={bgImg}
-        alt="title"
-        fill
-        className="object-cover cursor-pointer z-0"
+    <div>
+      <FilterBox
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
       />
-      <div className="relative z-10">
-        <h1 className="bg-red-500 text-white p-4 text-2xl">lfjldjf</h1>
+      <div>
+        <h1 className="text-xl font-medium py-3">{selectedCategory == "All" ? "Promotional videos" : selectedCategory}</h1>
+        <VideoBox />
       </div>
     </div>
   )

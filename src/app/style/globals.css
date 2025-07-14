@@ -41,12 +41,14 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-red:#EF4444;
+  --color-reds:#EF4444;
+  --color-blacks:#000000;
+  --color-grays:#535353;
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background:#f6f6f6;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -121,3 +123,4 @@
     @apply bg-background text-foreground;
   }
 }
+
