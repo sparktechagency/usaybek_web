@@ -1,7 +1,8 @@
 import Image from "next/image"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Rocket, Dot } from "lucide-react"
 import { PlaceholderImg } from "@/lib/utils"
+import Link from "next/link"
+import Avatars from "../avater"
 
 interface VideoCardProps {
     thumbnail?: string
@@ -23,7 +24,7 @@ export function VideoCard({
     channelAvatar,
 }: VideoCardProps) {
     return (
-        <div className="max-w-sm  lg:w-full lg:max-w-full">
+        <Link href="/video/2" className="max-w-sm  lg:w-full lg:max-w-full">
             <div className="relative">
                 <div className="">
                     <Image
@@ -43,10 +44,7 @@ export function VideoCard({
             </div>
             <div>
                 <div className="flex gap-2 pt-2">
-                    <Avatar className="size-14">
-                        <AvatarImage src={PlaceholderImg(50, 50)} alt={channelName} />
-                        <AvatarFallback>{channelName.charAt(0)}</AvatarFallback>
-                    </Avatar>
+                    <Avatars className="size-13" alt={title} src="" fallback={channelName.charAt(0)}/>
                     <ul className="[&>li]:text-blacks">
                         <li className="text-lg font-semibold">{title}</li>
                         <li className="text-gray-500">{channelName}</li>
@@ -60,6 +58,6 @@ export function VideoCard({
                     </ul>
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }

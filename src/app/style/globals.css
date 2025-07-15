@@ -3,6 +3,19 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+/* 
+container: {
+  		center: true,
+  		padding: {
+  			DEFAULT: '1rem',
+  			md: '2rem',
+  			lg: '3rem',
+  			xl: '4rem',
+  			'2xl': '5rem'
+  		} */
+
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -44,6 +57,7 @@
   --color-reds:#EF4444;
   --color-blacks:#000000;
   --color-grays:#535353;
+  --color-grays-place:#dddddd;
 }
 
 :root {

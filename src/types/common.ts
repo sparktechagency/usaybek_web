@@ -3,6 +3,11 @@ export type ParamsProps ={
     id: string;
   };
 }
+export type ParamsProp ={
+  params: {
+    slug: string;
+  };
+}
 
 
 export interface childrenProps {

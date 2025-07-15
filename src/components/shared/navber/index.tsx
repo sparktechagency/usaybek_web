@@ -6,6 +6,7 @@ import logoImg from "@/assets/logo.png"
 import { useLogin } from '@/components/common/login-provider'
 import { PlaceholderImg } from '@/lib/utils'
 import Img from '@/components/reuseable/img'
+import Link from 'next/link'
 
 export default function Navber() {
     // const headerRef = useRef<HTMLDivElement>(null);
@@ -23,16 +24,20 @@ export default function Navber() {
 
     return (
         <div>
-            <ul className="relative  z-10 max-w-screen px-20 flex items-center flex-wrap space-y-2 md:space-y-0 justify-center md:justify-between py-8">
-                <li> <div className="relative w-40 h-11 rounded-full overflow-hidden mr-3">
-                    <Image
-                        src={logoImg}
-                        alt={"author.name"}
-                        fill
-                        className="object-cover"
-                    />
-                </div></li>
+            <ul className="relative mx-auto  z-10 w-11/12 lg:max-w-screen lg:px-20 flex items-center  justify-between py-8">
                 <li>
+                    <Link href={"/"}>
+                        <div className="relative w-40 h-11 rounded-full overflow-hidden mr-3">
+                            <Image
+                                src={logoImg}
+                                alt={"author.name"}
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
+                    </Link>
+                </li>
+                <li className='hidden md:block'>
                     <div className="flex items-center  rounded-full bg-[white] px-2  w-full md:max-w-5xl mx-auto">
                         <input
                             type="text"

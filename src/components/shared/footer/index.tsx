@@ -1,7 +1,106 @@
-import React from 'react'
+import Image from "next/image"
+import Link from "next/link"
+import { Mail, Phone, Facebook, Youtube, Copyright } from "lucide-react"
+import logoImg from "@/assets/logo.png"
 
 export default function Footer() {
   return (
-    <div>Footer</div>
+    <footer className="bg-white">
+      <div className="container m-auto pt-10 pb-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          {/* Column 1: Logo and Description */}
+          <div className="space-y-4">
+            <div className="relative w-48 h-14 rounded-full overflow-hidden mr-3">
+              <Image
+                src={logoImg}
+                alt={"author.name"}
+                fill
+                className="object-cover"
+              />
+            </div>
+            <h3 className="text-xl font-semibold text-blacks">Meet your town specialists</h3>
+            <p className="text-sm text-blacks leading-relaxed">
+              Expanding from the Chicagoland area to a nationwide reach, we aim to simplify and enhance the way people
+              find services and businesses in their local communities, fostering closer connections between businesses
+              and residents.
+            </p>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-blacks" />
+                <Link href="mailto:info@mytsv.com" className="text-blacks ">
+                  info@mytsv.com
+                </Link>
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-blacks" />
+                <Link href="tel:+16302977501" className="text-blacks ">
+                  +1 630 297 7501
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Column 2: Useful Links */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-blacks">Useful Links</h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="#" className="text-blacks">
+                  FAQ
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-blacks ">
+                  Blogs
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Company */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-blacks">Company</h3>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="#" className="text-blacks ">
+                  About us
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-blacks ">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-blacks ">
+                  Terms & Conditions
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Follow Us */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-blacks">Follow Us</h3>
+            <div className="flex space-x-4">
+              <Link href="#" aria-label="Facebook">
+                <Facebook className="h-6 w-6 text-blacks" />
+              </Link>
+              <Link href="#" aria-label="YouTube">
+                <Youtube className="h-6 w-6 text-blacks" />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Copyright */}
+        <div className="border-t mt-2 pt-2 border-gray-200 text-center text-sm text-blacks">
+          <div className="flex items-center justify-center gap-1">
+            <Copyright className="h-4 w-4" />
+            <span>{"MyTsv - Meet your town specialists"}</span>
+          </div>
+        </div>
+      </div>
+    </footer>
   )
 }
