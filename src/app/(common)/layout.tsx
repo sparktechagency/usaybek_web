@@ -1,5 +1,5 @@
-import HeroSec from '@/components/common/home/hero-sec'
 import Sidebar from '@/components/common/sideber'
+import Navber from '@/components/shared/navber'
 import { childrenProps } from '@/types'
 import React from 'react'
 
@@ -7,7 +7,8 @@ import React from 'react'
 export default function CommonLayout({ children }: childrenProps) {
   return (
     <div>
-      <HeroSec />
+      {/* <HeroSec /> */}
+      <Navber/>
       <div className='flex'>
         <div><Sidebar /></div>
         <main className='p-4'>{children}</main>

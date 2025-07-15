@@ -14,7 +14,7 @@ export default function Home() {
         onSelectCategory={setSelectedCategory}
       />
       <div>
-        <h1 className="text-xl font-medium py-3">{selectedCategory == "All" ? "Promotional videos" : selectedCategory}</h1>
+        <h1 className="text-xl font-medium pt-8 pb-3">{selectedCategory == "All" ? "Promotional videos" : selectedCategory}</h1>
         <VideoBox />
       </div>
     </div>

@@ -61,12 +61,12 @@ export default function Sidebar() {
   return (
     <div
       className={cn(
-        "flex flex-col h-fit bg-white transition-all duration-300 ease-in-out",
+        "flex flex-col h-fit bg-white rounded-r-md transition-all duration-300 ease-in-out",
         isExpanded ? "w-64" : "w-20",
       )}
     >
       {/* Header */}
-      <div className="flex items-center p-4 h-20">
+      <div className={`flex items-center  p-4 h-20 ${isExpanded ? "justify-start":"justify-center"}`}>
         <button
           onClick={toggleSidebar}
           className="p-2 rounded-md cursor-pointer"
@@ -117,8 +117,8 @@ export default function Sidebar() {
             </Link>
           )
         )}
-        {login && (<Link className="flex items-center gap-3 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors text-red-500" href={"/"}>
-          <LogOut className="h-5 w-fit text-blacks" />Sign out</Link>)}
+        {login && (<Link className={`flex items-center gap-3 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors text-red-500 ${isExpanded ? "justify-start" : "justify-center m-auto my-3 w-fit"}`} href={"/"}>
+          <LogOut className="h-5 w-fit  text-red-500" /> {isExpanded && <span className="whitespace-nowrap font-normal">{"Sign out"}</span>}</Link>)}
       </nav>
       {/* <nav className="flex-1 py-2 mx-2 space-y-2">
         {navItems.map((item) => (
