@@ -1,8 +1,5 @@
-import { VideoCard } from "@/components/reuseable/video-card"
-import SeeNav from "../see-nav"
-
-
-
+import { VideoCard } from "@/components/reuseable/video-card";
+import SeeNav from "../see-nav";
 
 export const videos = [
   {
@@ -125,30 +122,31 @@ export const videos = [
     isPromoted: false,
     channelAvatar: "/placeholder.svg?height=24&width=24",
   },
-]
-
+];
 
 export default function VideoBox() {
-
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {videos.slice(0,4).map((video) => (
+        {videos.slice(0, 4).map((video) => (
           <VideoCard key={video.id} {...video} />
         ))}
       </div>
-      <SeeNav title="Beauty esthetics" href="/video-all/beauty-esthetics"/>
+      <SeeNav title="Beauty esthetics" href="/video-all/beauty-esthetics" />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {videos.slice(0,4).map((video) => (
+        {videos.slice(0, 4).map((video) => (
           <VideoCard key={video.id} {...video} />
         ))}
       </div>
-      <SeeNav title="Restaurant & Catering" href="/video-all/beauty-esthetics"/>
+      <SeeNav
+        title="Restaurant & Catering"
+        href="/video-all/beauty-esthetics"
+      />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {videos.slice(0,4).map((video) => (
+        {videos.slice(0, 4).map((video) => (
           <VideoCard key={video.id} {...video} />
         ))}
       </div>
     </div>
-  )
+  );
 }

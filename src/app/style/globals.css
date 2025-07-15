@@ -1,20 +1,28 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import 'tailwind-scrollbar-hide/v4';
 
 @custom-variant dark (&:is(.dark *));
 
+@utility container {
+  padding-inline: 1rem;
+  margin-inline: auto;
 
-/* 
-container: {
-  		center: true,
-  		padding: {
-  			DEFAULT: '1rem',
-  			md: '2rem',
-  			lg: '3rem',
-  			xl: '4rem',
-  			'2xl': '5rem'
-  		} */
+  @variant md {
+    padding-inline: 2rem;
+  }
 
+  @variant lg {
+    padding-inline: 3rem;
+  }
+
+  @variant xl {
+    padding-inline: 4rem;
+  }
+  @variant 2xl {
+    padding-inline: 5rem;
+  }
+}
 
 @theme inline {
   --color-background: var(--background);
@@ -54,15 +62,15 @@ container: {
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-reds:#EF4444;
-  --color-blacks:#000000;
-  --color-grays:#535353;
-  --color-grays-place:#dddddd;
+  --color-reds: #ef4444;
+  --color-blacks: #000000;
+  --color-grays: #535353;
+  --color-grays-place: #dddddd;
 }
 
 :root {
   --radius: 0.625rem;
-  --background:#f6f6f6;
+  --background: #f6f6f6;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -137,4 +145,3 @@ container: {
     @apply bg-background text-foreground;
   }
 }
-
