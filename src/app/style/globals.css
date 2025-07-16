@@ -8,20 +8,16 @@
   padding-inline: 1rem;
   margin-inline: auto;
 
-  @variant md {
-    padding-inline: 2rem;
-  }
-
   @variant lg {
-    padding-inline: 3rem;
+    padding-inline: 0rem;
   }
-
+/* 
   @variant xl {
     padding-inline: 4rem;
-  }
-  @variant 2xl {
+  } */
+  /* @variant 2xl {
     padding-inline: 5rem;
-  }
+  } */
 }
 
 @theme inline {

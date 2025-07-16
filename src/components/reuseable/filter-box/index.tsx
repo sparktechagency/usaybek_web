@@ -66,10 +66,9 @@ function FilterBox({
   };
 
   return (
-    <div className="flex items-center gap-2 w-full overflow-hidden px-2">
+    <div className="flex items-center gap-2 w-full overflow-hidden">
       {/* Left Scroll Button */}
-      {canScroll && (
-        <Button
+      <Button
           onClick={scrollLeft}
           variant="outline"
           size="icon"
@@ -78,7 +77,6 @@ function FilterBox({
         >
           <ChevronLeft className="h-5 w-5" />
         </Button>
-      )}
 
       {/* Scrollable category list */}
       <div
@@ -104,8 +102,7 @@ function FilterBox({
       </div>
 
       {/* Right Scroll Button */}
-      {canScroll && (
-        <Button
+       <Button
           onClick={scrollRight}
           variant="outline"
           size="icon"
@@ -114,7 +111,6 @@ function FilterBox({
         >
           <ChevronRight className="h-5 w-5" />
         </Button>
-      )}
     </div>
   );
 }

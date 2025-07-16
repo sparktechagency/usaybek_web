@@ -9,7 +9,6 @@ import { Metadata } from "next";
 
 
 export async function generateMetadata({ params }: ParamsProps): Promise<Metadata> {
-  // Example static content for demonstration; ideally, fetch blog data using `params.id`
   const title = "Best Plumber Near Me: Find Trusted Plumbing Services with MyTSV.com";
   const description =
     "Need a reliable plumber fast? Discover how MyTSV.com helps you find local, trusted plumbing professionals with real videos and reviews.";
@@ -23,23 +22,27 @@ export async function generateMetadata({ params }: ParamsProps): Promise<Metadat
       canonical: url,
     },
     openGraph: {
+      type: "article", 
       title,
       description,
       url,
+      siteName: "MyTSV",
       images: [
         {
           url: image,
-          width: 1200,
           height: 630,
           alt: title,
         },
       ],
+      locale: "en_US", 
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
       images: [image],
+      site: "@MyTSV",      
+      creator: "@MyTSV",  
     },
     keywords: [
       "best plumber near me",
@@ -50,6 +53,7 @@ export async function generateMetadata({ params }: ParamsProps): Promise<Metadat
     ],
   };
 }
+
 
 
 

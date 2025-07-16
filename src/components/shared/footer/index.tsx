@@ -9,8 +9,8 @@ export default function Footer() {
       <div className="container m-auto pt-10 pb-5">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Column 1: Logo and Description */}
-          <div className="space-y-4">
-            <div className="relative w-48 h-14 rounded-full overflow-hidden mr-3">
+          <div className="space-y-2">
+            <div className="relative w-40 h-14 rounded-full overflow-hidden mr-3">
               <Image
                 src={logoImg}
                 alt={"author.name"}
@@ -19,15 +19,14 @@ export default function Footer() {
               />
             </div>
             <h3 className="text-xl font-semibold text-blacks">Meet your town specialists</h3>
-            <p className="text-sm text-blacks leading-relaxed">
+            <p className="text-sm text-blacks  leading-relaxed">
               Expanding from the Chicagoland area to a nationwide reach, we aim to simplify and enhance the way people
-              find services and businesses in their local communities, fostering closer connections between businesses
-              and residents.
+              find services and businesses in their local communities.
             </p>
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-blacks" />
-                <Link href="mailto:info@mytsv.com" className="text-blacks ">
+                <Link href="mailto:info@mytsv.com" className="text-blacks">
                   info@mytsv.com
                 </Link>
               </div>
