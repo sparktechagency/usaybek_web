@@ -37,9 +37,6 @@ const options = [
 
 
 
-
-
-
 export default function VideoDetails({ slug }: any) {
     const [isReprot, setIsReport] = useState(false);
     const [isText, setIsText] = useState(false)

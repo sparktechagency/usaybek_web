@@ -1,5 +1,4 @@
 "use client";
-
 import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -92,7 +91,7 @@ function FilterBox({
             className={cn(
               "whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium flex-shrink-0",
               selectedCategory === category
-                ? "bg-[#EF4444] text-white"
+                ? "bg-[#EF4444] text-white hover:bg-[#EF4444] hover:text-white"
                 : "bg-white text-gray-800 border hover:bg-[#EF4444] hover:text-white"
             )}
           >

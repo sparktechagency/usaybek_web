@@ -27,7 +27,7 @@ export default function Navber() {
             <ul className="relative mx-auto  z-10 w-11/12 lg:max-w-screen lg:px-20 flex items-center  justify-between py-8">
                 <li>
                     <Link href={"/"}>
-                        <div className="relative w-40 h-11 rounded-full overflow-hidden mr-3">
+                        <div className="relative w-40 h-11 overflow-hidden mr-3">
                             <Image
                                 src={logoImg}
                                 alt={"author.name"}

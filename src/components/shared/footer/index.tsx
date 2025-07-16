@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Column 1: Logo and Description */}
           <div className="space-y-2">
-            <div className="relative w-40 h-14 rounded-full overflow-hidden mr-3">
+            <div className="relative w-50 h-14">
               <Image
                 src={logoImg}
                 alt={"author.name"}
