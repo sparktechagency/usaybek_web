@@ -1,33 +1,18 @@
 "use client"
 import { useState } from "react"
-import Link from "next/link"
 import { cn, PlaceholderImg } from "@/lib/utils"
-import { Avatar, AvatarFallback, AvatarImage, Separator } from "@/components/ui"
-import {
-  Menu,
-  Upload,
-  Settings,
-  Play,
-  Home,
-  Book,
-  Megaphone,
-  HelpCircle,
-  Info,
-  Contact,
-  ClipboardList,
-  ThumbsUp,
-  History,
-  LogOut,
-  Globe,
-  CircleUserRound,
-} from "lucide-react"
+import { Separator } from "@/components/ui"
 import { useLogin } from "../login-provider"
 import Img from "@/components/reuseable/img"
 import { usePathname } from "next/navigation"
+import {Menu} from "lucide-react"
+import Link from "next/link"
+import Icon from "@/icon"
+
 
 export default function Sidebar() {
   const [isExpanded, setIsExpanded] = useState(true)
-  const pathname=usePathname()
+  const pathname = usePathname()
   const { login } = useLogin()
 
   const toggleSidebar = () => {
@@ -35,27 +20,27 @@ export default function Sidebar() {
   }
 
   const navItems = [
-    { icon: Upload, text: "Upload your video", href: "/upload" },
-    { icon: Settings, text: "Settings", href: "/settings" },
-    { icon: Play, text: "My videos", href: "/my-videos" },
+    { icon: <Icon name="supload" />, text: "Upload your video", href: "/upload" },
+    { icon: <Icon name="ssetting" />, text: "Settings", href: "/dashboard" },
+    { icon: <Icon name="svideos" />, text: "My videos", href: "/my-videos" },
     { text: "separator" },
-    { icon: Home, text: "Home", href: "/", active: true },
-    { icon: Book, text: "Blogs", href: "/blogs" },
-    { icon: Megaphone, text: "Promotions", href: "/promotions" },
-    { icon: HelpCircle, text: "FAQ", href: "/faq" },
-    { icon: Info, text: "About us", href: "/about-us" },
-    { icon: Contact, text: "Contact us", href: "/contact-us" },
-    { icon: ClipboardList, text: "Terms & Conditions", href: "/terms" },
+    { icon: <Icon name="shome" />, text: "Home", href: "/", active: true },
+    { icon: <Icon name="sblog" />, text: "Blogs", href: "/blogs" },
+    { icon: <Icon name="spromotion" />, text: "Promotions", href: "/promotions" },
+    { icon: <Icon name="sfqa" />, text: "FAQ", href: "/faq" },
+    { icon: <Icon name="sabout" />, text: "About us", href: "/about-us" },
+    { icon: <Icon name="scontact" />, text: "Contact us", href: "/contact-us" },
+    { icon: <Icon name="strams" />, text: "Terms & Conditions", href: "/terms" },
     { text: "separator" },
-    { icon: ThumbsUp, text: "Liked videos", href: "/liked" },
-    { icon: History, text: "History", href: "/history" },
+    { icon: <Icon name="slikeup" />, text: "Liked videos", href: "/liked" },
+    { icon: <Icon name="shistory" />, text: "History", href: "/history" },
   ]
 
   const signOutItems = [
-    { icon: Home, text: "Home", href: "/" },
-    { icon: Book, text: "Blogs", href: "/blogs" },
-    { icon: Megaphone, text: "Promotions", href: "/promotions" },
-    { icon: Globe, text: "Onsite account creation", href: "/promotions" }
+    { icon: <Icon name="shome" />, text: "Home", href: "/" },
+    { icon: <Icon name="sblog" />, text: "Blogs", href: "/blogs" },
+    { icon: <Icon name="spromotion" />, text: "Promotions", href: "/promotions" },
+    { icon: <Icon name="sonSide" />, text: "Onsite account creation", href: "/promotions" }
   ]
 
   const Items = login ? navItems : signOutItems
@@ -68,7 +53,7 @@ export default function Sidebar() {
       )}
     >
       {/* Header */}
-      <div className={`flex items-center  p-4 h-20 ${isExpanded ? "justify-start":"justify-center"}`}>
+      <div className={`flex items-center  p-4 h-20 ${isExpanded ? "justify-start" : "justify-center"}`}>
         <button
           onClick={toggleSidebar}
           className="p-2 rounded-md cursor-pointer"
@@ -90,7 +75,7 @@ export default function Sidebar() {
             <Img className="size-9 rounded-full" src={PlaceholderImg()} title="User avatar" ></Img>
             {isExpanded && <span className="font-medium text-gray-800 whitespace-nowrap">Md. Julfiker Islam</span>}
           </>) : (<>
-            <h1 className="size-9 rounded-full"><CircleUserRound className="size-9 text-[#535353]/80" /></h1>
+            <Icon name="suser" width={36} height={36} />
             {isExpanded && <span className="font-medium text-gray-800 whitespace-nowrap">Sign in</span>}
           </>)}
 
@@ -100,7 +85,7 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 py-2 mx-2 space-y-2">
+      <nav className="flex-1 py-2 mx-2 space-y-3">
         {Items.map((item: any, index) =>
           item.text === "separator" ? (
             <Separator key={`separator-${index}`} />
@@ -114,31 +99,14 @@ export default function Sidebar() {
                 isExpanded ? "justify-start" : "justify-center m-auto my-3 w-fit"
               )}
             >
-              <item.icon className="h-5 w-fit font-bold text-blacks" />
+              {item.icon}
               {isExpanded && <span className="whitespace-nowrap font-normal">{item.text}</span>}
             </Link>
           )
         )}
         {login && (<Link className={`flex items-center gap-3 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors text-red-500 ${isExpanded ? "justify-start" : "justify-center m-auto my-3 w-fit"}`} href={"/"}>
-          <LogOut className="h-5 w-fit  text-red-500" /> {isExpanded && <span className="whitespace-nowrap font-normal">{"Sign out"}</span>}</Link>)}
+          <Icon name="ssignout" /> {isExpanded && <span className="whitespace-nowrap font-normal">{"Sign out"}</span>}</Link>)}
       </nav>
-      {/* <nav className="flex-1 py-2 mx-2 space-y-2">
-        {navItems.map((item) => (
-          <Link
-            key={item.text}
-            href={item.href}
-            className={cn(
-              "flex items-center gap-3 px-3 py-2 text-blacks hover:bg-gray-100 rounded-full transition-colors",
-              item.active && "bg-gray-100 font-semibold",
-              isExpanded ? "justify-start" : "justify-center m-auto my-3 w-fit ",
-            )}
-          >
-            <item.icon className="h-5 w-fit text-blacks" />
-            {isExpanded && <span className="whitespace-nowrap font-normal">{item.text}</span>}
-          </Link>
-        ))}
-      </nav> */}
-
     </div>
   )
 }

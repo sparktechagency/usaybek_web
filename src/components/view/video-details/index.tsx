@@ -4,12 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui";
 import {
-  Eye,
   ThumbsUp,
-  ThumbsDown,
-  Share2,
-  Flag,
-  MessageCircle,
   Play,
   Settings,
   Maximize,
@@ -20,7 +15,8 @@ import Avatars from "@/components/reuseable/avater";
 import Modal from "@/components/reuseable/modal";
 import { useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui";
-import Icon from "@/icon/icon";
+import Icon from "@/icon";
+
 
 const options = [
   { value: "sexual-content", label: "Sexual content" },
@@ -34,24 +30,25 @@ const options = [
   { value: "spam-misleading", label: "Spam or misleading" },
   { value: "legal-issue", label: "Legal issue" },
   { value: "captions-issue", label: "Captions issue" },
-];
+]
+
+
+
+
+
 
 export default function VideoDetails({ slug }: any) {
   const [isReprot, setIsReport] = useState(false);
-  const [isText, setIsText] = useState(false);
-  const [isShare, setIsShare] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("");
-  console.log(selectedValue);
+  const [isText, setIsText] = useState(false)
+  const [isShare, setIsShare] = useState(false)
+  const [selectedValue, setSelectedValue] = useState("sexual-content")
+  console.log(selectedValue)
 
-  console.log(slug);
+  console.log(slug)
 
   return (
     <div className="container">
       <div className="flex flex-col">
-        <h1>lfjljflf</h1>
-        <Icon name="eye" />
-        {/* Header */}
-
         {/* Main content area */}
         <div className="flex flex-col lg:flex-row flex-1 gap-6">
           {/* Left column: Video player, details, comments */}
@@ -101,11 +98,9 @@ export default function VideoDetails({ slug }: any) {
 
             {/* Video Title and Actions */}
             <div>
-              {/* <Logo /> */}
-              {/* <h1>fjdfjlk</h1> */}
               <h1 className="text-lg lg:text-xl font-semibold text-blacks mt-3">
-                Joe&apos;s Expert Auto LLC. - Address: 2740 N Elston Ave,
-                Chicago, IL 60647, United States
+                Joe's Expert Auto LLC. - Address: 2740 N Elston Ave, Chicago, IL
+                60647, United States
               </h1>
               <div className="flex items-center flex-wrap lg:flex-nowrap justify-between mt-5">
                 <div className="flex items-center gap-3">
@@ -117,35 +112,32 @@ export default function VideoDetails({ slug }: any) {
                   </div>
                 </div>
                 {/* right */}
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-2  text-sm has-[>div]:cursor-pointer">
-                  <div className="flex items-center gap-1 border px-4 py-1 rounded-full">
-                    <Eye className="size-6 text-grays" />
+                <div className="flex mt-2 md:mt-0 flex-wrap items-center gap-x-4 gap-y-2  text-sm has-[>div]:cursor-pointer">
+                  <div className="flex  gap-1 border px-4 py-1 rounded-full">
+                    <Icon name="eye" width={23} height={23} />
                     <span className="text-blacks font-semibold">10K</span>
                   </div>
-                  <div className="flex items-center gap-1 border px-4 py-1 rounded-full">
-                    <ThumbsUp className="size-5 text-grays" />
+                  <div className="flex gap-1 border px-4 py-1 rounded-full">
+                    <Icon name="likeUp" width={21} height={21} />
                     <span className="text-blacks font-semibold">10</span>
                   </div>
                   <div className="flex items-start gap-1 border px-4 py-1 rounded-full">
-                    <ThumbsDown className="size-5 text-grays" />
+                    <Icon name="likeDown" width={20} height={20} className="relative mt-1" />
                     <span className="text-blacks font-semibold">10</span>
                   </div>
-                  <div className="flex items-center gap-1 border px-4 py-1 rounded-full">
-                    <MessageCircle className="size-5 text-grays" />
+                  <div className="flex  gap-1 border px-4 py-1 rounded-full">
+                    <Icon name="message" width={20} height={20} className="relative mt-1" />
                     <span className="text-blacks font-semibold">10</span>
                   </div>
-                  <div
-                    onClick={() => setIsShare(!isShare)}
-                    className="flex items-center gap-1 border px-4 py-1 rounded-full"
-                  >
-                    <Share2 className="size-4 text-grays" />
+                  <div onClick={() => setIsShare(!isShare)} className="flex  gap-1 border px-4 py-1 rounded-full">
+                    <Icon name="share" width={23} height={23} />
                     <span className="text-blacks font-semibold">Share</span>
                   </div>
                   <div
                     onClick={() => setIsReport(!isReprot)}
-                    className="flex items-center gap-1 border px-4 py-1 rounded-full"
+                    className="flex  gap-1 border px-4 py-1 rounded-full"
                   >
-                    <Flag className="size-5 text-grays" />
+                    <Icon name="report" width={16} height={16} />
                     <span className="text-blacks font-semibold">Report</span>
                   </div>
                 </div>
@@ -176,7 +168,7 @@ export default function VideoDetails({ slug }: any) {
             </div>
 
             {/* Comments Section */}
-            <div className="border-gray-200 pb-5">
+            <div className="border-gray-200">
               <h2 className="text-lg font-semibold">1000 Comments</h2>
               <div className="flex items-center gap-3 mt-4">
                 <Avatars src="" fallback="M" alt="Channel Avatar" />
@@ -321,21 +313,13 @@ export default function VideoDetails({ slug }: any) {
           </RadioGroup>
           {/* Button section at the bottom, aligned to the right. */}
           <div className="mt-2 flex justify-end gap-4">
-            <Button
-              variant="link"
-              onClick={() => setIsReport(false)}
-              className="text-black hover:text-blacks hover:no-underline"
-            >
+            <Button variant="link" onClick={() => setIsReport(false)} className="text-black hover:text-blacks hover:no-underline">
               Cancel
             </Button>
-            <Button
-              variant="link"
-              onClick={() => {
-                setIsReport(false);
-                setIsText(true);
-              }}
-              className="text-reds hover:text-reds hover:no-underline"
-            >
+            <Button variant="link" onClick={() => {
+              setIsReport(false)
+              setIsText(true)
+            }} className="text-reds hover:text-reds hover:no-underline">
               Next
             </Button>
           </div>
@@ -344,40 +328,28 @@ export default function VideoDetails({ slug }: any) {
       {/* Modal Report text box*/}
       <Modal open={isText} title={selectedValue} setIsOpen={setIsText}>
         <div>
-          <Textarea
-            className="resize-none w-full h-36 "
-            placeholder="Describe your issue..."
-          ></Textarea>
+          <Textarea className="resize-none w-full h-36 " placeholder="Describe your issue...">
+
+          </Textarea>
           <div className="mt-2 flex justify-end gap-4">
-            <Button
-              variant="link"
-              onClick={() => setIsText(false)}
-              className="text-black hover:text-blacks hover:no-underline"
-            >
+            <Button variant="link" onClick={() => setIsText(false)} className="text-black hover:text-blacks hover:no-underline">
               Cancel
             </Button>
-            <Button
-              variant="link"
-              onClick={() => {
-                console.log("all ok");
-              }}
-              className="text-reds hover:text-reds hover:no-underline"
-            >
+            <Button variant="link" onClick={() => {
+              console.log("all ok")
+            }} className="text-reds hover:text-reds hover:no-underline">
               Report
             </Button>
           </div>
         </div>
+
       </Modal>
       {/* Share Modal box for the side*/}
       <Modal open={isShare} title={"Share"} setIsOpen={setIsShare}>
         <div>
           <ul>
-            <li className="text-xl text-blacks font-semibold text-center">
-              Link for this video
-            </li>
-            <li className="text-center text-grays px-3">
-              Copy this link and share to your friends through anything you want
-            </li>
+            <li className="text-xl text-blacks font-semibold text-center">Link for this video</li>
+            <li className="text-center text-grays px-3">Copy this link and share to your friends through anything you want</li>
           </ul>
           <Input
             type="text"
@@ -387,11 +359,12 @@ export default function VideoDetails({ slug }: any) {
           />
           <div className="flex justify-center">
             <Button className="rounded-full px-6 py-2 h-auto text-center text-base bg-transparent hover:bg-transparent shadow-none border border-input">
-              <Copy className="mr-2 h-4 w-4 text-grays" />
+              <Icon name="copy" width={16} height={16}/>
               <span className="text-blacks"> Copy link</span>
             </Button>
           </div>
         </div>
+
       </Modal>
     </div>
   );

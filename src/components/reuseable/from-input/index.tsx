@@ -53,21 +53,29 @@ export function FromInput({
                 <div>
                     {/* {label && <Label className={cn("mb-2 text-primary text-base", stylelabel)}>{label}</Label>} */}
                     <div className="relative">
-                        <div className="relative">
-                             <Input
-                            className={cn("peer", className)}
-                            {...field}
-                            type={inputType}
-                            placeholder={placeholder}
-                        />
-                        <label className="absolute cursor-text bg-body px-1 left-2.5 top-2.5 text-slate-400 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90">
-                       Type Here...
-                        </label>
-                        </div>
-                        {eye && (
+                            <Input
+                                className={cn(
+                                    "peer h-11 w-full rounded-full px-3 text-sm placeholder-transparent focus:outline-none pl-[1rem]",
+                                    className
+                                )}
+                                {...field}
+                                type={inputType}
+                                id="your-input-id"
+                            />
+                            <label
+                                className={cn(
+                                    "absolute left-4 top-1/2 z-10 -translate-y-1/2 px-1 text-sm text-blacks transition-all duration-200",
+                                    "peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-placeholder-shown:text-muted-foreground",
+                                    "peer-focus:top-0 peer-focus:text-sm peer-focus:text-primary peer-focus:font-medium peer-focus:mx-2 peer-focus:bg-body"
+                                )}
+                                htmlFor="your-input-id"
+                            >
+                                {label}
+                            </label>
+                            {eye && (
                             <h1
                                 onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-                                className="absolute cursor-pointer  top-[6px] right-2"
+                                className="absolute cursor-pointer  top-[12px] right-2"
                             >
                                 {isPasswordVisible ? (
                                     <EyeOff className="text-muted-foreground" size={20} />
@@ -76,7 +84,7 @@ export function FromInput({
                                 )}
                             </h1>
                         )}
-                    </div>
+                        </div>
                     {error?.message && (
                         <h3 className="text-sm pt-[1px] text-end text-[#f73f4e] flex gap-1 items-center justify-end">
                             {error.message}
@@ -92,7 +100,7 @@ export function FromInput({
 
 
 
- 
+
 // <div class="w-full max-w-sm min-w-[200px]">
 //   <div class="relative">
 //     <input
