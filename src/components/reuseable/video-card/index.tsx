@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Rocket, Dot } from "lucide-react"
+import { Rocket} from "lucide-react"
 import { PlaceholderImg } from "@/lib/utils"
 import Link from "next/link"
 import Avatars from "../avater"

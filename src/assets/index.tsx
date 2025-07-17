@@ -7,8 +7,10 @@ import choose from "@/assets/static/about/choose.svg"
 import join from "@/assets/static/about/join.svg"
 import tarams from "@/assets/static/tarams.svg"
 import contact from "@/assets/static/contact-us.svg"
+import logo from "@/assets/logo.png"
 
 const assets = {
+  logo,
   basic: {
     questionImg,
     tarams,

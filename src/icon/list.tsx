@@ -25,6 +25,9 @@ import shistory from "@/icon/sideber/history.svg"
 import ssignout from "@/icon/sideber/signout.svg"
 import sonSide from "@/icon/sideber/onslide.svg"
 import suser from "@/icon/sideber/usernot.svg"
+import sdashboard from "@/icon/sideber/dashboard.svg"
+import sanalytics from "@/icon/sideber/analytics.svg"
+import sreport from "@/icon/sideber/sreport.svg"
 
 export const IconList = {
   eye,
@@ -53,5 +56,8 @@ export const IconList = {
   shistory,
   ssignout,
   sonSide,
-  suser
+  suser,
+  sdashboard,
+  sanalytics,
+  sreport 
 };

@@ -31,7 +31,7 @@ export default function AbountUs() {
                         </div>
                         <CardText>
                             To empower individuals and businesses through a dynamic, user-focused platform that fosters growth,
-                            creativity, and meaningful connections across communities.Over the years, we've expanded our offerings, refined our technology
+                            creativity, and meaningful connections across communities.Over the years, we&apos;ve expanded our offerings, refined our technology
                         </ CardText>
                     </Card>
                     <Card className="gap-3">
@@ -40,11 +40,11 @@ export default function AbountUs() {
                             <h3 className="text-2xl font-semibold text-blacks">Meet with the Team</h3>
                         </div>
                         <CardText>
-                            Behind MyTSV is a passionate team of creators, developers, and community builders. We come from diverse backgrounds, but we're united by one goal: to make mytsv.com a place where ideas come to life and connections lead to real impact.
+                            Behind MyTSV is a passionate team of creators, developers, and community builders. We come from diverse backgrounds, but we&apos;re united by one goal: to make mytsv.com a place where ideas come to life and connections lead to real impact.
 
                         </ CardText>
                         <CardText>
-                            We're designers and storytellers, strategists and support heroes, all working together to make your experience seamless, enriching, and inspiring.
+                            We&apos;re designers and storytellers, strategists and support heroes, all working together to make your experience seamless, enriching, and inspiring.
                         </ CardText>
                     </Card>
                     </div>
@@ -58,10 +58,10 @@ export default function AbountUs() {
                             Founded with a vision to bring people and ideas together, MyTSV began as a local project with a big dream. What started as a small initiative to highlight community talent and services in Chicagoland has now grown into a multi-faceted platform serving users from all walks of life
                         </ CardText>
                         <CardText>
-                            We're designers and storytellers, strategists and support heroes, all working together to make your experience seamless, enriching, and inspiring.
+                            We&apos;re designers and storytellers, strategists and support heroes, all working together to make your experience seamless, enriching, and inspiring.
                         </ CardText>
                         <CardText>
-                            Over the years, we've expanded our offerings, refined our technology, and stayed committed to the needs of our growing user base—all while keeping our core values front and center.
+                            Over the years, we&apos;ve expanded our offerings, refined our technology, and stayed committed to the needs of our growing user base—all while keeping our core values front and center.
                         </ CardText>
                     </Card>
                     <Card className="gap-3">
@@ -93,7 +93,7 @@ export default function AbountUs() {
                             <h3 className="text-2xl font-semibold text-blacks">Join Us</h3>
                         </div>
                         <CardText className="text-center">
-                             Whether you're a local business owner, a creative mind, or someone searching for inspiration—MyTSV is your stage. Explore, connect, grow. We're glad yo're here.
+                             Whether you&apos;re a local business owner, a creative mind, or someone searching for inspiration—MyTSV is your stage. Explore, connect, grow. We&apos;re glad yo&apos;re here.
                         </CardText>
                     </Card>
             </div>

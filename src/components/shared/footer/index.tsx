@@ -1,6 +1,5 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Mail, Phone, Facebook, Youtube, Copyright } from "lucide-react"
 import logoImg from "@/assets/logo.png"
 import Icon from "@/icon"
 

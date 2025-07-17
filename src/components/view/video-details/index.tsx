@@ -8,7 +8,6 @@ import {
   Play,
   Settings,
   Maximize,
-  Copy,
 } from "lucide-react";
 import { PlaceholderImg } from "@/lib/utils";
 import Avatars from "@/components/reuseable/avater";
@@ -99,7 +98,7 @@ export default function VideoDetails({ slug }: any) {
             {/* Video Title and Actions */}
             <div>
               <h1 className="text-lg lg:text-xl font-semibold text-blacks mt-3">
-                Joe's Expert Auto LLC. - Address: 2740 N Elston Ave, Chicago, IL
+                Joe&apos;s Expert Auto LLC. - Address: 2740 N Elston Ave, Chicago, IL
                 60647, United States
               </h1>
               <div className="flex items-center flex-wrap lg:flex-nowrap justify-between mt-5">
