@@ -20,7 +20,7 @@ export default function Sidebar() {
   }
 
   const navItems = [
-    { icon: <Icon name="supload" />, text: "Upload your video", href: "/upload" },
+    { icon: <Icon name="supload"/>, text: "Upload your video", href: "/upload" },
     { icon: <Icon name="ssetting" />, text: "Settings", href: "/dashboard" },
     { icon: <Icon name="svideos" />, text: "My videos", href: "/my-videos" },
     { text: "separator" },

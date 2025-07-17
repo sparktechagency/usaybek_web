@@ -28,6 +28,9 @@ import suser from "@/icon/sideber/usernot.svg"
 import sdashboard from "@/icon/sideber/dashboard.svg"
 import sanalytics from "@/icon/sideber/analytics.svg"
 import sreport from "@/icon/sideber/sreport.svg"
+import menu from "@/icon/sideber/menu.svg"
+import uploadWhite from "@/icon/basic/uploadWhite.svg"
+import locationGary from "@/icon/basic/locationgary.svg"
 
 export const IconList = {
   eye,
@@ -59,5 +62,8 @@ export const IconList = {
   suser,
   sdashboard,
   sanalytics,
-  sreport 
+  sreport,
+  menu,
+  uploadWhite,
+  locationGary
 };

@@ -5,41 +5,36 @@ import Link from 'next/link';
 import Icon from '@/icon';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
-export type SidebarProps = {
-    sidebarOpen: boolean;
-    setSidebarOpen: (open: boolean) => void;
-};
 
-export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
+
+export default function Sidebar() {
     const pathname = usePathname()
+    const [isExpanded, setIsExpanded] = useState(true)
     const navItems = [
         { icon: <Icon name="sdashboard" />, text: "Dashboard", href: "/dashboard" },
-        { icon: <Icon name="svideos" />, text: "My videos", href: "/my-videos" },
-        { icon: <Icon name="sanalytics" />, text: "Analytics", href: "/analytics" },
-        { icon: <Icon name="ssetting" />, text: "Settings", href: "/settings" },
-        { icon: <Icon name="sreport" />, text: "Reports", href: "/reports" }
+        { icon: <Icon name="svideos" />, text: "My videos", href: "/dashboard/my-videos" },
+        { icon: <Icon name="sanalytics" />, text: "Analytics", href: "/dashboard/analytics" },
+        { icon: <Icon name="ssetting" />, text: "Settings", href: "/dashboard/settings" },
+        { icon: <Icon name="sreport" />, text: "Reports", href: "/dashboard/reports" }
     ]
 
     return (
         <div className="flex">
-            {/* Overlay */}
-            {sidebarOpen && (
-                <div
-                    className="fixed inset-0 z-20 bg-black/40 opacity-50"
-                    onClick={() => setSidebarOpen(false)}
-                />
-            )}
-            {/* Sidebar */}
+
             <aside
-                className={`absolute left-0 top-0 z-20 flex h-screen bg-white transition-transform pr-3  transform duration-300 ease-linear flex-col overflow-y-hidden  text-blacks w-[240px] lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-                    }`}
+                className={cn(
+                    "flex flex-col h-full bg-white rounded-tr-md  transition-all duration-300 ease-in-out",
+                    isExpanded ? "w-64" : "w-20",
+                )}
             >
                 <div className="flex flex-col ">
                     <div>
                         <div className="flex items-center justify-center my-4 text-white">
-                            <Link href={"/"}>
-                                <div className="relative w-40 h-13 overflow-hidden mr-3">
+                            <Icon onClick={() => setIsExpanded(!isExpanded)} name="menu" width={25} height={25} className='cursor-pointer' />
+                            {isExpanded && <Link href={"/"} className='ml-4'>
+                                <div className="relative w-40 h-13 overflow-hidden">
                                     <Image
                                         src={assets.logo}
                                         alt={"author.name"}
@@ -47,22 +42,24 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                                         className="object-fill"
                                     />
                                 </div>
-                            </Link>
+                            </Link>}
                         </div>
                         <nav className="flex-1 py-2 mx-2 space-y-3">
                             {navItems.map((item: any, index) =>
                                 <Link
-                                    key={index}
+                                    key={item.text}
                                     href={item.href}
                                     className={cn(
-                                        "flex items-center gap-3 px-4 py-2 text-blacks hover:bg-gray-100 rounded-full transition-colors",
+                                        "flex items-center gap-3 px-3 py-2 text-blacks hover:bg-gray-100 rounded-lg transition-colors",
                                         item.href === pathname && "bg-gray-100 font-semibold",
+                                        isExpanded ? "justify-start" : "justify-center m-auto my-3 w-fit"
                                     )}
                                 >
                                     {item.icon}
-                                    <span className="whitespace-nowrap font-normal">{item.text}</span>
+                                    {isExpanded && <span className="whitespace-nowrap font-normal">{item.text}</span>}
                                 </Link>
                             )}
+
                         </nav>
                     </div>
                 </div>

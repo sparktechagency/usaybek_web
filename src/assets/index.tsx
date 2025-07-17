@@ -8,6 +8,9 @@ import join from "@/assets/static/about/join.svg"
 import tarams from "@/assets/static/tarams.svg"
 import contact from "@/assets/static/contact-us.svg"
 import logo from "@/assets/logo.png"
+import views from "@/assets/static/dashboard/views.svg"
+import videos from "@/assets/static/dashboard/videos.svg"
+import likes from "@/assets/static/dashboard/likes.svg"
 
 const assets = {
   logo,
@@ -23,6 +26,11 @@ const assets = {
       choose,
       join
     }
+  },
+  dashboard: {
+    views,
+    videos,
+    likes
   }
 };
 
