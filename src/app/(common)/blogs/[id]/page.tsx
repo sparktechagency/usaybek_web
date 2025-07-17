@@ -8,12 +8,13 @@ import { Metadata } from "next";
 
 
 
-export async function generateMetadata({ params }: ParamsProps): Promise<Metadata> {
+export async function generateMetadata({ params: { id } }: ParamsProps): Promise<Metadata> {
+  console.log(id)
   const title = "Best Plumber Near Me: Find Trusted Plumbing Services with MyTSV.com";
   const description =
     "Need a reliable plumber fast? Discover how MyTSV.com helps you find local, trusted plumbing professionals with real videos and reviews.";
   const image = "https://yourdomain.com/images/blog-1.jpg";
-  const url = `https://yourdomain.com/blogs/${params.id}`;
+  const url = `https://yourdomain.com/blogs/$`;
 
   return {
     title: `${title} | MyTSV Blog`,
