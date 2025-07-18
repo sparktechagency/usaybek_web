@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { PlaceholderImg } from "@/lib/utils";
-import { ParamsProps } from "@/types";
 import { BackBtn } from "@/components/reuseable/icon-list";
 import Link from "next/link";
+import { IdParams, SlugParams } from "@/types";
 
 // export async function generateMetadata({ params: { id } }: ParamsProps): Promise<Metadata> {
 //   console.log(id)
@@ -52,7 +52,8 @@ import Link from "next/link";
 //   };
 // }
 
-export default function Blog({ params: { id } }: ParamsProps) {
+export default async function Blog({ params }: IdParams) {
+  const { id } = await params;
   console.log(id);
   return (
     <div>
@@ -75,7 +76,7 @@ export default function Blog({ params: { id } }: ParamsProps) {
         {/* Text Section */}
         <div className="lg:w-1/2 w-full space-y-4">
           <h1 className="text-xl lg:text-2xl font-bold leading-tight">
-            Best Plumber Near Me: Find Trusted Plumbing Services with MyTSV.com
+            {`Best Plumber Near Me: Find Trusted Plumbing Services with MyTSV.com`}
           </h1>
           <p className="text-lg text-blacks">
             When a plumbing emergency strikes, the last thing you want is to
