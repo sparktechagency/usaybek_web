@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useSidebar } from "@/context/useSideber";
 
 interface CategoryFiltersProps {
   selectedCategory: string;
@@ -28,6 +29,7 @@ function FilterBox({
   selectedCategory,
   onSelectCategory,
 }: CategoryFiltersProps) {
+  const { isExpanded } = useSidebar();
   const scrollRef = useRef<HTMLDivElement>(null);
   const scrollAmount = 200;
   const [canScroll, setCanScroll] = useState(false);
@@ -39,7 +41,6 @@ function FilterBox({
       setCanScroll(hasOverflow);
     }
   };
-  console.log(canScroll)
 
   useEffect(() => {
     checkScroll();
@@ -64,11 +65,15 @@ function FilterBox({
       });
     }
   };
-
   return (
-    <div className="flex items-center gap-2 w-full overflow-hidden">
-      {/* Left Scroll Button */}
-      <Button
+    <div
+      className={`${
+        isExpanded ? "w-[calc(100vw-325px)]" : "w-[calc(100vw-150px)]"
+      }`}
+    >
+      <div className="flex items-center gap-2 overflow-hidden">
+        {/* Left Scroll Button */}
+        <Button
           onClick={scrollLeft}
           variant="outline"
           size="icon"
@@ -78,31 +83,31 @@ function FilterBox({
           <ChevronLeft className="h-5 w-5" />
         </Button>
 
-      {/* Scrollable category list */}
-      <div
-        ref={scrollRef}
-        className="flex flex-1 gap-2 overflow-x-auto scroll-smooth px-1 min-w-0"
-        style={{ scrollbarWidth: "none" }}
-      >
-        {categories.map((category) => (
-          <Button
-            key={category}
-            onClick={() => onSelectCategory(category)}
-            variant="outline"
-            className={cn(
-              "whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium flex-shrink-0",
-              selectedCategory === category
-                ? "bg-[#EF4444] text-white hover:bg-[#EF4444] hover:text-white"
-                : "bg-white text-gray-800 border hover:bg-[#EF4444] hover:text-white"
-            )}
-          >
-            {category}
-          </Button>
-        ))}
-      </div>
+        {/* Scrollable category list */}
+        <div
+          ref={scrollRef}
+          className="flex flex-1 gap-2 overflow-x-auto scroll-smooth px-1 min-w-0"
+          style={{ scrollbarWidth: "none" }}
+        >
+          {categories.map((category) => (
+            <Button
+              key={category}
+              onClick={() => onSelectCategory(category)}
+              variant="outline"
+              className={cn(
+                "whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium flex-shrink-0",
+                selectedCategory === category
+                  ? "bg-[#EF4444] text-white hover:bg-[#EF4444] hover:text-white"
+                  : "bg-white text-gray-800 border hover:bg-[#EF4444] hover:text-white"
+              )}
+            >
+              {category}
+            </Button>
+          ))}
+        </div>
 
-      {/* Right Scroll Button */}
-       <Button
+        {/* Right Scroll Button */}
+        <Button
           onClick={scrollRight}
           variant="outline"
           size="icon"
@@ -111,6 +116,7 @@ function FilterBox({
         >
           <ChevronRight className="h-5 w-5" />
         </Button>
+      </div>
     </div>
   );
 }

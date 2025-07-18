@@ -11,14 +11,8 @@
   @variant lg {
     padding-inline: 0rem;
   }
-/* 
-  @variant xl {
-    padding-inline: 4rem;
-  } */
-  /* @variant 2xl {
-    padding-inline: 5rem;
-  } */
 }
+
 
 @theme inline {
   --color-background: var(--background);
@@ -63,6 +57,8 @@
   --color-grays: #535353;
   --color-grays-place: #dddddd;
   --color-body:#f6f6f6;
+  --width-sideber-md:256px;
+  --width-sideber-xs:80px;
 }
 
 :root {
@@ -139,6 +135,6 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-hidden;
   }
 }
