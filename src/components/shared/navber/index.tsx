@@ -52,6 +52,7 @@ export default function Navber() {
               aria-label="Location search input"
             />
             <Button
+             onClick={() => setIsLogin(!login)}
               variant={"primary"}
               className="w-[120px] px-0  h-11 my-1 rounded-full has-[>svg]:px-0"
             >
@@ -62,8 +63,8 @@ export default function Navber() {
         </li>
         <li>
           {login ? (
-            <Button
-              onClick={() => setIsLogin(false)}
+            <Link href={"/profile"}>
+              <Button
               variant={"primary"}
               className="h-12 pl-2 pr-4 rounded-full"
             >
@@ -74,10 +75,10 @@ export default function Navber() {
               />
               Md Julfiker Islam
             </Button>
+            </Link>
           ) : (
             <Button
               variant={"primary"}
-              onClick={() => setIsLogin(true)}
               className="h-12 px-4 rounded-full"
             >
               Sign in to your Account

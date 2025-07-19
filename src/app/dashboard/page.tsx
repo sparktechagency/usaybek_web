@@ -9,27 +9,36 @@ import { ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
+import { profileImgs } from '../(simple)/profile/page'
+
+export const ViewItem = [
+  {
+    label: "Views",
+    value: 22568,
+    icon: assets.dashboard.views
+  },
+  {
+    label: "Videos",
+    value: 40,
+    icon: assets.dashboard.videos
+  },
+  {
+    label: "Likes",
+    value: 17256,
+    icon: assets.dashboard.likes
+  }
+]
+
+export const serviceItem = [
+  "Haircuts & Trims",
+  "Hair Styling",
+  "Hair Coloring",
+  "Hair Treatments",
+  "Chemical Services"
+];
 
 export default function Dashboard() {
   const [status, setStatus] = useState("Views");
-  const dashboardItem = [
-    {
-      label: "Views",
-      value: 22568,
-      icon: assets.dashboard.views
-    },
-    {
-      label: "Videos",
-      value: 40,
-      icon: assets.dashboard.videos
-    },
-    {
-      label: "Likes",
-      value: 17256,
-      icon: assets.dashboard.likes
-    }
-  ]
-
   return (
     <div>
       <NavItem title="Dashboard Overview" />
@@ -45,7 +54,7 @@ export default function Dashboard() {
                 className="rounded-xl"
               />
               <Avatar className="absolute bottom-0 left-1/2 translate-x-[-50%] translate-y-1/2 size-24  shadow-md">
-                <AvatarImage src="https://surl.li/rdorwp" alt="Profile picture" />
+                <AvatarImage src={profileImgs} alt="Profile picture" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </div>
@@ -58,12 +67,12 @@ export default function Dashboard() {
             </CardContent>
             <div className="flex items-center justify-between mb-4">
               <CardTitle className="text-[22px] text-blacks font-semibold">Analytics</CardTitle>
-              <Link href="/dashboard/analytics" className="flex items-center gap-1 font-normal text-blacks border-1 py-2 px-5 rounded-full">
+              <Link href="/dashboard/analytics" className="items-center hidden md:flex  gap-1 font-normal text-blacks border-1 py-2 px-5 rounded-full">
                 See full analytics <ArrowUpRight className="h-5 w-5" />
               </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {dashboardItem.map((item, index) => (
+              {ViewItem.map((item, index) => (
                 <Card key={index} className="gap-0 p-2  border-1">
                   <div className='flex justify-between px-4 py-3'>
                     <div>
@@ -73,8 +82,8 @@ export default function Dashboard() {
                     <Image
                       src={item.icon}
                       alt={item.label}
-                      width={48}
-                      height={48}
+                      width={44}
+                      height={44}
                     />
                   </div>
 
@@ -99,21 +108,11 @@ export default function Dashboard() {
             <Card className="p-3 border-1 gap-0 md:pb-26">
               <CardTitle className="text-xl font-semibold mb-2">Services</CardTitle>
               <CardContent className="p-0 flex flex-wrap max-w-xs gap-3 [&>button]:text-blacks">
-                <Button variant="outline" className="rounded-full  px-4 py-2 text-sm bg-transparent">
-                  1. Haircuts & Trims
-                </Button>
-                <Button variant="outline" className="rounded-full  px-4 py-2 text-sm bg-transparent">
-                  2. Hair Styling
-                </Button>
-                <Button variant="outline" className="rounded-full px-4 py-2 text-sm bg-transparent">
-                  3. Hair Coloring
-                </Button>
-                <Button variant="outline" className="rounded-full px-4 py-2 text-sm bg-transparent">
-                  4. Hair Treatments
-                </Button>
-                <Button variant="outline" className="rounded-full px-4 py-2 text-sm bg-transparent">
-                  5. Chemical Services
-                </Button>
+                {serviceItem.map((item,index)=>(
+                    <Button key={index} variant="outline" className="rounded-full  px-4 py-2 text-sm bg-transparent">
+                     {index+1} {" "} {item}
+                  </Button>
+                ))}
               </CardContent>
             </Card>
           </div>

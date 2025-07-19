@@ -41,6 +41,9 @@ import deleteRed from "@/icon/dash/deleteRed.svg"
 import checkWhite from "@/icon/basic/checkWhite.svg"
 import arrowRight from "@/icon/basic/arrow-right.svg"
 import google from "@/icon/basic/google.svg"
+import phoneGray from "@/icon/basic/phoneGray.svg"
+import mailGray from "@/icon/basic/mailGray.svg"
+import eyenot from "@/icon/basic/eyeNot.svg"
 
 
 export const IconList = {
@@ -86,5 +89,8 @@ export const IconList = {
   deleteRed,
   checkWhite,
   arrowRight,
-  google 
+  google,
+  phoneGray,
+  mailGray,
+  eyenot
 };
