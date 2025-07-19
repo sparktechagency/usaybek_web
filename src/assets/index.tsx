@@ -10,6 +10,9 @@ import logo from "@/assets/logo.png";
 import views from "@/assets/static/dashboard/views.svg";
 import videos from "@/assets/static/dashboard/videos.svg";
 import likes from "@/assets/static/dashboard/likes.svg";
+import loginImg from "@/assets/login/login.svg"
+import signImg from "@/assets/login/sign-up.svg"
+import forgotImg from "@/assets/login/forgot.svg"
 
 const assets = {
   logo,
@@ -30,6 +33,11 @@ const assets = {
     videos,
     likes,
   },
+  auth: {
+    loginImg,
+    signImg,
+    forgotImg
+  }
 };
 
 export default assets;

@@ -31,15 +31,15 @@ export function FromTextArea({
       name={name}
       render={({ field, fieldState: { error } }) => (
         <div>
-          {label && (
+          {/* {label && (
             <Label className={cn("mb-2 text-black text-base", stylelabel)}>
               {label}
             </Label>
-          )}
+          )} */}
           <div className="relative">
             <Textarea
-              className={className}
-              placeholder={placeholder}
+              className={cn("h-12 w-full rounded-full  pl-4 pr-3  text-blacks placeholder:text-blacks text-sm",className)}
+              placeholder={label}
               {...field}
               {...rest}
             />

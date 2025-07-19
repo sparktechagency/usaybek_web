@@ -31,6 +31,17 @@ import sreport from "@/icon/sideber/sreport.svg"
 import menu from "@/icon/sideber/menu.svg"
 import uploadWhite from "@/icon/basic/uploadWhite.svg"
 import locationGary from "@/icon/basic/locationgary.svg"
+import sent from "@/icon/basic/sent.svg"
+import locationBlack from "@/icon/basic/locationBlack.svg"
+import alertRed from "@/icon/basic/alertRed.svg"
+import internetBlack from "@/icon/dash/internetBlack.svg"
+import calenderGarys from "@/icon/dash/calenderGarys.svg"
+import timegrays from "@/icon/dash/timegrays.svg"
+import deleteRed from "@/icon/dash/deleteRed.svg"
+import checkWhite from "@/icon/basic/checkWhite.svg"
+import arrowRight from "@/icon/basic/arrow-right.svg"
+import google from "@/icon/basic/google.svg"
+
 
 export const IconList = {
   eye,
@@ -65,5 +76,15 @@ export const IconList = {
   sreport,
   menu,
   uploadWhite,
-  locationGary
+  locationGary,
+  sent,
+  locationBlack,
+  alertRed,
+  internetBlack,
+  calenderGarys,
+  timegrays,
+  deleteRed,
+  checkWhite,
+  arrowRight,
+  google 
 };

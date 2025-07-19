@@ -8,7 +8,7 @@ import {
     type ControllerRenderProps,
     type ControllerFieldState,
 } from "react-hook-form";
-import {Input} from "@/components/ui";
+import { Input, Label } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
 
@@ -24,7 +24,7 @@ interface formInputProps {
     className?: string;
 }
 
-export function FromInput({
+export function FromInputs({
     name,
     type = "text",
     eye = false,
@@ -51,13 +51,13 @@ export function FromInput({
                 fieldState: ControllerFieldState;
             }) => (
                 <div>
-                    {/*  <Label className={cn("text-blacks text-base font-medium absolute -top-3 left-7 bg-body px-3",stylelabel)}>{label}</Label> */}
                 <div className="relative">
+                  {/* placeholder:text-blacks */}
                   <Input
-                    className={cn("h-12 w-full rounded-full  pl-4 pr-3  text-blacks placeholder:text-blacks text-sm",className)}
+                    className={cn("h-12 w-full rounded-full pl-4 pr-3  text-blacks  text-sm",className)}
                     {...field}
                     type={inputType}
-                    placeholder={label}
+                    placeholder={placeholder}
                   />
                   {eye && (
                     <div
@@ -71,6 +71,7 @@ export function FromInput({
                       )}
                     </div>
                   )}
+                  <Label className={cn("text-blacks text-base font-medium absolute -top-3 left-7 bg-body px-3",stylelabel)}>{label}</Label>
                 </div>
                 {error?.message && (
                   <h3 className="text-sm pt-[1px] text-end text-[#f73f4e] flex gap-1 items-center justify-end">

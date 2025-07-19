@@ -1,7 +1,7 @@
 import ContactUs from "@/components/common/contact-us";
 import SectionNav from "@/components/reuseable/section-nav";
 import { Card } from "@/components/ui";
-import { Mail, MapPin, Phone } from "lucide-react";
+import Icon from "@/icon";
 import { Metadata } from "next";
 import React from "react";
 
@@ -58,17 +58,17 @@ export default function Contact() {
                 We&apos;d love to hear from you! Reach out to us through any of
                 the following methods:
               </p>
-              <div className="space-y-3">
+              <div className="space-y-3 mt-8">
                 <div className="flex items-center space-x-3 [&>div]:text-blacks">
-                  <Mail className="h-5 w-5 text-gray-700" />
+                  <Icon name="femail" width={19} height={19}/>
                   <span>info@mytsv.com</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Phone className="h-5 w-5 text-gray-700" />
+                   <Icon name="fphone" width={19} height={19}/>
                   <span>+1 630 297 7501</span>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <MapPin className="h-5 w-5 flex-shrink-0 text-gray-700" />
+                <Icon name="locationBlack" width={19} height={19}/>
                   <span>20570 N Milwaukee Ave Deerfield IL 60015</span>
                 </div>
               </div>

@@ -2,6 +2,7 @@
 import assets from '@/assets'
 import { ChartAreaStacked } from '@/components/common/chats/area'
 import NavItem from '@/components/common/dashboard/navber'
+import { MonthlyBox } from '@/components/reuseable/date-box'
 import { Avatar, AvatarFallback, AvatarImage, Button, Card, CardContent, CardTitle } from '@/components/ui'
 import Icon from '@/icon'
 import { ArrowUpRight } from 'lucide-react'
@@ -10,7 +11,7 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 
 export default function Dashboard() {
-  const [status, setStatus] = useState("Pending");
+  const [status, setStatus] = useState("Views");
   const dashboardItem = [
     {
       label: "Views",
@@ -83,59 +84,59 @@ export default function Dashboard() {
             </div>
           </Card>
           <div className='space-y-4'>
-          {/* About Section */}
-          <Card className='p-3 border-1 gap-0 md:pb-30'>
-            <CardTitle className="text-xl font-semibold mb-2">About</CardTitle>
-            <CardContent className="p-0 text-blacks text-sm leading-relaxed lg:pr-20">
-              Lorem ipsum dolor sit amet consectetur. Nibh sagittis ligula sem pulvinar elementum rhoncus lacus.
-              Dignissim pretium vitae neque vulputate velit libero suscipit amet. Felis proin in tortor amet. Sit
-              imperdiet ac aliquam leo est egestas. Sit id vitae tempus nulla ut consectetur mi lobortis nec. Convallis
-              velit lectus aliquam elementum dignissim. Est risus adipiscing ornare et lorem
-            </CardContent>
-          </Card>
+            {/* About Section */}
+            <Card className='p-3 border-1 gap-0 md:pb-30'>
+              <CardTitle className="text-xl font-semibold mb-2">About</CardTitle>
+              <CardContent className="p-0 text-blacks text-sm leading-relaxed lg:pr-20">
+                Lorem ipsum dolor sit amet consectetur. Nibh sagittis ligula sem pulvinar elementum rhoncus lacus.
+                Dignissim pretium vitae neque vulputate velit libero suscipit amet. Felis proin in tortor amet. Sit
+                imperdiet ac aliquam leo est egestas. Sit id vitae tempus nulla ut consectetur mi lobortis nec. Convallis
+                velit lectus aliquam elementum dignissim. Est risus adipiscing ornare et lorem
+              </CardContent>
+            </Card>
 
-          {/* Services Section */}
-          <Card className="p-3 border-1 gap-0 md:pb-26">
-            <CardTitle className="text-xl font-semibold mb-2">Services</CardTitle>
-            <CardContent className="p-0 flex flex-wrap max-w-xs gap-3 [&>button]:text-blacks">
-              <Button variant="outline" className="rounded-full  px-4 py-2 text-sm bg-transparent">
-                1. Haircuts & Trims
-              </Button>
-              <Button variant="outline" className="rounded-full  px-4 py-2 text-sm bg-transparent">
-                2. Hair Styling
-              </Button>
-              <Button variant="outline" className="rounded-full px-4 py-2 text-sm bg-transparent">
-                3. Hair Coloring
-              </Button>
-              <Button variant="outline" className="rounded-full px-4 py-2 text-sm bg-transparent">
-                4. Hair Treatments
-              </Button>
-              <Button variant="outline" className="rounded-full px-4 py-2 text-sm bg-transparent">
-                5. Chemical Services
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+            {/* Services Section */}
+            <Card className="p-3 border-1 gap-0 md:pb-26">
+              <CardTitle className="text-xl font-semibold mb-2">Services</CardTitle>
+              <CardContent className="p-0 flex flex-wrap max-w-xs gap-3 [&>button]:text-blacks">
+                <Button variant="outline" className="rounded-full  px-4 py-2 text-sm bg-transparent">
+                  1. Haircuts & Trims
+                </Button>
+                <Button variant="outline" className="rounded-full  px-4 py-2 text-sm bg-transparent">
+                  2. Hair Styling
+                </Button>
+                <Button variant="outline" className="rounded-full px-4 py-2 text-sm bg-transparent">
+                  3. Hair Coloring
+                </Button>
+                <Button variant="outline" className="rounded-full px-4 py-2 text-sm bg-transparent">
+                  4. Hair Treatments
+                </Button>
+                <Button variant="outline" className="rounded-full px-4 py-2 text-sm bg-transparent">
+                  5. Chemical Services
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
       <div>
-          <h1 className='text-center text-base lg:text-2xl font-semibold my-6 lg:my-10'>Overall statistics of your channel</h1>
-          <div className="flex justify-between border-b border-gray-200">
+        <h1 className='text-center text-base lg:text-2xl font-semibold my-6 lg:my-10'>Overall statistics of your channel</h1>
+        <div className="flex justify-between border-b border-gray-200">
           <div>
-          {["Views", "Likes", "Dislikes"].map((item) => (
-          <button
-            key={item}
-            onClick={() => setStatus(item)}
-            className={`cursor-pointer px-6 py-2 text-sm font-medium text-[#333] border-b-2 border-transparent ${status === item ? "!border-reds" : ""
-              } focus:outline-none`}
-          >
-            {item.charAt(0).toUpperCase() + item.slice(1)}
-          </button>
-        ))}
+            {["Views", "Likes", "Dislikes"].map((item) => (
+              <button
+                key={item}
+                onClick={() => setStatus(item)}
+                className={`cursor-pointer px-6 py-2 text-sm font-medium text-[#333] border-b-2 border-transparent ${status === item ? "!border-reds" : ""
+                  } focus:outline-none`}
+              >
+                {item.charAt(0).toUpperCase() + item.slice(1)}
+              </button>
+            ))}
           </div>
-        <Button className='bg-transparent border hidden md:block text-blacks rounded-full py-1 h-8'>Monthly</Button>
-      </div>
-      <ChartAreaStacked/>
+          <MonthlyBox />
+        </div>
+        <ChartAreaStacked />
       </div>
     </div>
   )

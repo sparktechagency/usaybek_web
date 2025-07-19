@@ -23,6 +23,8 @@ const categories = [
   "Pharmacies",
   "Bookstores",
   "Cafes",
+  "Electronic store",
+  "Auto mechanic",
 ];
 
 function FilterBox({
