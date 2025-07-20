@@ -2,7 +2,6 @@
 import assets from '@/assets'
 import { ChartAreaStacked } from '@/components/common/chats/area'
 import NavItem from '@/components/common/dashboard/navber'
-import { MonthlyBox } from '@/components/reuseable/date-box'
 import { Avatar, AvatarFallback, AvatarImage, Button, Card, CardContent, CardTitle } from '@/components/ui'
 import Icon from '@/icon'
 import { ArrowUpRight } from 'lucide-react'
@@ -10,6 +9,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { profileImgs } from '../(simple)/profile/page'
+import MonthlyBox from '@/components/reuseable/date-box'
 
 export const ViewItem = [
   {
@@ -133,7 +133,7 @@ export default function Dashboard() {
               </button>
             ))}
           </div>
-          <MonthlyBox />
+          <MonthlyBox/>
         </div>
         <ChartAreaStacked />
       </div>
