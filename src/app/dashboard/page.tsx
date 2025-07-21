@@ -8,7 +8,6 @@ import { ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
-import { profileImgs } from '../(simple)/profile/page'
 import MonthlyBox from '@/components/reuseable/date-box'
 
 export const ViewItem = [
@@ -54,7 +53,7 @@ export default function Dashboard() {
                 className="rounded-xl"
               />
               <Avatar className="absolute bottom-0 left-1/2 translate-x-[-50%] translate-y-1/2 size-24  shadow-md">
-                <AvatarImage src={profileImgs} alt="Profile picture" />
+                <AvatarImage src={"https://doctors-next14.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fprofile2.0440e650.jpg&w=1920&q=75"} alt="Profile picture" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </div>

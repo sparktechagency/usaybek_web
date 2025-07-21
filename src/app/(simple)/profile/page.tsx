@@ -8,7 +8,7 @@ import Image from 'next/image'
 
 
 
-export const profileImgs = "https://doctors-next14.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fprofile2.0440e650.jpg&w=1920&q=75"
+
 
 
 export default function ProfileBox() {
@@ -26,7 +26,7 @@ export default function ProfileBox() {
                         />
                         <div className='absolute bottom-0 left-15 translate-y-1/2 '>
                         <Avatar className="size-24  shadow-md">
-                            <AvatarImage src={profileImgs} alt="Profile picture" />
+                            <AvatarImage src={"https://doctors-next14.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fprofile2.0440e650.jpg&w=1920&q=75"} alt="Profile picture" />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
                         <h2 className="text-xl font-semibold text-blacks">Haircut Pro</h2>
