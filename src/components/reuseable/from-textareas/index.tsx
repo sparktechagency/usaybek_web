@@ -15,7 +15,7 @@ interface FromTextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> 
   stylelabel?: string;
 }
 
-export function FromTextArea({
+export function FromTextAreas({
   name,
   label,
   placeholder,
@@ -31,18 +31,14 @@ export function FromTextArea({
       name={name}
       render={({ field, fieldState: { error } }) => (
         <div>
-          {label && (
-            <Label className={cn("mb-2 text-black text-base", stylelabel)}>
-              {label}
-            </Label>
-          )}
           <div className="relative">
             <Textarea
-              className={cn("h-12 w-full rounded-full  pl-4 pr-3  text-blacks placeholder:text-blacks text-sm",className)}
-              placeholder={label}
+              className={cn("w-full rounded-xl  pl-3 pr-3 py-3  text-blacks resize-none  text-sm",className)}
+              placeholder={placeholder}
               {...field}
               {...rest}
             />
+              <Label className={cn("text-blacks text-base font-medium absolute -top-3 left-7 bg-body px-3",stylelabel)}>{label}</Label>
           </div>
           {error?.message && (
             <h3 className="text-sm pt-[1px] text-end text-[#f73f4e] flex gap-1 items-center justify-end">

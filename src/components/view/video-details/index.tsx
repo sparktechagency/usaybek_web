@@ -1,19 +1,15 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui";
-import {
-  ThumbsUp,
-  Play,
-  Settings,
-  Maximize,
-} from "lucide-react";
-import { PlaceholderImg } from "@/lib/utils";
 import Avatars from "@/components/reuseable/avater";
 import Modal from "@/components/reuseable/modal";
-import { useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui";
+import VideoPlayer from "@/components/common/video-player";
+import {ThumbsUp} from "lucide-react";
+import { PlaceholderImg } from "@/lib/utils";
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import Icon from "@/icon";
 
 
@@ -53,47 +49,7 @@ export default function VideoDetails({ slug }: any) {
           {/* Left column: Video player, details, comments */}
           <div className="flex-1 min-w-0">
             {/* Video Player */}
-            <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
-              <Image
-                src="https://surl.li/lzklum"
-                alt="Video thumbnail"
-                layout="fill"
-                objectFit="cover"
-                className="opacity-70"
-              />
-              {/* Playback controls placeholder */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent text-white flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-white hover:bg-white/20"
-                  >
-                    <Play className="w-5 h-5" />
-                    <span className="sr-only">Play</span>
-                  </Button>
-                  <span>2:26 / 8:34</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-white hover:bg-white/20"
-                  >
-                    <Settings className="w-5 h-5" />
-                    <span className="sr-only">Settings</span>
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-white hover:bg-white/20"
-                  >
-                    <Maximize className="w-5 h-5" />
-                    <span className="sr-only">Fullscreen</span>
-                  </Button>
-                </div>
-              </div>
-            </div>
+             <VideoPlayer/>
 
             {/* Video Title and Actions */}
             <div>

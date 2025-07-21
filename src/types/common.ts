@@ -9,3 +9,8 @@ export type SlugParams = {
 export interface childrenProps {
   children: React.ReactNode;
 }
+
+export interface TabBoxProps {
+  isTab: string;
+  setIsTab: (tab: string) => void;
+}

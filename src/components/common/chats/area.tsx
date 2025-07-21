@@ -18,6 +18,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { cn } from "@/lib/utils";
 // import {
 //   Select,
 //   SelectContent,
@@ -136,7 +137,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function ChartAreaStacked() {
+type ChartProps ={
+  className?:string
+}
+
+export function ChartAreaStacked({className}: ChartProps) {
   const [timeRange, setTimeRange] = React.useState("7d");
 
   const filteredData = chartData.filter((item) => {
@@ -154,7 +159,7 @@ export function ChartAreaStacked() {
   });
 
   return (
-    <Card className="p-0 shadow-none border-[1px] mt-2">
+    <Card className={cn("p-0 shadow-none border-[1px] mt-2",className)}>
       {/* <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
           <CardTitle>Area Chart - Interactive</CardTitle>

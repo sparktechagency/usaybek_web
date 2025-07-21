@@ -13,6 +13,8 @@ export default function Sidebar() {
   const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState(true);
 
+
+  // resize screen
   useEffect(() => {
     if (isMobile) {
       setIsExpanded(false);

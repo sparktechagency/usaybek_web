@@ -33,10 +33,10 @@ export default function MonthlyBox() {
   }
 
   return (
-    <div className="p-4 flex flex-col items-start relative">
+    <div className="flex flex-col items-start relative">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="bg-transparent hover:bg-transparent border hidden md:block text-blacks rounded-full py-1 h-8 lg:flex space-x-2">
+          <Button className="bg-transparent hover:bg-transparent border hidden md:block text-blacks rounded-full py-1 h-8 w-[100px] lg:flex space-x-2">
             {selectedRange.charAt(0).toUpperCase() + selectedRange.slice(1)} <ChevronDown />
           </Button>
         </DropdownMenuTrigger>

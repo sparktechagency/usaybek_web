@@ -26,7 +26,7 @@ export const formatDateTime = (date: any) => {
 export const delay = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
-
+export const capitalize = (s:string | any) => s[0]?.toUpperCase() + s?.slice(1);
 
 export const PlaceholderImg = (
   width: number = 600,

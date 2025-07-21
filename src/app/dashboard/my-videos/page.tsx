@@ -15,6 +15,9 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Icon from "@/icon";
 import { Pagination } from "@/components/reuseable/pagination";
+import { DeleteBtn } from "@/components/reuseable/btn";
+import Link from "next/link";
+
 
 interface Video {
   id: string;
@@ -144,6 +147,13 @@ export default function MyVideos() {
     }
   };
 
+  const SingleVideoDelete = async (id: string) => {
+    const con = await confirm();
+    if (con) {
+      console.log(id);
+    }
+  };
+
   return (
     <div>
       <NavItem title="My videos" upload={true} />
@@ -154,14 +164,7 @@ export default function MyVideos() {
           </span>
           {selectedVideoIds?.size > 0 && (
             <>
-              <Button
-                variant="ghost"
-                className="rounded-md px-3 py-1 text-sm font-medium border-2 border-reds/20 text-reds hover:text-reds bg-[#FFE9E9] hover:bg-[#FFE9E9]"
-                onClick={handleDelete}
-              >
-                <Icon name="deleteRed" />
-                Delete
-              </Button>
+              <DeleteBtn onClick={handleDelete} />
             </>
           )}
         </div>
@@ -218,9 +221,32 @@ export default function MyVideos() {
                         <div className="font-semibold text-blacks text-lg">
                           {video.title}
                         </div>
-                        <div className="text-sm text-grays block break-all whitespace-normal line-clamp-2">
-                          {video.description}
+                        <div className="group text-sm cursor-pointer text-grays block break-all whitespace-normal line-clamp-2 relative">
+                          <span className="block group-hover:hidden line-clamp-2">
+                            {video.description}
+                          </span>
+
+                          <div className="hidden group-hover:block">
+                            <ul className="flex items-center space-x-3 mt-3">
+                              <li className="hover:border rounded-md p-1">
+                                <Link href={"/dashboard/video-details?tab=details"}><Icon name={"veye"} /></Link>
+                              </li>
+                              <li className="hover:border rounded-md p-1">
+                                <Link href={"/dashboard/video-details?tab=analytics"}><Icon name={"vanalytics"} /></Link>
+                              </li>
+                              <li className="hover:border rounded-md p-1">
+                                <Link href={"/dashboard/edit-video"}>
+                                  <Icon name={"vedit"} />
+                                </Link>
+                              </li>
+                              <li className="hover:border rounded-md p-1">
+                                <Link href={"/dashboard/video-details?tab=comments"}><Icon name={"vmesage"} /></Link>
+                              </li>
+                              <li className="hover:border rounded-md p-1" onClick={() => SingleVideoDelete(video.id)}><Icon name={"vdelete"} width={14} height={15} className="relative mb-1" /></li>
+                            </ul>
+                          </div>
                         </div>
+
                       </div>
                     </div>
                   </div>
@@ -267,7 +293,7 @@ export default function MyVideos() {
         <li className="font-medium">
           <Pagination
             page={1}
-            onPageChange={() => {}}
+            onPageChange={() => { }}
             totalPage={10}
             per_page={2}
           ></Pagination>
@@ -276,3 +302,6 @@ export default function MyVideos() {
     </div>
   );
 }
+
+//  <Icon name='eye' className='transition-all duration-200 ease-in-out
+//  hover:hue-rotate-0 hover:invert-0 hover:sepia-100 hover:saturate-100 hover:brightness-100 hover:contrast-100' />
