@@ -9,32 +9,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import MonthlyBox from '@/components/reuseable/date-box'
+import { serviceItem, ViewItem } from '@/dummy-data'
 
-export const ViewItem = [
-  {
-    label: "Views",
-    value: 22568,
-    icon: assets.dashboard.views
-  },
-  {
-    label: "Videos",
-    value: 40,
-    icon: assets.dashboard.videos
-  },
-  {
-    label: "Likes",
-    value: 17256,
-    icon: assets.dashboard.likes
-  }
-]
 
-export const serviceItem = [
-  "Haircuts & Trims",
-  "Hair Styling",
-  "Hair Coloring",
-  "Hair Treatments",
-  "Chemical Services"
-];
 
 export default function Dashboard() {
   const [status, setStatus] = useState("Views");

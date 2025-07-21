@@ -1,8 +1,8 @@
 "use client"
-import { serviceItem, ViewItem } from '@/app/dashboard/page'
 import { videos } from '@/components/common/video-box'
 import { VideoCard } from '@/components/reuseable/video-card'
 import { Avatar, AvatarFallback, AvatarImage, Card, CardContent, CardTitle } from '@/components/ui'
+import { serviceItem, ViewItem } from '@/dummy-data'
 import Icon from '@/icon'
 import Image from 'next/image'
 
