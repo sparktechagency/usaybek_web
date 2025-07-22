@@ -21,7 +21,7 @@ export default function Sidebar() {
       href: "/upload",
     },
     { icon: <Icon name="ssetting" />, text: "Settings", href: "/dashboard" },
-    { icon: <Icon name="svideos" />, text: "My videos", href: "/my-videos" },
+    { icon: <Icon name="svideos" />, text: "My videos", href: "/dashboard/my-videos" },
     { text: "separator" },
     { icon: <Icon name="shome" />, text: "Home", href: "/", active: true },
     { icon: <Icon name="sblog" />, text: "Blogs", href: "/blogs" },
@@ -39,7 +39,7 @@ export default function Sidebar() {
       href: "/terms",
     },
     { text: "separator" },
-    { icon: <Icon name="slikeup" />, text: "Liked videos", href: "/liked" },
+    { icon: <Icon name="slikeup" />, text: "Liked videos", href: "/like-videos" },
     { icon: <Icon name="shistory" />, text: "History", href: "/history" },
   ];
 

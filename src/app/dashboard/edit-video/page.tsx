@@ -2,6 +2,7 @@
 import VideoPlayer from '@/components/common/video-player'
 import Form from '@/components/reuseable/from'
 import { FromInputs } from '@/components/reuseable/from-inputs'
+import { InputSelectField } from '@/components/reuseable/from-select'
 import { FromTagInputs } from '@/components/reuseable/from-tag-inputs'
 import { FromTextAreas } from '@/components/reuseable/from-textareas'
 import { Button } from '@/components/ui'
@@ -21,8 +22,8 @@ export default function EditVideo() {
       description: "Lorem ipsum dolor sit amet consectetur. Aenean tortor tellus semper tincidunt vel. Eget venenatis feugiat sed eget facilisi felis egestas. Tempor pulvinar vel euismod mattis. Auctor porttitor proin augue massa massa. Tortor vel eu felis tempus. Semper sit proin molestie semper fermentum. Justo accumsan rutrum ut risus at purus dignissim. Sit ipsum aenean aliquet suspendisse. Pulvinar egestas justo sed aliquam id donec sit nec. Cursus volutpat pellentesque odio donec. Et ac aliquet neque quis pulvinar consectetur lorem felis. ",
       state: "Uk",
       city: "Bangldesh",
-      category: "category 1",
-      everyone: "Everyone",
+      category: "category1",
+      visibility: "everyone",
       tags: ["React", "Next.js", "Tailwind"],
 
     },
@@ -78,16 +79,31 @@ export default function EditVideo() {
                 name="city"
                 placeholder="City name here"
               />
-              <FromInputs
-                label='Category'
+              <InputSelectField
+                items={[
+                  { label: "Category 1", value: "category1" },
+                  { label: "Category 2", value: "Category 2" },
+                  { label: "Category 3", value: "Category 3" },
+                  { label: "Category 4", value: "Category 4" },
+                  { label: "Category 5", value: "Category 5" },
+                  { label: "Category 6", value: "Category 6" },
+                  { label: "Category 7", value: "Category 7" },
+                  { label: "Category 8", value: "Category 8" },
+                ]}
+                label="Category"
                 name="category"
-                placeholder="Category 1"
-              />
-              <FromInputs
-                label='Everyone'
-                name="everyone"
-                placeholder="Everyone"
-              />
+                placeholder="Select category"
+              ></InputSelectField>
+              <InputSelectField
+                items={[
+                  { label: "Everyone", value: "everyone",icon:<Icon width={18} name="internetBlack"/> },
+                  { label: "Only me", value: "only me",icon:<Icon  width={14} name="lockBack"/> }
+                ]}
+                label="Visibility"
+                name="visibility"
+                placeholder="Select category"
+              ></InputSelectField>
+
               <FromTagInputs
                 label='Tags'
                 name="tags"

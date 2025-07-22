@@ -53,6 +53,12 @@ import editBlack from "@/icon/dash/editBlack.svg"
 import deleteWhite from "@/icon/dash/deleteWhite.svg"
 import saveWhite from "@/icon/dash/saveWhite.svg"
 import undoBlack from "@/icon/dash/undoBlack.svg"
+import lockBack from "@/icon/dash/lockBalck.svg"
+import cameraWhite from "@/icon/dash/cameraWhite.svg"
+import quesReads from "@/icon/dash/quesReds.svg"
+import exBlack from "@/icon/dash/exBlack.svg"
+import pauseBlack from "@/icon/dash/pauseBlack.svg"
+import playBlack from "@/icon/dash/playBlack.svg"
 
 
 export const IconList = {
@@ -110,5 +116,11 @@ export const IconList = {
   editBlack,
   deleteWhite,
   saveWhite,
-  undoBlack
+  undoBlack,
+  lockBack,
+  cameraWhite,
+  quesReads,
+  exBlack,
+  pauseBlack,
+  playBlack
 };

@@ -33,7 +33,7 @@ export function FromTextAreas({
         <div>
           <div className="relative">
             <Textarea
-              className={cn("w-full rounded-xl  pl-3 pr-3 py-3  text-blacks resize-none  text-sm",className)}
+              className={cn("w-full rounded-3xl  pl-3 pr-3 py-3  text-blacks resize-none  text-sm",className)}
               placeholder={placeholder}
               {...field}
               {...rest}

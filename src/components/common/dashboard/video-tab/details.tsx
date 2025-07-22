@@ -58,7 +58,6 @@ export default function Details({ isTab, setIsTab }: TabBoxProps) {
             <FromTagShow name="specialties"
               label="Specialties"
               tags={["Cricket", "Football", "Basketball"]} />
-            {/* <FromShow label='Tags' value='' /> */}
           </div>
           <div>
             <h1 className='font-semibold text-xl my-6'>Thumbnail</h1>
