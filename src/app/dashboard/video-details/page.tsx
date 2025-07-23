@@ -16,10 +16,9 @@ export default function VideoDetails() {
         setIsTab(active as string)
     }, [active, isTab])
 
-    console.log(isTab)
 
     return (
-        <Suspense>
+        <Suspense fallback={<div className='hidden'>Loading search...</div>}>
              <div className='pb-15'>
             {isTab === "details" ? (
                    <Details isTab={isTab} setIsTab={setIsTab} />
