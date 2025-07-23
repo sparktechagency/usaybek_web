@@ -3,7 +3,7 @@ import Analytics from '@/components/common/dashboard/video-tab/analytics'
 import Comments from '@/components/common/dashboard/video-tab/comments'
 import Details from '@/components/common/dashboard/video-tab/details'
 import { useSearchParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 
 
 
@@ -19,7 +19,8 @@ export default function VideoDetails() {
     console.log(isTab)
 
     return (
-        <div className='pb-15'>
+        <Suspense>
+             <div className='pb-15'>
             {isTab === "details" ? (
                    <Details isTab={isTab} setIsTab={setIsTab} />
             ) : isTab === "analytics" ? (
@@ -32,5 +33,6 @@ export default function VideoDetails() {
 
 
         </div>
+        </Suspense>
     )
 }
