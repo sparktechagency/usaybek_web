@@ -1,8 +1,6 @@
 "use client";
 import {
     AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
     AlertDialogFooter,
@@ -10,115 +8,80 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import Icon from "@/icon";
-import React, {
-    createContext,
-    useContext,
-    useState,
-    ReactNode,
-} from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
-// Types
-type ConfirmDialogOptions = Partial<Omit<ConfirmDialogState, "open" | "resolve">>;
-
-interface ConfirmDialogState {
+interface SuccessDialogState {
     open: boolean;
-    title: string;
-    description: string;
-    confirmText: string;
-    cancelText: string;
-    onConfirm?: () => void;
-    onCancel?: () => void;
+    title?: string;
+    description?: string;
     resolve?: (value: boolean) => void;
 }
 
-interface ConfirmDialogContextType {
-    confirm: (options?: ConfirmDialogOptions) => Promise<boolean>;
+interface SuccessDialogContextType {
+    success: (title?: string, description?: string) => Promise<boolean>;
 }
 
-const ConfirmDialogContext = createContext<ConfirmDialogContextType | undefined>(undefined);
+const SuccessDialogContext = createContext<SuccessDialogContextType | undefined>(undefined);
 
-interface ConfirmDialogProviderProps {
-    children: ReactNode;
-}
-
-export const SuccessDialogProvider = ({ children }: ConfirmDialogProviderProps) => {
-    const [dialogState, setDialogState] = useState<ConfirmDialogState>({
+export const SuccessDialogProvider = ({ children }: { children: ReactNode }) => {
+    const [dialogState, setDialogState] = useState<SuccessDialogState>({
         open: false,
-        title: "Are you sure to delete this video ?",
-        description: "Users can't find your video anymore.",
-        confirmText: "Yes, Delete",
-        cancelText: "Cancel",
-        onConfirm: undefined,
-        onCancel: undefined,
-        resolve: undefined,
+        title: "Payment successful",
+        description: "Redirecting to home page",
     });
 
-    const confirm = (options: ConfirmDialogOptions = {}): Promise<boolean> => {
+    const success = (title?: string, description?: string): Promise<boolean> => {
         return new Promise((resolve) => {
-            setDialogState((prev) => ({
-                ...prev,
-                ...options,
+            setDialogState({
                 open: true,
+                title: title || "Payment successful",
+                description: description || "Redirecting to home page",
                 resolve,
-            }));
+            });
+
+            // ✅ Auto close after 1 minute (60000 ms)
+            setTimeout(() => {
+                closeDialog();
+            }, 3000);
         });
     };
 
-    const handleConfirm = () => {
-        dialogState.resolve?.(true);
-        closeDialog();
-        dialogState.onConfirm?.();
-    };
-
-    const handleCancel = () => {
-        dialogState.resolve?.(false);
-        closeDialog();
-        dialogState.onCancel?.();
-    };
-
     const closeDialog = () => {
+        if (dialogState.resolve) dialogState.resolve(true);
         setDialogState((prev) => ({ ...prev, open: false }));
     };
 
     return (
-        <ConfirmDialogContext.Provider value={{ confirm }}>
+        <SuccessDialogContext.Provider value={{ success }}>
             {children}
             <AlertDialog open={dialogState.open} onOpenChange={closeDialog}>
-                <AlertDialogContent className="rounded-md w-[420px] px-20">
-                    <AlertDialogHeader>
-                        <AlertDialogTitle >
-                            <ul>
-                                <li className="flex justify-center"><Icon name="alertRed" width={50} height={50}/></li>
-                                <li className="text-center text-reds text-2xl">{dialogState.title || "Are you sure to delete this video ?"}</li>
-
-                            </ul>
+                <AlertDialogContent className="rounded-md w-[420px] px-8 py-10 text-center">
+                    <AlertDialogHeader className="text-center mx-auto">
+                        <AlertDialogTitle>
+                            <div className="flex justify-center mb-3">
+                                <Icon name="sucessGreen" width={70} height={70} />
+                            </div>
+                            <div className="text-green-600 text-2xl font-semibold">
+                                {dialogState.title}
+                            </div>
                         </AlertDialogTitle>
-                        <AlertDialogDescription className="text-center text-grays">
-                            {dialogState.description || "Users can't find your video anymore."}
+                        <AlertDialogDescription className="text-gray-500 mt-2 text-center">
+                            {dialogState.description}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <AlertDialogFooter className="sm:justify-center mt-3">
-                        <AlertDialogCancel onClick={handleCancel} className="cursor-pointer rounded-full py-6 px-8">
-                            {dialogState.cancelText || "Cancel"}
-                        </AlertDialogCancel>
-                        <AlertDialogAction
-                            onClick={handleConfirm}
-                            className="bg-reds hover:bg-reds cursor-pointer rounded-full py-6 px-5"
-                        >
-                            {dialogState.confirmText || "Confirm"}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
+                    {/* ✅ Removed the OK button */}
+                    <AlertDialogFooter className="hidden" />
                 </AlertDialogContent>
             </AlertDialog>
-        </ConfirmDialogContext.Provider>
+        </SuccessDialogContext.Provider>
     );
 };
 
 // Hook
-export default function useConfirmation(): ConfirmDialogContextType {
-    const context = useContext(ConfirmDialogContext);
+export function useSuccessDialog(): SuccessDialogContextType {
+    const context = useContext(SuccessDialogContext);
     if (!context) {
-        throw new Error("useConfirmation must be used within a ConfirmDialogProvider");
+        throw new Error("useSuccessDialog must be used within SuccessDialogProvider");
     }
     return context;
 }

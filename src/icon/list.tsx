@@ -62,6 +62,7 @@ import playBlack from "@/icon/dash/playBlack.svg"
 import get from "@/icon/basic/get.svg"
 import fors from "@/icon/basic/for.svg"
 import phoned from "@/icon/basic/phoned.svg"
+import sucessGreen from "@/icon/basic/sucessGreen.svg"
 
 
 export const IconList = {
@@ -128,5 +129,6 @@ export const IconList = {
   playBlack,
   get,
   fors,
-  phoned
+  phoned,
+  sucessGreen
 };

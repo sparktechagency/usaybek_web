@@ -1,14 +1,23 @@
+"use client"
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 import onsideImg from "@/assets/onsideImg.jpg"
 import { Alert, AlertDescription, Button } from '@/components/ui'
 import Icon from '@/icon'
-import { ArrowRight} from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
+import Modal from '@/components/reuseable/modal'
+import OnSideAccount from '@/components/common/onslide/account-create'
+import PaymentBox from '@/components/common/payment-box'
 
-export default function OnSideAccount() {
+
+
+export default function OnSidePage() {
+    const [isPayment, setIsPayment] = useState(false)
+    const [isAccount, setIsAccount] = useState(false)
+    
     return (
         <div className='max-w-6xl m-auto'>
-            <div className="relative h-48 md:h-64">
+            <div  className="relative h-48 md:h-64">
                 <Image
                     src={onsideImg}
                     alt="Cover image"
@@ -94,11 +103,19 @@ export default function OnSideAccount() {
                     </p>
                 </div>
                 <div className="md:w-1/3 flex justify-center md:justify-end">
-                    <Button variant={"primary"} className='rounded-full gap-3' >
+                    <Button onClick={() => setIsAccount(true)} variant={"primary"} size={"lg"} className='rounded-full gap-3' >
                         Pay & register now <ArrowRight className="h-6 w-6 font-bold -rotate-45" />
                     </Button>
                 </div>
             </div>
+            {/* is Account */}
+            <Modal open={isAccount} title='Onsite account creation' setIsOpen={setIsAccount} titleStyle='text-center' className='sm:max-w-3xl'>
+                <OnSideAccount setIsAccount={setIsAccount} setIsPayment={setIsPayment} />
+            </Modal>
+            {/*  Pay to MyTSV */}
+            <Modal title="Pay to MyTSV" open={isPayment} setIsOpen={setIsPayment} titleStyle='text-center' className='sm:max-w-3xl'>
+                <PaymentBox setIsPayment={setIsPayment} />
+            </Modal>
         </div>
     )
 } 

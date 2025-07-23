@@ -26,7 +26,7 @@ export default function Modal({
   className,
   title,
   titleStyle,
-  mainStyle
+  mainStyle,
 }: ModalProps) {
   return (
     <Dialog open={open} onOpenChange={setIsOpen}>

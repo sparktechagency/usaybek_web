@@ -54,7 +54,7 @@ export function FromInputs({
                 <div className="relative">
                   {/* placeholder:text-blacks */}
                   <Input
-                    className={cn("h-12 w-full rounded-full pl-4 pr-3  text-blacks  text-sm",className)}
+                    className={cn("h-12 w-full rounded-full pl-4 pr-3  text-blacks placeholder:text-grays  text-sm",className)}
                     {...field}
                     type={inputType}
                     placeholder={placeholder}

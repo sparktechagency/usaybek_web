@@ -51,3 +51,8 @@ export const SignUpSchema = loginSchema.extend({
   message: "Passwords must be match.",
 });
 
+
+// onSide account
+export const onSideSchema=SignUpSchema.extend({
+  secret: z.string().nonempty("Representative secret is required"),
+})
