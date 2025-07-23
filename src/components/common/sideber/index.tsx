@@ -54,7 +54,7 @@ export default function Sidebar() {
     {
       icon: <Icon name="sonSide" />,
       text: "Onsite account creation",
-      href: "/promotions",
+      href: "/onside-account",
     },
   ];
 

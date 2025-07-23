@@ -140,6 +140,18 @@
   }
 }
 
-.like-gradient{
+.like-gradient {
   background: linear-gradient(0deg, rgba(204, 43, 94, 0) 0%, rgba(239, 68, 68, 0.80) 50%, #753A88 100%)
+}
+
+.onside-get {
+  background: linear-gradient(124deg, #EC008C 0.15%, #FC6767 99.85%);
+}
+
+.onside-for {
+  background: linear-gradient(123deg, #8A2387 1.07%, #E94057 50%, #F27121 98.93%);
+}
+
+.onside-free {
+  background: linear-gradient(90deg, #EC008C 0%, #FC6767 100%);
 }

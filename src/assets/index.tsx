@@ -14,6 +14,7 @@ import loginImg from "@/assets/login/login.svg"
 import signImg from "@/assets/login/sign-up.svg"
 import forgotImg from "@/assets/login/forgot.svg"
 
+
 const assets = {
   logo,
   basic: {

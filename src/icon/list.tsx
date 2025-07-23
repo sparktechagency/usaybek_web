@@ -59,6 +59,9 @@ import quesReads from "@/icon/dash/quesReds.svg"
 import exBlack from "@/icon/dash/exBlack.svg"
 import pauseBlack from "@/icon/dash/pauseBlack.svg"
 import playBlack from "@/icon/dash/playBlack.svg"
+import get from "@/icon/basic/get.svg"
+import fors from "@/icon/basic/for.svg"
+import phoned from "@/icon/basic/phoned.svg"
 
 
 export const IconList = {
@@ -122,5 +125,8 @@ export const IconList = {
   quesReads,
   exBlack,
   pauseBlack,
-  playBlack
+  playBlack,
+  get,
+  fors,
+  phoned
 };
