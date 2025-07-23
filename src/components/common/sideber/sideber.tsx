@@ -4,61 +4,18 @@ import { Separator } from "@/components/ui";
 import { useLogin } from "../login-provider";
 import Img from "@/components/reuseable/img";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
 import Link from "next/link";
 import Icon from "@/icon";
 import { useSidebar } from "@/context/useSideber";
+import { navItems, signOutItems } from "./nav-data";
 
 export default function Sidebar() {
   const { isExpanded, toggleSidebar } = useSidebar();
   const pathname = usePathname();
   const { login } = useLogin();
 
-  const navItems = [
-    {
-      icon: <Icon name="supload" />,
-      text: "Upload your video",
-      href: "/upload",
-    },
-    { icon: <Icon name="ssetting" />, text: "Settings", href: "/dashboard" },
-    { icon: <Icon name="svideos" />, text: "My videos", href: "/dashboard/my-videos" },
-    { text: "separator" },
-    { icon: <Icon name="shome" />, text: "Home", href: "/", active: true },
-    { icon: <Icon name="sblog" />, text: "Blogs", href: "/blogs" },
-    {
-      icon: <Icon name="spromotion" />,
-      text: "Promotions",
-      href: "/promotions",
-    },
-    { icon: <Icon name="sfqa" />, text: "FAQ", href: "/faq" },
-    { icon: <Icon name="sabout" />, text: "About us", href: "/about-us" },
-    { icon: <Icon name="scontact" />, text: "Contact us", href: "/contact-us" },
-    {
-      icon: <Icon name="strams" />,
-      text: "Terms & Conditions",
-      href: "/terms",
-    },
-    { text: "separator" },
-    { icon: <Icon name="slikeup" />, text: "Liked videos", href: "/like-videos" },
-    { icon: <Icon name="shistory" />, text: "History", href: "/history" },
-  ];
-
-  const signOutItems = [
-    { icon: <Icon name="shome" />, text: "Home", href: "/" },
-    { icon: <Icon name="sblog" />, text: "Blogs", href: "/blogs" },
-    {
-      icon: <Icon name="spromotion" />,
-      text: "Promotions",
-      href: "/promotions",
-    },
-    {
-      icon: <Icon name="sonSide" />,
-      text: "Onsite account creation",
-      href: "/onside-account",
-    },
-  ];
-
   const Items = login ? navItems : signOutItems;
+
 
   return (
     <div
@@ -69,18 +26,17 @@ export default function Sidebar() {
     >
       {/* Header */}
       <div
-        className={`flex items-center  p-4 h-20 ${
-          isExpanded ? "justify-start" : "justify-center"
-        }`}
+        className={`flex items-center  p-4 h-20 ${isExpanded ? "justify-start" : "justify-center"
+          }`}
       >
         <button
           onClick={toggleSidebar}
           className="p-2 rounded-md cursor-pointer"
         >
-          <Menu className="h-6 w-6 text-blacks" />
+          <Icon name="menu" width={22} height={22} />
         </button>
         {isExpanded && (
-          <h1 className="ml-4 text-xl font-semibold text-gray-800">Menu</h1>
+          <h1 className="ml-3 text-xl font-semibold text-blacks">Menu</h1>
         )}
       </div>
 
@@ -146,9 +102,8 @@ export default function Sidebar() {
         )}
         {login && (
           <Link
-            className={`flex items-center gap-3 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors text-red-500 ${
-              isExpanded ? "justify-start" : "justify-center m-auto my-3 w-fit"
-            }`}
+            className={`flex items-center gap-3 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors text-red-500 ${isExpanded ? "justify-start" : "justify-center m-auto my-3 w-fit"
+              }`}
             href={"/"}
           >
             <Icon name="ssignout" />{" "}

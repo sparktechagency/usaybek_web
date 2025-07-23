@@ -6,8 +6,21 @@ import { Button } from '@/components/ui'
 import Avatars from '@/components/reuseable/avater'
 import { DeleteBtn } from '@/components/reuseable/btn'
 import Link from 'next/link'
+import useConfirmation from '@/context/delete-modal'
 
 export default function Comments({ isTab, setIsTab }: TabBoxProps) {
+  const { confirm } = useConfirmation();
+
+
+  const handleDelete = async () => {
+    const con = await confirm({
+      title:"Are you sure to delete this comment ?",
+      description:"Users can't find this comment anymore."
+    });
+    if (con) {
+      console.log("ok");
+    }
+  };
   return (
     <div>
       <ul className='flex justify-between my-4'>
@@ -56,7 +69,7 @@ export default function Comments({ isTab, setIsTab }: TabBoxProps) {
               </div>
             </div>
           </div>
-          <DeleteBtn label="Remove" />
+          <DeleteBtn onClick={()=>handleDelete()} label="Remove" />
         </div>
         {/* Comment 2 */}
         <div className="flex items-center justify-between border-b-1 pb-2">
@@ -93,7 +106,7 @@ export default function Comments({ isTab, setIsTab }: TabBoxProps) {
               </div>
             </div>
           </div>
-          <DeleteBtn label="Remove" />
+          <DeleteBtn onClick={()=>handleDelete()} label="Remove" />
         </div>
       </div>
     </div>

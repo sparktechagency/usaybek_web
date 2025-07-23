@@ -5,13 +5,15 @@ import Link from "next/link";
 import Icon from "@/icon";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import SideberFixed from "../../sideber/sideber-fixed";
 
 export default function Sidebar() {
   const { isMobile } = useIsMobile();
   const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState(true);
+  const [isSide,setIsSide]=useState(false)
 
 
   // resize screen
@@ -59,7 +61,7 @@ export default function Sidebar() {
           <div>
             <div className="flex items-center justify-center my-4 text-white">
               <Icon
-                onClick={() => setIsExpanded(!isExpanded)}
+                onClick={() => setIsSide(!isSide)}
                 name="menu"
                 width={25}
                 height={25}
@@ -103,6 +105,7 @@ export default function Sidebar() {
           </div>
         </div>
       </aside>
+      <SideberFixed isSide={isSide} setIsSide={setIsSide}/>
     </div>
   );
 }

@@ -40,7 +40,7 @@ export default function MonthlyBox() {
             {selectedRange.charAt(0).toUpperCase() + selectedRange.slice(1)} <ChevronDown />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-[150px] mr-10">
+        <DropdownMenuContent align="start" className="w-[150px] mr-10 border-0">
           <DropdownMenuItem onClick={() => setSelectedRange("monthly")}>Monthly</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setSelectedRange("yearly")}>Yearly</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setSelectedRange("custom")}>Custom</DropdownMenuItem>
@@ -48,27 +48,28 @@ export default function MonthlyBox() {
       </DropdownMenu>
 
       {selectedRange === "custom" && (
-        <Card className="mt-4 p-4 w-full max-w-md rounded-xl">
-          <Tabs defaultValue="month" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 bg-muted rounded-md overflow-hidden p-1">
+        <Card className="mt-9 p-0 gap-0  min-w-xl rounded-xl border-0 shadow-md absolute top-0 right-0 bg-white z-50">
+          <Tabs defaultValue="month" className="w-full gap-0">
+            <TabsList className="grid w-full grid-cols-2 !rounded-tl-xl !rounded-tr-xl rounded-none  h-11 p-0   bg-[#F0F0F0]">
               <TabsTrigger
                 value="month"
-                className="data-[state=active]:bg-red-500 data-[state=active]:text-white data-[state=active]:shadow-sm rounded-md px-4 py-2"
+                className="data-[state=active]:bg-reds data-[state=active]:data-[state=active]:rounded-tl-xl data-[state=active]:text-white h-full data-[state=active]:shadow-sm rounded-none px-4 py-1 cursor-pointer"
               >
                 Month
               </TabsTrigger>
               <TabsTrigger
                 value="year"
-                className="data-[state=active]:bg-red-500 data-[state=active]:text-white data-[state=active]:shadow-sm rounded-md px-4 py-2"
+                className="data-[state=active]:bg-reds data-[state=active]:data-[state=active]:rounded-tr-xl  h-full data-[state=active]:text-white data-[state=active]:shadow-sm rounded-none px-4 py-1 cursor-pointer"
               >
                 Year
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="month" className="mt-4">
-              <div className="flex items-center justify-between mb-4">
+            <TabsContent value="month" className="mt-4 p-3">
+              <div className="flex items-center justify-between mb-4 pb-2 border-b">
                 <Button
                   variant="ghost"
                   size="icon"
+                  className="bg-[#FFDDDD] hover:bg-[#FFDDDD]"
                   onClick={() => handleYearNavigation("prev", "month")}
                   aria-label="Previous year"
                 >
@@ -78,36 +79,32 @@ export default function MonthlyBox() {
                 <Button
                   variant="ghost"
                   size="icon"
+                  className="bg-[#FFDDDD] hover:bg-[#FFDDDD]"
                   onClick={() => handleYearNavigation("next", "month")}
                   aria-label="Next year"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-6 gap-2">
                 {months.map((month, index) => (
                   <Button
                     key={month}
                     variant={selectedMonth === index ? "default" : "outline"}
-                    className={selectedMonth === index ? "bg-red-500 hover:bg-red-600 text-white" : ""}
+                    className={selectedMonth === index ? "bg-reds hover:bg-reds text-white rounded-full" : "bg-transparent hover:bg-transparent rounded-full"}
                     onClick={() => setSelectedMonth(index)}
                   >
                     {month}
                   </Button>
                 ))}
               </div>
-              <div className="mt-4 text-right">
-                <Button>
-                  <Download className="mr-2 h-4 w-4" />
-                  Download
-                </Button>
-              </div>
             </TabsContent>
-            <TabsContent value="year" className="mt-4">
-              <div className="flex items-center justify-between mb-4">
+            <TabsContent value="year" className="mt-4 p-3">
+              <div className="flex items-center justify-between mb-4 pb-2 border-b">
                 <Button
                   variant="ghost"
                   size="icon"
+                  className="bg-[#FFDDDD] hover:bg-[#FFDDDD]"
                   onClick={() => handleYearNavigation("prev", "year")}
                   aria-label="Previous block of years"
                 >
@@ -117,6 +114,7 @@ export default function MonthlyBox() {
                 <Button
                   variant="ghost"
                   size="icon"
+                  className="bg-[#FFDDDD] hover:bg-[#FFDDDD]"
                   onClick={() => handleYearNavigation("next", "year")}
                   aria-label="Next block of years"
                 >
@@ -129,7 +127,7 @@ export default function MonthlyBox() {
                     key={year}
                     variant={selectedYear === year ? "default" : "outline"}
                     className={
-                      selectedYear === year ? "bg-red-500 hover:bg-red-600 text-white rounded-full" : "rounded-full"
+                      selectedYear === year ? "bg-reds hover:bg-reds text-white rounded-full" : "bg-transparent hover:bg-transparent rounded-full"
                     }
                     onClick={() => setSelectedYear(year)}
                   >
@@ -137,12 +135,7 @@ export default function MonthlyBox() {
                   </Button>
                 ))}
               </div>
-              <div className="mt-4 text-right">
-                <Button>
-                  <Download className="mr-2 h-4 w-4" />
-                  Download
-                </Button>
-              </div>
+
             </TabsContent>
           </Tabs>
         </Card>

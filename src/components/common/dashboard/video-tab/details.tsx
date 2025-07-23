@@ -20,7 +20,10 @@ export default function Details({ isTab, setIsTab }: TabBoxProps) {
 
 
   const handleDelete = async () => {
-    const con = await confirm();
+    const con = await confirm({
+      title: "Are you sure to delete this video ?",
+      description: "Users can't find your video anymore"
+    });
     if (con) {
       console.log("ok");
     }

@@ -2,11 +2,11 @@
 import { Button } from "@/components/ui";
 import { Search } from "lucide-react";
 import Image from "next/image";
-import logoImg from "@/assets/logo.png";
 import { useLogin } from "@/components/common/login-provider";
 import { PlaceholderImg } from "@/lib/utils";
 import Img from "@/components/reuseable/img";
 import Link from "next/link";
+import assets from "@/assets";
 
 export default function Navber() {
   // const headerRef = useRef<HTMLDivElement>(null);
@@ -27,12 +27,19 @@ export default function Navber() {
         <li>
           <Link href={"/"}>
             <div className="relative w-40 h-11 overflow-hidden mr-3">
-              <Image
+            <Image
+                  src={assets.logo}
+                  alt="MYTSV Logo"
+                  width={160}
+                  height={160}
+                  className="object-contain"
+                />
+              {/* <Image
                 src={logoImg}
                 alt={"author.name"}
                 fill
                 className="object-cover"
-              />
+              /> */}
             </div>
           </Link>
         </li>
