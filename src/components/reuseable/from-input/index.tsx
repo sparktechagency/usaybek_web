@@ -8,7 +8,7 @@ import {
     type ControllerRenderProps,
     type ControllerFieldState,
 } from "react-hook-form";
-import {Input} from "@/components/ui";
+import {Input, Label} from "@/components/ui";
 import { cn } from "@/lib/utils";
 
 
@@ -22,6 +22,7 @@ interface formInputProps {
     eye?: boolean;
     placeholder?: string;
     className?: string;
+    matching?:boolean
 }
 
 export function FromInput({
@@ -31,14 +32,12 @@ export function FromInput({
     label,
     placeholder,
     stylelabel,
+    matching=false,
     className,
 }: formInputProps) {
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(true);
     const { control } = useFormContext();
-
     const inputType = eye ? (isPasswordVisible ? "text" : "password") : type;
-
-
     return (
         <Controller
             control={control}
@@ -51,13 +50,13 @@ export function FromInput({
                 fieldState: ControllerFieldState;
             }) => (
                 <div>
-                    {/*  <Label className={cn("text-blacks text-base font-medium absolute -top-3 left-7 bg-body px-3",stylelabel)}>{label}</Label> */}
+                  {matching && ( <Label className={cn("text-blacks text-base font-medium absolute -top-3 left-7 bg-body px-3",stylelabel)}>{label}</Label>)}
                 <div className="relative">
                   <Input
-                    className={cn("h-12 w-full rounded-full  pl-4 pr-3  text-blacks placeholder:text-blacks text-sm",className)}
+                    className={cn(`h-12 w-full rounded-full  pl-4 pr-3  text-blacks ${!matching && "placeholder:text-blacks"} text-sm`,className)}
                     {...field}
                     type={inputType}
-                    placeholder={label}
+                    placeholder={matching ? placeholder : label}
                   />
                   {eye && (
                     <div

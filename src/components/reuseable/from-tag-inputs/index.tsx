@@ -73,7 +73,7 @@ export function FromTagInputs({
         return (
           <div>
             <div className="relative">
-              <div className="relative rounded-3xl border border-input bg-background px-3 py-3">
+              <div className={cn("relative rounded-3xl border border-input bg-background px-3 py-3",className)}>
                 <div className="flex flex-wrap gap-2 pb-2">
                   {tags.map((tag: string,idx:number) => (
                     <Badge

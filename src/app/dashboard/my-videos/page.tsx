@@ -1,7 +1,6 @@
 "use client";
 import NavItem from "@/components/common/dashboard/navber";
 import {
-  Button,
   Checkbox,
   Table,
   TableBody,
@@ -11,12 +10,15 @@ import {
   TableRow,
 } from "@/components/ui";
 import useConfirmation from "@/context/delete-modal";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Icon from "@/icon";
 import { Pagination } from "@/components/reuseable/pagination";
 import { DeleteBtn } from "@/components/reuseable/btn";
 import Link from "next/link";
+import Modal from "@/components/reuseable/modal";
+import TabList from "@/components/common/upload/tab";
+import PaymentBox from "@/components/common/payment-box";
 
 
 interface Video {
@@ -123,10 +125,17 @@ const initialVideos: Video[] = [
 export default function MyVideos() {
   const { confirm } = useConfirmation();
   const [videos, setVideos] = useState<Video[]>(initialVideos);
+  const [isUpload, setIsUpload] = useState(false)
+  const [isPayment,setIsPayment]=useState(false)
   const [isCheck, setIsCheck] = useState(false);
   const [selectedVideoIds, setSelectedVideoIds] = useState<Set<string>>(
     new Set()
   );
+
+// isUpload modal close
+  useEffect(()=>{
+    setIsUpload(false)
+  },[isPayment])
 
   const handleSelectVideo = (id: string, isChecked: boolean) => {
     setSelectedVideoIds((prev) => {
@@ -141,7 +150,10 @@ export default function MyVideos() {
   };
 
   const handleDelete = async () => {
-    const con = await confirm();
+    const con = await confirm({
+      title: "Are you sure to delete this video ?",
+      description: "Users can't find your video anymore"
+    });
     if (con) {
       console.log(selectedVideoIds);
     }
@@ -156,7 +168,7 @@ export default function MyVideos() {
 
   return (
     <div>
-      <NavItem title="My videos" upload={true} />
+      <NavItem title="My videos" onClick={() => setIsUpload(!isUpload)} upload={true} />
       <div>
         <div className="flex items-center space-x-4 pb-2 pt-10">
           <span className="font-medium text-blacks">
@@ -299,6 +311,14 @@ export default function MyVideos() {
           ></Pagination>
         </li>
       </ul>
+      {/* modal upload */}
+      <Modal open={isUpload} setIsOpen={setIsUpload} title="Upload a new video" titleStyle="text-center" className='sm:max-w-4xl'>
+        <TabList setIsPayment={setIsPayment} />
+      </Modal>
+      {/* payment */}
+      <Modal title="Pay to MyTSV" open={isPayment} setIsOpen={setIsPayment} titleStyle='text-center' className='sm:max-w-3xl'>
+         <PaymentBox setIsPayment={setIsPayment} />
+      </Modal>
     </div>
   );
 }

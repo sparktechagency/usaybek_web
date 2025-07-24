@@ -63,6 +63,7 @@ import get from "@/icon/basic/get.svg"
 import fors from "@/icon/basic/for.svg"
 import phoned from "@/icon/basic/phoned.svg"
 import sucessGreen from "@/icon/basic/sucessGreen.svg"
+import promoted from "@/icon/dash/promoted.svg"
 
 
 export const IconList = {
@@ -130,5 +131,6 @@ export const IconList = {
   get,
   fors,
   phoned,
-  sucessGreen
+  sucessGreen,
+  promoted
 };

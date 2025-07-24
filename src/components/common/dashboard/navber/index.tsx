@@ -5,10 +5,11 @@ import React from 'react'
 
 type uploadProps = {
   title: string,
-  upload?: boolean
+  upload?: boolean,
+  onClick?:()=>void
 }
 
-export default function NavItem({ upload = false,title }: uploadProps) {
+export default function NavItem({ upload = false,title,onClick }: uploadProps) {
   return (
     <div className="flex items-center space-y-2 md:space-y-0 flex-wrap md:flex-nowrap justify-between py-2">
       <h1 className="text-2xl font-bold text-blacks">{title}</h1>
@@ -20,7 +21,7 @@ export default function NavItem({ upload = false,title }: uploadProps) {
           className="pl-10 pr-4 py-2 rounded-full border-none w-full placeholder:text-grays"
         />
       </div>
-      {upload ? (<Button variant={"primary"} size={"lg"} className='rounded-full w-full lg:w-fit h-11'>
+      {upload ? (<Button onClick={onClick} variant={"primary"} size={"lg"} className='rounded-full w-full lg:w-fit h-11'>
         <Icon name='uploadWhite' width={16} height={16} className='mr-1' />
         Upload a new video</Button>) : (<h1 className='opacity-0'>0</h1>)}
 
