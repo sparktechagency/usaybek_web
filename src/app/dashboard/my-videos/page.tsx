@@ -248,7 +248,7 @@ export default function MyVideos() {
                               </li>
                               <li className="hover:border rounded-md p-1">
                                 <Link href={"/dashboard/edit-video"}>
-                                  <Icon name={"vedit"} />
+                                  <Icon name={"vedit"} /> 
                                 </Link>
                               </li>
                               <li className="hover:border rounded-md p-1">
@@ -266,7 +266,7 @@ export default function MyVideos() {
 
                 <TableCell>
                   <div className="inline-flex items-center space-x-1 border rounded-full px-2 py-1 text-blacks">
-                    <Icon name="internetBlack" width={17} height={17} />
+                    <Icon name="internetBlack" width={17}  height={17} />
                     <span>{video.visibility}</span>
                   </div>
                 </TableCell>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Upload } from "lucide-react"
 import { FieldValues, useForm } from 'react-hook-form'
@@ -10,9 +10,22 @@ import { FromTextAreas } from '@/components/reuseable/from-textareas'
 import Icon from '@/icon'
 
 
+type UploadVideoProps = {
+    title: string;
+    category: string;
+    city: string;
+    state: string;
+    visibility: string;
+    tags: string[];
+    description: string;
+    thumbnail: FileList | null;
+}
+
 export default function YoutubeLink({ setIsPayment }: any) {
+    const [thumbnailName, setThumbnailName] = useState<string | null>(null);
     const [isPay, setIsPay] = useState(true)
-    const from = useForm({
+    const thumbnailInputRef = useRef<HTMLInputElement | null>(null);
+    const from = useForm<UploadVideoProps>({
         // resolver: zodResolver(loginSchema),
         defaultValues: {
             title: "",
@@ -21,10 +34,19 @@ export default function YoutubeLink({ setIsPayment }: any) {
             state: "",
             visibility: "",
             tags: ["React", "Next.js", "Tailwind"],
-            description: ""
+            description: "",
+            thumbnail: null,
         },
     });
+ 
 
+    const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            setThumbnailName(file?.name?.split(".")[0]);
+            from.setValue("thumbnail", e.target.files);
+        }
+    };
 
     //  handleSubmit
     const handleSubmit = async (values: FieldValues) => {
@@ -117,20 +139,30 @@ export default function YoutubeLink({ setIsPayment }: any) {
                     {/* Thumbnail Section */}
                     <div className="space-y-1">
                         <div className="flex items-center justify-between border rounded-full p-1 h-9">
-                            <span className="text-sm  text-blacks pl-1">Thumbnail</span>
+                            <span className="text-sm pl-1">{thumbnailName ? thumbnailName : "Thumbnail"}</span>
                             <Button
                                 variant="outline"
-                                className="flex items-center space-x-2 h-7 rounded-full text-[#3B97D3] hover:text-[#3B97D3] border-[#3B97D3] bg-transparent hover:bg-transparent"
+                                type="button"
+                                onClick={() => thumbnailInputRef.current?.click()}
+                                className="flex items-center space-x-2 h-7 rounded-full text-[#3B97D3] border-[#3B97D3] hover:text-[#3B97D3]"
                             >
                                 <Upload className="h-4 w-4 text-[#3B97D3]" />
                                 <span>Upload an image</span>
                             </Button>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                ref={thumbnailInputRef}
+                                onChange={handleThumbnailChange}
+                            />
                         </div>
                         <div className="flex items-center space-x-2 text-reds text-sm">
                             <Icon name='alertRed' width={17} className='rotate-2' />
                             <span>Image resolution should be minimum 1920x1080 px</span>
                         </div>
                     </div>
+
 
 
                     {/* Visibility Dropdown */}

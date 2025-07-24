@@ -64,6 +64,11 @@ import fors from "@/icon/basic/for.svg"
 import phoned from "@/icon/basic/phoned.svg"
 import sucessGreen from "@/icon/basic/sucessGreen.svg"
 import promoted from "@/icon/dash/promoted.svg"
+import bell from "@/icon/admin/bell.svg"
+import channel from "@/icon/admin/channel.svg"
+import earnings from "@/icon/admin/earnings.svg"
+import videos from "@/icon/admin/videos.svg"
+
 
 
 export const IconList = {
@@ -132,5 +137,10 @@ export const IconList = {
   fors,
   phoned,
   sucessGreen,
-  promoted
+  promoted,
+  // admin
+  bell,
+  channel,
+  earnings,
+  videos
 };

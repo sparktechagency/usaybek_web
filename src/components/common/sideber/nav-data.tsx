@@ -6,7 +6,7 @@ export const navItems = [
         text: "Upload your video",
         href: "/upload",
     },
-    { icon: <Icon name="ssetting" />, text: "Settings", href: "/dashboard" },
+    { icon: <Icon name="ssetting"/>, text: "Settings", href: "/dashboard" },
     { icon: <Icon name="svideos" />, text: "My videos", href: "/dashboard/my-videos" },
     { text: "separator" },
     { icon: <Icon name="shome" />, text: "Home", href: "/", active: true },
@@ -31,7 +31,7 @@ export const navItems = [
 
 //signOutItems
 export const signOutItems = [
-    { icon: <Icon name="shome" />, text: "Home", href: "/" },
+    { icon: <Icon name="shome" className="has-[src>svg]:fill-amber-700" />, text: "Home", href: "/" },
     { icon: <Icon name="sblog" />, text: "Blogs", href: "/blogs" },
     {
         icon: <Icon name="spromotion" />,
