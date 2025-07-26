@@ -9,7 +9,9 @@ interface PaginationProps {
   onPageChange: (page: number) => void
   totalPage: number
   per_page: number
-  className?: string
+  className?: string,
+  activeStyle?:string,
+  itemStyle?:string
 }
 
 export function Pagination({
@@ -17,7 +19,9 @@ export function Pagination({
   onPageChange,
   totalPage,
   per_page,
-  className
+  className,
+  activeStyle,
+  itemStyle
 }: PaginationProps) {
   const total = Math.ceil(totalPage / per_page)
 
@@ -27,9 +31,9 @@ export function Pagination({
         previousLabel={<ChevronLeft className="h-4 w-4" />}
         nextLabel={<ChevronRight className="h-4 w-4" />}
         className="flex flex-row gap-1 w-fit"
-        pageItemClassName="h-10 border rounded-md w-10 flex items-center justify-center whitespace-nowrap text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+        pageItemClassName={cn("h-10 border rounded-md w-10 flex items-center justify-center whitespace-nowrap text-sm font-medium hover:bg-accent hover:text-accent-foreground",itemStyle)}
         pageLinkClassName="h-10 w-10 flex items-center justify-center rounded-full"
-        activeItemClassName="bg-transparent border border-[#1890FF] text-[#1890FF] hover:bg-transparent hover:!text-[#1890FF] rounded-md"
+        activeItemClassName={cn(`bg-transparent border border-[#1890FF] text-[#1890FF] hover:bg-transparent hover:!text-[#1890FF] rounded-md`,activeStyle)}
         disabledItemClassName="hover:!bg-transparent"
         current={page}
         total={total}

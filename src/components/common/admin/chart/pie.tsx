@@ -1,5 +1,4 @@
 "use client"
-
 import { Pie, PieChart, Cell, Label } from "recharts"
 import {
   type ChartConfig,

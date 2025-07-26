@@ -10,6 +10,7 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import Icon from "@/icon";
+import FavIcon from "@/icon/admin/favIcon";
 import React, {
     createContext,
     useContext,
@@ -29,6 +30,7 @@ interface ConfirmDialogState {
     onConfirm?: () => void;
     onCancel?: () => void;
     resolve?: (value: boolean) => void;
+    icon?: boolean
 }
 
 interface ConfirmDialogContextType {
@@ -48,6 +50,7 @@ export const ConfirmDialogProvider = ({ children }: ConfirmDialogProviderProps) 
         description: "Users can't find your video anymore.",
         confirmText: "Yes, Delete",
         cancelText: "Cancel",
+        icon: false,
         onConfirm: undefined,
         onCancel: undefined,
         resolve: undefined,
@@ -88,7 +91,9 @@ export const ConfirmDialogProvider = ({ children }: ConfirmDialogProviderProps) 
                     <AlertDialogHeader>
                         <AlertDialogTitle >
                             <ul>
-                                <li className="flex justify-center"><Icon name="alertRed" width={50} height={50}/></li>
+                                <li className="flex justify-center mb-2">
+                                    {dialogState.icon ? (<FavIcon name="delete" className="size-12" />) : (<Icon name="alertRed" width={50} height={50} />)}
+                                </li>
                                 <li className="text-center text-reds text-2xl">{dialogState.title || "Are you sure to delete this video ?"}</li>
 
                             </ul>

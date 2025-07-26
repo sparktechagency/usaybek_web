@@ -3,6 +3,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import FavIcon from "@/icon/admin/favIcon";
 
 
 // ✅ Define Type for Submenu
@@ -47,17 +48,18 @@ export default function NavItem({ item }: NavItemProps) {
 
   return (
     <ul className="space-y-1 mr-5">
-      {item.map(({ to, label, icon: Icon, submenu }, parentIndex) => (
+      {item.map(({ to, label, icon, submenu }, parentIndex) => (
         <li key={parentIndex}>
           {to ? (
             <Link
               className={`flex px-3 ${
                 pathname === to &&
-                "!border-l-5 !border-[#00AAFF] !bg-white !text-primary "
-              } hover:bg-white   rounded-r-md hover:!text-primary  border-l-5 border-transparent  py-2 items-center font-medium text-base gap-x-2 text-white`}
+                "!border-l-5 !border-[#073CE9] !bg-white !text-reds "
+              } hover:bg-white   rounded-r-md hover:!text-reds   border-l-5 border-transparent  py-2 items-center font-medium text-base gap-x-2 text-white`}
               href={to}
             >
-              {Icon && <Icon size={20} />} {label}
+              {/* hoverColor="#000000" activeColor={ pathname === to && "#000000" as string}  */}
+              {icon && <FavIcon  name={icon}/> } {label}
             </Link>
           ) : (
             <div
@@ -65,7 +67,7 @@ export default function NavItem({ item }: NavItemProps) {
               className="flex items-center px-3 py-2 justify-between cursor-pointer"
             >
               <span className="flex items-center gap-x-2">
-                {Icon && <Icon size={20} />} {label}
+              {icon && <FavIcon name={icon}/> } {label}
               </span>
               {activeSubmenu === parentIndex ? (
                 <ChevronUp className="size-5 font-extrabold" />
@@ -87,8 +89,8 @@ export default function NavItem({ item }: NavItemProps) {
                   key={subIndex}
                   className={`${
                     pathname === to &&
-                    "!border-l-5 !border-[#00AAFF] !bg-white !text-primary"
-                  } rounded-r-md pl-6 hover:bg-white border-l-5 border-transparent  py-2 hover:!text-primary`}
+                    "!border-l-5 !border-[#073CE9] !bg-white !text-reds"
+                  } rounded-r-md pl-6 hover:bg-white border-l-5 border-transparent  py-2 hover:!text-reds`}
                 >
                   {to && (
                     <Link className="flex items-center gap-x-2" href={to}>

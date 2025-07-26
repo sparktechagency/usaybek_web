@@ -9,8 +9,11 @@ interface NavTitleProps {
 
 export default function NavTitle({ title, subTitle }: NavTitleProps) {
     const { setTitle, setSubtitle } = useTitle();
+
     useEffect(() => {
         setTitle(title);
         setSubtitle(subTitle);
     }, [setTitle, setSubtitle, title, subTitle]);
+
+    return null;
 }

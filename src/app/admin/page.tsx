@@ -1,25 +1,26 @@
 import ChannelChart from "@/components/common/admin/chart/channel";
 import { PieCharts } from "@/components/common/admin/chart/pie";
 import PreferenceChart from "@/components/common/admin/chart/preference";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import Icon from "@/icon"
-import { LayoutGrid, PlaySquare, CreditCard } from "lucide-react"
+import NavTitle from "@/components/common/admin/reuseable/nav-title";
+import { Card} from "@/components/ui/card"
+import FavIcon from "@/icon/admin/favIcon";
+
 
 const stats = [
   {
     title: "Total channels",
     value: 120,
-    icon: <Icon name="channel" />,
+    icon: <FavIcon name="chanel"/>,
   },
   {
     title: "Total videos",
     value: 500,
-    icon: <Icon name="videos" />,
+    icon: <FavIcon name="videos" />,
   },
   {
     title: "Earnings",
     value: "$3,000.00",
-    icon: <Icon name="earnings" />,
+    icon: <FavIcon name="earnings" />,
   }
 ];
 
@@ -27,6 +28,7 @@ const stats = [
 export default function Home() {
   return (
     <div>
+      <NavTitle title="Dashboard Overview" subTitle="You can see all of your apps statistics from here"/>
       <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
         {
           stats.map((item, idx) => (

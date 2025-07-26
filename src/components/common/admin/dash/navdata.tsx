@@ -1,71 +1,62 @@
-import {
-    LayoutDashboard,
-    Layers,
-    Users,
-    Tags,
-    Receipt,
-    Image,
-    FolderTree,
-    FileText,
-    Search,
-    BarChart2,
-    Settings,
-  } from "lucide-react";
+
   
-  export const adminLinks = [
+ 
+ 
+ 
+ export const adminLinks = [
     {
       label: "Dashboard",
-      icon: LayoutDashboard,
+      icon:"dashboard",
       to: "/admin",
     },
     {
       label: "Channels",
-      icon: Layers,
+      icon:"channels",
       to: "/admin/channels",
     },
     {
       label: "Sales representatives",
-      icon: Users,
+      icon: "sales",
       to: "/admin/sales-representatives",
     },
     {
       label: "Pricings",
-      icon: Tags,
+      icon: "pricing",
       to: "/admin/pricings",
     },
     {
       label: "Transactions",
-      icon: Receipt,
+      icon:"transaction",
       to: "/admin/transactions",
     },
     {
       label: "Promotional banners",
-      icon: Image,
+      icon:"promotional",
       to: "/admin/promotional-banners",
     },
     {
       label: "Manage category",
-      icon: FolderTree,
+      icon: "manage",
       to: "/admin/manage-category",
     },
     {
       label: "Manage blogs",
-      icon: FileText,
+      icon: "blog",
       to: "/admin/manage-blogs",
     },
     {
       label: "Seo management",
-      icon: Search,
+      icon: "seo",
       to: "/admin/seo-management",
     },
     {
       label: "Reports",
-      icon: BarChart2,
+      icon: "report",
       to: "/admin/reports",
     },
     {
       label: "Settings",
-      icon: Settings,
+      icon:"setting",
       to: "/admin/settings",
     },
   ];
