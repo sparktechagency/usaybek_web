@@ -55,6 +55,7 @@
   --color-reds: #ef4444;
   --color-blacks: #000000;
   --color-grays: #535353;
+  --color-gray1:#888;
   --color-grays-place: #dddddd;
   --color-body: #f6f6f6;
   --width-sideber-md: 256px;
@@ -154,4 +155,45 @@
 
 .onside-free {
   background: linear-gradient(90deg, #EC008C 0%, #FC6767 100%);
+}
+
+
+.ql-toolbar {
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  background: #f9fafb !important;
+  padding: 12px 16px !important;
+}
+
+.ql-container {
+  border: none !important;
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+}
+
+.ql-editor {
+  padding: 16px !important;
+  min-height: 200px !important;
+}
+
+.ql-editor.ql-blank::before {
+  color: #9ca3af !important;
+  font-style: normal !important;
+  left: 16px !important;
+}
+
+.ql-snow .ql-tooltip {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+}
+
+.ql-snow .ql-picker-options {
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
 }

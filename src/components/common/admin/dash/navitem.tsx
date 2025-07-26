@@ -6,22 +6,19 @@ import Link from "next/link";
 import FavIcon from "@/icon/admin/favIcon";
 
 
-// ✅ Define Type for Submenu
 interface SubmenuItem {
   to?: string;
   label: string;
-  icon?:any;
+  icon?: any;
 }
 
-// ✅ Define Type for Main Menu Item
 interface MenuItem {
   to?: string;
   label: string;
-  icon?:any;
+  icon?: any;
   submenu?: SubmenuItem[];
 }
 
-// ✅ Props Type
 interface NavItemProps {
   item: MenuItem[];
 }
@@ -29,8 +26,9 @@ interface NavItemProps {
 export default function NavItem({ item }: NavItemProps) {
   const pathname = usePathname();
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null);
+  const [hoverIdx,setHoverIdx] = useState<number | null>(null);
+  const [subhoverIdx,setsubHoverIdx]=useState<number | null>(null);
 
-  // ✅ UseRef with Type
   const menuRefs = useRef<(HTMLUListElement | null)[]>([]);
 
   useEffect(() => {
@@ -46,20 +44,24 @@ export default function NavItem({ item }: NavItemProps) {
     setActiveSubmenu((prev) => (prev === index ? null : index));
   };
 
+
   return (
-    <ul className="space-y-1 mr-5">
+    <ul className="space-y-2 mr-5">
       {item.map(({ to, label, icon, submenu }, parentIndex) => (
-        <li key={parentIndex}>
+        <li key={parentIndex} className="group"
+        >
           {to ? (
             <Link
-              className={`flex px-3 ${
-                pathname === to &&
+              onMouseEnter={() =>setHoverIdx(parentIndex)}
+              onMouseLeave={() =>setHoverIdx(null)}
+              className={`flex px-3 ${pathname === to &&
                 "!border-l-5 !border-[#073CE9] !bg-white !text-reds "
-              } hover:bg-white   rounded-r-md hover:!text-reds   border-l-5 border-transparent  py-2 items-center font-medium text-base gap-x-2 text-white`}
+                } hover:bg-white   rounded-r-md hover:!text-reds   border-l-5 border-transparent  py-2 items-center font-medium text-base gap-x-2 text-white`}
               href={to}
+
             >
               {/* hoverColor="#000000" activeColor={ pathname === to && "#000000" as string}  */}
-              {icon && <FavIcon  name={icon}/> } {label}
+              {icon && <FavIcon hoverColor="#ef4444" groupHover={hoverIdx === parentIndex} activeColor={pathname === to && "#ef4444" as any} name={icon} />} {label}
             </Link>
           ) : (
             <div
@@ -67,7 +69,7 @@ export default function NavItem({ item }: NavItemProps) {
               className="flex items-center px-3 py-2 justify-between cursor-pointer"
             >
               <span className="flex items-center gap-x-2">
-              {icon && <FavIcon name={icon}/> } {label}
+                {icon && <FavIcon name={icon} />} {label}
               </span>
               {activeSubmenu === parentIndex ? (
                 <ChevronUp className="size-5 font-extrabold" />
@@ -84,17 +86,19 @@ export default function NavItem({ item }: NavItemProps) {
               }}
               className="overflow-hidden transition-all duration-300 ease-out max-h-0 space-y-1"
             >
-              {submenu.map(({ to, label, icon: SubIcon }, subIndex) => (
+              {submenu.map(({ to, label, icon }, subIndex) => (
                 <li
                   key={subIndex}
-                  className={`${
-                    pathname === to &&
+                  onMouseEnter={() =>setsubHoverIdx(subIndex)}
+                  onMouseLeave={() =>setsubHoverIdx(null)}
+                  className={`${pathname === to &&
                     "!border-l-5 !border-[#073CE9] !bg-white !text-reds"
-                  } rounded-r-md pl-6 hover:bg-white border-l-5 border-transparent  py-2 hover:!text-reds`}
+                    } rounded-r-md pl-6 hover:bg-white border-l-5 border-transparent  py-2 hover:!text-reds`}
                 >
                   {to && (
                     <Link className="flex items-center gap-x-2" href={to}>
-                      {SubIcon && <SubIcon size={20} />} {label}
+                      {icon && <FavIcon hoverColor="#ef4444" groupHover={subhoverIdx === subIndex}
+                        activeColor={pathname === to && "#ef4444" as any} name={icon} />} {label}
                     </Link>
                   )}
                 </li>

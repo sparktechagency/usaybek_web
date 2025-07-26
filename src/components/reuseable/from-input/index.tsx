@@ -50,7 +50,7 @@ export function FromInput({
                 fieldState: ControllerFieldState;
             }) => (
                 <div>
-                  {matching && ( <Label className={cn("text-blacks text-base font-medium absolute -top-3 left-7 bg-body px-3",stylelabel)}>{label}</Label>)}
+                  {matching && ( <Label className={cn("text-blacks text-base font-medium  px-3 mb-1",stylelabel)}>{label}</Label>)}
                 <div className="relative">
                   <Input
                     className={cn(`h-12 w-full rounded-full  pl-4 pr-3  text-blacks ${!matching && "placeholder:text-blacks"} text-sm`,className)}

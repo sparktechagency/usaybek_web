@@ -1,10 +1,9 @@
-"use client"
+
+"use client";
 import React, { useState } from "react";
 import { adminIcon } from "./list";
 
-const icons = {
-    ...adminIcon
-} as const;
+const icons = { ...adminIcon } as const;
 
 type IconName = keyof typeof icons;
 
@@ -13,11 +12,20 @@ interface IconProps {
     className?: string;
     color?: string;
     hoverColor?: string;
-    activeColor?: string
+    activeColor?: string;
+    groupHover?: boolean;
 }
 
-export default function FavIcon({ name, className, color, hoverColor, activeColor }: IconProps) {
-    const [isHovered, setIsHovered] = useState(false);
+export default function FavIcon({
+    name,
+    className,
+    color,
+    hoverColor,
+    activeColor,
+    groupHover,
+}: IconProps) {
+    const [internalHover, setInternalHover] = useState(false);
+    const hovered = groupHover ?? internalHover;
 
     const icon = icons[name];
     if (!icon) return null;
@@ -25,8 +33,8 @@ export default function FavIcon({ name, className, color, hoverColor, activeColo
     const applyFill = (element: React.ReactElement): React.ReactElement => {
         const props = element.props as {
             className?: string;
-            children?: React.ReactNode;
             fill?: string;
+            children?: React.ReactNode;
             [key: string]: any;
         };
 
@@ -35,7 +43,7 @@ export default function FavIcon({ name, className, color, hoverColor, activeColo
             className: className
                 ? `${props.className ? props.className + " " : ""}${className}`.trim()
                 : props.className,
-            fill: isHovered && hoverColor ? hoverColor : activeColor ? activeColor : color || props.fill,
+            fill: hovered && hoverColor ? hoverColor : activeColor ? activeColor : color || props.fill,
         };
 
         if (props.children) {
@@ -47,16 +55,16 @@ export default function FavIcon({ name, className, color, hoverColor, activeColo
         return React.cloneElement(element, newProps);
     };
 
+
     // Cast the element so TypeScript allows onMouseEnter/onMouseLeave props
     const iconWithHover = React.cloneElement(
         applyFill(icon) as React.ReactElement<React.DOMAttributes<any>>,
         {
-            onMouseEnter: () => setIsHovered(true),
-            onMouseLeave: () => setIsHovered(false),
+            onMouseEnter: () => !groupHover && setInternalHover(true),
+            onMouseLeave: () => !groupHover && setInternalHover(false),
         }
     );
 
     return iconWithHover;
 }
-
 

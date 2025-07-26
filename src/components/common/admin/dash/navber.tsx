@@ -40,13 +40,13 @@ export default function Navber({ sidebarOpen, setSidebarOpen }: SidebarProps) {
           {/* right side */}
           <div>
             <div className="flex mr-6 items-center gap-2">
-              <Link href={"/company/notification"}>
+              <Link href={"/admin/notification"}>
                 <div className="relative cursor-pointer bg-reds text-green-900 size-12  grid place-items-center rounded-full">
                   {/* <Icon name="bell"/> */}
                   <FavIcon name="bell"/>
                 </div>
               </Link>
-              <Link href={"/company/profile"}>
+              <Link href={"/admin/profile"}>
                 <div className="relative flex items-center gap-2 rounded-full cursor-pointer">
                   <Image src="/user.png" alt="User Icon" width={50} height={50} />
                   {/* <Icon name="suser" width={45} height={45}/> */}
