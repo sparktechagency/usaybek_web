@@ -38,6 +38,9 @@ export function FromInput({
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(true);
     const { control } = useFormContext();
     const inputType = eye ? (isPasswordVisible ? "text" : "password") : type;
+   
+    const inputId = `input-${name}`;
+
     return (
         <Controller
             control={control}
@@ -50,9 +53,10 @@ export function FromInput({
                 fieldState: ControllerFieldState;
             }) => (
                 <div>
-                  {matching && ( <Label className={cn("text-blacks text-base font-medium  px-3 mb-1",stylelabel)}>{label}</Label>)}
+                  {matching && ( <Label  htmlFor={inputId} className={cn("text-blacks text-base font-medium  px-3 mb-1",stylelabel)}>{label}</Label>)}
                 <div className="relative">
                   <Input
+                    id={inputId} 
                     className={cn(`h-12 w-full rounded-full  pl-4 pr-3  text-blacks ${!matching && "placeholder:text-blacks"} text-sm`,className)}
                     {...field}
                     type={inputType}

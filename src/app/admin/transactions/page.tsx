@@ -126,7 +126,7 @@ export default function Channels() {
                         onPageChange={() => { }}
                         totalPage={10}
                         per_page={2}
-                        activeStyle="!rounded-full !bg-reds !border-none !text-white hover:text-white"
+                        activeStyle="!rounded-full !bg-reds !border-none !text-white hover:!text-white"
                         itemStyle='rounded-full'
                     ></Pagination>
                 </li>

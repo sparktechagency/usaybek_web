@@ -3,6 +3,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
+import { cn } from "@/lib/utils";
 
 // ✅ Dynamically import ReactQuill to avoid SSR issue
 const ReactQuill = dynamic(() => import("react-quill-new"), {
@@ -13,9 +14,10 @@ const ReactQuill = dynamic(() => import("react-quill-new"), {
 interface TextEditorProps {
   value: string;
   onChange: (content: string) => void;
+  className?:string
 }
 
-const TextEditor: React.FC<TextEditorProps> = ({ value, onChange }) => {
+const TextEditor: React.FC<TextEditorProps> = ({ value, onChange,className }) => {
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, false] }, { size: ["small", false, "large", "huge"] }],
@@ -58,7 +60,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ value, onChange }) => {
           onChange={onChange}
           modules={modules}
           formats={formats}
-          className="min-h-[280px] rounded-b-xl bg-white"
+          className={cn(`min-h-[280px] rounded-b-xl bg-white`,className)}
         />
       </div>
     </div>

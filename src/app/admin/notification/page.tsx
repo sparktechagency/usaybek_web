@@ -1,7 +1,5 @@
 import NavTitle from '@/components/common/admin/reuseable/nav-title'
 import React from 'react'
-
-import { Calendar, Clock, Mail } from "lucide-react";
 import FavIcon from '@/icon/admin/favIcon';
 
 const notifications = [
@@ -38,32 +36,32 @@ export default function Notification() {
     return (
         <div>
             <NavTitle title='Notifications' subTitle='You can manage the notifications of MyTSV from here.' />
-            <div className='space-y-8'>
+            <div className='space-y-8 py-5'>
                 {notifications.map((notification, index) => (
                     <div
                         key={index}
-                        className={`bg-white border-l-4 ${notification.color} p-4 grid grid-cols-1 lg:grid-cols-3 rounded-md`}
+                        className={`bg-white border-l-4 ${notification.color} p-3 grid grid-cols-1 lg:grid-cols-3 rounded-md`}
                     >
                         <div className="mb-2 md:mb-0">
-                            <h3 className="font-semibold text-xl text-blacks">{notification.title}</h3>
+                            <h3 className="lg:text-base xl:text-xl font-semibold  text-blacks">{notification.title}</h3>
                             <p className="text-sm text-blacks">
                                 {notification.description}{" "}
                                 <span className="text-gray1 cursor-pointer">Tap to view</span>
                             </p>
                         </div>
-                        <ul className='md:left-1/2 relative space-y-1 *:text-gray1'>
+                        <ul className='md:left-1/2 relative space-y-2 *:text-gray1'>
                             <li className="flex items-center gap-1">
-                                 <FavIcon name="calender"/>
-                                <span>{notification.date}</span>
+                                 <FavIcon name="calender" className='size-4' />
+                                <span className='text-sm'>{notification.date}</span>
                             </li>
                             <li className="flex items-center gap-1">
-                            <FavIcon name="time"/>
-                                <span>{notification.time}</span>
+                            <FavIcon name="time" className='size-4'/>
+                                <span className='text-sm'>{notification.time}</span>
                             </li>
                         </ul>
 
                         <div className="text-gray-500  items-center hidden md:flex md:justify-end">
-                        <FavIcon name="noti"/>
+                        <FavIcon name="noti" className='size-4'/>
                         </div>
                     </div>
                 ))}

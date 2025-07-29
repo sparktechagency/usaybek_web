@@ -95,7 +95,7 @@ const PriceItem = ({ id, label, unit = "/Video", value, onChange }: PriceItemPro
                     value={value}
                     onChange={handleChange}
                     style={{ width: inputWidth }}
-                    className="border-none p-0 !text-lg font-medium text-blacks focus-visible:ring-0 text-center bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="border-none p-0 h-4 !text-lg font-medium text-blacks focus-visible:ring-0 text-center bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <span className="text-sm text-[#888] font-medium relative mt-2">{unit}</span>
             </div>

@@ -1,5 +1,5 @@
 "use client"
-import { CustomTable, Deletebtn, Editbtn } from '@/components/common/admin/reuseable';
+import { CustomTable, Deletebtn,Previewbtn } from '@/components/common/admin/reuseable';
 import NavTitle from '@/components/common/admin/reuseable/nav-title';
 import SearchBox from '@/components/common/admin/reuseable/search';
 import { Pagination } from '@/components/reuseable/pagination';
@@ -151,7 +151,7 @@ export default function Channels() {
                                 <ul className="flex gap-2">
                                     <li>
                                         <Link href={"/admin/channels/1"}>
-                                            <Editbtn />
+                                            <Previewbtn/>
                                         </Link>
 
                                     </li>
@@ -171,7 +171,7 @@ export default function Channels() {
                         onPageChange={() => { }}
                         totalPage={10}
                         per_page={2}
-                        activeStyle="!rounded-full !bg-reds !border-none !text-white hover:text-white"
+                        activeStyle="!rounded-full !bg-reds !border-none !text-white hover:!text-white"
                         itemStyle='rounded-full'
                     ></Pagination>
                 </li>

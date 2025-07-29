@@ -7,13 +7,14 @@ import { Controller, useFormContext } from "react-hook-form";
 import { TextareaHTMLAttributes } from "react";
 
 // Props interface
-interface FromTextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface FromTextAreaProps
+  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   name: string;
   label?: string;
   placeholder?: string;
   className?: string;
   stylelabel?: string;
-  matching?:boolean
+  matching?: boolean;
 }
 
 export function FromTextAreas({
@@ -22,10 +23,11 @@ export function FromTextAreas({
   placeholder,
   className,
   stylelabel,
-  matching=false,
+  matching = false,
   ...rest
 }: FromTextAreaProps) {
   const { control } = useFormContext();
+  const fieldId = `textarea-${name}`;
 
   return (
     <Controller
@@ -35,12 +37,26 @@ export function FromTextAreas({
         <div>
           <div className="relative">
             <Textarea
-              className={cn("w-full rounded-3xl  pl-3 pr-3 py-3  text-blacks resize-none  text-sm",className)}
+              id={fieldId}
+              className={cn(
+                "w-full rounded-3xl  pl-3 pr-3 py-3  text-blacks resize-none   text-sm",
+                className
+              )}
               placeholder={placeholder}
               {...field}
               {...rest}
             />
-            {!matching && (<Label className={cn("text-blacks text-base font-medium absolute -top-3 left-7 bg-body px-3",stylelabel)}>{label}</Label>)}
+            {!matching && (
+              <Label
+                htmlFor={fieldId}
+                className={cn(
+                  "text-blacks text-base font-medium absolute -top-3 left-7 bg-body px-3",
+                  stylelabel
+                )}
+              >
+                {label}
+              </Label>
+            )}
           </div>
           {error?.message && (
             <h3 className="text-sm pt-[1px] text-end text-[#f73f4e] flex gap-1 items-center justify-end">

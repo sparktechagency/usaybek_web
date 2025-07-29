@@ -127,7 +127,7 @@ export const videos = [
 export default function VideoBox() {
   return (
     <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {videos.slice(0, 4).map((video) => (
           <VideoCard key={video.id} {...video} />
         ))}
