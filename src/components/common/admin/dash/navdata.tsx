@@ -17,7 +17,7 @@
     {
       label: "Sales representatives",
       icon: "sales",
-      to: "/admin/sales-representatives",
+      to: "/admin/sales",
     },
     {
       label: "Pricings",
@@ -47,7 +47,7 @@
     {
       label: "Seo management",
       icon: "seo",
-      to: "/admin/seo-management",
+      to: "/admin/seo",
     },
     {
       label: "Reports",
@@ -62,7 +62,7 @@
         { to: "/admin/setting/about-us", icon:"about", label: "About us" },
         { to: "/admin/setting/terms", icon:"terms", label: "Terms & Conditions" },
         { to: "/admin/setting/fqa", icon:"fqa", label: "FAQ" },
-        { to: "/admin/setting/contacts", icon:"contacts", label: "Contacts" },
+        { to: "/admin/setting/contacts", icon:"contact", label: "Contacts" },
       ],
     },
   ];

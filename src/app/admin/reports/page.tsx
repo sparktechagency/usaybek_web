@@ -8,95 +8,63 @@ import NavTitle from "@/components/common/admin/reuseable/nav-title";
 import SearchBox from "@/components/common/admin/reuseable/search";
 import Avatars from "@/components/reuseable/avater";
 import { Pagination } from "@/components/reuseable/pagination";
-import { TableCell, TableRow } from "@/components/ui";
+import { Button, TableCell, TableRow } from "@/components/ui";
 import useConfirmation from "@/context/delete-modal";
 import Link from "next/link";
 import React from "react";
 
-export default function Channels() {
+export default function Reports() {
   const { confirm } = useConfirmation();
   const headers = [
     "Sl. No",
-    "Channel name",
-    "Email",
-    "Videos",
-    "Views",
-    "Likes",
+    "Report from",
+    "Reported channel",
+    "Reason",
     "Action",
   ];
 
-  const channelsItem = [
+  const reports = [
     {
       slNo: "001",
-      channelName: "Haircut pro",
-      email: "example@gmail.com",
-      videos: 100,
-      views: "100K",
-      likes: "52.36K",
+      reportFrom: "Haircut pro",
+      reportedChannel: "Mr. Beast",
+      reason: "Spreading misinformation",
     },
     {
-      slNo: "001",
-      channelName: "Haircut pro",
-      email: "example@gmail.com",
-      videos: 100,
-      views: "100K",
-      likes: "52.36K",
+      slNo: "002",
+      reportFrom: "Haircut pro",
+      reportedChannel: "Mr. Beast",
+      reason: "Spreading misinformation",
     },
     {
-      slNo: "001",
-      channelName: "Haircut pro",
-      email: "example@gmail.com",
-      videos: 100,
-      views: "100K",
-      likes: "52.36K",
+      slNo: "003",
+      reportFrom: "Haircut pro",
+      reportedChannel: "Mr. Beast",
+      reason: "Spreading misinformation",
     },
     {
-      slNo: "001",
-      channelName: "Haircut pro",
-      email: "example@gmail.com",
-      videos: 100,
-      views: "100K",
-      likes: "52.36K",
+      slNo: "004",
+      reportFrom: "Haircut pro",
+      reportedChannel: "Mr. Beast",
+      reason: "Spreading misinformation",
     },
     {
-      slNo: "001",
-      channelName: "Haircut pro",
-      email: "example@gmail.com",
-      videos: 100,
-      views: "100K",
-      likes: "52.36K",
+      slNo: "005",
+      reportFrom: "Haircut pro",
+      reportedChannel: "Mr. Beast",
+      reason: "Spreading misinformation",
     },
     {
-      slNo: "001",
-      channelName: "Haircut pro",
-      email: "example@gmail.com",
-      videos: 100,
-      views: "100K",
-      likes: "52.36K",
+      slNo: "006",
+      reportFrom: "Haircut pro",
+      reportedChannel: "Mr. Beast",
+      reason: "Spreading misinformation",
     },
     {
-      slNo: "001",
-      channelName: "Haircut pro",
-      email: "example@gmail.com",
-      videos: 100,
-      views: "100K",
-      likes: "52.36K",
-    },
-    {
-      slNo: "001",
-      channelName: "Haircut pro",
-      email: "example@gmail.com",
-      videos: 100,
-      views: "100K",
-      likes: "52.36K",
-    },
-    {
-      slNo: "001",
-      channelName: "Haircut pro",
-      email: "example@gmail.com",
-      videos: 100,
-      views: "100K",
-      likes: "52.36K",
+      slNo: "007",
+      reportFrom: "Haircut pro",
+      reportedChannel: "Mr. Beast",
+      reason: "Spreading misinformation",
     },
   ];
 
@@ -115,41 +83,51 @@ export default function Channels() {
   return (
     <div>
       <NavTitle
-        title="Channels"
-        subTitle="You can see & manage all the channels of MyTSV from here."
+        title="Reports"
+        subTitle="You can see & manage all the reports of MyTSV from here."
       />
-      <SearchBox placeholder="Search channel" />
+      <div className="flex justify-between items-center">
+        <SearchBox placeholder="Search channel" />
+        <Link href="/admin/appeals">
+          <Button variant="primary" size="lg" className="rounded-full">
+            Appeals (10)
+          </Button>
+        </Link>
+      </div>
+
       <div>
         <CustomTable headers={headers}>
-          {channelsItem.map((item, index) => (
+          {reports.map((item, index) => (
             <TableRow key={index}>
               {/* Sl No */}
               <TableCell>{item.slNo}</TableCell>
 
-              {/* Channel Name with Image */}
               <TableCell className="relative">
                 <div className="flex items-center gap-3">
                   <Avatars
                     src=""
-                    fallback={item.channelName}
+                    fallback={item.reportFrom}
                     alt="profile"
                     fallbackStyle="avatar"
                   />
-                  <span>{item.channelName}</span>
+                  <span>{item.reportFrom}</span>
+                </div>
+              </TableCell>
+
+              <TableCell className="relative">
+                <div className="flex items-center gap-3">
+                  <Avatars
+                    src=""
+                    fallback={item.reportedChannel}
+                    alt="profile"
+                    fallbackStyle="avatar"
+                  />
+                  <span>{item.reportedChannel}</span>
                 </div>
               </TableCell>
 
               {/* Email */}
-              <TableCell>{item.email}</TableCell>
-
-              {/* Videos */}
-              <TableCell>{item.videos}</TableCell>
-
-              {/* Views */}
-              <TableCell>{item.views}</TableCell>
-
-              {/* Likes */}
-              <TableCell>{item.likes}</TableCell>
+              <TableCell>{item.reason}</TableCell>
 
               {/* Action Buttons */}
               <TableCell>

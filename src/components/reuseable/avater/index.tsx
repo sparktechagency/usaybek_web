@@ -1,14 +1,14 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { cn, PlaceholderImg } from "@/lib/utils"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
 
 type AvatarsProps = {
-  className?: string
-  alt: string
-  src: string
-  imgstyle?: string
-  fallbackStyle?: string
-  fallback:string
-}
+  className?: string;
+  alt: string;
+  src: string;
+  imgstyle?: string;
+  fallbackStyle?: string;
+  fallback: string;
+};
 
 export default function Avatars({
   className,
@@ -18,13 +18,15 @@ export default function Avatars({
   fallbackStyle,
   fallback,
 }: AvatarsProps) {
-    // src
+  // src
   return (
     <Avatar className={cn("size-10", className)}>
-      <AvatarImage className={imgstyle} src={PlaceholderImg(50,50)} alt={alt} />
-      <AvatarFallback className={cn("bg-grays-place text-blacks", fallbackStyle)}>
-        {fallback}
+      <AvatarImage className={imgstyle} src={src} alt={alt} />
+      <AvatarFallback
+        className={cn("bg-grays-place text-blacks font-medium", fallbackStyle)}
+      >
+        {fallback?.charAt(0)?.toUpperCase()}
       </AvatarFallback>
     </Avatar>
-  )
+  );
 }

@@ -56,6 +56,7 @@
   --color-blacks: #000000;
   --color-grays: #535353;
   --color-gray1:#888;
+  --color-gray2:#888888;
   --color-grays-place: #dddddd;
   --color-body: #f6f6f6;
   --width-sideber-md: 256px;
@@ -157,6 +158,9 @@
   background: linear-gradient(90deg, #EC008C 0%, #FC6767 100%);
 }
 
+.avatar{
+  @apply bg-[#FFE9E9] text-reds
+}
 
 .ql-toolbar {
   border-top: none !important;

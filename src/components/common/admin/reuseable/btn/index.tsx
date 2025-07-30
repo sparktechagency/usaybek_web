@@ -1,7 +1,9 @@
 import FavIcon from "@/icon/admin/favIcon";
+import { cn } from "@/lib/utils";
 
 type BtnProps = {
   onClick?: () => void;
+  className?:string
 };
 
 // Previewbtn
@@ -17,11 +19,11 @@ export function Previewbtn({ onClick }: BtnProps) {
 }
 
 // Deletebtn
-export function Deletebtn({ onClick }: BtnProps) {
+export function Deletebtn({ onClick,className }: BtnProps) {
   return (
     <button
       onClick={onClick}
-      className="size-[37px] grid place-items-center text-[#FF5353] bg-[#FFE8E8] rounded-lg cursor-pointer"
+      className={cn(`size-[37px] grid place-items-center text-[#FF5353] bg-[#FFE8E8] rounded-lg cursor-pointer`,className)}
     >
       <FavIcon name="delete" />
     </button>
@@ -30,11 +32,11 @@ export function Deletebtn({ onClick }: BtnProps) {
 
 
 // Editbtn
-export function Editbtn({ onClick }: BtnProps) {
+export function Editbtn({ onClick,className }: BtnProps) {
   return (
     <button
       onClick={onClick}
-      className="size-[37px] bg-[#DBFFDB] grid place-items-center  rounded-lg cursor-pointer"
+      className={cn(`size-[37px] bg-[#DBFFDB] grid place-items-center  rounded-lg cursor-pointer`,className)}
     >
       <FavIcon name="edit" />
     </button>

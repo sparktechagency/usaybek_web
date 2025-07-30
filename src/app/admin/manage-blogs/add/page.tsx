@@ -31,7 +31,7 @@ export default function AddBlog() {
       <Form from={from} onSubmit={handleSubmit} className="space-y-7 py-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           <div className="space-y-10">
-            <ImageUploader />
+            <ImageUploader title="Drag and drop your file here" />
             <FromInputs
               label="Title"
               name="title"
