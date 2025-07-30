@@ -20,7 +20,7 @@ const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export const SidebarControl = ({ children }: { children: ReactNode }) => {
   const [isExpanded, setIsExpanded] = useState(true);
-  const { isMobile } = useIsMobile();
+  const { isMobile } = useIsMobile(1030);
 
   useEffect(() => {
     if (isMobile) {

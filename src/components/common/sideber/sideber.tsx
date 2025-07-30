@@ -14,21 +14,19 @@ import TabList from "../upload/tab";
 import PaymentBox from "../payment-box";
 
 export default function Sidebar() {
-  const [isUpload, setIsUpload] = useState(false)
-  const [isPayment, setIsPayment] = useState(false)
+  const [isUpload, setIsUpload] = useState(false);
+  const [isPayment, setIsPayment] = useState(false);
   const { isExpanded, toggleSidebar } = useSidebar();
   const pathname = usePathname();
   const { login } = useLogin();
 
   const Items = login ? navItems : signOutItems;
 
-
   //  colse pay
   // isUpload modal close
   useEffect(() => {
-    setIsUpload(false)
-  }, [isPayment])
-
+    setIsUpload(false);
+  }, [isPayment]);
 
   return (
     <>
@@ -40,8 +38,9 @@ export default function Sidebar() {
       >
         {/* Header */}
         <div
-          className={`flex items-center  p-4 h-20 ${isExpanded ? "justify-start" : "justify-center"
-            }`}
+          className={`flex items-center  p-4 h-20 ${
+            isExpanded ? "justify-start" : "justify-center"
+          }`}
         >
           <button
             onClick={toggleSidebar}
@@ -98,18 +97,17 @@ export default function Sidebar() {
                 key={item.text}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2 text-blacks hover:bg-gray-100 rounded-full transition-colors",
+                  `flex items-center gap-3  text-blacks hover:bg-gray-100 rounded-full transition-colors`,
                   item.href === pathname && "bg-gray-100 font-semibold",
                   isExpanded
-                    ? "justify-start"
-                    : "justify-center m-auto my-3 w-fit"
+                    ? "justify-start px-3 py-2"
+                    : "justify-center m-auto my-3 size-10"
                 )}
-
                 //  onClick
                 onClick={(e) => {
                   if (item.href === "/upload") {
-                    e.preventDefault(); // Stop navigation
-                    setIsUpload(true);  // ✅ Open Upload Modal
+                    e.preventDefault();
+                    setIsUpload(true);
                   }
                 }}
               >
@@ -124,8 +122,11 @@ export default function Sidebar() {
           )}
           {login && (
             <Link
-              className={`flex items-center gap-3 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors text-red-500 ${isExpanded ? "justify-start" : "justify-center m-auto my-3 w-fit"
-                }`}
+              className={`flex items-center gap-3  rounded-full hover:bg-gray-100 transition-colors text-red-500 ${
+                isExpanded
+                  ? "justify-start px-3 py-2"
+                  : "justify-center m-auto my-3 size-10"
+              }`}
               href={"/"}
             >
               <Icon name="ssignout" />{" "}
@@ -142,14 +143,25 @@ export default function Sidebar() {
       {/* modal */}
 
       {/* modal upload */}
-      <Modal open={isUpload} setIsOpen={setIsUpload} title="Upload a new video" titleStyle="text-center" className='sm:max-w-4xl'>
+      <Modal
+        open={isUpload}
+        setIsOpen={setIsUpload}
+        title="Upload a new video"
+        titleStyle="text-center"
+        className="sm:max-w-4xl"
+      >
         <TabList setIsPayment={setIsPayment} />
       </Modal>
       {/* payment */}
-      <Modal title="Pay to MyTSV" open={isPayment} setIsOpen={setIsPayment} titleStyle='text-center' className='sm:max-w-3xl'>
+      <Modal
+        title="Pay to MyTSV"
+        open={isPayment}
+        setIsOpen={setIsPayment}
+        titleStyle="text-center"
+        className="sm:max-w-3xl"
+      >
         <PaymentBox setIsPayment={setIsPayment} />
       </Modal>
     </>
-
   );
 }

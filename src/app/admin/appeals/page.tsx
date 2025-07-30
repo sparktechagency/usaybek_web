@@ -5,7 +5,6 @@ import {
   Previewbtn,
 } from "@/components/common/admin/reuseable";
 import NavTitle from "@/components/common/admin/reuseable/nav-title";
-import SearchBox from "@/components/common/admin/reuseable/search";
 import Avatars from "@/components/reuseable/avater";
 import { BackBtn } from "@/components/reuseable/icon-list";
 import { Pagination } from "@/components/reuseable/pagination";

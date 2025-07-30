@@ -1,37 +1,40 @@
-import Image from "next/image"
-import Link from "next/link"
-import logoImg from "@/assets/logo.png"
-import Icon from "@/icon"
+import Image from "next/image";
+import Link from "next/link";
+import Icon from "@/icon";
+import assets from "@/assets";
 
 export default function Footer() {
   return (
     <footer className="bg-white">
       <div className="container m-auto pt-10 pb-5">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-          {/* Column 1: Logo and Description */}
           <div className="space-y-2">
-            <div className="relative w-50 h-14">
+            <Link href={"/"}>
               <Image
-                src={logoImg}
-                alt={"author.name"}
-                fill
-                className="object-cover"
+                src={assets.logo}
+                alt="MYTSV Logo"
+                width={160}
+                height={160}
+                className="object-contain"
               />
-            </div>
-            <h3 className="text-xl font-semibold text-blacks">Meet your town specialists</h3>
+            </Link>
+            <h3 className="text-xl font-semibold text-blacks">
+              Meet your town specialists
+            </h3>
             <p className="text-sm text-blacks  leading-relaxed">
-              Expanding from the Chicagoland area to a nationwide reach, we aim to simplify and enhance the way people
-              find services and businesses in their local communities.
+              Expanding from the Chicagoland area to a nationwide reach, we aim
+              to simplify and enhance the way people find services and
+              businesses in their local communities.
             </p>
             <div className="space-y-3 text-sm mt-4">
               <div className="flex items-center gap-2">
-                <Icon name="femail" width={20} height={20}/>
+                <Icon name="femail" width={20} height={20} />
                 <Link href="mailto:info@mytsv.com" className="text-blacks">
                   info@mytsv.com
                 </Link>
               </div>
               <div className="flex items-center gap-2">
-                <Icon name="fphone" width={20} height={20}/>
+                <Icon name="fphone" width={20} height={20} />
                 <Link href="tel:+16302977501" className="text-blacks ">
                   +1 630 297 7501
                 </Link>
@@ -83,10 +86,10 @@ export default function Footer() {
             <h3 className="text-lg font-semibold text-blacks">Follow Us</h3>
             <div className="flex items-center space-x-4">
               <Link href="#" aria-label="Facebook">
-              <Icon name="ffacebook" width={23} height={23}/>
+                <Icon name="ffacebook" width={23} height={23} />
               </Link>
               <Link href="#" aria-label="YouTube">
-              <Icon name="fyoutube" width={24} height={24}/>
+                <Icon name="fyoutube" width={24} height={24} />
               </Link>
             </div>
           </div>
@@ -95,11 +98,11 @@ export default function Footer() {
         {/* Copyright */}
         <div className="border-t mt-8 pt-5 border-gray-200 text-center text-sm text-blacks">
           <div className="flex items-center justify-center gap-1">
-          <Icon name="fcopy" width={18} height={18}/>
+            <Icon name="fcopy" width={18} height={18} />
             <span>{"MyTsv - Meet your town specialists"}</span>
           </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }
