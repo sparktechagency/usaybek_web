@@ -10,9 +10,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
+import z from 'zod'
+
+
+type forgotProps=z.infer<typeof ForgotSchema>
 
 export default function ForgotPassword() {
-  const from = useForm({
+  const from = useForm<forgotProps>({
     resolver: zodResolver(ForgotSchema),
     defaultValues: {
       email: "",
@@ -23,6 +27,8 @@ export default function ForgotPassword() {
   const handleSubmit = async (values: FieldValues) => {
     console.log("Login form:", values);
   };
+
+ 
 
   return (
     <div className="fixed inset-0 m-0 md:m-3">
