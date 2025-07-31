@@ -44,11 +44,6 @@ import google from "@/icon/basic/google.svg"
 import phoneGray from "@/icon/basic/phoneGray.svg"
 import mailGray from "@/icon/basic/mailGray.svg"
 import eyenot from "@/icon/basic/eyeNot.svg"
-import veye from "@/icon/dash/veye.svg"
-import vanalytics from "@/icon/dash/vanalytics.svg"
-import vedit from "@/icon/dash/vedit.svg"
-import vmesage from "@/icon/dash/vmesage.svg"
-import vdelete from "@/icon/dash/vdelete.svg"
 import editBlack from "@/icon/dash/editBlack.svg"
 import deleteWhite from "@/icon/dash/deleteWhite.svg"
 import saveWhite from "@/icon/dash/saveWhite.svg"
@@ -115,11 +110,6 @@ export const IconList = {
   phoneGray,
   mailGray,
   eyenot,
-  veye,
-  vanalytics,
-  vedit,
-  vmesage,
-  vdelete,
   editBlack,
   deleteWhite,
   saveWhite,

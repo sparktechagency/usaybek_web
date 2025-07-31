@@ -19,7 +19,7 @@ import Link from "next/link";
 import Modal from "@/components/reuseable/modal";
 import TabList from "@/components/common/upload/tab";
 import PaymentBox from "@/components/common/payment-box";
-
+import FavIcon from "@/icon/admin/favIcon";
 
 interface Video {
   id: string;
@@ -125,17 +125,17 @@ const initialVideos: Video[] = [
 export default function MyVideos() {
   const { confirm } = useConfirmation();
   const [videos, setVideos] = useState<Video[]>(initialVideos);
-  const [isUpload, setIsUpload] = useState(false)
-  const [isPayment,setIsPayment]=useState(false)
+  const [isUpload, setIsUpload] = useState(false);
+  const [isPayment, setIsPayment] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
   const [selectedVideoIds, setSelectedVideoIds] = useState<Set<string>>(
     new Set()
   );
 
-// isUpload modal close
-  useEffect(()=>{
-    setIsUpload(false)
-  },[isPayment])
+  // isUpload modal close
+  useEffect(() => {
+    setIsUpload(false);
+  }, [isPayment]);
 
   const handleSelectVideo = (id: string, isChecked: boolean) => {
     setSelectedVideoIds((prev) => {
@@ -152,7 +152,7 @@ export default function MyVideos() {
   const handleDelete = async () => {
     const con = await confirm({
       title: "Are you sure to delete this video ?",
-      description: "Users can't find your video anymore"
+      description: "Users can't find your video anymore",
     });
     if (con) {
       console.log(selectedVideoIds);
@@ -168,7 +168,11 @@ export default function MyVideos() {
 
   return (
     <div>
-      <NavItem title="My videos" onClick={() => setIsUpload(!isUpload)} upload={true} />
+      <NavItem
+        title="My videos"
+        onClick={() => setIsUpload(!isUpload)}
+        upload={true}
+      />
       <div>
         <div className="flex items-center space-x-4 pb-2 pt-10">
           <span className="font-medium text-blacks">
@@ -239,26 +243,70 @@ export default function MyVideos() {
                           </span>
 
                           <div className="hidden group-hover:block">
-                            <ul className="flex items-center space-x-3 mt-3">
-                              <li className="hover:border rounded-md p-1">
-                                <Link href={"/dashboard/video-details?tab=details"}><Icon name={"veye"} /></Link>
-                              </li>
-                              <li className="hover:border rounded-md p-1">
-                                <Link href={"/dashboard/video-details?tab=analytics"}><Icon name={"vanalytics"} /></Link>
-                              </li>
-                              <li className="hover:border rounded-md p-1">
-                                <Link href={"/dashboard/edit-video"}>
-                                  <Icon name={"vedit"} /> 
+                            <ul className="flex items-center space-x-2 mt-3">
+                              <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
+                                <Link
+                                  href={"/dashboard/video-details?tab=details"}
+                                >
+                                  <FavIcon
+                                    name="eye"
+                                    className="size-5"
+                                    color="#535353"
+                                    hoverColor="#4a4df5"
+                                  />
                                 </Link>
                               </li>
-                              <li className="hover:border rounded-md p-1">
-                                <Link href={"/dashboard/video-details?tab=comments"}><Icon name={"vmesage"} /></Link>
+                              <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
+                                <Link
+                                  href={
+                                    "/dashboard/video-details?tab=analytics"
+                                  }
+                                >
+                                  <FavIcon
+                                    name="analytics"
+                                    className="size-4"
+                                    color="#535353"
+                                    hoverColor="#4a4df5"
+                                  />
+                                </Link>
                               </li>
-                              <li className="hover:border rounded-md p-1" onClick={() => SingleVideoDelete(video.id)}><Icon name={"vdelete"} width={14} height={15} className="relative mb-1" /></li>
+                              <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
+                                <Link href={"/dashboard/edit-video"}>
+                                  <FavIcon
+                                    name="edit"
+                                    className="size-4"
+                                    color="#535353"
+                                    hoverColor="#4a4df5"
+                                  />
+                                </Link>
+                              </li>
+                              <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
+                                <Link
+                                  href={"/dashboard/video-details?tab=comments"}
+                                  className="relative top-[2px]"
+                                >
+                                  <FavIcon
+                                    name="comnet"
+                                    className="size-4"
+                                    color="#535353"
+                                    hoverColor="#4a4df5"
+                                  />
+                                </Link>
+                              </li>
+                              <li
+                                className="hover:border rounded-md size-8 grid place-items-center hover:bg-white"
+                                onClick={() => SingleVideoDelete(video.id)}
+                              >
+                                <FavIcon
+                                  name="delete"
+                                  className="size-4"
+                                  color="#535353"
+                                  hoverColor="#ef4444"
+                                />
+                              </li>
                             </ul>
                           </div>
                         </div>
-
                       </div>
                     </div>
                   </div>
@@ -266,7 +314,7 @@ export default function MyVideos() {
 
                 <TableCell>
                   <div className="inline-flex items-center space-x-1 border rounded-full px-2 py-1 text-blacks">
-                    <Icon name="internetBlack" width={17}  height={17} />
+                    <Icon name="internetBlack" width={17} height={17} />
                     <span>{video.visibility}</span>
                   </div>
                 </TableCell>
@@ -305,19 +353,31 @@ export default function MyVideos() {
         <li className="font-medium">
           <Pagination
             page={1}
-            onPageChange={() => { }}
+            onPageChange={() => {}}
             totalPage={10}
             per_page={2}
           ></Pagination>
         </li>
       </ul>
       {/* modal upload */}
-      <Modal open={isUpload} setIsOpen={setIsUpload} title="Upload a new video" titleStyle="text-center" className='sm:max-w-4xl'>
+      <Modal
+        open={isUpload}
+        setIsOpen={setIsUpload}
+        title="Upload a new video"
+        titleStyle="text-center"
+        className="sm:max-w-4xl"
+      >
         <TabList setIsPayment={setIsPayment} />
       </Modal>
       {/* payment */}
-      <Modal title="Pay to MyTSV" open={isPayment} setIsOpen={setIsPayment} titleStyle='text-center' className='sm:max-w-3xl'>
-         <PaymentBox setIsPayment={setIsPayment} />
+      <Modal
+        title="Pay to MyTSV"
+        open={isPayment}
+        setIsOpen={setIsPayment}
+        titleStyle="text-center"
+        className="sm:max-w-3xl"
+      >
+        <PaymentBox setIsPayment={setIsPayment} />
       </Modal>
     </div>
   );
