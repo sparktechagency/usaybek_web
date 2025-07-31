@@ -7,11 +7,19 @@ import { PlaceholderImg } from "@/lib/utils";
 import Img from "@/components/reuseable/img";
 import Link from "next/link";
 import assets from "@/assets";
-import { ImgBox } from "@/components/common/admin/reuseable";
+import { usePathname } from "next/navigation";
+import FavIcon from "@/icon/admin/favIcon";
+import { useState } from "react";
+import SidebarFixed from "@/components/common/sideber/sideber-fixed";
 
 export default function Navber() {
   // const headerRef = useRef<HTMLDivElement>(null);
+  const [isSide, setIsSide] = useState(false);
   const { login, setIsLogin } = useLogin();
+  const path = usePathname();
+  const patterns = [/^\/video\/.+/, /^\/profile$/];
+  const isMenu = patterns.some((regex) => regex.test(path));
+
   // console.log(login)
 
   // useEffect(() => {
@@ -25,15 +33,20 @@ export default function Navber() {
   return (
     <div className="container">
       <ul className="relative  flex items-center  justify-between py-8">
-        <li>
+        <li className="flex space-x-5 items-center">
+          {isMenu && (
+            <span onClick={() => setIsSide(!isSide)}>
+              <FavIcon name="menu" className="size-6 cursor-pointer" />
+            </span>
+          )}
           <Link href={"/"}>
-          <Image
-                  src={assets.logo}
-                  alt="MYTSV Logo"
-                  width={160}
-                  height={160}
-                  className="object-contain"
-                />
+            <Image
+              src={assets.logo}
+              alt="MYTSV Logo"
+              width={160}
+              height={160}
+              className="object-contain"
+            />
           </Link>
         </li>
         <li className="hidden md:block">
@@ -52,7 +65,7 @@ export default function Navber() {
               aria-label="Location search input"
             />
             <Button
-             onClick={() => setIsLogin(!login)}
+              onClick={() => setIsLogin(!login)}
               variant={"primary"}
               className="w-[120px] px-0  h-11 my-1 rounded-full has-[>svg]:px-0"
             >
@@ -65,22 +78,19 @@ export default function Navber() {
           {login ? (
             <Link href={"/profile"}>
               <Button
-              variant={"primary"}
-              className="h-12 pl-2 pr-4 rounded-full"
-            >
-              <Img
-                src={PlaceholderImg(100, 100)}
-                className="size-10"
-                title="img"
-              />
-              Md Julfiker Islam
-            </Button>
+                variant={"primary"}
+                className="h-12 pl-2 pr-4 rounded-full"
+              >
+                <Img
+                  src={PlaceholderImg(100, 100)}
+                  className="size-10"
+                  title="img"
+                />
+                Md Julfiker Islam
+              </Button>
             </Link>
           ) : (
-            <Button
-              variant={"primary"}
-              className="h-12 px-4 rounded-full"
-            >
+            <Button variant={"primary"} className="h-12 px-4 rounded-full">
               Sign in to your Account
             </Button>
           )}
@@ -106,6 +116,9 @@ export default function Navber() {
           }
         }
       `}</style>
+
+      {/* navber fixed */}
+      <SidebarFixed isSide={isSide} setIsSide={setIsSide} />
     </div>
   );
 }

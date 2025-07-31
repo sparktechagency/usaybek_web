@@ -1,5 +1,4 @@
 "use client"
-import assets from '@/assets'
 import { ChartAreaStacked } from '@/components/common/chats/area'
 import NavItem from '@/components/common/dashboard/navber'
 import { Avatar, AvatarFallback, AvatarImage, Button, Card, CardContent, CardTitle } from '@/components/ui'
