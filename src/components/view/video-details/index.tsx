@@ -1,17 +1,16 @@
 "use client";
+import CommentBox from "@/components/common/comment-box";
 import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui";
 import Avatars from "@/components/reuseable/avater";
 import Modal from "@/components/reuseable/modal";
 import { RadioGroup, RadioGroupItem } from "@/components/ui";
 import VideoPlayer from "@/components/common/video-player";
-import {ThumbsUp} from "lucide-react";
 import { PlaceholderImg } from "@/lib/utils";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Icon from "@/icon";
-
+import FavIcon from "@/icon/admin/favIcon";
 
 const options = [
   { value: "sexual-content", label: "Sexual content" },
@@ -25,37 +24,32 @@ const options = [
   { value: "spam-misleading", label: "Spam or misleading" },
   { value: "legal-issue", label: "Legal issue" },
   { value: "captions-issue", label: "Captions issue" },
-]
-
-
-
-
-
+];
 
 export default function VideoDetails({ slug }: any) {
   const [isReprot, setIsReport] = useState(false);
-  const [isText, setIsText] = useState(false)
-  const [isShare, setIsShare] = useState(false)
-  const [selectedValue, setSelectedValue] = useState("sexual-content")
-  console.log(selectedValue)
+  const [isText, setIsText] = useState(false);
+  const [isShare, setIsShare] = useState(false);
+  const [selectedValue, setSelectedValue] = useState("sexual-content");
+  console.log(selectedValue);
 
-  console.log(slug)
+  console.log(slug);
 
   return (
-    <div className="container">
+    <div className="container py-10">
       <div className="flex flex-col">
         {/* Main content area */}
         <div className="flex flex-col lg:flex-row flex-1 gap-6">
           {/* Left column: Video player, details, comments */}
           <div className="flex-1 min-w-0">
             {/* Video Player */}
-             <VideoPlayer/>
+            <VideoPlayer />
 
             {/* Video Title and Actions */}
             <div>
               <h1 className="text-lg lg:text-xl font-semibold text-blacks mt-3">
-                Joe&apos;s Expert Auto LLC. - Address: 2740 N Elston Ave, Chicago, IL
-                60647, United States
+                Joe&apos;s Expert Auto LLC. - Address: 2740 N Elston Ave,
+                Chicago, IL 60647, United States
               </h1>
               <div className="flex items-center flex-wrap lg:flex-nowrap justify-between mt-5">
                 <div className="flex items-center gap-3">
@@ -68,31 +62,34 @@ export default function VideoDetails({ slug }: any) {
                 </div>
                 {/* right */}
                 <div className="flex mt-2 md:mt-0 flex-wrap items-center gap-x-4 gap-y-2  text-sm has-[>div]:cursor-pointer">
-                  <div className="flex  gap-1 border px-4 py-1 rounded-full">
-                    <Icon name="eye" width={23} height={23} />
+                  <div className="flex   border px-3 space-x-1 h-8 items-center rounded-full">
+                    <FavIcon name="eye" color="#888888" className="size-6" />
                     <span className="text-blacks font-semibold">10K</span>
                   </div>
-                  <div className="flex gap-1 border px-4 py-1 rounded-full">
-                    <Icon name="likeUp" width={21} height={21} />
+                  <div className="flex  border px-3 h-8 space-x-1 items-center rounded-full">
+                    <FavIcon name="likeUp" color="#888888"  className="size-5 relative mb-[1px]" />
                     <span className="text-blacks font-semibold">10</span>
                   </div>
-                  <div className="flex items-start gap-1 border px-4 py-1 rounded-full">
-                    <Icon name="likeDown" width={20} height={20} className="relative mt-1" />
+                  <div className="flex border px-3 h-8 items-center space-x-1 rounded-full">
+                    <FavIcon name="likeDown" color="#888888" className="size-5 relative mr-1 top-[2px]" />
                     <span className="text-blacks font-semibold">10</span>
                   </div>
-                  <div className="flex  gap-1 border px-4 py-1 rounded-full">
-                    <Icon name="message" width={20} height={20} className="relative mt-1" />
+                  <div className="flex  border px-3 h-8 items-center space-x-1 rounded-full">
+                    <FavIcon name="comnet" color="#888888" className="size-5 relative top-[2px]" />
                     <span className="text-blacks font-semibold">10</span>
                   </div>
-                  <div onClick={() => setIsShare(!isShare)} className="flex  gap-1 border px-4 py-1 rounded-full">
-                    <Icon name="share" width={23} height={23} />
+                  <div
+                    onClick={() => setIsShare(!isShare)}
+                    className="flex  border px-3 h-8 items-center space-x-1 rounded-full"
+                  >
+                    <FavIcon name="share" />
                     <span className="text-blacks font-semibold">Share</span>
                   </div>
                   <div
                     onClick={() => setIsReport(!isReprot)}
-                    className="flex  gap-1 border px-4 py-1 rounded-full"
+                    className="flex  border px-3 h-8 items-center space-x-1 rounded-full"
                   >
-                    <Icon name="report" width={16} height={16} />
+                    <FavIcon name="report1" className="size-5" />
                     <span className="text-blacks font-semibold">Report</span>
                   </div>
                 </div>
@@ -134,76 +131,7 @@ export default function VideoDetails({ slug }: any) {
               </div>
 
               {/* Sample Comments */}
-              <div className="mt-6 space-y-6">
-                {/* Comment 1 */}
-                <div className="flex gap-3">
-                  <Avatars src={""} fallback="J" alt="John Doe" />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 text-sm">
-                      <span className="font-semibold">John Doe</span>
-                      <span className="text-gray-500">2 days ago</span>
-                    </div>
-                    <p className="mt-1 text-gray-800">
-                      Very informative video. I will obviously take your
-                      service.
-                    </p>
-                    <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="flex items-center gap-1"
-                      >
-                        <ThumbsUp className="w-4 h-4" />
-                        <span>2.6K</span>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-blue-600 hover:text-blue-700"
-                      >
-                        See Reply
-                      </Button>
-                      <Button variant="ghost" size="sm">
-                        Reply
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-                {/* Comment 2 */}
-                <div className="flex gap-3">
-                  <Avatars src="" fallback="J" alt="Channel Avatar" />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 text-sm">
-                      <span className="font-semibold">John Doe</span>
-                      <span className="text-gray-500">2 days ago</span>
-                    </div>
-                    <p className="mt-1 text-gray-800">
-                      Very informative video. I will obviously take your
-                      service.
-                    </p>
-                    <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="flex items-center gap-1"
-                      >
-                        <ThumbsUp className="w-4 h-4" />
-                        <span>2.6K</span>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-blue-600 hover:text-blue-700"
-                      >
-                        See Reply
-                      </Button>
-                      <Button variant="ghost" size="sm">
-                        Reply
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <CommentBox />
             </div>
           </div>
 
@@ -268,13 +196,21 @@ export default function VideoDetails({ slug }: any) {
           </RadioGroup>
           {/* Button section at the bottom, aligned to the right. */}
           <div className="mt-2 flex justify-end gap-4">
-            <Button variant="link" onClick={() => setIsReport(false)} className="text-black hover:text-blacks hover:no-underline">
+            <Button
+              variant="link"
+              onClick={() => setIsReport(false)}
+              className="text-black hover:text-blacks hover:no-underline"
+            >
               Cancel
             </Button>
-            <Button variant="link" onClick={() => {
-              setIsReport(false)
-              setIsText(true)
-            }} className="text-reds hover:text-reds hover:no-underline">
+            <Button
+              variant="link"
+              onClick={() => {
+                setIsReport(false);
+                setIsText(true);
+              }}
+              className="text-reds hover:text-reds hover:no-underline"
+            >
               Next
             </Button>
           </div>
@@ -283,28 +219,40 @@ export default function VideoDetails({ slug }: any) {
       {/* Modal Report text box*/}
       <Modal open={isText} title={selectedValue} setIsOpen={setIsText}>
         <div>
-          <Textarea className="resize-none w-full h-36 " placeholder="Describe your issue...">
-
-          </Textarea>
+          <Textarea
+            className="resize-none w-full h-36 "
+            placeholder="Describe your issue..."
+          ></Textarea>
           <div className="mt-2 flex justify-end gap-4">
-            <Button variant="link" onClick={() => setIsText(false)} className="text-black hover:text-blacks hover:no-underline">
+            <Button
+              variant="link"
+              onClick={() => setIsText(false)}
+              className="text-black hover:text-blacks hover:no-underline"
+            >
               Cancel
             </Button>
-            <Button variant="link" onClick={() => {
-              console.log("all ok")
-            }} className="text-reds hover:text-reds hover:no-underline">
+            <Button
+              variant="link"
+              onClick={() => {
+                console.log("all ok");
+              }}
+              className="text-reds hover:text-reds hover:no-underline"
+            >
               Report
             </Button>
           </div>
         </div>
-
       </Modal>
       {/* Share Modal box for the side*/}
       <Modal open={isShare} title={"Share"} setIsOpen={setIsShare}>
         <div>
           <ul>
-            <li className="text-xl text-blacks font-semibold text-center">Link for this video</li>
-            <li className="text-center text-grays px-3">Copy this link and share to your friends through anything you want</li>
+            <li className="text-xl text-blacks font-semibold text-center">
+              Link for this video
+            </li>
+            <li className="text-center text-grays px-3">
+              Copy this link and share to your friends through anything you want
+            </li>
           </ul>
           <Input
             type="text"
@@ -314,12 +262,11 @@ export default function VideoDetails({ slug }: any) {
           />
           <div className="flex justify-center">
             <Button className="rounded-full px-6 py-2 h-auto text-center text-base bg-transparent hover:bg-transparent shadow-none border border-input">
-              <Icon name="copy" width={16} height={16}/>
+              <FavIcon name="copy1" className="size-6"/>
               <span className="text-blacks"> Copy link</span>
             </Button>
           </div>
         </div>
-
       </Modal>
     </div>
   );

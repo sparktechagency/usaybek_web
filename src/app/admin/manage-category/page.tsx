@@ -63,7 +63,6 @@ export default function ManageCategory() {
     const con = await confirm({
       title: "Are you sure to delete this category ?",
       description: "Users will not be able to find this category.",
-      icon: true,
     });
     if (con) {
       console.log(id);

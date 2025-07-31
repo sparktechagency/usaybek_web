@@ -1,10 +1,3 @@
-import eye from "@/icon/video-details/eye.svg";
-import likeUp from "@/icon/video-details/like-up.svg"
-import likeDown from "@/icon/video-details/like-down.svg"
-import message from "@/icon/video-details/message.svg"
-import share from "@/icon/video-details/share.svg"
-import report from "@/icon/video-details/report.svg"
-import copy from "@/icon/video-details/copy.svg"
 import femail from "@/icon/footer/emailbg.svg"
 import fphone from "@/icon/footer/phonebg.svg"
 import ffacebook from "@/icon/footer/facebookbg.svg"
@@ -62,15 +55,7 @@ import promoted from "@/icon/dash/promoted.svg"
 
 
 
-
 export const IconList = {
-  eye,
-  likeUp,
-  likeDown,
-  message,
-  share,
-  report,
-  copy,
   femail,
   fphone,
   ffacebook,

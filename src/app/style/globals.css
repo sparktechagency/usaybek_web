@@ -59,6 +59,7 @@
   --color-gray2:#888888;
   --color-grays-place: #dddddd;
   --color-body: #f6f6f6;
+  --color-greens:#009411;
   --width-sideber-md: 256px;
   --width-sideber-xs: 80px;
 }
@@ -156,6 +157,10 @@
 
 .onside-free {
   background: linear-gradient(90deg, #EC008C 0%, #FC6767 100%);
+}
+
+.alart{
+  background:linear-gradient(90deg, rgba(239, 68, 68, 0.00) 0%, #EF4444 50%, rgba(239, 68, 68, 0.00) 100%);
 }
 
 .avatar{

@@ -76,7 +76,6 @@ export default function FQA() {
       title: "You are going to delete this question",
       description:
         "After deleting, users can't find this question & answer anymore.",
-      icon: true,
     });
     if (confirmed) {
       console.log(id);

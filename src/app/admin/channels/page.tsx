@@ -105,10 +105,9 @@ export default function Channels() {
       title: "You are going to delete this channel",
       description:
         "After deleting, users can't find this channel and videos anymore",
-      icon: true,
     });
     if (con) {
-      //   console.log(selectedVideoIds);
+        console.log("handleDelete");
     }
   };
 

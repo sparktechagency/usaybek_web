@@ -1,4 +1,5 @@
 "use client";
+import ReportView from "@/components/common/admin/basic/report-view";
 import {
   CustomTable,
   Deletebtn,
@@ -6,14 +7,27 @@ import {
 } from "@/components/common/admin/reuseable";
 import NavTitle from "@/components/common/admin/reuseable/nav-title";
 import SearchBox from "@/components/common/admin/reuseable/search";
+import VideoPlayer from "@/components/common/video-player";
 import Avatars from "@/components/reuseable/avater";
+import Modal from "@/components/reuseable/modal";
 import { Pagination } from "@/components/reuseable/pagination";
-import { Button, TableCell, TableRow } from "@/components/ui";
+import SelectBox from "@/components/reuseable/select-box";
+import { Button, TableCell, TableRow, Textarea } from "@/components/ui";
 import useConfirmation from "@/context/delete-modal";
+import FavIcon from "@/icon/admin/favIcon";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+
+const options = [
+  { label: "Suspend for 7 days", value: "suspend_7_days" },
+  { label: "Suspend for 30 days", value: "suspend_30_days" },
+  { label: "Give a warning", value: "warning" },
+  { label: "Suspend permanently", value: "suspend_permanently" },
+];
 
 export default function Reports() {
+  const [isPreview, setIsPreview] = useState<boolean>(false);
+  const [isTake, setIsTake] = useState<boolean>(false);
   const { confirm } = useConfirmation();
   const headers = [
     "Sl. No",
@@ -73,7 +87,7 @@ export default function Reports() {
       title: "You are going to delete this channel",
       description:
         "After deleting, users can't find this channel and videos anymore",
-      icon: true,
+      icon: "i2",
     });
     if (con) {
       //   console.log(selectedVideoIds);
@@ -133,9 +147,7 @@ export default function Reports() {
               <TableCell>
                 <ul className="flex gap-2">
                   <li>
-                    <Link href={"/admin/channels/1"}>
-                      <Previewbtn />
-                    </Link>
+                    <Previewbtn onClick={() => setIsPreview(!isPreview)} />
                   </li>
                   <li>
                     <Deletebtn onClick={handleDelete} />
@@ -158,6 +170,50 @@ export default function Reports() {
           ></Pagination>
         </li>
       </ul>
+      {/* preview box */}
+      <Modal
+        open={isPreview}
+        setIsOpen={setIsPreview}
+        title="Haircut pro"
+        titleStyle="text-center"
+        className="sm:max-w-5xl"
+      >
+        <ReportView
+          options={options}
+          onChange={(value: any) => {
+            console.log("Selected action:", value);
+            setIsTake(true);
+          }}
+        />
+      </Modal>
+      {/* isTake */}
+      <Modal
+        open={isTake}
+        setIsOpen={setIsTake}
+        className="sm:max-w-3xl"
+        title="Haircut pro"
+        titleStyle="text-center"
+      >
+        <h1 className="text-lg text-center font-semibold text-blacks">
+          Joe&apos;s Expert Auto LLC. - Address: 2740 N Elston Ave, Chicago, IL
+          60647, United States
+        </h1>
+        <h1 className="flex items-center justify-center my-2 text-reds">
+          <FavIcon name="question" className="mr-2" />
+          Spreading misinformation
+        </h1>
+        <h1 className="flex items-center justify-center my-5 text-white alart py-3">
+          <FavIcon name="alert" className="mr-2" />
+          Suspending for 7 days
+        </h1>
+        <Textarea
+          className="w-full rounded-3xl  pl-3 pr-3 py-3  text-blacks resize-none   text-sm min-h-45"
+          placeholder="What is the issue ?"
+        />
+        <Button variant="primary" className="rounded-full mt-2 float-right">
+          Take action
+        </Button>
+      </Modal>
     </div>
   );
 }

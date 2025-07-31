@@ -86,7 +86,6 @@ export default function SalesrepResentatives() {
       title: "Are you sure to delete this representatives ?",
       description:
         "This sales representatives will no longer able to access his account.",
-      icon: true,
     });
     if (confirmed) {
       console.log(id);
