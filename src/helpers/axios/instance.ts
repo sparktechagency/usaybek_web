@@ -7,8 +7,8 @@ import axios from "axios";
 const instance = axios.create();
 instance.defaults.headers.post["Content-Type"] = "application/json";
 instance.defaults.headers["Accept"] = "application/json";
-instance.defaults.withCredentials = true;
-instance.defaults.timeout = 60000;
+// instance.defaults.withCredentials =false
+
 
 // Add a request interceptor
 instance.interceptors.request.use(

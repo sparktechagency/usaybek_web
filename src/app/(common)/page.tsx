@@ -1,11 +1,14 @@
 "use client";
 import VideoBox from "@/components/common/video-box";
 import FilterBox from "@/components/reuseable/filter-box";
+import { useHomeVideosQuery } from "@/redux/api/landing/videosApi";
 import { useState } from "react";
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const {data}=useHomeVideosQuery({})
 
+  console.log(data)
   return (
     <div>
       <FilterBox
