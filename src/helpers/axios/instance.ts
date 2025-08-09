@@ -28,10 +28,17 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   
   function (response) {
+    const {current_page,per_page, total}=response.data.data
     const responseObject:any = {
-      data: response?.data?.data,
-      meta: response?.data?.meta,
+      data: response?.data,
+      meta: {
+        current_page,
+        per_page,
+        total
+      },
     };
+
+    // console.log(response.data.data.current_page)
     return responseObject;
   },
   async function (error) {
