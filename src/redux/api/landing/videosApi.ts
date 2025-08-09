@@ -44,6 +44,16 @@ export const videosApi = baseApi.injectEndpoints({
         };
       },
     }),
+    VideosDetails: build.query({
+      query: (id: string) => ({
+        url: `/videos/${id}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.relatedVideos],
+      transformResponse: (response: any) => {
+        return response.data
+      },
+    }),
     RelatedVideos: build.query({
       query: (id: string) => ({
         url: `/get-related-video/${id}`,
@@ -65,4 +75,5 @@ export const {
   usePromoVideosQuery,
   useCategoriesQuery,
   useRelatedVideosQuery,
+  useVideosDetailsQuery
 } = videosApi;

@@ -5,6 +5,7 @@ import FavIcon from "@/icon/admin/favIcon";
 
 export function VideoCard({ item }: any) {
   const {
+    id,
     title,
     thumbnail,
     user,
@@ -13,7 +14,7 @@ export function VideoCard({ item }: any) {
     is_promoted,
   } = item || {};
   return (
-    <Link href="/video/2" className="max-w-sm  lg:w-full lg:max-w-full">
+    <Link href={`/video/${id}`} className="max-w-sm  lg:w-full lg:max-w-full">
       <div className="relative">
         <div className="">
           <Image

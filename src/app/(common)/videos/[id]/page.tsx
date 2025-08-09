@@ -20,7 +20,6 @@ export default function VideoList({
   const { id } = use(params);
   const { data, isLoading } = useRelatedVideosQuery(id);
 
-  console.log(id);
 
   return (
     <div>

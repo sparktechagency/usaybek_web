@@ -65,11 +65,17 @@ export default function Home() {
           </>
         ) : (
           <div className="home gap-6">
-            {relatedLoading
-              ? Skeleton(8)
-              : relatedVideos?.data?.map((video: any) => (
-                  <VideoCard key={video.id} item={video} />
-                ))}
+            {relatedLoading ? (
+              Skeleton(8)
+            ) : !!relatedVideos?.data.length ? (
+              relatedVideos?.data?.map((video: any) => (
+                <VideoCard key={video.id} item={video} />
+              ))
+            ) : (
+              <h1 className="text-gray-500 col-span-4 text-center py-20">
+                Not Video Found
+              </h1>
+            )}
           </div>
         )}
       </div>
