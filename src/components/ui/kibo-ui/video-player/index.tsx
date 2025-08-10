@@ -121,5 +121,5 @@ export const VideoPlayerContent = ({
   className,
   ...props
 }: VideoPlayerContentProps) => (
-  <video crossOrigin className={cn('mt-0 mb-0', className)} {...props} />
+  <video  className={cn('mt-0 mb-0', className)} {...props} />
 );

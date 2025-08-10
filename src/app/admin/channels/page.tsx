@@ -170,9 +170,9 @@ export default function Channels() {
       <ul className="flex flex-wrap justify-end my-7">
         <li className="font-medium">
           <Pagination
-            page={1}
+            current_page={1}
             onPageChange={() => {}}
-            totalPage={10}
+            total={10}
             per_page={2}
             activeStyle="!rounded-full !bg-reds !border-none !text-white hover:!text-white"
             itemStyle="rounded-full"

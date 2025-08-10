@@ -352,9 +352,9 @@ export default function MyVideos() {
       <ul className="flex flex-wrap justify-end my-7">
         <li className="font-medium">
           <Pagination
-            page={1}
+            current_page={1}
             onPageChange={() => {}}
-            totalPage={10}
+            total={10}
             per_page={2}
           ></Pagination>
         </li>
