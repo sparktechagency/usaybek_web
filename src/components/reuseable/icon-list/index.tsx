@@ -22,7 +22,7 @@ export const BackBtn = ({ onClick, className, iconStyle }: BackBtnProps) => (
   >
     <span
       className={cn(
-        "bg-white rounded-full p-1 flex items-center justify-center",
+        "bg-white rounded-full size-10 grid place-items-center",
         iconStyle
       )}
     >

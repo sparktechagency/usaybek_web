@@ -18,7 +18,7 @@ export default function VideoList({
   params: Promise<VideoListParams>;
 }) {
   const { id } = use(params);
-  const { data, isLoading } = useRelatedVideosQuery(id);
+  const { data, isLoading } = useRelatedVideosQuery({id:id});
 
 
   return (

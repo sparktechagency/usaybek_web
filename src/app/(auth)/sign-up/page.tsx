@@ -44,8 +44,8 @@ export default function SignUp() {
             <Card className="w-full max-w-lg rounded-md md:rounded-none md:rounded-t-xl px-4 py-8 bg-body border-none mx-auto md:absolute md:left-0 md:bottom-0">
               <CardHeader className="flex flex-col items-center space-y-0 gap-0 pt-6">
                 <Image src={assets.logo} alt="MYTSV Logo" width={150} height={50} className="object-contain" />
-                <CardTitle className="text-2xl font-bold text-reds mt-3">Welcome back</CardTitle>
-                <CardDescription className="text-blacks text-center">Use your credentials to login</CardDescription>
+                <CardTitle className="text-2xl font-bold text-reds mt-3">Create an account</CardTitle>
+                <CardDescription className="text-blacks text-center">Use your credentials to Sign In</CardDescription>
               </CardHeader>
               <Form className="space-y-5 pt-4" from={from} onSubmit={handleSubmit}>
                 <FromInputs

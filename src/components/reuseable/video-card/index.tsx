@@ -2,8 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import Avatars from "../avater";
 import FavIcon from "@/icon/admin/favIcon";
+import { cn } from "@/lib/utils";
 
-export function VideoCard({ item }: any) {
+
+export function VideoCard({ item, className }: any) {
   const {
     id,
     title,
@@ -14,7 +16,10 @@ export function VideoCard({ item }: any) {
     is_promoted,
   } = item || {};
   return (
-    <Link href={`/video/${id}`} className="max-w-sm  lg:w-full lg:max-w-full">
+    <Link
+      href={`/video/${id}`}
+      className={cn("max-w-sm  lg:w-full lg:max-w-full", className)}
+    >
       <div className="relative">
         <div className="">
           <Image

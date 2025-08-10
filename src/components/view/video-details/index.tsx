@@ -58,7 +58,7 @@ export default function VideoDetails({ slug }: any) {
     is_disliked,
   } = data || {};
 
-  console.log(data?.category_id)
+
 
 
   return (

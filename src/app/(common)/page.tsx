@@ -1,4 +1,5 @@
 "use client";
+import HomePromotion from "@/components/common/home-promotion";
 import SeeNav from "@/components/common/see-nav";
 import FilterBox from "@/components/reuseable/filter-box";
 import { VideoCardSkeleton } from "@/components/reuseable/skeleton-item";
@@ -7,36 +8,35 @@ import { VideoCard } from "@/components/reuseable/video-card";
 import { capitalize } from "@/lib/utils";
 import {
   useHomeVideosQuery,
-  usePromoVideosQuery,
   useRelatedVideosQuery,
 } from "@/redux/api/landing/videosApi";
 import { Loader } from "lucide-react";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
 export default function Home() {
   const { ref, inView } = useInView();
   const [isCount, setIsCount] = useState<number>(10);
   const [isCategory, setIsCategory] = useState({ id: "all", name: "All" });
-  const { data: promoVideos, isLoading: proLoading } = usePromoVideosQuery({});
   const { data: chVideos, isLoading: videoLoading } = useHomeVideosQuery({});
-  const query: Record<string, any> = { per_page: isCount } 
-  const { data: relatedVideos, isLoading: relatedLoading,refetch} =
-    useRelatedVideosQuery(
-      { id: isCategory.id, params: query },
-      {
-        skip: isCategory.id === "all",
-      }
-    );
+  const query: Record<string, any> = { per_page: isCount };
+  const {
+    data: relatedVideos,
+    isLoading: relatedLoading,
+    refetch,
+  } = useRelatedVideosQuery(
+    { id: isCategory.id, params: query },
+    {
+      skip: isCategory.id === "all",
+    }
+  );
 
   useEffect(() => {
-    if (inView) {
+    if (inView && isCategory.id !== "all") {
       setIsCount((pre) => pre + 10);
-      refetch()
+      refetch();
     }
-  }, [inView,refetch]);
-
-
+  }, [inView, refetch, isCategory?.id]);
 
   return (
     <div>
@@ -50,15 +50,7 @@ export default function Home() {
 
         {isCategory.id === "all" ? (
           <>
-            {/* Promotional videos */}
-            <div className="home gap-6">
-              {proLoading
-                ? Skeleton(4)
-                : promoVideos?.data?.map((video: any) => (
-                    <VideoCard key={video.id} item={video} />
-                  ))}
-            </div>
-
+            <HomePromotion />
             {/* All videos */}
             {videoLoading ? (
               <div className="home gap-6 mt-5">{Skeleton(8)}</div>
@@ -97,7 +89,7 @@ export default function Home() {
         )}
       </div>
       <div ref={ref} className="mx-auto flex justify-center mt-5">
-         <Loader className="animate-spin text-blacks/20"/>
+        <Loader className="animate-spin text-blacks/20" />
       </div>
     </div>
   );
