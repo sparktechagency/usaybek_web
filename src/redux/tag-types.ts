@@ -5,7 +5,7 @@ export enum tagTypes {
   relatedVideos = "relatedVideos",
   videoDetails = "videoDetails",
   blogs = "blogs",
-  singleBlog = "blogs",
+  singleBlog = "singleBlog",
 }
 
 export const tagTypesList = [
