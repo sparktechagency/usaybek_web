@@ -14,6 +14,11 @@ import {
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  DetailsSkeleton,
+  RelatedVideoCard,
+} from "@/components/reuseable/skeleton-item";
+import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 
 const options = [
   { value: "sexual-content", label: "Sexual content" },
@@ -30,17 +35,12 @@ const options = [
 ];
 
 export default function VideoDetails({ slug }: any) {
-  const { data, isLoading } = useVideosDetailsQuery("1");
-  const { data: relVideos, isLoading: relLoading } = useRelatedVideosQuery(
-    data?.category_id
-  );
+  const { data, isLoading } = useVideosDetailsQuery(slug);
+  const { data: relVideos, isLoading: relLoading } = useRelatedVideosQuery({id:data?.category_id});
   const [isReprot, setIsReport] = useState(false);
   const [isText, setIsText] = useState(false);
   const [isShare, setIsShare] = useState(false);
   const [selectedValue, setSelectedValue] = useState("sexual-content");
-
-  if (isLoading) return <p>Loading...</p>;
-  if (!data) return <p>No video found.</p>;
 
   const {
     id,
@@ -56,103 +56,114 @@ export default function VideoDetails({ slug }: any) {
     comment_replies_count_formated,
     is_liked,
     is_disliked,
-  } = data;
+  } = data || {};
 
-  console.log(relVideos);
+  console.log(data?.category_id)
+
 
   return (
     <div className="container py-10">
       <div className="flex flex-col">
         <div className="flex flex-col lg:flex-row flex-1 gap-6">
           {/* Left column */}
+
           <div className="flex-1 min-w-0">
-            {/* Video Player */}
-            <VideoPlayer src={video} />
-
-            {/* Video Title and Actions */}
-            <div>
-              <h1 className="text-lg lg:text-xl font-semibold text-blacks mt-3">
-                {title}
-              </h1>
-              <div className="flex items-center flex-wrap lg:flex-nowrap justify-between mt-5">
-                <div className="flex items-center gap-3">
-                  <Avatars
-                    src={user?.avatar}
-                    fallback={user?.name}
-                    alt={user?.name}
-                  />
-                  <div className="flex-1">
-                    <Link href="#" className="font-semibold text-gray-900">
-                      {user?.channel_name}
-                    </Link>
+            {isLoading ? (
+              <DetailsSkeleton />
+            ) : (
+              <>
+                <VideoPlayer src={video} />
+                {/* Video Title and Actions */}
+                <div>
+                  <h1 className="text-lg lg:text-xl font-semibold text-blacks mt-3">
+                    {title}
+                  </h1>
+                  <div className="flex items-center flex-wrap lg:flex-nowrap justify-between mt-5">
+                    <div className="flex items-center gap-3">
+                      <Avatars
+                        src={user?.avatar}
+                        fallback={user?.name}
+                        alt={user?.name}
+                      />
+                      <div className="flex-1">
+                        <Link href="#" className="font-semibold text-gray-900">
+                          {user?.channel_name}
+                        </Link>
+                      </div>
+                    </div>
+                    {/* Right actions */}
+                    <div className="flex mt-2 md:mt-0 flex-wrap items-center gap-x-4 gap-y-2 text-sm has-[>div]:cursor-pointer">
+                      <div className="flex border px-3 space-x-1 h-8 items-center rounded-full">
+                        <FavIcon
+                          name="eye"
+                          color="#888888"
+                          className="size-6"
+                        />
+                        <span className="text-blacks font-semibold">
+                          {views_count_formated}
+                        </span>
+                      </div>
+                      <div className="flex border px-3 h-8 space-x-1 items-center rounded-full">
+                        <FavIcon
+                          name="likeUp"
+                          color={is_liked ? "#ff0000" : "#888888"}
+                          className="size-5 relative mb-[1px]"
+                        />
+                        <span className="text-blacks font-semibold">
+                          {likes_count_formated}
+                        </span>
+                      </div>
+                      <div className="flex border px-3 h-8 items-center space-x-1 rounded-full">
+                        <FavIcon
+                          name="likeDown"
+                          color={is_disliked ? "#ff0000" : "#888888"}
+                          className="size-5 relative mr-1 top-[2px]"
+                        />
+                        <span className="text-blacks font-semibold">
+                          {dislikes_count_formated}
+                        </span>
+                      </div>
+                      <div className="flex border px-3 h-8 items-center space-x-1 rounded-full">
+                        <FavIcon
+                          name="comnet"
+                          color="#888888"
+                          className="size-5 relative top-[2px]"
+                        />
+                        <span className="text-blacks font-semibold">
+                          {comment_replies_count_formated}
+                        </span>
+                      </div>
+                      <div
+                        onClick={() => setIsShare(!isShare)}
+                        className="flex border px-3 h-8 items-center space-x-1 rounded-full"
+                      >
+                        <FavIcon name="share" />
+                        <span className="text-blacks font-semibold">Share</span>
+                      </div>
+                      <div
+                        onClick={() => setIsReport(!isReprot)}
+                        className="flex border px-3 h-8 items-center space-x-1 rounded-full"
+                      >
+                        <FavIcon name="report1" className="size-5" />
+                        <span className="text-blacks font-semibold">
+                          Report
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                {/* Right actions */}
-                <div className="flex mt-2 md:mt-0 flex-wrap items-center gap-x-4 gap-y-2 text-sm has-[>div]:cursor-pointer">
-                  <div className="flex border px-3 space-x-1 h-8 items-center rounded-full">
-                    <FavIcon name="eye" color="#888888" className="size-6" />
-                    <span className="text-blacks font-semibold">
-                      {views_count_formated}
-                    </span>
-                  </div>
-                  <div className="flex border px-3 h-8 space-x-1 items-center rounded-full">
-                    <FavIcon
-                      name="likeUp"
-                      color={is_liked ? "#ff0000" : "#888888"}
-                      className="size-5 relative mb-[1px]"
-                    />
-                    <span className="text-blacks font-semibold">
-                      {likes_count_formated}
-                    </span>
-                  </div>
-                  <div className="flex border px-3 h-8 items-center space-x-1 rounded-full">
-                    <FavIcon
-                      name="likeDown"
-                      color={is_disliked ? "#ff0000" : "#888888"}
-                      className="size-5 relative mr-1 top-[2px]"
-                    />
-                    <span className="text-blacks font-semibold">
-                      {dislikes_count_formated}
-                    </span>
-                  </div>
-                  <div className="flex border px-3 h-8 items-center space-x-1 rounded-full">
-                    <FavIcon
-                      name="comnet"
-                      color="#888888"
-                      className="size-5 relative top-[2px]"
-                    />
-                    <span className="text-blacks font-semibold">
-                      {comment_replies_count_formated}
-                    </span>
-                  </div>
-                  <div
-                    onClick={() => setIsShare(!isShare)}
-                    className="flex border px-3 h-8 items-center space-x-1 rounded-full"
-                  >
-                    <FavIcon name="share" />
-                    <span className="text-blacks font-semibold">Share</span>
-                  </div>
-                  <div
-                    onClick={() => setIsReport(!isReprot)}
-                    className="flex border px-3 h-8 items-center space-x-1 rounded-full"
-                  >
-                    <FavIcon name="report1" className="size-5" />
-                    <span className="text-blacks font-semibold">Report</span>
-                  </div>
+
+                {/* Channel Info */}
+                <div className="border p-4 rounded-md my-5 shadow-xs">
+                  <p className="text-sm text-blacks font-semibold">
+                    {publish_time_formated}
+                  </p>
+                  <p className="mt-1 text-sm text-grays leading-relaxed">
+                    {description}
+                  </p>
                 </div>
-              </div>
-            </div>
-
-            {/* Channel Info */}
-            <div className="border p-4 rounded-md my-5 shadow-xs">
-              <p className="text-sm text-blacks font-semibold">
-                {publish_time_formated}
-              </p>
-              <p className="mt-1 text-sm text-grays leading-relaxed">
-                {description}
-              </p>
-            </div>
-
+              </>
+            )}
             {/* Comments */}
             <div className="border-gray-200">
               <h2 className="text-lg font-semibold">
@@ -173,41 +184,48 @@ export default function VideoDetails({ slug }: any) {
           <div className="w-full lg:w-96 flex-shrink-0 mt-6 lg:mt-0">
             <h2 className="text-xl font-semibold mb-4">Related videos</h2>
             <div className="space-y-5">
-              {relVideos?.data.map((item: any) => (
-                <Link
-                  href={`/video/${item.id}`}
-                  key={item.id}
-                  className="flex gap-3 group"
-                >
-                  <div className="relative w-37 h-22 flex-shrink-0 rounded-md overflow-hidden">
-                    <Image
-                      src={item.thumbnail}
-                      alt="Related video thumbnail"
-                      fill
-                      style={{ objectFit: "cover" }}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-sm  font-medium line-clamp-2 text-blacks">
-                      {item.title}
-                    </h3>
-                    <ul>
-                      <li className="text-gray-600 text-base mt-1">
-                        {item?.user?.channel_name}
-                      </li>
-                      <li className="text-grays flex space-x-2 items-center text-sm">
-                        <span className="text-xs">
-                          {item.views_count_formated} views
-                        </span>
-                        <span className="flex items-center text-sm">
-                          <span className="inline-block w-2 h-2 bg-[#D9D9D9] rounded-full mr-1"></span>
-                          {item.created_at_format}
-                        </span>
-                      </li>
-                    </ul>
-                  </div>
-                </Link>
-              ))}
+              {/* <RelatedVideoCard/> */}
+              {relLoading ? (
+                <SkeletonCount count={10}>
+                  <RelatedVideoCard />
+                </SkeletonCount>
+              ) : (
+                relVideos?.data.map((item: any) => (
+                  <Link
+                    href={`/video/${item.id}`}
+                    key={item.id}
+                    className="flex gap-3 group"
+                  >
+                    <div className="relative w-37 h-22 flex-shrink-0 rounded-md overflow-hidden">
+                      <Image
+                        src={item.thumbnail}
+                        alt="Related video thumbnail"
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-sm  font-medium line-clamp-2 text-blacks">
+                        {item.title}
+                      </h3>
+                      <ul>
+                        <li className="text-gray-600 text-base mt-1">
+                          {item?.user?.channel_name}
+                        </li>
+                        <li className="text-grays flex space-x-2 items-center text-sm">
+                          <span className="text-xs">
+                            {item.views_count_formated} views
+                          </span>
+                          <span className="flex items-center text-sm">
+                            <span className="inline-block w-2 h-2 bg-[#D9D9D9] rounded-full mr-1"></span>
+                            {item.created_at_format}
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+                  </Link>
+                ))
+              )}
             </div>
           </div>
         </div>

@@ -13,13 +13,13 @@ import {
 } from "@/components/ui/kibo-ui/video-player";
 
 interface PlayerProps {
-  src: string;
+  src?: string;
 }
 
 const PlayerBox = ({ src }: PlayerProps) => (
   <VideoPlayer className="overflow-hidden w-full h-[650px] rounded-lg border">
     <VideoPlayerContent
-      // crossOrigin="true"
+      // crossOrigin="anonymous"
       preload="metadata"
       autoPlay={true}
       slot="media"

@@ -4,6 +4,8 @@ import { PlaceholderImg } from "@/lib/utils";
 import { BackBtn } from "@/components/reuseable/icon-list";
 import Link from "next/link";
 import { IdParams, SlugParams } from "@/types";
+import { makeStore } from "@/redux/store";
+import { blogApi } from "@/redux/api/landing/blogApi";
 
 // export async function generateMetadata({ params: { id } }: ParamsProps): Promise<Metadata> {
 //   console.log(id)
@@ -54,7 +56,12 @@ import { IdParams, SlugParams } from "@/types";
 
 export default async function Blog({ params }: IdParams) {
   const { id } = await params;
-  console.log(id);
+  const store = makeStore();
+  const { data } = await store.dispatch(blogApi.endpoints.singleBlog.initiate(id));
+  
+ 
+  const {image,title,description}=data || {}
+
   return (
     <div>
       <Link href={"/blogs"}>
@@ -65,7 +72,7 @@ export default async function Blog({ params }: IdParams) {
         {/* Image Section */}
         <div className="lg:w-1/2 w-full">
           <Image
-            src={PlaceholderImg(1000, 1000)}
+            src={image}
             alt="title"
             width={1000}
             height={1000}
@@ -76,7 +83,7 @@ export default async function Blog({ params }: IdParams) {
         {/* Text Section */}
         <div className="lg:w-1/2 w-full space-y-4">
           <h1 className="text-xl lg:text-2xl font-bold leading-tight">
-            {`Best Plumber Near Me: Find Trusted Plumbing Services with MyTSV.com`}
+             {title}
           </h1>
           <p className="text-lg text-blacks">
             When a plumbing emergency strikes, the last thing you want is to

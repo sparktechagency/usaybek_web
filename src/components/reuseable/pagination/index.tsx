@@ -5,9 +5,9 @@ import { cn } from '@/lib/utils'
 import React from 'react'
 
 interface PaginationProps {
-  page: number
+  current_page?: number
   onPageChange: (page: number) => void
-  totalPage: number
+  total?: number
   per_page: number
   className?: string,
   activeStyle?:string,
@@ -15,15 +15,15 @@ interface PaginationProps {
 }
 
 export function Pagination({
-  page,
+  current_page=1,
   onPageChange,
-  totalPage,
+  total=10,
   per_page,
   className,
   activeStyle,
   itemStyle
 }: PaginationProps) {
-  const total = Math.ceil(totalPage / per_page)
+  const totalCount = Math.ceil(total / per_page)
 
   return (
     <div className={cn("lg:w-[320px] flex justify-end", className)}>
@@ -35,8 +35,8 @@ export function Pagination({
         pageLinkClassName="h-10 w-10 flex items-center justify-center rounded-full"
         activeItemClassName={cn(`bg-transparent border border-[#1890FF] text-[#1890FF] hover:bg-transparent hover:!text-[#1890FF] rounded-md`,activeStyle)}
         disabledItemClassName="hover:!bg-transparent"
-        current={page}
-        total={total}
+        current={current_page}
+        total={totalCount}
         onPageChange={onPageChange}
       />
     </div>
