@@ -17,12 +17,11 @@ import Link from "next/link";
 import React, { useState } from "react";
 import MonthlyBox from "@/components/reuseable/date-box";
 import { serviceItem, ViewItem } from "@/dummy-data";
-import { useGetAllDoctorQuery } from "@/redux/api/videoApi";
+
 
 export default function Dashboard() {
   const [status, setStatus] = useState("Views");
-  const { data } = useGetAllDoctorQuery({});
-  console.log(data);
+ 
   return (
     <div>
       <NavItem title="Dashboard Overview" />

@@ -90,9 +90,11 @@ export default function Navber() {
               </Button>
             </Link>
           ) : (
-            <Button variant={"primary"} className="h-12 px-4 rounded-full">
-              Sign in to your Account
-            </Button>
+            <Link href="/sign-in">
+              <Button variant={"primary"} className="h-12 px-4 rounded-full">
+                Sign in to your Account
+              </Button>
+            </Link>
           )}
         </li>
       </ul>

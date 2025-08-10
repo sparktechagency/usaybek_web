@@ -33,5 +33,17 @@ export const PlaceholderImg = (
   height: number = 400
 ): string => {
   return `https://placehold.co/${width}x${height}.png`;
-  // return `https://surl.li/wkkxwa`;
 };
+
+// fromData payload
+export const modifyPayload = (values: any) => {
+  const obj = { ...values };
+  const file = obj["file"];
+  delete obj["file"];
+  const data = JSON.stringify(obj);
+  const formData = new FormData();
+  formData.append("data", data);
+  formData.append("file", file);
+  return formData;
+};
+
