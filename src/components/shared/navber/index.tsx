@@ -2,8 +2,6 @@
 import { Button } from "@/components/ui";
 import { Search } from "lucide-react";
 import Image from "next/image";
-import { useLogin } from "@/components/common/login-provider";
-import { PlaceholderImg } from "@/lib/utils";
 import Img from "@/components/reuseable/img";
 import Link from "next/link";
 import assets from "@/assets";
@@ -11,15 +9,18 @@ import { usePathname } from "next/navigation";
 import FavIcon from "@/icon/admin/favIcon";
 import { useState } from "react";
 import SidebarFixed from "@/components/common/sideber/sideber-fixed";
+import { useAuth } from "@/redux/features/authSlice";
+import { useAppSelector } from "@/redux/hooks";
 
 export default function Navber() {
   // const headerRef = useRef<HTMLDivElement>(null);
   const [isSide, setIsSide] = useState(false);
-  const { login, setIsLogin } = useLogin();
+  const {user}=useAppSelector(state=>state.auth)
   const path = usePathname();
+  const auth=useAuth()
   const patterns = [/^\/video\/.+/, /^\/profile$/];
   const isMenu = patterns.some((regex) => regex.test(path));
-
+ 
   // console.log(login)
 
   // useEffect(() => {
@@ -65,7 +66,6 @@ export default function Navber() {
               aria-label="Location search input"
             />
             <Button
-              onClick={() => setIsLogin(!login)}
               variant={"primary"}
               className="w-[120px] px-0  h-11 my-1 rounded-full has-[>svg]:px-0"
             >
@@ -75,18 +75,18 @@ export default function Navber() {
           </div>
         </li>
         <li>
-          {login ? (
+          {auth ? (
             <Link href={"/profile"}>
               <Button
                 variant={"primary"}
                 className="h-12 pl-2 pr-4 rounded-full"
               >
                 <Img
-                  src={PlaceholderImg(100, 100)}
+                  src={user?.avatar}
                   className="size-10"
                   title="img"
                 />
-                Md Julfiker Islam
+                 {user?.name}
               </Button>
             </Link>
           ) : (

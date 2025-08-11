@@ -9,31 +9,23 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  Checkbox,
-  Label,
 } from "@/components/ui";
-import Icon from "@/icon";
 import { useSignUpMutation } from "@/redux/api/authApi";
 import { SignUpSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FieldValues, useForm } from "react-hook-form";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { FieldValues, useForm } from "react-hook-form";
-
-const modifyPayload = (values: any) => {
-  const obj = { ...values };
-  const file = obj["file"];
-  delete obj["file"];
-  const data = JSON.stringify(obj);
-  const formData = new FormData();
-  formData.append("data", data);
-  formData.append("file", file);
-  return formData;
-};
+import Icon from "@/icon";
+import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
+import { delay, modifyPayload } from "@/lib/utils";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
-  const [signUp ,{isLoading}]=useSignUpMutation()
+  const router = useRouter();
+  const [signUp, { isLoading }] = useSignUpMutation();
   const from = useForm({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
@@ -47,16 +39,29 @@ export default function SignUp() {
 
   // handleSubmit
   const handleSubmit = async (values: FieldValues) => {
-    const data = {
+    const value = {
       channel_name: values.channel_name,
       name: values.full_name,
-      email: values.channel_name,
+      email: values.email,
       password: values.password,
       c_password: values.confirm_password,
     };
-    const tt=modifyPayload(data)
-    const res=await signUp(tt)
-    console.log(res)
+    try {
+      const data = modifyPayload(value);
+      const res = await signUp(data).unwrap();
+      if (res.status) {
+        toast("Create Account Successfull", {
+          description: res?.message,
+        });
+      }
+      await delay(4050);
+      window.open("https://mail.google.com/mail/u/0/#inbox", "_blank");
+      router.push(`/varify-otp?email=${values?.email}`);
+      from.reset();
+    } catch (err: any) {
+      ResponseApiErrors(err?.data, from);
+    }
+    
   };
 
   return (
@@ -110,12 +115,14 @@ export default function SignUp() {
                   eye={true}
                   label="Password"
                   name="password"
+                  type="password"
                   placeholder="Enter your Password"
                 />
                 <FromInput
                   eye={true}
                   label="Confirm Password"
                   name="confirm_password"
+                  type="password"
                   placeholder="Enter your Confirm Password"
                 />
 
@@ -123,6 +130,7 @@ export default function SignUp() {
                   type="submit"
                   variant={"primary"}
                   className="w-full rounded-full"
+                  disabled={isLoading}
                 >
                   Sign in
                 </Button>

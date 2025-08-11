@@ -1,9 +1,10 @@
-import { clsx, type ClassValue } from "clsx"
+import { clsx, type ClassValue } from "clsx";
 import dayjs from "dayjs";
-import { twMerge } from "tailwind-merge"
+import { twMerge } from "tailwind-merge";
+import Cookies from "js-cookie";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export const RandomString = () => {
@@ -11,7 +12,7 @@ export const RandomString = () => {
 };
 
 // dateTime
-export const formatDate = (date: any,type:string="DD MMM YYYY") => {
+export const formatDate = (date: any, type: string = "DD MMM YYYY") => {
   return dayjs(date).format(type);
 };
 export const formatTime = (date: any) => {
@@ -23,10 +24,11 @@ export const formatDateTime = (date: any) => {
 };
 
 // delay Time
-export const delay = (ms: number) =>
+export const delay = (ms: number = 4000) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
-export const capitalize = (s:string | any) => s[0]?.toUpperCase() + s?.slice(1);
+export const capitalize = (s: string | any) =>
+  s[0]?.toUpperCase() + s?.slice(1);
 
 export const PlaceholderImg = (
   width: number = 600,
@@ -37,13 +39,22 @@ export const PlaceholderImg = (
 
 // fromData payload
 export const modifyPayload = (values: any) => {
-  const obj = { ...values };
-  const file = obj["file"];
-  delete obj["file"];
-  const data = JSON.stringify(obj);
   const formData = new FormData();
-  formData.append("data", data);
-  formData.append("file", file);
+  Object.entries(values).forEach(([key, value]) => {
+    formData.append(key, value as any);
+  });
   return formData;
 };
 
+// Cookies
+export function setCookie(key: string, value: string) {
+  return Cookies.set(key, value);
+}
+
+export function getCookie(key: string): string | undefined {
+  return Cookies.get(key);
+}
+
+export function removeCookie(key: string) {
+  return Cookies.remove(key);
+}

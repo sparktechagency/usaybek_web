@@ -23,14 +23,23 @@ export const contactSchema = z
   })
 
 // loginSchema
-export const ForgotSchema = z
-  .object({
-    email: z.string().nonempty("Email is required"),
-  })
+export const ForgotSchema = z.object({
+  email: z
+    .string()
+    .nonempty("Email is required")
+    .refine(
+      (val) =>
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
+      { message: "Invalid email address" }
+    ),
+})
 // loginSchema
 export const loginSchema = ForgotSchema.extend({
-  password: z.string().nonempty("Password is required"),
-})
+  password: z
+    .string()
+    .nonempty("Password is required")
+    .min(4, "Password must be at 4 characters"), 
+});
 // signUp
 export const SignUpSchema = loginSchema.extend({
   channel_name: z.string().nonempty("Channel is required"),

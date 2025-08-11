@@ -1,17 +1,11 @@
 
+import { authKey, getCookie } from '@/lib';
 import { createSlice } from '@reduxjs/toolkit';
 
 
 
-export type userProps = {
-  email: string;
-  role: string;
-  iat: number;
-  exp: number;
-};
-
 type AuthStateProps = {
-  user: null | userProps;
+  user:any;
   token: null | string;
 };
 
@@ -37,6 +31,12 @@ const authSlice = createSlice({
 });
 
 export const { setUser, logout } = authSlice.actions;
+
+
+export const useAuth=()=>{
+  const token=getCookie(authKey)
+  return !!token
+}
 
 // export const signOut = () => (dispatch: any) => {
 //   localStroageRemove(authKey)

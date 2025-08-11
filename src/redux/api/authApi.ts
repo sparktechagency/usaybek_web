@@ -6,12 +6,28 @@ export const authApi = baseApi.injectEndpoints({
       query: (data) => ({
         url: "/auth/register",
         method: "POST",
-        data
+        ContentType: "multipart/form-data",
+        data,
+      }),
+    }),
+    signIn: build.mutation({
+      query: (data) => ({
+        url: "/auth/login",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+    }),
+    otpVarify: build.mutation({
+      query: (data) => ({
+        url: "/auth/otp-verification",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
       }),
     }),
   }),
 });
 
-export const {
-   useSignUpMutation
-} = authApi;
+export const { useSignUpMutation, useSignInMutation, useOtpVarifyMutation } =
+  authApi;

@@ -12,16 +12,27 @@ import {
   Checkbox,
   Label,
 } from "@/components/ui";
+import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import Icon from "@/icon";
+import { authKey, delay, modifyPayload, setCookie } from "@/lib";
+import { useSignInMutation } from "@/redux/api/authApi";
+import { setUser } from "@/redux/features/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
 import { loginSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function Login() {
+  const [signIn, { isLoading }] = useSignInMutation();
+  const [isError, setIsError] = useState("");
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const from = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -31,7 +42,38 @@ export default function Login() {
   });
 
   const handleSubmit = async (values: FieldValues) => {
-    console.log("Login form:", values);
+    setIsError("");
+    const value = {
+      email: values.email,
+      password: values.password,
+    };
+    try {
+      const data = modifyPayload(value);
+      const res = await signIn(data).unwrap();
+      if (res.status) {
+        const { access_token: token, user: info } = res.data;
+        const user = {
+          id: info.id,
+          name: info.name,
+          email: info.email,
+          avatar: info.avatar,
+        };
+        dispatch(setUser({ user, token }));
+        setCookie(authKey, token);
+        toast.success("Login Successful", {
+          description: "Welcome back! You're now logged in",
+        });
+      }
+      await delay(4050);
+      router.push(`/`);
+      from.reset();
+    } catch (err: any) {
+      if (err?.data?.errors) {
+        ResponseApiErrors(err.data, from);
+      } else if (!err?.data?.status && err?.data?.message) {
+        setIsError(err.data.message);
+      }
+    }
   };
 
   return (
@@ -107,10 +149,14 @@ export default function Login() {
                     Forgot Password ?
                   </Link>
                 </div>
+                {isError && (
+                  <h1 className="text-reds text-sm text-center">{isError}</h1>
+                )}
                 <Button
                   type="submit"
                   variant={"primary"}
                   className="w-full rounded-full"
+                  disabled={isLoading}
                 >
                   Sign in
                 </Button>

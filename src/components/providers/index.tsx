@@ -6,6 +6,7 @@ import { ConfirmDialogProvider } from "@/context/delete-modal";
 import { SuccessDialogProvider } from "@/context/success-modal";
 import { Provider } from "react-redux";
 import { makeStore } from "@/redux/store";
+import { Toaster } from "../ui";
 
 export default function Providers({ children }: childrenProps) {
   const store = makeStore();
@@ -18,6 +19,7 @@ export default function Providers({ children }: childrenProps) {
           </SidebarControl>
         </SuccessDialogProvider>
       </ConfirmDialogProvider>
+      <Toaster position="top-right"/>
     </Provider>
   );
 }

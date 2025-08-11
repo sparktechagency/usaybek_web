@@ -1,7 +1,6 @@
 "use client";
 import { cn, PlaceholderImg } from "@/lib/utils";
 import { Separator } from "@/components/ui";
-import { useLogin } from "../login-provider";
 import Img from "@/components/reuseable/img";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -12,15 +11,18 @@ import { useEffect, useState } from "react";
 import Modal from "@/components/reuseable/modal";
 import TabList from "../upload/tab";
 import PaymentBox from "../payment-box";
+import { useAuth } from "@/redux/features/authSlice";
+import { useAppSelector } from "@/redux/hooks";
 
 export default function Sidebar() {
   const [isUpload, setIsUpload] = useState(false);
   const [isPayment, setIsPayment] = useState(false);
   const { isExpanded, toggleSidebar } = useSidebar();
   const pathname = usePathname();
-  const { login } = useLogin();
+  const {user}=useAppSelector(state=>state.auth)
+  const auth=useAuth()
 
-  const Items = login ? navItems : signOutItems;
+  const Items = auth ? navItems : signOutItems;
 
   //  colse pay
   // isUpload modal close
@@ -61,16 +63,16 @@ export default function Sidebar() {
               isExpanded ? "justify-start border" : "justify-center"
             )}
           >
-            {login ? (
+            {auth ? (
               <>
                 <Img
                   className="size-9 rounded-full"
-                  src={PlaceholderImg()}
-                  title="User avatar"
+                  src={user?.avatar}
+                  title={user?.name}
                 ></Img>
                 {isExpanded && (
                   <span className="font-medium text-gray-800 whitespace-nowrap">
-                    Md. Julfiker Islam
+                     {user?.name}
                   </span>
                 )}
               </>
@@ -120,7 +122,7 @@ export default function Sidebar() {
               </Link>
             )
           )}
-          {login && (
+          {auth && (
             <Link
               className={`flex items-center gap-3  rounded-full hover:bg-gray-100 transition-colors text-red-500 ${
                 isExpanded
