@@ -1,25 +1,87 @@
 "use client"
 import * as React from "react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ChevronLeft, ChevronRight, Download, ChevronDown } from "lucide-react"
+import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react"
 
-export default function MonthlyBox() {
-  const [selectedRange, setSelectedRange] = React.useState<"monthly" | "yearly" | "custom">("monthly")
+export default function MonthlyBox({setIsMonth}:any) {
+  // Declare months array and helper function first
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ]
+
+  function getDisplayMonth(v: number) {
+    return months[(v + 12) % 12]
+  }
+
+  const [selectedRange, setSelectedRange] = React.useState<
+    "monthly" | "yearly" | "custom"
+  >("monthly")
   const [currentYear, setCurrentYear] = React.useState(new Date().getFullYear())
-  const [selectedMonth, setSelectedMonth] = React.useState(new Date().getMonth()) // 0-indexed
-  const [selectedYear, setSelectedYear] = React.useState(new Date().getFullYear()) // For the year grid selection
+  const [selectedMonth, setSelectedMonth] = React.useState(new Date().getMonth())
+  const [selectedYear, setSelectedYear] = React.useState(new Date().getFullYear())
 
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+ 
+  const monthValue=getDisplayMonth(selectedMonth)
+
+  React.useEffect(() => {
+    setIsMonth((prev: any) => ({
+      ...prev,
+      month: monthValue,
+      year: selectedYear,
+    }))
+  }, [monthValue, selectedYear, setIsMonth])
+
+  const cardRef = React.useRef<HTMLDivElement>(null)
   const yearsInGrid = 12 // Number of years to display in the grid
 
-  const handleYearNavigation = (direction: "prev" | "next", tab: "month" | "year") => {
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        selectedRange === "custom" &&
+        cardRef.current &&
+        !cardRef.current.contains(event.target as Node)
+      ) {
+        setSelectedRange("monthly") // Close custom popup on outside click
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [selectedRange])
+
+  const handleYearNavigation = (
+    direction: "prev" | "next",
+    tab: "month" | "year"
+  ) => {
     if (tab === "month") {
-      setCurrentYear((prevYear) => (direction === "prev" ? prevYear - 1 : prevYear + 1))
+      setCurrentYear((prevYear) =>
+        direction === "prev" ? prevYear - 1 : prevYear + 1
+      )
     } else if (tab === "year") {
-      setCurrentYear((prevYear) => (direction === "prev" ? prevYear - yearsInGrid : prevYear + yearsInGrid))
+      setCurrentYear((prevYear) =>
+        direction === "prev" ? prevYear - yearsInGrid : prevYear + yearsInGrid
+      )
     }
   }
 
@@ -37,18 +99,40 @@ export default function MonthlyBox() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button className="bg-transparent hover:bg-transparent border hidden md:block text-blacks rounded-full py-1 h-8 w-[100px] lg:flex space-x-2">
-            {selectedRange.charAt(0).toUpperCase() + selectedRange.slice(1)} <ChevronDown />
+            {selectedRange.charAt(0).toUpperCase() + selectedRange.slice(1)}{" "}
+            <ChevronDown />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-[150px] mr-10 border-0">
-          <DropdownMenuItem onClick={() => setSelectedRange("monthly")}>Monthly</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setSelectedRange("yearly")}>Yearly</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setSelectedRange("custom")}>Custom</DropdownMenuItem>
+        <DropdownMenuItem
+    onClick={() => {
+      setSelectedRange("monthly");
+      setSelectedMonth(new Date().getMonth());  // reset to current month
+      setSelectedYear(new Date().getFullYear()); // reset to current year
+    }}
+  >
+    Monthly
+  </DropdownMenuItem>
+  <DropdownMenuItem
+    onClick={() => {
+      setSelectedRange("yearly");
+      setSelectedMonth(new Date().getMonth());  // optionally reset month as well
+      setSelectedYear(new Date().getFullYear()); // reset to current year
+    }}
+  >
+    Yearly
+  </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setSelectedRange("custom")}>
+            Custom
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
       {selectedRange === "custom" && (
-        <Card className="mt-9 p-0 gap-0  min-w-xl rounded-xl border-0 shadow-md absolute top-0 right-0 bg-white z-50">
+        <Card
+          ref={cardRef}
+          className="mt-9 p-0 gap-0  min-w-xl rounded-xl border-0 shadow-md absolute top-0 right-0 bg-white z-50"
+        >
           <Tabs defaultValue="month" className="w-full gap-0">
             <TabsList className="grid w-full grid-cols-2 !rounded-tl-xl !rounded-tr-xl rounded-none  h-11 p-0   bg-[#F0F0F0]">
               <TabsTrigger
@@ -91,7 +175,11 @@ export default function MonthlyBox() {
                   <Button
                     key={month}
                     variant={selectedMonth === index ? "default" : "outline"}
-                    className={selectedMonth === index ? "bg-reds hover:bg-reds text-white rounded-full" : "bg-transparent hover:bg-transparent rounded-full"}
+                    className={
+                      selectedMonth === index
+                        ? "bg-reds hover:bg-reds text-white rounded-full"
+                        : "bg-transparent hover:bg-transparent rounded-full"
+                    }
                     onClick={() => setSelectedMonth(index)}
                   >
                     {month}
@@ -110,7 +198,7 @@ export default function MonthlyBox() {
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <span className="font-semibold">{currentYear}</span> {/* Displaying the latest year in the block */}
+                <span className="font-semibold">{currentYear}</span>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -127,7 +215,9 @@ export default function MonthlyBox() {
                     key={year}
                     variant={selectedYear === year ? "default" : "outline"}
                     className={
-                      selectedYear === year ? "bg-reds hover:bg-reds text-white rounded-full" : "bg-transparent hover:bg-transparent rounded-full"
+                      selectedYear === year
+                        ? "bg-reds hover:bg-reds text-white rounded-full"
+                        : "bg-transparent hover:bg-transparent rounded-full"
                     }
                     onClick={() => setSelectedYear(year)}
                   >
@@ -135,7 +225,6 @@ export default function MonthlyBox() {
                   </Button>
                 ))}
               </div>
-
             </TabsContent>
           </Tabs>
         </Card>

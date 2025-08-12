@@ -1,5 +1,4 @@
 "use client";
-import { ChartAreaStacked } from "@/components/common/chats/area";
 import NavItem from "@/components/common/dashboard/navber";
 import {
   Avatar,
@@ -16,12 +15,40 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import MonthlyBox from "@/components/reuseable/date-box";
-import { serviceItem, ViewItem } from "@/dummy-data";
-
+import { useUserDashboardQuery } from "@/redux/api/dashboard/simpleApi";
+import assets from "@/assets";
+import { ChartAreaOverView } from "@/components/common/chats/area";
 
 export default function Dashboard() {
-  const [status, setStatus] = useState("Views");
- 
+  const [isMonth, setIsMonth] = useState({
+    month: "",
+    year: null,
+  });
+  const query: Record<string, any> = {
+    type: "custom",
+    month: isMonth.month,
+    year: isMonth.year,
+  };
+  const { data, isLoading } = useUserDashboardQuery({ ...query });
+  const { analytics, user, views, videos, likes } = data?.data || {};
+  const ViewItem = [
+    {
+      label: "Views",
+      value: views,
+      icon: assets.dashboard.views,
+    },
+    {
+      label: "Videos",
+      value: videos,
+      icon: assets.dashboard.videos,
+    },
+    {
+      label: "Likes",
+      value: likes,
+      icon: assets.dashboard.likes,
+    },
+  ];
+
   return (
     <div>
       <NavItem title="Dashboard Overview" />
@@ -30,29 +57,31 @@ export default function Dashboard() {
           <Card className="p-2 border-1 gap-0">
             <div className="relative h-48 md:h-64">
               <Image
-                src={"https://surl.li/lzklum"}
-                alt="Cover image"
+                src={user?.cover_image}
+                alt={user?.channel_name}
                 layout="fill"
                 objectFit="cover"
                 className="rounded-xl"
               />
               <Avatar className="absolute bottom-0 left-1/2 translate-x-[-50%] translate-y-1/2 size-24  shadow-md">
-                <AvatarImage
-                  src={
-                    "https://doctors-next14.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fprofile2.0440e650.jpg&w=1920&q=75"
-                  }
-                  alt="Profile picture"
-                />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarImage src={user?.avatar} alt={user?.channel_name} />
+                <AvatarFallback>
+                  {user?.channel_name?.slice(0, 2)}
+                </AvatarFallback>
               </Avatar>
             </div>
             <CardContent className="pt-14 pb-4 px-6 text-center mx-auto">
               <h2 className="text-2xl font-semibold text-blacks">
-                Haircut Pro Islam
+                {user?.channel_name}
               </h2>
               <p className="text-base flex items-center justify-center text-center gap-1 mt-1">
                 <Icon name="locationGary" />
-                New York, USA
+                {user?.locations.map(
+                  (loc: any, idx: number) =>
+                    loc.type === "head-office" && (
+                      <span key={idx}>{loc.location}</span>
+                    )
+                )}
               </p>
             </CardContent>
             <div className="flex items-center justify-between mb-4">
@@ -92,13 +121,7 @@ export default function Dashboard() {
                 About
               </CardTitle>
               <CardContent className="p-0 text-blacks text-sm leading-relaxed lg:pr-20">
-                Lorem ipsum dolor sit amet consectetur. Nibh sagittis ligula sem
-                pulvinar elementum rhoncus lacus. Dignissim pretium vitae neque
-                vulputate velit libero suscipit amet. Felis proin in tortor
-                amet. Sit imperdiet ac aliquam leo est egestas. Sit id vitae
-                tempus nulla ut consectetur mi lobortis nec. Convallis velit
-                lectus aliquam elementum dignissim. Est risus adipiscing ornare
-                et lorem
+                {user?.bio}
               </CardContent>
             </Card>
 
@@ -108,7 +131,7 @@ export default function Dashboard() {
                 Services
               </CardTitle>
               <CardContent className="p-0 flex flex-wrap max-w-xs gap-3 [&>button]:text-blacks">
-                {serviceItem.map((item, index) => (
+                {user?.services?.map((item: any, index: any) => (
                   <Button
                     key={index}
                     variant="outline"
@@ -122,28 +145,9 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      <div>
-        <h1 className="text-center text-base lg:text-2xl font-semibold my-6 lg:my-10">
-          Overall statistics of your channel
-        </h1>
-        <div className="flex justify-between border-b border-gray-200">
-          <div>
-            {["Views", "Likes", "Dislikes"].map((item) => (
-              <button
-                key={item}
-                onClick={() => setStatus(item)}
-                className={`cursor-pointer px-6 py-2 text-sm font-medium text-[#333] border-b-2 border-transparent ${
-                  status === item ? "!border-reds" : ""
-                } focus:outline-none`}
-              >
-                {item.charAt(0).toUpperCase() + item.slice(1)}
-              </button>
-            ))}
-          </div>
-          <MonthlyBox />
-        </div>
-        <ChartAreaStacked />
-      </div>
+      <ChartAreaOverView analytics={analytics}>
+        <MonthlyBox setIsMonth={setIsMonth} />
+      </ChartAreaOverView>
     </div>
   );
 }

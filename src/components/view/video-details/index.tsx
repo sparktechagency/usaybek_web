@@ -366,8 +366,8 @@ export default function VideoDetails({ slug }: any) {
                 navigator.clipboard.writeText(
                   `${process.env.NEXT_PUBLIC_APP_URL}${path}`
                 );
-                toast.success("Link copied to clipboard!");
-                await delay(4050);
+                toast.success("Link copied to clipboard!",{ duration: 2000 });
+                await delay(2400);
                 setIsShare(false);
               }}
               className="rounded-full px-6 py-2 h-auto text-center text-base bg-transparent hover:bg-transparent shadow-none border border-input"

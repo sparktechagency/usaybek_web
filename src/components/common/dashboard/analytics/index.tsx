@@ -1,5 +1,5 @@
 "use client"
-import { ChartAreaStacked } from '@/components/common/chats/area'
+// import { ChartAreaStacked } from '@/components/common/chats/area'
 import MonthlyBox from '@/components/reuseable/date-box'
 import { Card } from '@/components/ui'
 import React from 'react'
@@ -30,7 +30,7 @@ export default function AnalyticsBox() {
                  <ul className='flex items-center justify-between mt-8'>
                      <li className='opacity-0'>0</li>
                      <li className='text-xl md:text-2xl font-semibold'>Your channel got 22,568 views in this month</li>
-                     <li><MonthlyBox/></li>
+                     {/* <li><MonthlyBox/></li> */}
                  </ul>
             </div>
           <div>
@@ -44,7 +44,7 @@ export default function AnalyticsBox() {
                     ))}
                 </div>
                 <div>
-                  <ChartAreaStacked className='border-none'/>
+                  {/* <ChartAreaStacked className='border-none'/> */}
                 </div>
             </Card>
 
