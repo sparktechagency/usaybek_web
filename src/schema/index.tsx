@@ -37,7 +37,7 @@ export const loginSchema = ForgotSchema.extend({
   password: z
     .string()
     .nonempty("Password is required")
-    .min(6, "Password must be at 6 characters"), 
+    .min(4, "Password must be at 4 characters"), 
 });
 // signUp
 export const SignUpSchema = loginSchema.extend({

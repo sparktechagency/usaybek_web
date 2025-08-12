@@ -68,6 +68,14 @@ export const videosApi = baseApi.injectEndpoints({
         };
       },
     }),
+     storeReport: build.mutation({
+      query: (data) => ({
+        url: "/add-report",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+    }),
   }),
 });
 
@@ -76,5 +84,6 @@ export const {
   usePromoVideosQuery,
   useCategoriesQuery,
   useRelatedVideosQuery,
-  useVideosDetailsQuery
+  useVideosDetailsQuery,
+  useStoreReportMutation
 } = videosApi;

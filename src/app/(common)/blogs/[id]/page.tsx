@@ -16,7 +16,7 @@ export async function generateMetadata({
     blogApi.endpoints.singleBlog.initiate(id)
   );
   const { image, title } = data;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL!;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
   const url = `${baseUrl}/blog/${id}`;
   const description = title;
   return {

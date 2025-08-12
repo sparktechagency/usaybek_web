@@ -9,6 +9,7 @@ import VideoPlayer from "@/components/common/video-player";
 import FavIcon from "@/icon/admin/favIcon";
 import {
   useRelatedVideosQuery,
+  useStoreReportMutation,
   useVideosDetailsQuery,
 } from "@/redux/api/landing/videosApi";
 import { useState } from "react";
@@ -19,28 +20,41 @@ import {
   RelatedVideoCard,
 } from "@/components/reuseable/skeleton-item";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
+import { delay, modifyPayload } from "@/lib";
+import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 
 const options = [
-  { value: "sexual-content", label: "Sexual content" },
-  { value: "violent-repulsive-content", label: "Violent or repulsive content" },
-  { value: "hateful-abusive-content", label: "Hateful or abusive content" },
-  { value: "harassment-bullying", label: "Harassment or bullying" },
-  { value: "harmful-dangerous-acts", label: "Harmful or dangerous acts" },
-  { value: "misinformation", label: "Misinformation" },
-  { value: "child-abuse", label: "Child abuse" },
-  { value: "promotes-terrorism", label: "Promotes terrorism" },
-  { value: "spam-misleading", label: "Spam or misleading" },
-  { value: "legal-issue", label: "Legal issue" },
-  { value: "captions-issue", label: "Captions issue" },
+  { value: "Sexual content", label: "Sexual content" },
+  {
+    value: "Violent or repulsive content",
+    label: "Violent or repulsive content",
+  },
+  { value: "Hateful or abusive content", label: "Hateful or abusive content" },
+  { value: "Harassment or bullying", label: "Harassment or bullying" },
+  { value: "Harmful or dangerous acts", label: "Harmful or dangerous acts" },
+  { value: "Misinformation", label: "Misinformation" },
+  { value: "Child abuse", label: "Child abuse" },
+  { value: "Promotes terrorism", label: "Promotes terrorism" },
+  { value: "Spam or misleading", label: "Spam or misleading" },
+  { value: "Legal issue", label: "Legal issue" },
+  { value: "Captions issue", label: "Captions issue" },
 ];
 
 export default function VideoDetails({ slug }: any) {
+  const path = usePathname();
   const { data, isLoading } = useVideosDetailsQuery(slug);
-  const { data: relVideos, isLoading: relLoading } = useRelatedVideosQuery({id:data?.category_id});
+  const [storeReport, { isLoading: ReportLoading }] = useStoreReportMutation();
+  const { data: relVideos, isLoading: relLoading } = useRelatedVideosQuery({
+    id: data?.category_id,
+  });
   const [isReprot, setIsReport] = useState(false);
   const [isText, setIsText] = useState(false);
   const [isShare, setIsShare] = useState(false);
-  const [selectedValue, setSelectedValue] = useState("sexual-content");
+  const [reportText, setReportText] = useState({
+    reason: "Sexual content",
+    issue: "",
+  });
 
   const {
     id,
@@ -58,8 +72,27 @@ export default function VideoDetails({ slug }: any) {
     is_disliked,
   } = data || {};
 
-
-
+  const SubmitReport = async () => {
+    const value = {
+      video_id: slug,
+      ...reportText,
+    };
+    try {
+      const data = modifyPayload(value);
+      const res = await storeReport(data).unwrap();
+      if (res.status) {
+        toast.success("Report Submitted", {
+          description: "Your report has been created successfully.",
+        });
+      }
+    } finally {
+      setIsText(false);
+      setReportText({
+        reason: "",
+        issue: "",
+      });
+    }
+  };
 
   return (
     <div className="container py-10">
@@ -154,7 +187,7 @@ export default function VideoDetails({ slug }: any) {
                 </div>
 
                 {/* Channel Info */}
-                <div className="border p-4 rounded-md my-5 shadow-xs">
+                <div className="border p-4 rounded-md my-5">
                   <p className="text-sm text-blacks font-semibold">
                     {publish_time_formated}
                   </p>
@@ -235,8 +268,13 @@ export default function VideoDetails({ slug }: any) {
       <Modal open={isReprot} title="Report this video" setIsOpen={setIsReport}>
         <div>
           <RadioGroup
-            defaultValue={selectedValue}
-            onValueChange={setSelectedValue}
+            defaultValue={reportText.reason}
+            onValueChange={(value) =>
+              setReportText((prev) => ({
+                ...prev,
+                reason: value,
+              }))
+            }
             className="grid space-y-0"
           >
             {options.map((option) => (
@@ -275,11 +313,17 @@ export default function VideoDetails({ slug }: any) {
       </Modal>
 
       {/* Report Text Modal */}
-      <Modal open={isText} title={selectedValue} setIsOpen={setIsText}>
+      <Modal open={isText} title={reportText?.reason} setIsOpen={setIsText}>
         <div>
           <Textarea
             className="resize-none w-full h-36"
             placeholder="Describe your issue..."
+            onChange={(e) =>
+              setReportText((prev) => ({
+                ...prev,
+                issue: e.target.value,
+              }))
+            }
           />
           <div className="mt-2 flex justify-end gap-4">
             <Button
@@ -291,7 +335,8 @@ export default function VideoDetails({ slug }: any) {
             </Button>
             <Button
               variant="link"
-              onClick={() => console.log("all ok")}
+              disabled={ReportLoading}
+              onClick={() => SubmitReport()}
               className="text-reds hover:text-reds hover:no-underline"
             >
               Report
@@ -311,14 +356,22 @@ export default function VideoDetails({ slug }: any) {
               Copy this link and share to your friends through anything you want
             </li>
           </ul>
-          <Input
-            type="text"
-            value={data?.link || ""}
-            readOnly
-            className="w-full rounded-full h-12 text-center text-lg text-grays my-4"
-          />
+          <div className="w-full rounded-full h-12 border select-none flex justify-center items-center text-center text-lg text-grays my-4">
+            {`${process.env.NEXT_PUBLIC_APP_URL}${path}`}
+          </div>
+
           <div className="flex justify-center">
-            <Button className="rounded-full px-6 py-2 h-auto text-center text-base bg-transparent hover:bg-transparent shadow-none border border-input">
+            <Button
+              onClick={async () => {
+                navigator.clipboard.writeText(
+                  `${process.env.NEXT_PUBLIC_APP_URL}${path}`
+                );
+                toast.success("Link copied to clipboard!");
+                await delay(4050);
+                setIsShare(false);
+              }}
+              className="rounded-full px-6 py-2 h-auto text-center text-base bg-transparent hover:bg-transparent shadow-none border border-input"
+            >
               <FavIcon name="copy1" className="size-6" />
               <span className="text-blacks"> Copy link</span>
             </Button>

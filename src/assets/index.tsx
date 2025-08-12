@@ -1,4 +1,3 @@
-import questionImg from "@/assets/static/question-img.svg";
 import about from "@/assets/static/about/about-img.svg";
 import mission from "@/assets/static/about/mission.svg";
 import story from "@/assets/static/about/story.svg";
@@ -18,7 +17,6 @@ import forgotImg from "@/assets/login/forgot.svg"
 const assets = {
   logo,
   basic: {
-    questionImg,
     tarams,
     about: {
       about,
