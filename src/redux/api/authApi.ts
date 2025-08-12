@@ -1,3 +1,4 @@
+import { tagTypes } from "../tag-types";
 import { baseApi } from "./baseApi";
 
 export const authApi = baseApi.injectEndpoints({
@@ -26,8 +27,15 @@ export const authApi = baseApi.injectEndpoints({
         data,
       }),
     }),
+    getProfile: build.query({
+      query: () => ({
+        url: "/profile",
+        method: "GET"
+      }),
+      providesTags: [tagTypes.profile]
+    }),
   }),
 });
 
-export const { useSignUpMutation, useSignInMutation, useOtpVarifyMutation } =
+export const { useSignUpMutation, useSignInMutation, useOtpVarifyMutation,useGetProfileQuery } =
   authApi;

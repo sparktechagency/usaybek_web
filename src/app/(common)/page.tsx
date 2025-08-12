@@ -6,6 +6,7 @@ import { VideoCardSkeleton } from "@/components/reuseable/skeleton-item";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import { VideoCard } from "@/components/reuseable/video-card";
 import { capitalize } from "@/lib/utils";
+import { useGetProfileQuery } from "@/redux/api/authApi";
 import {
   useHomeVideosQuery,
   useRelatedVideosQuery,
@@ -38,6 +39,8 @@ export default function Home() {
     }
   }, [inView, refetch, isCategory?.id]);
 
+  console.log(chVideos)
+  
   return (
     <div>
       <FilterBox isCategory={isCategory} setIsCategory={setIsCategory} />

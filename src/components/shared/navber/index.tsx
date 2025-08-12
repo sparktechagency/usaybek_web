@@ -9,17 +9,23 @@ import { usePathname } from "next/navigation";
 import FavIcon from "@/icon/admin/favIcon";
 import { useState } from "react";
 import SidebarFixed from "@/components/common/sideber/sideber-fixed";
-import { useAuth } from "@/redux/features/authSlice";
-import { useAppSelector } from "@/redux/hooks";
+import { useGetProfileQuery } from "@/redux/api/authApi";
+import { authKey, getCookie } from "@/lib";
 
 export default function Navber() {
   // const headerRef = useRef<HTMLDivElement>(null);
   const [isSide, setIsSide] = useState(false);
-  const {user}=useAppSelector(state=>state.auth)
   const path = usePathname();
-  const auth=useAuth()
   const patterns = [/^\/video\/.+/, /^\/profile$/];
   const isMenu = patterns.some((regex) => regex.test(path));
+  const token=getCookie(authKey)
+  const {data:profileData, isLoading, }=useGetProfileQuery({}, {
+    refetchOnFocus: true,
+    skip: !token
+  })
+
+  
+
  
   // console.log(login)
 
@@ -75,18 +81,18 @@ export default function Navber() {
           </div>
         </li>
         <li>
-          {auth ? (
+          {token && !isLoading ? (
             <Link href={"/profile"}>
               <Button
                 variant={"primary"}
                 className="h-12 pl-2 pr-4 rounded-full"
               >
                 <Img
-                  src={user?.avatar}
+                  src={profileData?.data?.avatar}
                   className="size-10"
                   title="img"
                 />
-                 {user?.name}
+                 {profileData?.data?.name}
               </Button>
             </Link>
           ) : (

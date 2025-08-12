@@ -13,14 +13,6 @@ import { z } from "zod";
 //     message: "Passwords must be match.",
 //   });
 
-// contactSchema
-export const contactSchema = z
-  .object({
-    name: z.string().nonempty("Name is required"),
-    email: z.string().nonempty("Email is required"),
-    subject: z.string().nonempty("Subject is required"),
-    message: z.string().nonempty("Message is required"),
-  })
 
 // loginSchema
 export const ForgotSchema = z.object({
@@ -33,12 +25,19 @@ export const ForgotSchema = z.object({
       { message: "Invalid email address" }
     ),
 })
+
+// contactSchema
+export const contactSchema = ForgotSchema.extend({
+  name: z.string().nonempty("Name is required"),
+  subject: z.string().nonempty("Subject is required"),
+  message: z.string().nonempty("Message is required"),
+})
 // loginSchema
 export const loginSchema = ForgotSchema.extend({
   password: z
     .string()
     .nonempty("Password is required")
-    .min(4, "Password must be at 4 characters"), 
+    .min(6, "Password must be at 6 characters"), 
 });
 // signUp
 export const SignUpSchema = loginSchema.extend({

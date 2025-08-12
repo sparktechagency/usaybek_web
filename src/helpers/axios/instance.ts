@@ -14,9 +14,11 @@ instance.defaults.headers["Accept"] = "application/json";
 instance.interceptors.request.use(
   function (config) {
     const accessToken = getCookie(authKey);
+    console.log("accessToken", accessToken)
     if (accessToken) {
       config.headers.Authorization = accessToken;
     }
+    console.log("config.headers.Authorization", config.headers.Authorization)
     return config;
   },
   function (error) {

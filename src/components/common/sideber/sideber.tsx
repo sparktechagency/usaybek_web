@@ -1,5 +1,5 @@
 "use client";
-import { cn, PlaceholderImg } from "@/lib/utils";
+import { cn, getCookie } from "@/lib/utils";
 import { Separator } from "@/components/ui";
 import Img from "@/components/reuseable/img";
 import { usePathname } from "next/navigation";
@@ -12,17 +12,26 @@ import Modal from "@/components/reuseable/modal";
 import TabList from "../upload/tab";
 import PaymentBox from "../payment-box";
 import { useAuth } from "@/redux/features/authSlice";
-import { useAppSelector } from "@/redux/hooks";
+import { authKey } from "@/lib";
+import { useGetProfileQuery } from "@/redux/api/authApi";
 
 export default function Sidebar() {
   const [isUpload, setIsUpload] = useState(false);
   const [isPayment, setIsPayment] = useState(false);
   const { isExpanded, toggleSidebar } = useSidebar();
   const pathname = usePathname();
-  const {user}=useAppSelector(state=>state.auth)
-  const auth=useAuth()
+  const auth = useAuth();
+  const token = getCookie(authKey);
+  const { data: profileData, isLoading } = useGetProfileQuery(
+    {},
+    {
+      refetchOnFocus: true,
+      skip: !token,
+    }
+  );
+  const { name, avatar, role } = profileData?.data || {};
 
-  const Items = auth ? navItems : signOutItems;
+  const Items = role == "USER" ? navItems : signOutItems;
 
   //  colse pay
   // isUpload modal close
@@ -63,16 +72,16 @@ export default function Sidebar() {
               isExpanded ? "justify-start border" : "justify-center"
             )}
           >
-            {auth ? (
+            {token && !isLoading ? (
               <>
                 <Img
                   className="size-9 rounded-full"
-                  src={user?.avatar}
-                  title={user?.name}
+                  src={avatar}
+                  title={name}
                 ></Img>
                 {isExpanded && (
                   <span className="font-medium text-gray-800 whitespace-nowrap">
-                     {user?.name}
+                    {name}
                   </span>
                 )}
               </>

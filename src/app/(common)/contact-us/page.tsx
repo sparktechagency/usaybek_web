@@ -2,9 +2,10 @@ import ContactUs from "@/components/common/contact-us";
 import SectionNav from "@/components/reuseable/section-nav";
 import { Card } from "@/components/ui";
 import Icon from "@/icon";
+import { authKey } from "@/lib";
 import { Seo } from "@/lib/seo";
 import { Metadata } from "next";
-import React from "react";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = Seo({
   title: "Contact Us | MyTsv",
@@ -21,7 +22,15 @@ export const metadata: Metadata = Seo({
   image: "/images/contact-us.svg",
 });
 
-export default function Contact() {
+export default async function Contact() {
+  const tokon = (await cookies()).get(authKey)?.value;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact`, {
+    headers: { Authorization: `Bearer ${tokon}` },
+    cache: "force-cache",
+  });
+  const data = await res.json();
+  const { email, phone, address } = data?.data || {};
+
   return (
     <div className="m-auto max-w-7xl">
       <SectionNav
@@ -41,15 +50,15 @@ export default function Contact() {
               <div className="space-y-3 mt-8">
                 <div className="flex items-center space-x-3 [&>div]:text-blacks">
                   <Icon name="femail" width={19} height={19} />
-                  <span>info@mytsv.com</span>
+                  <span>{email}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Icon name="fphone" width={19} height={19} />
-                  <span>+1 630 297 7501</span>
+                  <span>{phone}</span>
                 </div>
                 <div className="flex items-start space-x-3">
                   <Icon name="locationBlack" width={19} height={19} />
-                  <span>20570 N Milwaukee Ave Deerfield IL 60015</span>
+                  <span>{address}</span>
                 </div>
               </div>
             </div>

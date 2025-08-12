@@ -1,8 +1,7 @@
-import type { BaseQueryFn } from '@reduxjs/toolkit/query'
-import type { AxiosRequestConfig, AxiosError } from 'axios'
-import instance from './instance'
-
-
+import type { BaseQueryFn } from '@reduxjs/toolkit/query';
+import type { AxiosRequestConfig, AxiosError } from 'axios';
+import { authKey, getCookie } from '@/lib';
+import axios from 'axios';
 
 
 export const axiosBaseQuery =
@@ -10,38 +9,40 @@ export const axiosBaseQuery =
     { baseUrl }: { baseUrl: string } = { baseUrl: '' }
   ): BaseQueryFn<
     {
-      url: string
-      method?: AxiosRequestConfig['method']
-      data?: AxiosRequestConfig['data']
-      params?: AxiosRequestConfig['params']
-      headers?: AxiosRequestConfig['headers']
-      meta?:any
-      ContentType?:string
+      url: string;
+      method?: AxiosRequestConfig['method'];
+      data?: AxiosRequestConfig['data'];
+      params?: AxiosRequestConfig['params'];
+      headers?: AxiosRequestConfig['headers'];
+      ContentType?: string;
     },
     unknown,
     unknown
   > =>
-  async ({ url, method, data, params, headers,ContentType }) => {
+  async ({ url, method, data, params, headers, ContentType }) => {
+    const accessToken = getCookie(authKey);
     try {
-      const result = await instance({
+      const result = await axios({
         url: baseUrl + url,
         method,
         data,
         params,
-        headers:{
-          "Content-Type":ContentType || "application/json",
+        headers: {
+          'Content-Type': ContentType || 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          ...headers, // Spread the headers from the function parameters
         },
-      })
-      return result
+      });
+      return { data: result.data }; // Return the data property of the response
     } catch (axiosError) {
-      const err = axiosError as AxiosError
-      console.log(err)
+      const err = axiosError as AxiosError;
       return {
         error: {
           status: err.response?.status,
           data: err.response?.data || err.message,
         },
-      }
+      };
     }
-  }
+  };
 
+  
