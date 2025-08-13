@@ -1,47 +1,147 @@
-"use client"
-import NavItem from '@/components/common/dashboard/navber'
-import CoverBox from '@/components/reuseable/cover-box'
-import Form from '@/components/reuseable/from';
-import { FromInputs } from '@/components/reuseable/from-inputs';
-import FromLocation from '@/components/reuseable/from-location';
-import { FromTagInputs } from '@/components/reuseable/from-tag-inputs';
-import { FromTextAreas } from '@/components/reuseable/from-textareas';
-import { Button } from '@/components/ui';
-import Icon from '@/icon';
-import React from 'react'
-import { FieldValues, useForm } from 'react-hook-form';
+"use client";
+import NavItem from "@/components/common/dashboard/navber";
+import Form from "@/components/reuseable/from";
+import { FromInputs } from "@/components/reuseable/from-inputs";
+import FromLocation from "@/components/reuseable/from-location";
+import { FromTagInputs } from "@/components/reuseable/from-tag-inputs";
+import { FromTextAreas } from "@/components/reuseable/from-textareas";
+import ImgUpload from "@/components/reuseable/img-uplod";
+import { Avatar, AvatarFallback, AvatarImage, Button } from "@/components/ui";
+import { useEditProfileMutation } from "@/redux/api/dashboard/simpleApi";
+import { useGetProfileQuery } from "@/redux/api/authApi";
+import { FieldValues, useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import FavIcon from "@/icon/admin/favIcon";
+import Icon from "@/icon";
+import Image from "next/image";
+import axios from "axios";
+
+const intImg = {
+  coverPreview: "",
+  avatarPreview: "",
+  cover_image: null,
+  avatar: null,
+};
 
 export default function Settings() {
+  const [editProfile, { isLoading }] = useEditProfileMutation();
+  const { data } = useGetProfileQuery({});
+  const [isImg, setIsImg] = useState<any>(intImg);
   const from = useForm({
-    // resolver: zodResolver(loginSchema),
     defaultValues: {
-      channel_name: "Haircut Pro",
-      email: "example@gmail.com",
-      services: ["Haircut Pro1", "Haircut Pro2", "Haircut Pro3"],
-      full_name: "Julfieker Islam",
-      contact: "79454095409",
-      bio: "Lorem ipsum dolor sit amet consectetur. Pretium gravida risus enim suspendisse. Id id molestie dictum mauris tincidunt. Molestie posuere quam sapien luctus. Consectetur tincidunt tincidunt fermentum ut risus quam. Suspendisse vivamus laoreet ornare molestie iaculis vitae urna. Diam augue sed rhoncus nec egestas praesent sit orci. Dui ut morbi nulla ipsum eget semper quis non. Fames nullam aliquam pellentesque tortor nulla. Id eget dolor sagittis aenean proin.",
-      locations:[
-        { id: 1, name: "Location 1", type: "Branch" }
-      ],
+      channel_name: "",
+      email: "",
+      services: [],
+      name: "",
+      contact: "",
+      bio: "",
+      locations: [],
     },
   });
 
+  const {
+    channel_name,
+    name,
+    email,
+    contact,
+    bio,
+    services,
+    cover_image,
+    avatar,
+    locations,
+  } = data?.data || {};
+
+  useEffect(() => {
+    if (data?.data) {
+      from.reset({
+        channel_name: channel_name,
+        name: name,
+        email: email,
+        contact: contact,
+        locations: locations,
+        bio: bio,
+        services: services,
+      });
+    }
+  }, [data, from]);
+
   const handleSubmit = async (values: FieldValues) => {
-    console.log("Login form:", values);
+    const valueItem = {
+      ...values,
+      ...(isImg.cover_image ? { cover_image: isImg.cover_image } : {}),
+      ...(isImg.avatar ? { avatar: isImg.avatar } : {}),
+    };
+    console.log(valueItem);
+    // editProfile({
+    //   ...values,
+    //   cover_image: isImg.cover_image,
+    //   avatar: isImg.avatar,
+    // });
   };
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await axios.get(
+        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=dhaka&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
+      );
+      console.log(data);
+    })();
+  }, []);
   return (
     <div>
-      <NavItem title='Settings' />
-      <div className='mt-10'>
-        <CoverBox edit={true} />
+      <NavItem title="Settings" />
+      <div className="mt-10">
+        <div className="relative h-48 md:h-64">
+          <Image
+            src={isImg.coverPreview || cover_image || "/blur.png"}
+            alt="Cover image"
+            layout="fill"
+            objectFit="cover"
+            className="rounded-xl"
+          />
+          <div className="absolute bottom-0 left-15 translate-y-1/2 ">
+            <div className="relative">
+              <Avatar className="size-24  shadow-md">
+                <AvatarImage
+                  src={isImg.avatarPreview || avatar}
+                  alt="Profile picture"
+                />
+                <AvatarFallback className="text-2xl font-bold">
+                  {channel_name?.toUpperCase()?.slice(0, 2)}
+                </AvatarFallback>
+              </Avatar>
+              <ImgUpload
+                onFileSelect={(file: File) => {
+                  setIsImg({
+                    ...isImg,
+                    avatar: file,
+                    avatarPreview: URL.createObjectURL(file),
+                  });
+                }}
+              >
+                <div className="size-8 absolute cursor-pointer grid place-items-center rounded-full  bottom-0 right-0 bg-reds">
+                  <Icon width={16} name="cameraWhite" />
+                </div>
+              </ImgUpload>
+            </div>
+          </div>
+          <ImgUpload
+            onFileSelect={(file: File) => {
+              setIsImg({
+                ...isImg,
+                cover_image: file,
+                coverPreview: URL.createObjectURL(file),
+              });
+            }}
+          >
+            <div className="size-8 absolute cursor-pointer grid place-items-center rounded-md  top-3 right-3 backdrop-blur-3xl bg-black/50">
+              <FavIcon className="size-4" name="editprofile" />
+            </div>
+          </ImgUpload>
+        </div>
       </div>
-      <Form
-        className="mt-20"
-        from={from}
-        onSubmit={handleSubmit}
-      >
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 [&>div]:space-y-6'>
+      <Form className="mt-20" from={from} onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 [&>div]:space-y-6">
           <div>
             <FromInputs
               label="Channel name"
@@ -58,20 +158,16 @@ export default function Settings() {
               name="services"
               placeholder="Enter your Services"
             />
-            <FromLocation
-             label="Business locations"
-             name="locations"
-            />
-
+            <FromLocation label="Business locations" name="locations" />
           </div>
           <div>
             <FromInputs
               label="Your full name"
-              name="full_name"
+              name="name"
               placeholder="Enter your Full name"
             />
             <FromInputs
-              type='number'
+              type="number"
               label="Contact"
               name="contact"
               placeholder="Enter your Contact"
@@ -80,15 +176,22 @@ export default function Settings() {
               label="Bio"
               name="bio"
               placeholder="Enter your Bio"
-              className='min-h-44 rounded-3xl'
+              className="min-h-44 rounded-3xl"
             />
-           <div className='flex justify-end'>
-           <Button variant={"primary"} size={"lg"} className='rounded-full text-base'><Icon name="saveWhite" width={16} />Save changes</Button>
-           </div>
+            <div className="flex justify-end">
+              <Button
+                disabled={isLoading}
+                variant={"primary"}
+                size={"lg"}
+                className="rounded-full text-base"
+              >
+                <Icon name="saveWhite" width={16} />
+                Save changes
+              </Button>
+            </div>
           </div>
-
         </div>
       </Form>
     </div>
-  )
+  );
 }

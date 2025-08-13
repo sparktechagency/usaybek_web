@@ -19,7 +19,19 @@ export const dashboardApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.userAnalytics],
     }),
+    editProfile: build.mutation({
+      query: (data) => ({
+        url: "/edit-profile",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+    }),
   }),
 });
 
-export const { useUserDashboardQuery, useGetAnalyticsQuery } = dashboardApi;
+export const {
+  useUserDashboardQuery,
+  useGetAnalyticsQuery,
+  useEditProfileMutation,
+} = dashboardApi;
