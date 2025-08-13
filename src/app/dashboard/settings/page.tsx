@@ -118,8 +118,8 @@ export default function Settings() {
                   });
                 }}
               >
-                <div className="size-8 absolute cursor-pointer grid place-items-center rounded-full  bottom-0 right-0 bg-reds">
-                  <Icon width={16} name="cameraWhite" />
+                <div className="size-10 absolute cursor-pointer grid place-items-center rounded-full bg-[green] bottom-0 right-0">
+                  <FavIcon  name="avaterimg"  />
                 </div>
               </ImgUpload>
             </div>
