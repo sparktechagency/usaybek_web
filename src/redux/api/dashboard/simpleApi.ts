@@ -26,6 +26,7 @@ export const dashboardApi = baseApi.injectEndpoints({
         ContentType: "multipart/form-data",
         data,
       }),
+      invalidatesTags: [tagTypes.profile],
     }),
   }),
 });

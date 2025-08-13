@@ -14,7 +14,8 @@ import React, { useEffect, useState } from "react";
 import FavIcon from "@/icon/admin/favIcon";
 import Icon from "@/icon";
 import Image from "next/image";
-import axios from "axios";
+import { modifyPayloadAll } from "@/lib";
+import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 
 const intImg = {
   coverPreview: "",
@@ -71,22 +72,20 @@ export default function Settings() {
       ...(isImg.cover_image ? { cover_image: isImg.cover_image } : {}),
       ...(isImg.avatar ? { avatar: isImg.avatar } : {}),
     };
-    console.log(valueItem);
-    // editProfile({
-    //   ...values,
-    //   cover_image: isImg.cover_image,
-    //   avatar: isImg.avatar,
-    // });
+    try {
+      const data = modifyPayloadAll(valueItem);
+      const res = await editProfile(data).unwrap();
+      if (res.status) {
+        setIsImg(intImg);
+        from.reset();
+      }
+    } catch (err: any) {
+      if (err?.data?.errors) {
+        ResponseApiErrors(err.data, from);
+      }
+    }
   };
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await axios.get(
-        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=dhaka&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
-      );
-      console.log(data);
-    })();
-  }, []);
   return (
     <div>
       <NavItem title="Settings" />

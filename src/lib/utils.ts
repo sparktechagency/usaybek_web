@@ -46,6 +46,24 @@ export const modifyPayload = (values: any) => {
   return formData;
 };
 
+export const modifyPayloadAll = (values: any) => {
+  const formData = new FormData();
+
+  Object.entries(values).forEach(([key, value]) => {
+    if (value === undefined || value === null) return;
+
+    if (value instanceof File) {
+      formData.append(key, value);
+    } else if (Array.isArray(value) || typeof value === 'object') {
+      formData.append(key, JSON.stringify(value));
+    } else {
+      formData.append(key, value as any);
+    }
+  });
+
+  return formData;
+};
+
 // Cookies
 export function setCookie(key: string, value: string) {
   return Cookies.set(key, value);
