@@ -6,7 +6,9 @@ export enum tagTypes {
   videoDetails = "videoDetails",
   blogs = "blogs",
   singleBlog = "singleBlog",
-  profile="profile"
+  profile="profile",
+  userDashboard="userDashboard",
+  userAnalytics="userAnalytics"
 }
 
 export const tagTypesList = [
@@ -17,5 +19,7 @@ export const tagTypesList = [
   tagTypes.videoDetails,
   tagTypes.blogs,
   tagTypes.singleBlog,
-  tagTypes.profile
+  tagTypes.profile,
+  tagTypes.userDashboard,
+  tagTypes.userAnalytics
 ]

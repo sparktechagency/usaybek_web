@@ -45,10 +45,13 @@ export default function MonthlyBox({setIsMonth}:any) {
   React.useEffect(() => {
     setIsMonth((prev: any) => ({
       ...prev,
-      month: monthValue,
+      type:selectedRange?.toString(),
+      month: monthValue?.toString(),
       year: selectedYear,
     }))
-  }, [monthValue, selectedYear, setIsMonth])
+  }, [monthValue, selectedYear, setIsMonth,selectedRange])
+
+  
 
   const cardRef = React.useRef<HTMLDivElement>(null)
   const yearsInGrid = 12 // Number of years to display in the grid

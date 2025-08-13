@@ -1,3 +1,4 @@
+import { tagTypes } from "@/redux/tag-types";
 import { baseApi } from "../baseApi";
 
 export const dashboardApi = baseApi.injectEndpoints({
@@ -8,8 +9,17 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: "GET",
         params: arg,
       }),
+      providesTags: [tagTypes.userDashboard],
+    }),
+    getAnalytics: build.query({
+      query: (arg: Record<string, any>) => ({
+        url: "/analytics",
+        method: "GET",
+        params: arg,
+      }),
+      providesTags: [tagTypes.userAnalytics],
     }),
   }),
 });
 
-export const {useUserDashboardQuery} = dashboardApi;
+export const { useUserDashboardQuery, useGetAnalyticsQuery } = dashboardApi;
