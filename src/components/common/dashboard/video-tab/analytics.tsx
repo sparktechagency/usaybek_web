@@ -1,5 +1,5 @@
 import React from 'react'
-import AnalyticsBox from '../analytics'
+// import AnalyticsBox from '../analytics'
 import { TabBoxProps } from '@/types'
 import TabBox from './tab-box'
 import { ArrowLeft } from 'lucide-react'
@@ -16,7 +16,7 @@ export default function Analytics({isTab,setIsTab}:TabBoxProps) {
             </li>
         </ul>
         <TabBox  isTab={isTab} setIsTab={setIsTab} className='my-10'/>
-        <AnalyticsBox/>
+        {/* <AnalyticsBox/> */}
     </div>
   )
 }

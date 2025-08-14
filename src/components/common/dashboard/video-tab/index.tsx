@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Comments from "@/components/common/dashboard/video-tab/comments";
 import Details from "@/components/common/dashboard/video-tab/details";
 
-function VideoTabContent() {
+export default function VideoDetailsBox({ slug }: any) {
   const [isTab, setIsTab] = useState("details");
   const searchParams = useSearchParams();
   const active = searchParams.get("tab");
@@ -14,17 +14,14 @@ function VideoTabContent() {
     if (active) setIsTab(active);
   }, [active]);
 
-  // if (isTab === "analytics") return <Analytics isTab={isTab} setIsTab={setIsTab} />;
-  if (isTab === "analytics") return "<Analytics isTab={isTab} setIsTab={setIsTab} />";
-  if (isTab === "comments") return <Comments isTab={isTab} setIsTab={setIsTab} />;
-  return <Details isTab={isTab} setIsTab={setIsTab} />;
-}
-
-export default function VideoDetails() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <VideoTabContent />
+      {isTab === "details" && (
+        <Details slug={slug} isTab={isTab} setIsTab={setIsTab} />
+      )}
+      {isTab === "comments" && <Comments isTab={isTab} setIsTab={setIsTab} />}
+      {isTab === "analytics" &&
+        "<Analytics isTab={isTab} setIsTab={setIsTab} />"}
     </Suspense>
   );
 }
-

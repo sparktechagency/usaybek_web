@@ -2,7 +2,6 @@
 import TabBox from '@/components/common/dashboard/video-tab/tab-box'
 import { Button } from '@/components/ui'
 import useConfirmation from '@/context/delete-modal'
-import { TabBoxProps } from '@/types'
 import { ArrowLeft} from 'lucide-react'
 import Icon from '@/icon'
 import React from 'react'
@@ -12,17 +11,22 @@ import { PlaceholderImg } from '@/lib/utils'
 import Link from 'next/link'
 import VideoPlayer from '../../video-player'
 import { FromTagShow } from '@/components/reuseable/from-tag-show'
+import { useVideosDetailsQuery } from '@/redux/api/landing/videosApi'
 
 
 
-export default function Details({ isTab, setIsTab }: TabBoxProps) {
+export default function Details({ slug, isTab, setIsTab }: any) {
+   const { data, isLoading } = useVideosDetailsQuery(slug);
   const { confirm } = useConfirmation();
+
+  console.log(slug)
 
 
   const handleDelete = async () => {
     const con = await confirm({
       title: "Are you sure to delete this video ?",
-      description: "Users can't find your video anymore"
+      description: "Users can't find your video anymore",
+      titleStyle: "px-10",
     });
     if (con) {
       console.log("ok");

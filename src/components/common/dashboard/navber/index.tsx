@@ -9,6 +9,7 @@ interface NavItemProps {
   search?: boolean;
   onClick?: () => void;
   onSearch?: (searchText: string) => void;
+  placeholder?:string
 }
 
 export default function NavItem({
@@ -17,6 +18,8 @@ export default function NavItem({
   onClick,
   search = true,
   onSearch,
+  placeholder = 'Search across your profile',
+
 }: NavItemProps) {
   const [searchText, setSearchText] = useState('');
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,13 +33,13 @@ export default function NavItem({
       <h1 className="text-2xl font-bold text-blacks">{title}</h1>
       
       {search && (
-        <div className="relative w-full max-w-2xl bg-white rounded-md lg:rounded-full py-1">
+        <div className="relative w-full max-w-xs xl:max-w-xl 2xl:max-w-2xl bg-white rounded-md lg:rounded-full py-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-grays" />
           <Input
             type="text"
             value={searchText}
             onChange={handleSearchChange}
-            placeholder="Search across your profile"
+            placeholder={placeholder}
             className="pl-10 pr-4 py-2 rounded-full border-none w-full placeholder:text-grays"
           />
         </div>

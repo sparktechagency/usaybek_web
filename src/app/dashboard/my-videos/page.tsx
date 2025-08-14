@@ -12,171 +12,83 @@ import {
 } from "@/components/ui";
 import useConfirmation from "@/context/delete-modal";
 import React, { useEffect, useState } from "react";
-import Icon from "@/icon";
 import { Pagination } from "@/components/reuseable/pagination";
 import { DeleteBtn } from "@/components/reuseable/btn";
-import Link from "next/link";
 import Modal from "@/components/reuseable/modal";
 import TabList from "@/components/common/upload/tab";
 import PaymentBox from "@/components/common/payment-box";
-import FavIcon from "@/icon/admin/favIcon";
-import { useUserVideosQuery } from "@/redux/api/dashboard/videosApi";
+import {
+  useBulkDeleteMutation,
+  useSingleDeleteMutation,
+  useUserVideosQuery,
+} from "@/redux/api/dashboard/videosApi";
 import { ImgBox } from "@/components/common/admin/reuseable";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
+import { TableNoItem } from "@/components/common/admin/reuseable/table-no-item";
 import { useDebounce } from "use-debounce";
-
-interface Video {
-  id: string;
-  thumbnail: string;
-  title: string;
-  description: string;
-  visibility: string;
-  date: string;
-  time: string;
-  views: number;
-  likes: number;
-  dislikes: number;
-  comments: number;
-}
-
-const initialVideos: Video[] = [
-  {
-    id: "1",
-    thumbnail: "/placeholder.svg?height=80&width=120",
-    title: "Video title goes here",
-    description:
-      "Lorem ipsum dolor sit amet consectetur. Netus massa nec eu arcu. ",
-    visibility: "Everyone",
-    date: "24-04-2025",
-    time: "10:20 AM",
-    views: 22203,
-    likes: 1256,
-    dislikes: 100,
-    comments: 100,
-  },
-  {
-    id: "2",
-    thumbnail: "/placeholder.svg?height=80&width=120",
-    title: "Video title goes here",
-    description:
-      "Lorem ipsum dolor sit amet consectetur. Netus massa nec eu arcu.",
-    visibility: "Everyone",
-    date: "24-04-2025",
-    time: "10:20 AM",
-    views: 22203,
-    likes: 1256,
-    dislikes: 100,
-    comments: 100,
-  },
-  {
-    id: "3",
-    thumbnail: "/placeholder.svg?height=80&width=120",
-    title: "Video title goes here",
-    description:
-      "Lorem ipsum dolor sit amet consectetur. Netus massa nec eu arcu.",
-    visibility: "Everyone",
-    date: "24-04-2025",
-    time: "10:20 AM",
-    views: 22203,
-    likes: 1256,
-    dislikes: 100,
-    comments: 100,
-  },
-  {
-    id: "4",
-    thumbnail: "/placeholder.svg?height=80&width=120",
-    title: "Video title goes here",
-    description:
-      "Lorem ipsum dolor sit amet consectetur. Netus massa nec eu arcu.",
-    visibility: "Everyone",
-    date: "24-04-2025",
-    time: "10:20 AM",
-    views: 22203,
-    likes: 1256,
-    dislikes: 100,
-    comments: 100,
-  },
-  {
-    id: "5",
-    thumbnail: "/placeholder.svg?height=80&width=120",
-    title: "Video title goes here",
-    description:
-      "Lorem ipsum dolor sit amet consectetur. Netus massa nec eu arcu.",
-    visibility: "Everyone",
-    date: "24-04-2025",
-    time: "10:20 AM",
-    views: 22203,
-    likes: 1256,
-    dislikes: 100,
-    comments: 100,
-  },
-  {
-    id: "6",
-    thumbnail: "/placeholder.svg?height=80&width=120",
-    title: "Video title goes here",
-    description:
-      "Lorem ipsum dolor sit amet consectetur. Netus massa nec eu arcu.",
-    visibility: "Everyone",
-    date: "24-04-2025",
-    time: "10:20 AM",
-    views: 22203,
-    likes: 1256,
-    dislikes: 100,
-    comments: 100,
-  },
-];
+import FavIcon from "@/icon/admin/favIcon";
+import { modifyPayloadBulk } from "@/lib";
+import Icon from "@/icon";
+import Link from "next/link";
 
 export default function MyVideos() {
+  const { confirm } = useConfirmation();
   const [isSearch, setIsSearch] = useState("");
   const [value] = useDebounce(isSearch, 1000);
+  const [isUpload, setIsUpload] = useState(false);
+  const [isPayment, setIsPayment] = useState(false);
+  const [isCheck, setIsCheck] = useState(false);
   const [isPage, setIsPage] = useState<number>();
   const query: Record<string, any> = {
     page: isPage,
     ...(value && { search: value }),
   };
   const { data: userVideos, isLoading } = useUserVideosQuery({ ...query });
-  const { confirm } = useConfirmation();
-  const [videos, setVideos] = useState<Video[]>(initialVideos);
-  const [isUpload, setIsUpload] = useState(false);
-  const [isPayment, setIsPayment] = useState(false);
-  const [isCheck, setIsCheck] = useState(false);
-  const [selectedVideoIds, setSelectedVideoIds] = useState<Set<string>>(
-    new Set()
-  );
-
-  console.log(value);
+  const [selectedVideoIds, setSelectedVideoIds] = useState<string[]>([]);
+  const [bulkDelete] = useBulkDeleteMutation();
+  const [singleDelete] = useSingleDeleteMutation();
 
   // isUpload modal close
   useEffect(() => {
     setIsUpload(false);
   }, [isPayment]);
 
-  const handleSelectVideo = (id: string, isChecked: boolean) => {
-    setSelectedVideoIds((prev) => {
-      const updated = new Set(prev);
-      if (isChecked) {
-        updated.add(id);
-      } else {
-        updated.delete(id);
-      }
-      return updated;
-    });
-  };
-
-  const handleDelete = async () => {
-    const con = await confirm({
-      title: "Are you sure to delete this video ?",
-      description: "Users can't find your video anymore",
-    });
-    if (con) {
-      console.log(selectedVideoIds);
+  const handleSelect = (id: string, checked: boolean) => {
+    if (checked) {
+      setSelectedVideoIds((prevIds) => [...prevIds, id]);
+    } else {
+      setSelectedVideoIds((prevIds) =>
+        prevIds.filter((videoId) => videoId !== id)
+      );
     }
   };
 
-  const SingleVideoDelete = async (id: string) => {
-    const con = await confirm();
+  // /handleDeleteAll
+  const handleDeleteAll = async () => {
+    const con = await confirm({
+      title: "Are you sure to delete this video ?",
+      description: "Users can't find your video anymore",
+      titleStyle: "px-10",
+    });
     if (con) {
-      console.log(id);
+      const data = modifyPayloadBulk("ids[]", selectedVideoIds);
+      const res = await bulkDelete(data).unwrap();
+      if (res?.status) {
+        setSelectedVideoIds([]);
+      }
+    }
+    setSelectedVideoIds([]);
+  };
+
+  // /SingleVideoDelete
+  const SingleVideoDelete = async (id: string) => {
+    const con = await confirm({
+      title: "Are you sure to delete this video ?",
+      description: "Users can't find your video anymore",
+      titleStyle: "px-10",
+    });
+    if (con) {
+      await singleDelete(id).unwrap();
     }
   };
 
@@ -187,15 +99,18 @@ export default function MyVideos() {
         onClick={() => setIsUpload(!isUpload)}
         upload={true}
         onSearch={(text) => setIsSearch(text)}
+        placeholder="Search video"
       />
       <div>
         <div className="flex items-center space-x-4 pb-2 pt-10">
           <span className="font-medium text-blacks">
-            Total videos: {videos.length}
+            {isCheck
+              ? `Selected Videos : ${selectedVideoIds?.length || 0}`
+              : `Total Videos: ${userVideos?.meta?.total || 0}`}
           </span>
-          {selectedVideoIds?.size > 0 && (
+          {selectedVideoIds?.length > 0 && (
             <>
-              <DeleteBtn onClick={handleDelete} />
+              <DeleteBtn onClick={handleDeleteAll} />
             </>
           )}
         </div>
@@ -233,10 +148,10 @@ export default function MyVideos() {
                       {isCheck && (
                         <div className="flex items-center space-x-2">
                           <Checkbox
-                            id={`${item.id}`}
-                            checked={selectedVideoIds.has(item.id)}
+                            id={`select-${item.id}`} 
+                            checked={selectedVideoIds.includes(item.id)}
                             onCheckedChange={(checked) =>
-                              handleSelectVideo(item.id, checked as boolean)
+                              handleSelect(item.id, checked as boolean)
                             }
                           />
                         </div>
@@ -264,9 +179,7 @@ export default function MyVideos() {
                               <ul className="flex items-center space-x-2 mt-3">
                                 <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
                                   <Link
-                                    href={
-                                      "/dashboard/video-details?tab=details"
-                                    }
+                                    href={`/dashboard/video-details/${item.id}?tab=details`}
                                   >
                                     <FavIcon
                                       name="eye"
@@ -369,11 +282,11 @@ export default function MyVideos() {
                 </TableRow>
               ))
             ) : (
-              <TableRow>
-                <TableCell colSpan={7}>
-                   <h1 className="textc-center">Video not found</h1>
-                </TableCell>
-              </TableRow>
+              <TableNoItem
+                title="No data is currently available for this section"
+                className="xl:py-40"
+                colSpan={7}
+              />
             )}
           </TableBody>
         </Table>
