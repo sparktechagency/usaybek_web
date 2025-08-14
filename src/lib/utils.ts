@@ -54,7 +54,7 @@ export const modifyPayloadAll = (values: any) => {
 
     if (value instanceof File) {
       formData.append(key, value);
-    } else if (Array.isArray(value) || typeof value === 'object') {
+    } else if (Array.isArray(value) || typeof value === "object") {
       formData.append(key, JSON.stringify(value));
     } else {
       formData.append(key, value as any);
@@ -76,3 +76,4 @@ export function getCookie(key: string): string | undefined {
 export function removeCookie(key: string) {
   return Cookies.remove(key);
 }
+

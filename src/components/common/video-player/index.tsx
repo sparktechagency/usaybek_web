@@ -11,13 +11,21 @@ import {
   VideoPlayerTimeRange,
   VideoPlayerVolumeRange,
 } from "@/components/ui/kibo-ui/video-player";
+import { cn } from "@/lib";
 
 interface PlayerProps {
   src?: string;
+  className?: string;
+  thumbnail?: string;
 }
 
-const PlayerBox = ({ src }: PlayerProps) => (
-  <VideoPlayer className="overflow-hidden w-full h-[650px] rounded-lg border">
+const PlayerBox = ({ src, className, thumbnail }: PlayerProps) => (
+  <VideoPlayer
+    className={cn(
+      "overflow-hidden w-full h-[650px] rounded-lg border",
+      className
+    )}
+  >
     <VideoPlayerContent
       // crossOrigin="anonymous"
       preload="metadata"

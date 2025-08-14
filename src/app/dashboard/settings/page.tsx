@@ -16,6 +16,8 @@ import Icon from "@/icon";
 import Image from "next/image";
 import { modifyPayloadAll } from "@/lib";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
+import avaterImg from "@/assets/avaterImg.svg";
+
 
 const intImg = {
   coverPreview: "",
@@ -64,13 +66,13 @@ export default function Settings() {
         services: services,
       });
     }
-  }, [data, from]);
+  }, [data?.data, from]);
 
   const handleSubmit = async (values: FieldValues) => {
     const valueItem = {
       ...values,
       ...(isImg.cover_image ? { cover_image: isImg.cover_image } : {}),
-      ...(isImg.avatar ? { avatar: isImg.avatar } : {}),
+      ...(isImg.avatar ? {image: isImg.avatar } : {}),
     };
     try {
       const data = modifyPayloadAll(valueItem);
@@ -85,6 +87,8 @@ export default function Settings() {
       }
     }
   };
+
+  
 
   return (
     <div>
@@ -118,8 +122,12 @@ export default function Settings() {
                   });
                 }}
               >
-                <div className="size-10 absolute cursor-pointer grid place-items-center rounded-full bg-[green] bottom-0 right-0">
-                  <FavIcon  name="avaterimg"  />
+                <div className="size-9 absolute cursor-pointer grid place-items-center rounded-full bottom-0 right-0">
+                  <Image
+                    src={avaterImg}
+                    alt={"avaterimg"}
+                    fill
+                  />
                 </div>
               </ImgUpload>
             </div>

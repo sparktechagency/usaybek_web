@@ -4,15 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from '@/lib/utils'
 import React from 'react'
 
-interface PaginationProps {
-  current_page?: number
-  onPageChange: (page: number) => void
-  total?: number
-  per_page: number
-  className?: string,
-  activeStyle?:string,
-  itemStyle?:string
-}
+
 
 export function Pagination({
   current_page=1,
@@ -22,7 +14,7 @@ export function Pagination({
   className,
   activeStyle,
   itemStyle
-}: PaginationProps) {
+}: any) {
   const totalCount = Math.ceil(total / per_page)
 
   return (

@@ -8,7 +8,11 @@ export enum tagTypes {
   singleBlog = "singleBlog",
   profile="profile",
   userDashboard="userDashboard",
-  userAnalytics="userAnalytics"
+  userAnalytics="userAnalytics",
+  getReport="getReport",
+  reportDetails="reportDetails",
+
+
 }
 
 export const tagTypesList = [
@@ -21,5 +25,7 @@ export const tagTypesList = [
   tagTypes.singleBlog,
   tagTypes.profile,
   tagTypes.userDashboard,
-  tagTypes.userAnalytics
+  tagTypes.userAnalytics,
+  tagTypes.getReport,
+  tagTypes.reportDetails,
 ]

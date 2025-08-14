@@ -26,7 +26,7 @@ export default function BlogsPage() {
       <ul className="flex flex-wrap justify-center my-3">
         <li className="font-medium">
           <Pagination
-            onPageChange={(v) => setIsPage(v)}
+            onPageChange={(v:any) => setIsPage(v)}
             {...blogs?.meta}
             activeStyle="!rounded-full !bg-reds !border-none !text-white hover:!text-white"
             itemStyle="rounded-full"
