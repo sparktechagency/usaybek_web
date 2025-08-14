@@ -12,7 +12,7 @@ export const dashboardApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.userDashboard],
     }),
     getAnalytics: build.query({
-      query: (arg: Record<string, any>) => ({
+      query: (arg?: Record<string, any>) => ({
         url: "/analytics",
         method: "GET",
         params: arg,

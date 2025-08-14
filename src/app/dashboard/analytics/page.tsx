@@ -26,7 +26,7 @@ export default function Analytics() {
 
   return (
     <div>
-      <NavItem title="Analytics" />
+      <NavItem title="Analytics" search={false} />
       <div>
         <div>
           <ul className="flex items-center justify-between mt-8">

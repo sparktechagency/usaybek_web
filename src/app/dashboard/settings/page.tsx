@@ -92,7 +92,7 @@ export default function Settings() {
 
   return (
     <div>
-      <NavItem title="Settings" />
+      <NavItem title="Settings" search={false} />
       <div className="mt-10">
         <div className="relative h-48 md:h-64">
           <Image

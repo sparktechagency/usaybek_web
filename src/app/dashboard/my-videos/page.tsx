@@ -2,6 +2,7 @@
 import NavItem from "@/components/common/dashboard/navber";
 import {
   Checkbox,
+  Skeleton,
   Table,
   TableBody,
   TableCell,
@@ -11,7 +12,6 @@ import {
 } from "@/components/ui";
 import useConfirmation from "@/context/delete-modal";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import Icon from "@/icon";
 import { Pagination } from "@/components/reuseable/pagination";
 import { DeleteBtn } from "@/components/reuseable/btn";
@@ -20,6 +20,10 @@ import Modal from "@/components/reuseable/modal";
 import TabList from "@/components/common/upload/tab";
 import PaymentBox from "@/components/common/payment-box";
 import FavIcon from "@/icon/admin/favIcon";
+import { useUserVideosQuery } from "@/redux/api/dashboard/videosApi";
+import { ImgBox } from "@/components/common/admin/reuseable";
+import SkeletonCount from "@/components/reuseable/skeleton-item/count";
+import { useDebounce } from "use-debounce";
 
 interface Video {
   id: string;
@@ -123,6 +127,14 @@ const initialVideos: Video[] = [
 ];
 
 export default function MyVideos() {
+  const [isSearch, setIsSearch] = useState("");
+  const [value] = useDebounce(isSearch, 1000);
+  const [isPage, setIsPage] = useState<number>();
+  const query: Record<string, any> = {
+    page: isPage,
+    ...(value && { search: value }),
+  };
+  const { data: userVideos, isLoading } = useUserVideosQuery({ ...query });
   const { confirm } = useConfirmation();
   const [videos, setVideos] = useState<Video[]>(initialVideos);
   const [isUpload, setIsUpload] = useState(false);
@@ -131,6 +143,8 @@ export default function MyVideos() {
   const [selectedVideoIds, setSelectedVideoIds] = useState<Set<string>>(
     new Set()
   );
+
+  console.log(value);
 
   // isUpload modal close
   useEffect(() => {
@@ -172,6 +186,7 @@ export default function MyVideos() {
         title="My videos"
         onClick={() => setIsUpload(!isUpload)}
         upload={true}
+        onSearch={(text) => setIsSearch(text)}
       />
       <div>
         <div className="flex items-center space-x-4 pb-2 pt-10">
@@ -208,154 +223,166 @@ export default function MyVideos() {
           </TableHeader>
 
           <TableBody>
-            {videos.map((video) => (
-              <TableRow key={video.id}>
-                <TableCell>
-                  <div className="flex gap-5 items-center pr-5">
-                    {isCheck && (
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id={`video-${video.id}`}
-                          checked={selectedVideoIds.has(video.id)}
-                          onCheckedChange={(checked) =>
-                            handleSelectVideo(video.id, checked as boolean)
-                          }
-                        />
-                      </div>
-                    )}
-                    <div className="flex space-x-4">
-                      <div className="relative w-[120px] h-[80px] rounded-md">
-                        <Image
-                          src={"https://surl.li/lzklum"}
-                          alt={video.title}
-                          width={120}
-                          height={80}
-                          className="object-cover rounded-md"
-                        />
-                      </div>
-                      <div className="w-[300px]">
-                        <div className="font-semibold text-blacks text-lg">
-                          {video.title}
+            {isLoading ? (
+              <SkeletonCount count={6}>{SkeletonVideosAll()}</SkeletonCount>
+            ) : userVideos?.data?.length > 0 ? (
+              userVideos?.data?.map((item: any) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    <div className="flex gap-5 items-center mr-5 w-[700px] overflow-hidden">
+                      {isCheck && (
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id={`${item.id}`}
+                            checked={selectedVideoIds.has(item.id)}
+                            onCheckedChange={(checked) =>
+                              handleSelectVideo(item.id, checked as boolean)
+                            }
+                          />
                         </div>
-                        <div className="group text-sm cursor-pointer text-grays block break-all whitespace-normal line-clamp-2 relative">
-                          <span className="block group-hover:hidden line-clamp-2">
-                            {video.description}
-                          </span>
+                      )}
+                      <div className="flex space-x-4">
+                        <div className="w-[150px] h-[95px]">
+                          <ImgBox
+                            src={item.thumbnail}
+                            alt={item.title}
+                            className="w-[150px] h-[95px] rounded-md"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-semibold block break-all whitespace-normal text-blacks text-lg !truncate">
+                            {item.title}
+                          </div>
+                          <div className="group w-full text-sm cursor-pointer text-grays relative">
+                            <div className="group-hover:!hidden">
+                              <h1 className="block flex-1  break-all whitespace-normal !line-clamp-2">
+                                {item.description}
+                              </h1>
+                            </div>
 
-                          <div className="hidden group-hover:block">
-                            <ul className="flex items-center space-x-2 mt-3">
-                              <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
-                                <Link
-                                  href={"/dashboard/video-details?tab=details"}
+                            <div className="hidden group-hover:block">
+                              <ul className="flex items-center space-x-2 mt-3">
+                                <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
+                                  <Link
+                                    href={
+                                      "/dashboard/video-details?tab=details"
+                                    }
+                                  >
+                                    <FavIcon
+                                      name="eye"
+                                      className="size-5"
+                                      color="#535353"
+                                      hoverColor="#4a4df5"
+                                    />
+                                  </Link>
+                                </li>
+                                <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
+                                  <Link
+                                    href={
+                                      "/dashboard/video-details?tab=analytics"
+                                    }
+                                  >
+                                    <FavIcon
+                                      name="analytics"
+                                      className="size-4"
+                                      color="#535353"
+                                      hoverColor="#4a4df5"
+                                    />
+                                  </Link>
+                                </li>
+                                <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
+                                  <Link href={"/dashboard/edit-video"}>
+                                    <FavIcon
+                                      name="edit"
+                                      className="size-4"
+                                      color="#535353"
+                                      hoverColor="#4a4df5"
+                                    />
+                                  </Link>
+                                </li>
+                                <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
+                                  <Link
+                                    href={
+                                      "/dashboard/video-details?tab=comments"
+                                    }
+                                    className="relative top-[2px]"
+                                  >
+                                    <FavIcon
+                                      name="comnet"
+                                      className="size-4"
+                                      color="#535353"
+                                      hoverColor="#4a4df5"
+                                    />
+                                  </Link>
+                                </li>
+                                <li
+                                  className="hover:border rounded-md size-8 grid place-items-center hover:bg-white"
+                                  onClick={() => SingleVideoDelete(item.id)}
                                 >
                                   <FavIcon
-                                    name="eye"
-                                    className="size-5"
-                                    color="#535353"
-                                    hoverColor="#4a4df5"
-                                  />
-                                </Link>
-                              </li>
-                              <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
-                                <Link
-                                  href={
-                                    "/dashboard/video-details?tab=analytics"
-                                  }
-                                >
-                                  <FavIcon
-                                    name="analytics"
+                                    name="delete"
                                     className="size-4"
                                     color="#535353"
-                                    hoverColor="#4a4df5"
+                                    hoverColor="#ef4444"
                                   />
-                                </Link>
-                              </li>
-                              <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
-                                <Link href={"/dashboard/edit-video"}>
-                                  <FavIcon
-                                    name="edit"
-                                    className="size-4"
-                                    color="#535353"
-                                    hoverColor="#4a4df5"
-                                  />
-                                </Link>
-                              </li>
-                              <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
-                                <Link
-                                  href={"/dashboard/video-details?tab=comments"}
-                                  className="relative top-[2px]"
-                                >
-                                  <FavIcon
-                                    name="comnet"
-                                    className="size-4"
-                                    color="#535353"
-                                    hoverColor="#4a4df5"
-                                  />
-                                </Link>
-                              </li>
-                              <li
-                                className="hover:border rounded-md size-8 grid place-items-center hover:bg-white"
-                                onClick={() => SingleVideoDelete(video.id)}
-                              >
-                                <FavIcon
-                                  name="delete"
-                                  className="size-4"
-                                  color="#535353"
-                                  hoverColor="#ef4444"
-                                />
-                              </li>
-                            </ul>
+                                </li>
+                              </ul>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </TableCell>
+                  </TableCell>
 
-                <TableCell>
-                  <div className="inline-flex items-center space-x-1 border rounded-full px-2 py-1 text-blacks">
-                    <Icon name="internetBlack" width={17} height={17} />
-                    <span>{video.visibility}</span>
-                  </div>
-                </TableCell>
+                  <TableCell>
+                    <div className="inline-flex items-center space-x-1 border rounded-full px-2 py-1 text-blacks">
+                      <Icon name="internetBlack" width={17} height={17} />
+                      <span>{item.visibility}</span>
+                    </div>
+                  </TableCell>
 
-                <TableCell>
-                  <ul className="[&>li]:text-grays space-y-1">
-                    <li className="flex items-center space-x-2">
-                      <Icon name="calenderGarys" width={17} height={17} />
-                      <span>{video.date}</span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                      <Icon name="timegrays" width={17} height={17} />
-                      <span>{video.time}</span>
-                    </li>
-                  </ul>
-                </TableCell>
+                  <TableCell>
+                    <ul className="[&>li]:text-grays space-y-1">
+                      <li className="flex items-center space-x-2">
+                        <Icon name="calenderGarys" width={17} height={17} />
+                        <span>{item?.created_date}</span>
+                      </li>
+                      <li className="flex items-center space-x-2">
+                        <Icon name="timegrays" width={17} height={17} />
+                        <span>{item?.created_time}</span>
+                      </li>
+                    </ul>
+                  </TableCell>
 
-                <TableCell>
-                  <div className="text-blacks">{video.views}</div>
-                </TableCell>
-                <TableCell>
-                  <div className="text-blacks">{video.likes}</div>
-                </TableCell>
-                <TableCell>
-                  <div className="text-blacks">{video.dislikes}</div>
-                </TableCell>
-                <TableCell>
-                  <div className="text-blacks">{video.comments}</div>
+                  <TableCell>
+                    <div className="text-blacks">{item.views}</div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="text-blacks">{item.likes_count}</div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="text-blacks">{item.dislikes_count}</div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="text-blacks">{item.comments_count}</div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7}>
+                   <h1 className="textc-center">Video not found</h1>
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>
       <ul className="flex flex-wrap justify-end my-7">
         <li className="font-medium">
           <Pagination
-            current_page={1}
-            onPageChange={() => {}}
-            total={10}
-            per_page={2}
+            onPageChange={(v: any) => setIsPage(v)}
+            {...userVideos?.meta}
           ></Pagination>
         </li>
       </ul>
@@ -383,5 +410,47 @@ export default function MyVideos() {
   );
 }
 
-//  <Icon name='eye' className='transition-all duration-200 ease-in-out
-//  hover:hue-rotate-0 hover:invert-0 hover:sepia-100 hover:saturate-100 hover:brightness-100 hover:contrast-100' />
+function SkeletonVideosAll() {
+  return (
+    <TableRow>
+      <TableCell>
+        <div className="flex gap-5 items-center pr-5 w-[700px] overflow-hidden">
+          <div className="flex space-x-4">
+            <div className="w-[150px] h-[95px]">
+              <Skeleton className="w-[150px] h-[95px] rounded-md" />
+            </div>
+            <div className="flex-1 space-y-2 mt-2">
+              <Skeleton className="w-[300px] h-4 rounded-sm" />
+              <Skeleton className="w-[500px] h-4 rounded-sm" />
+              <Skeleton className="w-[500px] h-4 rounded-sm" />
+            </div>
+          </div>
+        </div>
+      </TableCell>
+
+      <TableCell>
+        <Skeleton className="w-[110px] h-8 rounded-md" />
+      </TableCell>
+
+      <TableCell>
+        <div className="space-y-2">
+          <Skeleton className="w-[110px] h-4 rounded-sm" />
+          <Skeleton className="w-[110px] h-4 rounded-sm" />
+        </div>
+      </TableCell>
+
+      <TableCell>
+        <Skeleton className="w-[60px] h-4 rounded-sm" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="w-[60px] h-4 rounded-sm" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="w-[60px] h-4 rounded-sm" />
+      </TableCell>
+      <TableCell>
+        <Skeleton className="w-[60px] h-4 rounded-sm" />
+      </TableCell>
+    </TableRow>
+  );
+}

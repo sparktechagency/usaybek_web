@@ -11,6 +11,7 @@ export enum tagTypes {
   userAnalytics="userAnalytics",
   getReport="getReport",
   reportDetails="reportDetails",
+  userVideos="userVideos"
 
 
 }
@@ -28,4 +29,5 @@ export const tagTypesList = [
   tagTypes.userAnalytics,
   tagTypes.getReport,
   tagTypes.reportDetails,
+  tagTypes.userVideos
 ]
