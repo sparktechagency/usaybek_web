@@ -1,5 +1,4 @@
 import { capitalize, cn } from '@/lib/utils'
-import { TabBoxProps } from '@/types'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import React from 'react'

@@ -45,6 +45,8 @@ export function InputSelectField({
     const item = normalizedItems.find((item) => item.value === value)
     return item?.label || ""
   }
+  
+  console.log(items)
 
   return (
     <Controller

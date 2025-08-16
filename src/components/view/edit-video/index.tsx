@@ -62,7 +62,9 @@ export default function EditVideo({ slug }: { slug: string }) {
     visibility,
     tags,
     category_id,
-  } = (!isLoading && data) || {};
+  } = data || {};
+
+
 
   // This effect correctly sets the initial form values when data loads
   useEffect(() => {
@@ -77,7 +79,7 @@ export default function EditVideo({ slug }: { slug: string }) {
         tags: tags,
       });
     }
-  }, [data, from]); // Added 'from' to dependency array as per best practices
+  }, [data, from,category_id,visibility,slug,city,description, states, tags,title]); 
 
   const handleSubmit = async (values: FieldValues, id: string) => {
     const { state, category_id, ...rest } = values;

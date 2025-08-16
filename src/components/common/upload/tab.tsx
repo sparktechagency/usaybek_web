@@ -1,19 +1,17 @@
-"use client"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Upload, Youtube } from "lucide-react"
-import UplaodVideo from "./video"
-import YoutubeLink from "./youtube"
-
+"use client";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Upload, Youtube } from "lucide-react";
+import UplaodVideo from "./video";
+import YoutubeLink from "./youtube";
 
 const tabs = [
-  { id: "upload-video", label: "Upload Video", Icon: Upload },
-  { id: "youtube-link", label: "YouTube Link", Icon: Youtube }
-]
-
+  { id: "video", label: "Upload Video", Icon: Upload },
+  { id: "link", label: "YouTube Link", Icon: Youtube },
+];
 
 export default function TabList({ setIsPayment }: any) {
-  const [activeTab, setActiveTab] = useState("upload-video")
+  const [activeTab, setActiveTab] = useState("video");
 
   return (
     <div className="p-2">
@@ -23,8 +21,9 @@ export default function TabList({ setIsPayment }: any) {
             key={id}
             variant="out"
             onClick={() => setActiveTab(id)}
-            className={`flex-1 py-3 px-6 text-base border-none rounded-full font-medium transition-colors ${activeTab === id && "bg-reds !text-white"
-              }`}
+            className={`flex-1 py-3 px-6 text-base border-none rounded-full font-medium transition-colors ${
+              activeTab === id && "bg-reds !text-white"
+            }`}
           >
             <Icon className="mr-2 size-5" />
             {label}
@@ -32,8 +31,11 @@ export default function TabList({ setIsPayment }: any) {
         ))}
       </div>
 
-      {activeTab === "upload-video" ? (<UplaodVideo setIsPayment={setIsPayment} />) : (<YoutubeLink setIsPayment={setIsPayment} />)}
-
+      {activeTab === "video" ? (
+        <UplaodVideo type={activeTab} setIsPayment={setIsPayment} />
+      ) : (
+        <YoutubeLink setIsPayment={setIsPayment} />
+      )}
     </div>
-  )
+  );
 }

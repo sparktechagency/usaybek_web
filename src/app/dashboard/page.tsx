@@ -26,16 +26,16 @@ export default function Dashboard() {
     month: "",
     year: null,
   });
-  
+
   // Build query dynamically
   const query: Record<string, any> = {
-    type: isMonth.type || "monthly" ,
+    type: isMonth.type || "monthly",
     ...(isMonth.type === "custom" && {
       month: isMonth.month,
       year: isMonth.year,
     }),
   };
-  
+
   const { data, isLoading } = useUserDashboardQuery(query);
   const { analytics, user, views, videos, likes } = data?.data || {};
   const ViewItem = [
@@ -56,10 +56,9 @@ export default function Dashboard() {
     },
   ];
 
-
   return (
     <div>
-      <NavItem title="Dashboard Overview" />
+      <NavItem search={false} title="Dashboard Overview" />
       <div className="mt-6">
         {isLoading ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
