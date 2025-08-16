@@ -11,6 +11,8 @@ import Icon from "@/icon";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpSchema } from "@/schema";
 import { useCategoriesQuery } from "@/redux/api/landing/videosApi";
+import ImgUpload from "@/components/reuseable/img-uplod";
+import VideoUpload from "@/components/reuseable/video-uplod";
 
 type UploadVideoProps = {
   title: string;
@@ -23,18 +25,22 @@ type UploadVideoProps = {
   videoFile: FileList | null;
   thumbnail: FileList | null;
 };
+const intImg = {
+  videoPreview: "",
+  thumbnailPreview: "",
+  thumbnail: "",
+  video: "",
+};
 
 export default function UploadVideo({ type, setIsPayment }: any) {
+  const [isImg, setIsImg] = useState<any>(intImg);
   const { data: categories } = useCategoriesQuery({
     per_page: 1000,
   });
 
   const [isPay, setIsPay] = useState(true);
-  const [videoPreview, setVideoPreview] = useState<string | null>(null);
-  const [thumbnailName, setThumbnailName] = useState<string | null>(null);
 
-  const videoInputRef = useRef<HTMLInputElement | null>(null);
-  const thumbnailInputRef = useRef<HTMLInputElement | null>(null);
+  console.log(isImg)
 
   const from = useForm<UploadVideoProps>({
     // resolver: zodResolver(SignUpSchema),
@@ -45,9 +51,7 @@ export default function UploadVideo({ type, setIsPayment }: any) {
       state: "",
       visibility: "",
       tags: ["React", "Next.js", "Tailwind"],
-      description: "",
-      videoFile: null,
-      thumbnail: null,
+      description: ""
     },
   });
 
@@ -58,23 +62,7 @@ export default function UploadVideo({ type, setIsPayment }: any) {
     };
   };
 
-  // Handle Video Upload
-  const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setVideoPreview(URL.createObjectURL(file));
-      from.setValue("videoFile", e.target.files);
-    }
-  };
 
-  // Handle Thumbnail Upload
-  const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setThumbnailName(file?.name?.split(".")[0]);
-      from.setValue("thumbnail", e.target.files);
-    }
-  };
 
   return (
     <div>
@@ -86,37 +74,29 @@ export default function UploadVideo({ type, setIsPayment }: any) {
         {/* Left Column */}
         <div className="space-y-5">
           {/* Video Upload */}
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-8  text-center space-y-3 min-h-[220px] flex flex-col items-center justify-center">
-            {videoPreview ? (
-              <video
-                src={videoPreview}
-                className="max-h-40 w-full rounded-lg"
-                muted
-                autoPlay={false}
-                loop
-              />
-            ) : (
-              <>
-                <Upload className="h-12 w-12 text-black" />
-                <p className="text-xl font-semibold">Upload your video</p>
-                <p className="text-gray-500">Drag & drop your file or browse</p>
-              </>
-            )}
-            <Button
-              variant="primary"
-              type="button"
-              onClick={() => videoInputRef.current?.click()}
-            >
-              Browse Files
-            </Button>
-            <input
-              type="file"
-              accept="video/*"
-              className="hidden"
-              ref={videoInputRef}
-              onChange={handleVideoChange}
-            />
-          </div>
+
+          <VideoUpload
+            onFileSelect={(file: File) => {
+              setIsImg({
+                ...isImg,
+                video: file,
+                videoPreview: URL.createObjectURL(file),
+              });
+            }}
+          >
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8  text-center space-y-3 min-h-[220px] flex flex-col items-center justify-center">
+              <Upload className="h-12 w-12 text-black" />
+              <p className="text-xl font-semibold">Upload your video</p>
+              <p className="text-gray-500">Drag & drop your file or browse</p>
+              <Button
+                variant="primary"
+                type="button"
+              >
+                Browse Files
+              </Button>
+
+            </div>
+          </VideoUpload>
 
           {/* Promoted Button */}
           <Button
@@ -172,12 +152,12 @@ export default function UploadVideo({ type, setIsPayment }: any) {
           <InputSelectField
             items={categories?.data?.map((item: any) => ({
               label: item?.name,
-              value: item?.id,
+              value: item?.id?.toString(),
             }))}
             label="Category"
             name="category_id"
             placeholder="Select Category"
-             matching={true}
+            matching={true}
             className="py-4"
             itemStyle="py-2"
           />
@@ -185,24 +165,28 @@ export default function UploadVideo({ type, setIsPayment }: any) {
           <div className="space-y-1">
             <div className="flex items-center justify-between border rounded-full p-1 h-9">
               <span className="text-sm pl-1">
-                {thumbnailName ? thumbnailName : "Thumbnail"}
+                {isImg?.thumbnailPreview ? isImg?.thumbnailPreview : "Thumbnail"}
               </span>
-              <Button
-                variant="outline"
-                type="button"
-                onClick={() => thumbnailInputRef.current?.click()}
-                className="flex items-center space-x-2 h-7 rounded-full text-[#3B97D3] border-[#3B97D3] hover:text-[#3B97D3]"
+              <ImgUpload
+                onFileSelect={(file: File) => {
+                  setIsImg({
+                    ...isImg,
+                    thumbnail: file,
+                    thumbnailPreview: file?.name?.split(".")[0],
+                  });
+                }}
               >
-                <Upload className="h-4 w-4 text-[#3B97D3]" />
-                <span>Upload an image</span>
-              </Button>
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                ref={thumbnailInputRef}
-                onChange={handleThumbnailChange}
-              />
+                <Button
+                  variant="outline"
+                  type="button"
+                  className="flex items-center space-x-2 h-7 rounded-full text-[#3B97D3] border-[#3B97D3] hover:text-[#3B97D3]"
+                >
+                  <Upload className="h-4 w-4 text-[#3B97D3]" />
+                  <span>Upload an image</span>
+                </Button>
+              </ImgUpload>
+
+
             </div>
             <div className="flex items-center space-x-2 text-reds text-sm">
               <Icon name="alertRed" width={17} className="rotate-2" />

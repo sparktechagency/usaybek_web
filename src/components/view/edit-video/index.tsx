@@ -40,18 +40,6 @@ export default function EditVideo({ slug }: { slug: string }) {
   });
   const { data, isLoading } = useVideosDetailsQuery(slug);
   const [videoEdit, { isLoading: editLoading }] = useVideoEditMutation();
-  const from = useForm({
-    defaultValues: {
-      title: "",
-      description: "",
-      state: "",
-      city: "",
-      category_id: null,
-      visibility: "",
-      tags: [],
-    },
-  });
-
   const {
     video,
     thumbnail,
@@ -64,6 +52,18 @@ export default function EditVideo({ slug }: { slug: string }) {
     category_id,
   } = data || {};
 
+  const from = useForm({
+    defaultValues: {
+      title: title || "",
+      description: description || "",
+      state: states || "",
+      city: city || "",
+      category_id: category_id?.toString(),
+      visibility: visibility,
+      tags: tags || [],
+    },
+  });
+
 
 
   // This effect correctly sets the initial form values when data loads
@@ -74,12 +74,14 @@ export default function EditVideo({ slug }: { slug: string }) {
         description,
         state: states,
         city,
-        category_id,
+        category_id: category_id?.toString(),
         visibility,
         tags: tags,
       });
     }
-  }, [data, from,category_id,visibility,slug,city,description, states, tags,title]); 
+  }, [data, from, category_id, visibility, slug, city, description, states, tags, title]);
+
+  console.log(category_id, visibility)
 
   const handleSubmit = async (values: FieldValues, id: string) => {
     const { state, category_id, ...rest } = values;
@@ -96,7 +98,7 @@ export default function EditVideo({ slug }: { slug: string }) {
       const res = await videoEdit({ data, id }).unwrap();
       if (res.status) {
         from.reset();
-         setIsImg(intImg);
+        setIsImg(intImg);
       }
     } catch (err: any) {
       ResponseApiErrors(err?.data, from);
@@ -197,7 +199,7 @@ export default function EditVideo({ slug }: { slug: string }) {
               <InputSelectField
                 items={categories?.data?.map((item: any) => ({
                   label: item?.name,
-                  value: item?.id,
+                  value: item?.id?.toString(),
                 }))}
                 label="Category"
                 name="category_id"
@@ -225,7 +227,7 @@ export default function EditVideo({ slug }: { slug: string }) {
 
               <div>
                 <h1 className="font-semibold text-xl my-6">Thumbnail</h1>
-                <div className="w-full h-auto md:w-[600px] relative md:h-[300px]">
+                <div className="w-full h-auto  relative md:h-[300px] overflow-hidden">
                   <Image
                     src={isImg?.thumbnailPreview || thumbnail || "/blur.png"}
                     alt={"Thumbnail"}

@@ -35,18 +35,13 @@ export function InputSelectField({
 }: FormSelectProps) {
   const { control } = useFormContext()
 
-  const normalizedItems =
-    items?.map((item) => ({
-      ...item,
-      value: String(item.value),
-    })) || []
+ 
 
   const selectedLabel = (value: string) => {
-    const item = normalizedItems.find((item) => item.value === value)
+    const item = items.find((item) => item.value === value)
     return item?.label || ""
   }
   
-  console.log(items)
 
   return (
     <Controller
@@ -72,7 +67,7 @@ export function InputSelectField({
             </SelectTrigger>
             <SelectContent className="rounded-md p-0">
               <SelectGroup className="p-0 m-0">
-                {normalizedItems?.map((item, index) => (
+                {items?.map((item, index) => (
                   <SelectItem
                     className={cn("border-b last:border-b-0 py-3 pl-4 rounded-none", itemStyle)}
                     key={index}
