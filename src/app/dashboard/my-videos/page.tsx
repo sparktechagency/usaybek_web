@@ -148,7 +148,7 @@ export default function MyVideos() {
                       {isCheck && (
                         <div className="flex items-center space-x-2">
                           <Checkbox
-                            id={`select-${item.id}`} 
+                            id={`select-${item.id}`}
                             checked={selectedVideoIds.includes(item.id)}
                             onCheckedChange={(checked) =>
                               handleSelect(item.id, checked as boolean)
@@ -191,9 +191,7 @@ export default function MyVideos() {
                                 </li>
                                 <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
                                   <Link
-                                    href={
-                                      "/dashboard/video-details?tab=analytics"
-                                    }
+                                    href={`/dashboard/video-details/${item.id}?tab=analytics`}
                                   >
                                     <FavIcon
                                       name="analytics"
@@ -204,7 +202,9 @@ export default function MyVideos() {
                                   </Link>
                                 </li>
                                 <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
-                                  <Link href={"/dashboard/edit-video"}>
+                                  <Link
+                                    href={`/dashboard/edit-video/${item.id}`}
+                                  >
                                     <FavIcon
                                       name="edit"
                                       className="size-4"
@@ -215,9 +215,7 @@ export default function MyVideos() {
                                 </li>
                                 <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
                                   <Link
-                                    href={
-                                      "/dashboard/video-details?tab=comments"
-                                    }
+                                    href={`/dashboard/video-details/${item.id}?tab=comments`}
                                     className="relative top-[2px]"
                                   >
                                     <FavIcon

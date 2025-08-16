@@ -32,7 +32,7 @@ export default function Analytics() {
           <ul className="flex items-center justify-between mt-8">
             <li className="opacity-0">0</li>
             <li className="text-xl md:text-2xl font-semibold">
-              Your channel got 22,568 views in this month
+              {`Your channel got ${total_views || 0} views in this month`}
             </li>
             <li>
               {" "}

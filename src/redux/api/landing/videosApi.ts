@@ -49,7 +49,7 @@ export const videosApi = baseApi.injectEndpoints({
         url: `/videos/${id}`,
         method: "GET",
       }),
-      providesTags: [tagTypes.relatedVideos],
+      providesTags: [tagTypes.sinlgeVideo],
       transformResponse: (response: any) => {
         return response.data
       },

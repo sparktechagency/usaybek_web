@@ -19,7 +19,7 @@ import Link from "next/link";
 import React from "react";
 import Icon from "@/icon";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
-import { delay, modifyPayload } from "@/lib/utils";
+import { delay, modifyPayload } from "@/lib";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 

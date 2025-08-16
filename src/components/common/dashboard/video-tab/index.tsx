@@ -1,9 +1,9 @@
 "use client";
 import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-// import Analytics from "@/components/common/dashboard/video-tab/analytics";
-import Comments from "@/components/common/dashboard/video-tab/comments";
-import Details from "@/components/common/dashboard/video-tab/details";
+import Analytics from "./analytics";
+import Comments from "./comments";
+import Details from "./details";
 
 export default function VideoDetailsBox({ slug }: any) {
   const [isTab, setIsTab] = useState("details");
@@ -19,9 +19,12 @@ export default function VideoDetailsBox({ slug }: any) {
       {isTab === "details" && (
         <Details slug={slug} isTab={isTab} setIsTab={setIsTab} />
       )}
-      {isTab === "comments" && <Comments isTab={isTab} setIsTab={setIsTab} />}
-      {isTab === "analytics" &&
-        "<Analytics isTab={isTab} setIsTab={setIsTab} />"}
+      {isTab === "comments" && (
+        <Comments  isTab={isTab} setIsTab={setIsTab} />
+      )}
+      {isTab === "analytics" && (
+        <Analytics  isTab={isTab} setIsTab={setIsTab} />
+      )}
     </Suspense>
   );
 }

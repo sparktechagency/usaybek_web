@@ -8,7 +8,8 @@ import { DeleteBtn } from '@/components/reuseable/btn'
 import Link from 'next/link'
 import useConfirmation from '@/context/delete-modal'
 
-export default function Comments({ isTab, setIsTab }: TabBoxProps) {
+export default function Comments({ isTab,setIsTab }:any) {
+
   const { confirm } = useConfirmation();
 
 

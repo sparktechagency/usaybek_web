@@ -1,5 +1,6 @@
 "use client";
 import { ImgBox } from "@/components/common/admin/reuseable";
+import { TableNoItem } from "@/components/common/admin/reuseable/table-no-item";
 import NavItem from "@/components/common/dashboard/navber";
 import VideoPlayer from "@/components/common/video-player";
 import Form from "@/components/reuseable/from";
@@ -30,6 +31,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useDebounce } from "use-debounce";
 import z from "zod";
 
 const appealSchema = z.object({
@@ -40,7 +42,12 @@ const appealSchema = z.object({
 export default function Reports() {
   const [isPage, setIsPage] = useState<number>();
   const [isId, setIsId] = useState<string>();
-  const query: Record<string, any> = { page: isPage };
+  const [isSearch, setIsSearch] = useState("");
+  const [value] = useDebounce(isSearch, 1000);
+  const query: Record<string, any> = {
+    page: isPage,
+    ...(value && { search: value }),
+  };
   const [isAppeal, setIsAppeal] = useState(false);
   const [isView, setIsView] = useState(false);
   const [addAppeal, { isLoading: isLoadingAdd }] = useAddAppealMutation();
@@ -84,7 +91,12 @@ export default function Reports() {
 
   return (
     <div>
-      <NavItem title="Reports" />
+      <NavItem
+        title="Reports"
+        hidediv={true}
+        placeholder="Search Video"
+        onSearch={(text) => setIsSearch(text)}
+      />
       <Table className="border border-gray-300 mt-10">
         <TableHeader className="px-5">
           <TableRow className="rounded-tr-md">
@@ -102,9 +114,8 @@ export default function Reports() {
         <TableBody>
           {isLoading ? (
             <SkeletonCount count={5}>{TableSkeleton()}</SkeletonCount>
-          ) : (
-            !!report?.data &&
-            report.data.map((item: any) => {
+          ) : report?.data?.length > 0 ? (
+            report?.data?.map((item: any) => {
               const { id, action_name, action_issue, reason, video } =
                 item || {};
               return (
@@ -169,6 +180,12 @@ export default function Reports() {
                 </TableRow>
               );
             })
+          ) : (
+            <TableNoItem
+              title="No data is currently available for this section"
+              className="xl:py-40"
+              colSpan={3}
+            />
           )}
         </TableBody>
       </Table>

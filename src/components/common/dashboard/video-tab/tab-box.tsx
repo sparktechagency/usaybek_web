@@ -1,17 +1,18 @@
 import { capitalize, cn } from '@/lib/utils'
 import { TabBoxProps } from '@/types'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 import React from 'react'
 
-interface TabProps extends TabBoxProps {
-    className?:string
-}
 
-export default function TabBox({ isTab, setIsTab,className }:TabProps) {
+export default function TabBox({ isTab,setIsTab,className }:any) {
+  const {slug}=useParams()
+
+
     const tabItem=[
-        {name:"details",path:"/dashboard/video-details?tab=details"},
-        {name:"analytics",path:"/dashboard/video-details?tab=analytics"},
-        {name:"comments",path:"/dashboard/video-details?tab=comments"}
+        {name:"details",path:`/dashboard/video-details/${slug}?tab=details`},
+        {name:"analytics",path:`/dashboard/video-details/${slug}?tab=analytics`},
+        {name:"comments",path:`/dashboard/video-details/${slug}?tab=comments`}
     ]
   return (
     <div className={cn("border-b border-gray-200",className)}> 

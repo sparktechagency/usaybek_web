@@ -366,7 +366,7 @@ export default function VideoDetails({ slug }: any) {
                 navigator.clipboard.writeText(
                   `${process.env.NEXT_PUBLIC_APP_URL}${path}`
                 );
-                toast.success("Link copied to clipboard!",{ duration: 2000 });
+                toast.success("Link copied to clipboard!", { duration: 2000 });
                 await delay(2400);
                 setIsShare(false);
               }}

@@ -9,7 +9,8 @@ interface NavItemProps {
   search?: boolean;
   onClick?: () => void;
   onSearch?: (searchText: string) => void;
-  placeholder?:string
+  placeholder?: string;
+  hidediv?: boolean;
 }
 
 export default function NavItem({
@@ -18,10 +19,10 @@ export default function NavItem({
   onClick,
   search = true,
   onSearch,
-  placeholder = 'Search across your profile',
-
+  placeholder = "Search across your profile",
+  hidediv = false,
 }: NavItemProps) {
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
     setSearchText(text);
@@ -31,7 +32,7 @@ export default function NavItem({
   return (
     <div className="flex items-center space-y-2 md:space-y-0 flex-wrap md:flex-nowrap justify-between py-2">
       <h1 className="text-2xl font-bold text-blacks">{title}</h1>
-      
+
       {search && (
         <div className="relative w-full max-w-xs xl:max-w-xl 2xl:max-w-2xl bg-white rounded-md lg:rounded-full py-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-grays" />
@@ -44,6 +45,8 @@ export default function NavItem({
           />
         </div>
       )}
+
+      {hidediv && <div className="opacity-0"></div>}
 
       {upload && (
         <Button
