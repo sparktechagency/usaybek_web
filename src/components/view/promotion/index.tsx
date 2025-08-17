@@ -12,7 +12,7 @@ export default function PromotionPage() {
 
   return (
     <div>
-      <SubTilte title="Promotions" />
+      <SubTilte title="Promotions" className="pb-7" />
       {videoLoading ? (
         <div className="home gap-6 mt-5">
           <SkeletonCount count={16}>
