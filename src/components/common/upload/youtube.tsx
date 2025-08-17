@@ -1,225 +1,289 @@
-import React, { useRef, useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Upload } from "lucide-react"
-import { FieldValues, useForm } from 'react-hook-form'
+import React, { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { CircleAlert, Loader, Upload } from "lucide-react";
+import { FieldValues, useForm } from "react-hook-form";
 import Form from "@/components/reuseable/from";
-import { FromInput } from '@/components/reuseable/from-input'
-import { InputSelectField } from '@/components/reuseable/from-select'
-import { FromTagInputs } from '@/components/reuseable/from-tag-inputs'
-import { FromTextAreas } from '@/components/reuseable/from-textareas'
-import Icon from '@/icon'
+import { FromInput } from "@/components/reuseable/from-input";
+import {
+  InputSelectField,
+  InputSelectFieldIcon,
+} from "@/components/reuseable/from-select";
+import { FromTagInputs } from "@/components/reuseable/from-tag-inputs";
+import { FromTextAreas } from "@/components/reuseable/from-textareas";
+import Icon from "@/icon";
+import { useGetCitiesQuery, useGetStatesQuery } from "@/redux/api/commonApi";
+import { useStoreVideosMutation } from "@/redux/api/dashboard/videosApi";
+import { useCategoriesQuery } from "@/redux/api/landing/videosApi";
+import ImgUpload from "@/components/reuseable/img-uplod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { linkSchema } from "@/schema";
+import { modifyPayloadAll } from "@/lib";
+import { toast } from "sonner";
+import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 
+const intImg = {
+  thumbnailPreview: "",
+};
 
-type UploadVideoProps = {
-    title: string;
-    category: string;
-    city: string;
-    state: string;
-    visibility: string;
-    tags: string[];
-    description: string;
-    thumbnail: FileList | null;
-}
+export default function YoutubeLink({ type, setIsPayment }: any) {
+  const { data: states } = useGetStatesQuery({});
+  const [isImg, setIsImg] = useState<any>(intImg);
+  const [storeVideos, { isLoading }] = useStoreVideosMutation();
+  const { data: categories } = useCategoriesQuery({
+    per_page: 1000,
+  });
+  const [isSelect, setIsSelect] = useState({
+    state: [],
+    city: [],
+  });
 
-export default function YoutubeLink({ setIsPayment }: any) {
-    const [thumbnailName, setThumbnailName] = useState<string | null>(null);
-    const [isPay, setIsPay] = useState(true)
-    const thumbnailInputRef = useRef<HTMLInputElement | null>(null);
-    const from = useForm<UploadVideoProps>({
-        // resolver: zodResolver(loginSchema),
-        defaultValues: {
-            title: "",
-            category: "",
-            city: "",
-            state: "",
-            visibility: "",
-            tags: ["React", "Next.js", "Tailwind"],
-            description: "",
-            thumbnail: null,
-        },
-    });
- 
+  const [isPay, setIsPay] = useState(true);
+  const from = useForm({
+    resolver: zodResolver(linkSchema),
+    defaultValues: {
+      link: "",
+      title: "",
+      category_id: "",
+      city: "",
+      states: "",
+      visibility: "",
+      tags: [],
+      description: "",
+      thumbnail: null,
+    },
+  });
 
-    const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            setThumbnailName(file?.name?.split(".")[0]);
-            from.setValue("thumbnail", e.target.files);
-        }
+  const stateId = from.watch("states");
+  const { data: citys } = useGetCitiesQuery(stateId, {
+    skip: !stateId,
+  });
+  const stateName=stateId && (states?.find((item:any)=>item?.id === parseInt(stateId))?.name)
+
+  useEffect(() => {
+    if (!citys?.length) return;
+    setIsSelect((prev) => ({
+      ...prev,
+      city: citys.map(({ name, id }: any) => ({
+        label: name,
+        value: name,
+      })),
+    }));
+  }, [citys]);
+
+  useEffect(() => {
+    if (!states?.length) return;
+    setIsSelect((prev) => ({
+      ...prev,
+      state: states.map(({ name, id }: any) => ({
+        label: name,
+        value: id?.toString(),
+      })),
+    }));
+  }, [states]);
+
+  //  handleSubmit
+  const handleSubmit = async (values: FieldValues) => {
+    const { states, ...rest}=values
+    const value = {
+      ...rest,
+      states:stateName,
+      type,
+      is_promoted:0,
     };
+    try {
+      const data = modifyPayloadAll(value);
+      const res = await storeVideos(data).unwrap();
+      if (res.status) {
+        toast("Video Uploaded", {
+          description: res?.message,
+        });
+        setIsPayment(true);
+      }
+      from.reset();
+      setIsImg(intImg);
+    } catch (err: any) {
+      ResponseApiErrors(err?.data, from);
+    }
+  };
 
-    //  handleSubmit
-    const handleSubmit = async (values: FieldValues) => {
-        console.log("Login form:", values);
-    };
+  return (
+    <div>
+      <Form
+        from={from}
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+      >
+        {/* Left Column */}
+        <div className="space-y-5">
+          <FromInput
+            label="Paste your link here"
+            name="link"
+            placeholder="Enter Your title"
+            className="h-10"
+          />
+          <InputSelectField
+            items={isSelect?.state}
+            label="State"
+            name="states"
+            placeholder="Select State"
+            matching={true}
+            className="py-4"
+            itemStyle="py-2"
+          />
 
-
-    return (
-        <div>
-
-            <Form
-                from={from}
-                onSubmit={handleSubmit}
-                className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-                {/* Left Column */}
-                <div className="space-y-5">
-
-                    <FromInput
-                        label='Paste your link here'
-                        name="link"
-                        placeholder='Enter Your title'
-                        className='h-10'
-                    />
-                    {/* States Dropdown */}
-                    <InputSelectField
-                        items={[
-                            { label: "state 1", value: "state 1" },
-                            { label: "state 2", value: "state 2" },
-                            { label: "state 3", value: "state 3" },
-                        ]}
-                        label="State"
-                        name="state"
-                        placeholder="Select State"
-                        matching={true}
-                        className='py-4'
-                        itemStyle="py-2"
-                    ></InputSelectField>
-
-                    {/* City Dropdown */}
-                    <InputSelectField
-                        items={[
-                            { label: "city 1", value: "city 1" },
-                            { label: "city 2", value: "city 2" },
-                            { label: "city 3", value: "city 3" },
-                        ]}
-                        label="City"
-                        name="city"
-                        placeholder="Select City"
-                        matching={true}
-                        className='py-4'
-                        itemStyle="py-2"
-                    ></InputSelectField>
-                    {/* Promoted Button */}
-                    <Button variant={"primary"} className='rounded-full font-normal mt-4 text-base'>
-                        <Icon name="promoted" width={20} />
-                        <span>{isPay ? ("Promoted") : ("Promote for $99 / Month")}</span>
-                    </Button>
-                </div>
-
-                {/* Right Column */}
-                <div className="space-y-5">
-                    {/* Title Input */}
-                    <FromInput
-                        label='Title'
-                        name="title"
-                        placeholder='Enter Your title'
-                        className='h-10'
-                    />
-
-                    {/* Category Dropdown */}
-                    <InputSelectField
-                        items={[
-                            { label: "Category 1", value: "category1" },
-                            { label: "Category 2", value: "Category 2" },
-                            { label: "Category 3", value: "Category 3" },
-                            { label: "Category 4", value: "Category 4" },
-                            { label: "Category 5", value: "Category 5" },
-                            { label: "Category 6", value: "Category 6" },
-                            { label: "Category 7", value: "Category 7" },
-                            { label: "Category 8", value: "Category 8" },
-                        ]}
-                        label="Category"
-                        name="category"
-                        placeholder="Select category"
-                        matching={true}
-                        className='py-4'
-                        itemStyle="py-2"
-                    ></InputSelectField>
-                    {/* Thumbnail Section */}
-                    <div className="space-y-1">
-                        <div className="flex items-center justify-between border rounded-full p-1 h-9">
-                            <span className="text-sm pl-1">{thumbnailName ? thumbnailName : "Thumbnail"}</span>
-                            <Button
-                                variant="outline"
-                                type="button"
-                                onClick={() => thumbnailInputRef.current?.click()}
-                                className="flex items-center space-x-2 h-7 rounded-full text-[#3B97D3] border-[#3B97D3] hover:text-[#3B97D3]"
-                            >
-                                <Upload className="h-4 w-4 text-[#3B97D3]" />
-                                <span>Upload an image</span>
-                            </Button>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                ref={thumbnailInputRef}
-                                onChange={handleThumbnailChange}
-                            />
-                        </div>
-                        <div className="flex items-center space-x-2 text-reds text-sm">
-                            <Icon name='alertRed' width={17} className='rotate-2' />
-                            <span>Image resolution should be minimum 1920x1080 px</span>
-                        </div>
-                    </div>
-
-
-
-                    {/* Visibility Dropdown */}
-                    <InputSelectField
-                        items={[
-                            { label: "Everyone", value: "everyone", icon: <Icon width={16} name="internetBlack" /> },
-                            { label: "Only me", value: "only me", icon: <Icon width={13} name="lockBack" /> }
-                        ]}
-                        label="Visibility"
-                        name="visibility"
-                        placeholder="Select Visibility"
-                        matching={true}
-                        className='py-4'
-                        itemStyle="py-2"
-                    ></InputSelectField>
-                </div>
-                <div className='col-span-1 lg:col-span-2 space-y-5'>
-                    <FromTextAreas
-                        label="Description"
-                        name="description"
-                        placeholder="Enter your Description"
-                        className='min-h-28 rounded-3xl'
-                        matching={true}
-                    />
-                    <FromTagInputs
-                        label='Tags'
-                        name="tags"
-                        stylelabel="bg-white"
-                        className="bg-white"
-                    />
-                    {/* Description Textarea */}
-
-
-                </div>
-                {isPay ? (
-                    <div className='col-span-1 lg:col-span-2'>
-                        <div className="flex justify-end">
-                            <Button onClick={() => setIsPay(!isPay)} variant={"primary"}>
-                                Publish
-                            </Button>
-                        </div>
-                    </div>
-                ) : (
-                    <div className='col-span-1 lg:col-span-2'>
-                        <div className="flex space-x-3 items-center justify-end">
-                            <h1 className='text-grays'> After payment you will be returned here immediately.</h1>
-                            <Button variant={"out"}>
-                                $99.00
-                            </Button>
-                            <Button onClick={() => setIsPayment(true)} variant={"primary"}>
-                                Pay now
-                            </Button>
-                        </div>
-                    </div>
-                )}
-            </Form>
-
+          {/* City Dropdown */}
+          <InputSelectField
+            items={isSelect?.city}
+            label="City"
+            name="city"
+            placeholder="Select City"
+            matching={true}
+            className="py-4"
+            itemStyle="py-2"
+          />
+          {/* Promoted Button */}
+          <Button
+            variant={"primary"}
+            className="rounded-full font-normal mt-4 text-base"
+          >
+            <Icon name="promoted" width={20} />
+            <span>{isPay ? "Promoted" : "Promote for $99 / Month"}</span>
+          </Button>
         </div>
-    )
+
+        {/* Right Column */}
+        <div className="space-y-5">
+          {/* Title Input */}
+          <FromInput
+            label="Title"
+            name="title"
+            placeholder="Enter Your title"
+            className="h-10"
+          />
+
+          {/* Category Dropdown */}
+          <InputSelectField
+            items={categories?.data?.map((item: any) => ({
+              label: item?.name,
+              value: item?.id?.toString(),
+            }))}
+            label="Category"
+            name="category_id"
+            placeholder="Select Category"
+            matching={true}
+            className="py-4"
+            itemStyle="py-2"
+          />
+          {/* Thumbnail Section */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between border rounded-full p-1 h-9">
+              <span className="text-sm pl-1">
+                {isImg?.thumbnailPreview
+                  ? isImg?.thumbnailPreview
+                  : "Thumbnail"}
+              </span>
+              <ImgUpload
+                onFileSelect={(file: File) => {
+                  setIsImg({
+                    ...isImg,
+                    thumbnailPreview: file?.name?.split(".")[0],
+                  });
+                  from.setValue("thumbnail", file, { shouldValidate: true });
+                }}
+              >
+                <Button
+                  variant="outline"
+                  type="button"
+                  className="flex items-center space-x-2 h-7 rounded-full text-[#3B97D3] border-[#3B97D3] hover:text-[#3B97D3]"
+                >
+                  <Upload className="h-4 w-4 text-[#3B97D3]" />
+                  <span>Upload an image</span>
+                </Button>
+              </ImgUpload>
+            </div>
+            {from?.formState?.errors?.thumbnail && (
+              <p className="text-reds justify-end mt-1 flex items-center gap-1 text-sm">
+                {from?.formState?.errors?.thumbnail?.message as string}
+                <CircleAlert size={14} />
+              </p>
+            )}
+          </div>
+
+          {/* Visibility Dropdown */}
+          <InputSelectFieldIcon
+            items={[
+              {
+                label: "Everyone",
+                value: "Everyone",
+                icon: <Icon width={18} name="internetBlack" />,
+              },
+              {
+                label: "Only me",
+                value: "Only me",
+                icon: <Icon width={14} name="lockBack" />,
+              },
+            ]}
+            label="Visibility"
+            name="visibility"
+            placeholder="Select Visibility"
+            matching={true}
+            className="py-4"
+            itemStyle="py-2"
+          />
+        </div>
+        <div className="col-span-1 lg:col-span-2 space-y-5">
+          <FromTextAreas
+            label="Description"
+            name="description"
+            placeholder="Enter your Description"
+            className="min-h-40 rounded-3xl"
+            matching={true}
+          />
+          <FromTagInputs
+            label="Tags"
+            name="tags"
+            stylelabel="bg-white"
+            className="bg-white min-h-25"
+          />
+          {/* Description Textarea */}
+        </div>
+        <div className="col-span-1 lg:col-span-2">
+          <div className="flex justify-end">
+            <Button disabled={isLoading} variant={"primary"}>
+              {isLoading ? (
+                <span className="flex items-center">
+                  <Loader className="animate-spin size-4 mr-1" />
+                  Uploading
+                </span>
+              ) : (
+                "Publish"
+              )}
+            </Button>
+          </div>
+        </div>
+        {/* {isPay ? (
+          <div className="col-span-1 lg:col-span-2">
+            <div className="flex justify-end">
+              <Button disabled={isLoading} onClick={() => setIsPay(!isPay)} variant={"primary"}>
+                Publish
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="col-span-1 lg:col-span-2">
+            <div className="flex space-x-3 items-center justify-end">
+              <h1 className="text-grays">
+                {" "}
+                After payment you will be returned here immediately.
+              </h1>
+              <Button variant={"out"}>$99.00</Button>
+              <Button onClick={() => setIsPayment(true)} variant={"primary"}>
+                Pay now
+              </Button>
+            </div>
+          </div>
+        )} */}
+      </Form>
+    </div>
+  );
 }

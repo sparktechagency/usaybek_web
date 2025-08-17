@@ -19,6 +19,7 @@ import { useUserDashboardQuery } from "@/redux/api/dashboard/simpleApi";
 import { ChartAreaOverView } from "@/components/common/chats/area";
 import { Skeleton } from "@/components/ui/skeleton";
 import assets from "@/assets";
+import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 
 export default function Dashboard() {
   const [isMonth, setIsMonth] = useState({
@@ -62,10 +63,42 @@ export default function Dashboard() {
       <div className="mt-6">
         {isLoading ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            <Skeleton className="w-full h-[580px] bg-blacks/10" />
+            <div className="w-full h-[580px] border p-2 rounded-md">
+              <div className="relative">
+                <Skeleton className="w-full h-[200px] bg-blacks/10" />
+                <div className="space-y-2 mx-auto relative -top-20 w-[200px]">
+                  <Skeleton className="size-30 mx-auto rounded-full" />
+                  <Skeleton className="w-[200px] mx-auto h-4 rounded-full" />
+                  <Skeleton className="w-[200px] mx-auto h-4 rounded-full" />
+                </div>
+                <div>
+                  <div className="flex justify-between">
+                    <Skeleton className="w-[120px] h-8 rounded-full" />
+                    <Skeleton className="w-[120px] h-8 rounded-full" />
+                  </div>
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mt-3">
+                    <Skeleton className="w-full h-[100px] rounded-md" />
+                    <Skeleton className="w-full h-[100px] rounded-md" />
+                    <Skeleton className="w-full h-[100px] rounded-md" />
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="h-full  flex flex-col gap-4">
-              <Skeleton className="w-full h-1/2 bg-blacks/10" />
-              <Skeleton className="w-full h-1/2 bg-blacks/10" />
+              <div className="border w-full h-1/2 rounded-md p-2 space-y-2">
+                <Skeleton className="w-full h-8 bg-blacks/10 rounded-full" />
+                <Skeleton className="w-full h-4 bg-blacks/10 rounded-full" />
+                <Skeleton className="w-full h-4 bg-blacks/10 rounded-full" />
+                <Skeleton className="w-full h-4 bg-blacks/10 rounded-full" />
+              </div>
+              <div className="border w-full h-1/2 rounded-md p-2 space-y-2">
+                <Skeleton className="w-full h-8 bg-blacks/10 rounded-md" />
+                <div className="flex flex-wrap gap-4">
+                  <SkeletonCount count={10}>
+                    <Skeleton className="w-[100px] h-7  bg-blacks/10 rounded-full" />
+                  </SkeletonCount>
+                </div>
+              </div>
             </div>
           </div>
         ) : (

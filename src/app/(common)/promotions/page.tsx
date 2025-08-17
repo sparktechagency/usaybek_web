@@ -1,5 +1,3 @@
-import SubTilte from "@/components/reuseable/sub-title";
-import { VideoCard } from "@/components/reuseable/video-card";
 import PromotionPage from "@/components/view/promotion";
 import { Metadata } from "next";
 import React from "react";

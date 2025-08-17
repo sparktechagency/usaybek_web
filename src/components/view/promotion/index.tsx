@@ -10,6 +10,7 @@ import React from "react";
 export default function PromotionPage() {
   const { data: chVideos, isLoading: videoLoading } = useHomeVideosQuery({});
 
+
   return (
     <div>
       <SubTilte title="Promotions" />
@@ -21,7 +22,7 @@ export default function PromotionPage() {
         </div>
       ) : (
         chVideos?.data?.map((channel: any) => {
-          const promotedVideos = channel?.videos?.filter((v: any) => v.is_promoted);
+          const promotedVideos = channel?.videos?.filter((v: any) => v.is_promoted == 1);
 
           return promotedVideos?.length ? (
             <div key={channel.id}>

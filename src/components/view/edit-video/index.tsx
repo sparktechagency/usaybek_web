@@ -9,7 +9,7 @@ import {
 import { FromTagInputs } from "@/components/reuseable/from-tag-inputs";
 import { FromTextAreas } from "@/components/reuseable/from-textareas";
 import ImgUpload from "@/components/reuseable/img-uplod";
-import { Button } from "@/components/ui";
+import { Button, Input, Label } from "@/components/ui";
 import Icon from "@/icon";
 import {
   useCategoriesQuery,
@@ -34,6 +34,7 @@ const intImg = {
 };
 
 export default function EditVideo({ slug }: { slug: string }) {
+  const [isLink, setIsLink] = useState("");
   const [isImg, setIsImg] = useState<any>(intImg);
   const { data: categories, isLoading: categoriLoading } = useCategoriesQuery({
     per_page: 1000,
@@ -50,6 +51,8 @@ export default function EditVideo({ slug }: { slug: string }) {
     visibility,
     tags,
     category_id,
+    type,
+    link,
   } = data || {};
 
   const from = useForm({
@@ -64,8 +67,6 @@ export default function EditVideo({ slug }: { slug: string }) {
     },
   });
 
-
-
   // This effect correctly sets the initial form values when data loads
   useEffect(() => {
     if (data) {
@@ -79,9 +80,20 @@ export default function EditVideo({ slug }: { slug: string }) {
         tags: tags,
       });
     }
-  }, [data, from, category_id, visibility, slug, city, description, states, tags, title]);
-
-  console.log(category_id, visibility)
+    setIsLink(link);
+  }, [
+    data,
+    from,
+    category_id,
+    visibility,
+    slug,
+    city,
+    description,
+    states,
+    tags,
+    title,
+    link,
+  ]);
 
   const handleSubmit = async (values: FieldValues, id: string) => {
     const { state, category_id, ...rest } = values;
@@ -90,6 +102,7 @@ export default function EditVideo({ slug }: { slug: string }) {
       category_id: parseInt(values.category_id),
       states: state,
       _method: "PUT",
+      ...(isLink && {link:isLink}),
       ...(isImg?.thumbnail && { thumbnail: isImg?.thumbnail }),
       ...(isImg.video && { video: isImg.video }),
     };
@@ -155,24 +168,40 @@ export default function EditVideo({ slug }: { slug: string }) {
             <div className="space-y-9">
               <div className="relative">
                 <VideoPlayer
-                  src={isImg?.videoPreview || video}
+                  type={type}
+                  video={isImg?.videoPreview || video}
+                  link={link}
                   thumbnail={isImg?.thumbnailPreview || thumbnail} // Also fallback for thumbnail
                   className="h-[450px]"
                 />
-                <VideoUpload
-                  onFileSelect={(file: File) => {
-                    setIsImg({
-                      ...isImg,
-                      video: file,
-                      videoPreview: URL.createObjectURL(file),
-                    });
-                  }}
-                >
-                  <div className="size-8 absolute cursor-pointer grid place-items-center rounded-md  top-3 right-3 backdrop-blur-3xl bg-black/50">
-                    <FavIcon className="size-4" name="editprofile" />
-                  </div>
-                </VideoUpload>
+                {type === "video" && (
+                  <VideoUpload
+                    onFileSelect={(file: File) => {
+                      setIsImg({
+                        ...isImg,
+                        video: file,
+                        videoPreview: URL.createObjectURL(file),
+                      });
+                    }}
+                  >
+                    <div className="size-8 absolute cursor-pointer grid place-items-center rounded-md  top-3 right-3 backdrop-blur-3xl bg-black/50">
+                      <FavIcon className="size-4" name="editprofile" />
+                    </div>
+                  </VideoUpload>
+                )}
               </div>
+              {type === "link" && (
+                <div className="relative">
+                  <Label className="text-blacks text-base font-medium absolute -top-3 left-7 bg-body px-3">
+                    Youtube Link
+                  </Label>
+                  <Input
+                    value={isLink || ""}
+                    onChange={(e) => setIsLink(e.target.value)}
+                    className="h-12 w-full rounded-full pl-4 pr-3  text-blacks placeholder:text-grays  text-sm"
+                  />
+                </div>
+              )}
               <FromInputs
                 label="Title"
                 name="title"

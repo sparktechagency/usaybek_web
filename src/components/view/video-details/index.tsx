@@ -70,6 +70,8 @@ export default function VideoDetails({ slug }: any) {
     comment_replies_count_formated,
     is_liked,
     is_disliked,
+    type,
+    link
   } = data || {};
 
   const SubmitReport = async () => {
@@ -105,7 +107,12 @@ export default function VideoDetails({ slug }: any) {
               <DetailsSkeleton />
             ) : (
               <>
-                <VideoPlayer src={video} />
+                <VideoPlayer 
+                    type={type}
+                    video={video}
+                    link={link}
+                    thumbnail={thumbnail}
+                />
                 {/* Video Title and Actions */}
                 <div>
                   <h1 className="text-lg lg:text-xl font-semibold text-blacks mt-3">

@@ -38,7 +38,7 @@ export function InputSelectField({
  
 
   const selectedLabel = (value: string) => {
-    const item = items.find((item) => item.value === value)
+    const item = items?.find((item) => item.value === value)
     return item?.label || ""
   }
   

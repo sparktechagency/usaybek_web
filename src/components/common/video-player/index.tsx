@@ -13,48 +13,85 @@ import {
   VideoPlayerVolumeRange,
 } from "@/components/ui/kibo-ui/video-player";
 import { cn } from "@/lib";
+import ReactPlayer from 'react-player'
+
+
+type PlayerType = "video" | "link";
 
 interface PlayerProps {
-  src?: string;
+  type?: PlayerType;
+  video?: string;
+  link?: string;
+  thumbnail?: string; 
   className?: string;
-  thumbnail?: string;
+
 }
 
-const PlayerBox = ({ src, className, thumbnail }: PlayerProps) =>
-  src ? (
-    <VideoPlayer
-      className={cn(
-        "overflow-hidden w-full h-[650px] rounded-lg border",
-        className
-      )}
-    >
-      <VideoPlayerContent
-        // crossOrigin="anonymous"
-        preload="metadata"
-        autoPlay={true}
-        slot="media"
-        // controls={false}
-        src={src}
-      />
-      <VideoPlayerControlBar>
-        <VideoPlayerPlayButton />
-        <VideoPlayerSeekBackwardButton />
-        <VideoPlayerSeekForwardButton />
-        <VideoPlayerTimeRange />
-        <VideoPlayerTimeDisplay showDuration />
-        <VideoPlayerMuteButton />
-        <VideoPlayerVolumeRange />
-      </VideoPlayerControlBar>
-    </VideoPlayer>
-  ) : (
-    <div
-      className={cn(
-        "overflow-hidden w-full h-[650px] rounded-lg border",
-        className
-      )}
-    >
-      <Skeleton className="w-full h-full bg-blacks/5" />
-    </div>
-  );
+// 1. Break down complex JSX into smaller, focused components
+const VideoComponent = ({video, thumbnail, className }:Partial<PlayerProps>) => (
+  <VideoPlayer
+  className={cn(
+    "overflow-hidden w-full h-[650px] rounded-lg border",
+    className
+  )}
+>
+  <VideoPlayerContent
+    // crossOrigin="anonymous"
+    preload="metadata"
+    autoPlay={true}
+    slot="media"
+    // controls={false}
+    // poster={thumbnail}
+    src={video}
+  />
+  <VideoPlayerControlBar>
+    <VideoPlayerPlayButton />
+    <VideoPlayerSeekBackwardButton />
+    <VideoPlayerSeekForwardButton />
+    <VideoPlayerTimeRange />
+    <VideoPlayerTimeDisplay showDuration />
+    <VideoPlayerMuteButton />
+    <VideoPlayerVolumeRange />
+  </VideoPlayerControlBar>
+</VideoPlayer>
+);
+
+// A more realistic component for the 'link' type, e.g., an iframe
+const LinkComponent = ({link, className }:Partial<PlayerProps>) => (
+  <div className={cn("overflow-hidden w-full h-[650px] rounded-lg border", className)}>
+    {link ? (
+      <ReactPlayer src={link} height={'100%'} width={"100%"} />
+      // <iframe
+      //   src={"https://www.youtube.com/watch?v=bXlQ3Mw4uGc"}
+      //   className="w-full h-full"
+      //   title="Embedded Content"
+      //   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      //   allowFullScreen
+      // />
+    ) : (
+      <div className="w-full h-full flex items-center justify-center bg-muted">
+        <p className="text-muted-foreground">Invalid link provided.</p>
+      </div>
+    )}
+  </div>
+);
+
+const SkeletonLoader = ({ className }:Partial<PlayerProps>) => (
+  <div className={cn("overflow-hidden w-full h-[650px] rounded-lg border", className)}>
+    <Skeleton className="w-full h-full bg-blacks/5" />
+  </div>
+);
+
+
+// 2. Main PlayerBox component is now cleaner and easier to understand
+const PlayerBox = ({ type, video, link, className, thumbnail }: PlayerProps) => {
+  if (type === "video") {
+    return <VideoComponent video={video} thumbnail={thumbnail} className={className} />;
+  }
+  if (type === "link") {
+    return <LinkComponent link={link} className={className} />;
+  }
+  return <SkeletonLoader className={className} />;
+};
 
 export default PlayerBox;

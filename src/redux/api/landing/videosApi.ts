@@ -1,5 +1,6 @@
 import { tagTypes } from "@/redux/tag-types";
 import { baseApi } from "../baseApi";
+import { buildResponse } from "@/lib";
 
 export const videosApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -61,11 +62,8 @@ export const videosApi = baseApi.injectEndpoints({
          params,
       }),
       providesTags: [tagTypes.relatedVideos],
-      transformResponse: (response: any, meta: any) => {
-        return {
-          data: response.data.data,
-          meta,
-        };
+      transformResponse: (response: any) => {
+        return buildResponse(response?.data)
       },
     }),
      storeReport: build.mutation({

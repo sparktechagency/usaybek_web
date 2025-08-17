@@ -22,6 +22,7 @@ export default function Details({ slug, isTab, setIsTab }: any) {
   const { confirm } = useConfirmation();
 
   const {
+    type,
     id,
     video,
     thumbnail,
@@ -32,6 +33,7 @@ export default function Details({ slug, isTab, setIsTab }: any) {
     category,
     visibility,
     tags,
+    link
   } = (!isLoading && data) || {};
 
   //handleDelete
@@ -88,7 +90,9 @@ export default function Details({ slug, isTab, setIsTab }: any) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 ">
         <div>
           <VideoPlayer
-            src={video}
+            type={type}
+            video={video}
+            link={link}
             thumbnail={thumbnail}
             className="h-[450px]"
           />

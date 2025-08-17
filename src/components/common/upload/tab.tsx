@@ -34,7 +34,7 @@ export default function TabList({ setIsPayment }: any) {
       {activeTab === "video" ? (
         <UplaodVideo type={activeTab} setIsPayment={setIsPayment} />
       ) : (
-        <YoutubeLink setIsPayment={setIsPayment} />
+        <YoutubeLink type={activeTab}  setIsPayment={setIsPayment} />
       )}
     </div>
   );

@@ -1,59 +1,76 @@
 import { z } from "zod";
 
+// uploadVideo
+export const uploadVideo = z.object({
+  title: z.string().nonempty("Title is required"),
+  states: z.string().nonempty("States is required"),
+  city: z.string().nonempty("City is required"),
+  tags: z.array(z.string()).nonempty("Tags is required"),
+  visibility: z.string().nonempty("Visibility is required"),
+  description: z.string().nonempty("Description is required"),
+  category_id: z.string().nonempty("Category is required"),
+  video: z
+    .any()
+    .refine((file) => file instanceof File, { message: "Video is required" }),
+  thumbnail: z.any().refine((file) => file instanceof File, {
+    message: "Thumbnail is required",
+  }),
+});
 
-
-// updateSchema
-// export const updateSchema = z
-//   .object({
-//     new_password: z.string().nonempty("New Password is required"),
-//     confirm_password: z.string().nonempty("Confirm password is required"),
-//   })
-//   .refine((value) => value.new_password === value.confirm_password, {
-//     path: ["confirm_password"],
-//     message: "Passwords must be match.",
-//   });
-
+// linkSchema
+export const linkSchema = z.object({
+  link: z.string().nonempty("Link is required"),
+  title: z.string().nonempty("Title is required"),
+  states: z.string().nonempty("States is required"),
+  city: z.string().nonempty("City is required"),
+  tags: z.array(z.string()).nonempty("Tags is required"),
+  visibility: z.string().nonempty("Visibility is required"),
+  description: z.string().nonempty("Description is required"),
+  category_id: z.string().nonempty("Category is required"),
+  thumbnail: z.any().refine((file) => file instanceof File, {
+    message: "Thumbnail is required",
+  }),
+});
 
 // loginSchema
 export const ForgotSchema = z.object({
   email: z
     .string()
     .nonempty("Email is required")
-    .refine(
-      (val) =>
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
-      { message: "Invalid email address" }
-    ),
-})
+    .refine((val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
+      message: "Invalid email address",
+    }),
+});
 
 // contactSchema
 export const contactSchema = ForgotSchema.extend({
   name: z.string().nonempty("Name is required"),
   subject: z.string().nonempty("Subject is required"),
   message: z.string().nonempty("Message is required"),
-})
+});
 // loginSchema
 export const loginSchema = ForgotSchema.extend({
   password: z
     .string()
     .nonempty("Password is required")
-    .min(4, "Password must be at 4 characters"), 
+    .min(4, "Password must be at 4 characters"),
 });
 // signUp
-export const SignUpSchema = loginSchema.extend({
-  channel_name: z.string().nonempty("Channel is required"),
-  full_name: z.string().nonempty("Full Name is required"),
-  confirm_password: z.string().nonempty("Confirm password is required"),
-}).refine((value) => value.password === value.confirm_password, {
-  path: ["confirm_password"],
-  message: "Passwords must be match.",
-});
-
+export const SignUpSchema = loginSchema
+  .extend({
+    channel_name: z.string().nonempty("Channel is required"),
+    full_name: z.string().nonempty("Full Name is required"),
+    confirm_password: z.string().nonempty("Confirm password is required"),
+  })
+  .refine((value) => value.password === value.confirm_password, {
+    path: ["confirm_password"],
+    message: "Passwords must be match.",
+  });
 
 // onSide account
-export const onSideSchema=SignUpSchema.extend({
+export const onSideSchema = SignUpSchema.extend({
   secret: z.string().nonempty("Representative secret is required"),
-})
+});
 
 // /passwordSchema
 export const passwordChangeSchema = z
@@ -62,7 +79,7 @@ export const passwordChangeSchema = z
     new_password: z.string().nonempty("New Password is required"),
     confirm_password: z.string().nonempty("Confirm password is required"),
   })
-.refine((value) => value.new_password === value.confirm_password, {
-  path: ["confirm_password"],
-  message: "Passwords must be match.",
-});
+  .refine((value) => value.new_password === value.confirm_password, {
+    path: ["confirm_password"],
+    message: "Passwords must be match.",
+  });

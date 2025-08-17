@@ -28,13 +28,13 @@ export function TableNoItem({
   );
 }
 
-export function NoItemData({ title = "No Data Found", className }: itemProps) {
+export function NoItemData({ title = "No Data Found", className }: any) {
   return (
-    <div className={cn("py-24 text-center", className)}>
+    <div className={cn("py-24 text-center flex flex-col justify-center", className)}>
       <div className="flex justify-center">
-        <FavIcon name="svgFile" />
+        <FavIcon color="#99a1af" name="svgFile" />
       </div>
-      <h3 className="text-sm font-medium text-gray-400">{title}</h3>
+      <h3 className="text-sm font-medium text-gray-400 mt-5">{title}</h3>
     </div>
   );
 }

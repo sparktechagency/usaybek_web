@@ -1,4 +1,5 @@
 "use client";
+import { NoItemData } from "@/components/common/admin/reuseable/table-no-item";
 import HomePromotion from "@/components/common/home-promotion";
 import SeeNav from "@/components/common/see-nav";
 import FilterBox from "@/components/reuseable/filter-box";
@@ -6,7 +7,6 @@ import { VideoCardSkeleton } from "@/components/reuseable/skeleton-item";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import { VideoCard } from "@/components/reuseable/video-card";
 import { capitalize } from "@/lib/utils";
-import { useGetProfileQuery } from "@/redux/api/authApi";
 import {
   useHomeVideosQuery,
   useRelatedVideosQuery,
@@ -17,30 +17,45 @@ import { useInView } from "react-intersection-observer";
 
 export default function Home() {
   const { ref, inView } = useInView();
-  const [isCount, setIsCount] = useState<number>(10);
+  const [page, setPage] = useState(1);
+  const [similarVideos, setSimilarVideos] = useState<any[]>([]);
   const [isCategory, setIsCategory] = useState({ id: "all", name: "All" });
-  const { data: chVideos, isLoading: videoLoading } = useHomeVideosQuery({});
-  const query: Record<string, any> = { per_page: isCount };
-  const {
-    data: relatedVideos,
-    isLoading: relatedLoading,
-    refetch,
-  } = useRelatedVideosQuery(
-    { id: isCategory.id, params: query },
-    {
-      skip: isCategory.id === "all",
-    }
-  );
 
   useEffect(() => {
-    if (inView && isCategory.id !== "all") {
-      setIsCount((pre) => pre + 10);
-      refetch();
-    }
-  }, [inView, refetch, isCategory?.id]);
+    setPage(1);
+    setSimilarVideos([]);
+  }, [isCategory]);
 
-  console.log(chVideos)
-  
+  const { data: chVideos, isLoading: videoLoading } = useHomeVideosQuery({});
+  const query = { page, per_page: 6 };
+
+  const { data: relatedVideos, isLoading: relatedLoading } =
+    useRelatedVideosQuery(
+      { id: isCategory.id, params: query },
+      { skip: isCategory.id === "all" }
+    );
+
+  // ✅ Append new videos only when new data comes
+  const totalCount = !!relatedVideos?.data?.length;
+  useEffect(() => {
+    if (totalCount) {
+      setSimilarVideos((prev) => [...prev, ...relatedVideos.data]);
+    }
+  }, [relatedVideos, totalCount]);
+
+  // const currentTotal = relatedVideos?.meta?.total ?? 0;
+  // const hasMore = similarVideos.length < currentTotal;
+
+  // ✅ Only trigger when loader in view + has more
+  useEffect(() => {
+    if (inView && isCategory.id !== "all" && !relatedLoading) {
+      setPage((p) => p + 1);
+    }
+  }, [inView, isCategory.id, relatedLoading]);
+
+  console.log(relatedVideos?.data.length);
+  console.log(relatedVideos?.data?.length);
+
   return (
     <div>
       <FilterBox isCategory={isCategory} setIsCategory={setIsCategory} />
@@ -48,13 +63,11 @@ export default function Home() {
         <h1 className="text-xl font-medium pt-8 pb-3">
           {isCategory.id === "all"
             ? "Promotional videos"
-            : capitalize(isCategory?.name)}
+            : capitalize(isCategory.name)}
         </h1>
 
         {isCategory.id === "all" ? (
           <>
-            <HomePromotion />
-            {/* All videos */}
             {videoLoading ? (
               <div className="home gap-6 mt-5">{Skeleton(8)}</div>
             ) : (
@@ -76,23 +89,28 @@ export default function Home() {
             )}
           </>
         ) : (
-          <div className="home gap-6">
-            {relatedLoading ? (
-              Skeleton(8)
-            ) : !!relatedVideos?.data.length ? (
-              relatedVideos?.data?.map((video: any) => (
-                <VideoCard key={video.id} item={video} />
-              ))
-            ) : (
-              <h1 className="text-gray-500 col-span-4 text-center py-20">
-                Not Video Found
-              </h1>
-            )}
+          <div>
+            <div className="home gap-6">
+              {relatedLoading ? (
+                Skeleton(6)
+              ) : !!similarVideos ? (
+                similarVideos?.map((video: any, idx: number) => (
+                  <VideoCard key={idx} item={video} />
+                ))
+              ) : (
+                <NoItemData title="No Video Found" className="col-span-4" />
+              )}
+            </div>
+            {/* ✅ Loader only when more pages left */}
+            <div className="ttttt">
+              {totalCount && (
+                <div ref={ref} className="mx-auto flex justify-center mt-5">
+                  <Loader className="animate-spin text-blacks/20" />
+                </div>
+              )}
+            </div>
           </div>
         )}
-      </div>
-      <div ref={ref} className="mx-auto flex justify-center mt-5">
-        <Loader className="animate-spin text-blacks/20" />
       </div>
     </div>
   );
@@ -106,58 +124,3 @@ function Skeleton(count: number) {
     </SkeletonCount>
   );
 }
-
-// "use client";
-// import { useState, useEffect } from "react";
-// import { useInView } from "react-intersection-observer";
-// import { VideoCard } from "@/components/reuseable/video-card";
-// import { VideoCardSkeleton } from "@/components/reuseable/skeleton-item";
-// import SkeletonCount from "@/components/reuseable/skeleton-item/count";
-// import { useHomeVideosQuery, useRelatedVideosQuery } from "@/redux/api/landing/videosApi";
-// import FilterBox from "@/components/reuseable/filter-box";
-// import { capitalize } from "@/lib/utils";
-
-// export default function Home() {
-//   const [isCategory, setIsCategory] = useState({ id: "all", name: "All" });
-//   const [page, setPage] = useState(1);
-//   const [items, setItems] = useState<any[]>([]);
-//   const perPage = 10;
-//   const { ref, inView } = useInView();
-
-//   const queryArgs = { per_page: perPage, page };
-//   const { data: homeData, isLoading: homeLoading } = useHomeVideosQuery(queryArgs, { skip: isCategory.id !== "all" });
-//   const { data: relatedData, isLoading: relatedLoading } = useRelatedVideosQuery(
-//     { id: isCategory.id, params: queryArgs },
-//     { skip: isCategory.id === "all" }
-//   );
-
-//   useEffect(() => {
-//     const newData = isCategory.id === "all" ? homeData?.data : relatedData?.data;
-//     if (newData?.length) setItems(prev => [...prev, ...newData]);
-//   }, [homeData, relatedData]);
-
-//   useEffect(() => { if (inView) setPage(p => p + 1); }, [inView]);
-
-//   return (
-//     <div>
-//       <FilterBox isCategory={isCategory} setIsCategory={setIsCategory} />
-//       <h1 className="text-xl font-medium pt-8 pb-3">
-//         {isCategory.id === "all" ? "All Videos" : capitalize(isCategory.name)}
-//       </h1>
-
-//       <div className="home gap-6">
-//         {(homeLoading || relatedLoading) && page === 1
-//           ? Skeleton(8)
-//           : items.map(v => <VideoCard key={v.id} item={v} />)}
-//       </div>
-
-//       <div ref={ref} className="text-center py-5 text-gray-500">Loading more...</div>
-//     </div>
-//   );
-// }
-
-// const Skeleton = (n: number) => (
-//   <SkeletonCount count={n}>
-//     <VideoCardSkeleton />
-//   </SkeletonCount>
-// );

@@ -15,6 +15,15 @@ export const usersVideosApi = baseApi.injectEndpoints({
         return buildResponse(res?.data);
       },
     }),
+    storeVideos: build.mutation({
+      query: (data) => ({
+        url: "/videos",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+      invalidatesTags: [tagTypes.userVideos],
+    }),
     singleDelete: build.mutation({
       query: (id) => ({
         url: `/videos/${id}`,
@@ -38,11 +47,11 @@ export const usersVideosApi = baseApi.injectEndpoints({
         ContentType: "multipart/form-data",
         data,
       }),
-      invalidatesTags: [tagTypes.sinlgeVideo],
+      invalidatesTags: [tagTypes.sinlgeVideo,tagTypes.userVideos],
     }),
     VideoAnalytics: build.query({
-      query: ({ id, arg }: { id:any,arg?:Record<string, any> }) => ({
-        url:`/video-analytics/${id}`,
+      query: ({ id, arg }: { id: any; arg?: Record<string, any> }) => ({
+        url: `/video-analytics/${id}`,
         method: "GET",
         params: arg,
       }),
@@ -58,5 +67,6 @@ export const {
   useBulkDeleteMutation,
   useSingleDeleteMutation,
   useVideoEditMutation,
-  useVideoAnalyticsQuery
+  useVideoAnalyticsQuery,
+  useStoreVideosMutation
 } = usersVideosApi;
