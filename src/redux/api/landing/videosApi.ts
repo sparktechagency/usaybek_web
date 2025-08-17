@@ -18,19 +18,6 @@ export const videosApi = baseApi.injectEndpoints({
         };
       },
     }),
-    PromoVideos: build.query({
-      query: () => ({
-        url: "/get-promotional-video",
-        method: "GET",
-      }),
-      transformResponse: (response: any, meta: any) => {
-        return {
-          data: response.data.data,
-          meta,
-        };
-      },
-      providesTags: [tagTypes.promoVideos],
-    }),
     Categories: build.query({
       query: (arg: Record<string, any>) => ({
         url: "/categories",
@@ -38,10 +25,9 @@ export const videosApi = baseApi.injectEndpoints({
         params: arg,
       }),
       providesTags: [tagTypes.categories],
-      transformResponse: (response: any, meta: any) => {
+      transformResponse: (response: any) => {
         return {
-          data: response.data.data,
-          meta,
+          data: response.data.data
         };
       },
     }),
@@ -79,7 +65,6 @@ export const videosApi = baseApi.injectEndpoints({
 
 export const {
   useHomeVideosQuery,
-  usePromoVideosQuery,
   useCategoriesQuery,
   useRelatedVideosQuery,
   useVideosDetailsQuery,

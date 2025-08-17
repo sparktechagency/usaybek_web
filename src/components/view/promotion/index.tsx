@@ -4,12 +4,11 @@ import { VideoCardSkeleton } from "@/components/reuseable";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import SubTilte from "@/components/reuseable/sub-title";
 import { VideoCard } from "@/components/reuseable/video-card";
-import { useHomeVideosQuery } from "@/redux/api/landing/videosApi";
+import { useGetPromotionQuery } from "@/redux/api/landing/promotionApi";
 import React from "react";
 
 export default function PromotionPage() {
-  const { data: chVideos, isLoading: videoLoading } = useHomeVideosQuery({});
-
+  const { data: proItem, isLoading: videoLoading } = useGetPromotionQuery({video_limit:4});
 
   return (
     <div>
@@ -21,20 +20,18 @@ export default function PromotionPage() {
           </SkeletonCount>
         </div>
       ) : (
-        chVideos?.data?.map((channel: any) => {
-          const promotedVideos = channel?.videos?.filter((v: any) => v.is_promoted == 1);
-
-          return promotedVideos?.length ? (
+        proItem?.map((channel: any) => 
+          channel?.videos?.length ? (
             <div key={channel.id}>
-              <SeeNav title={channel.name} href={`/videos/${channel.id}`} />
+              <SeeNav title={channel.name} href={`/promotions/${channel.id}`} />
               <div className="home gap-6">
-                {promotedVideos.map((video: any) => (
+                {channel.videos.map((video: any) => (
                   <VideoCard key={video.id} item={video} />
                 ))}
               </div>
             </div>
-          ) : null;
-        })
+          ) : null
+        )
       )}
     </div>
   );

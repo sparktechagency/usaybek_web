@@ -1,24 +1,21 @@
 export enum tagTypes {
   videos = "videos",
+  promoVideosSlider = "promoVideosSlider",
   promoVideos = "promoVideos",
   categories = "categories",
   relatedVideos = "relatedVideos",
   videoDetails = "videoDetails",
   blogs = "blogs",
   singleBlog = "singleBlog",
-  profile="profile",
-  userDashboard="userDashboard",
-  userAnalytics="userAnalytics",
-  getReport="getReport",
-  reportDetails="reportDetails",
-  userVideos="userVideos",
-  sinlgeVideo="sinlgeVideo",
-  states="states",
-  cities="cities",
-
-
-
-
+  profile = "profile",
+  userDashboard = "userDashboard",
+  userAnalytics = "userAnalytics",
+  getReport = "getReport",
+  reportDetails = "reportDetails",
+  userVideos = "userVideos",
+  sinlgeVideo = "sinlgeVideo",
+  states = "states",
+  cities = "cities",
 }
 
 export const tagTypesList = [
@@ -37,5 +34,6 @@ export const tagTypesList = [
   tagTypes.userVideos,
   tagTypes.sinlgeVideo,
   tagTypes.cities,
-  tagTypes.states
-]
+  tagTypes.states,
+  tagTypes.promoVideosSlider,
+];
