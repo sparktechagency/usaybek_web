@@ -16,6 +16,9 @@ export enum tagTypes {
   sinlgeVideo = "sinlgeVideo",
   states = "states",
   cities = "cities",
+  contactus="contactus",
+  allcomment="allcomment",
+  allReplay="getReplay"
 }
 
 export const tagTypesList = [
@@ -36,4 +39,7 @@ export const tagTypesList = [
   tagTypes.cities,
   tagTypes.states,
   tagTypes.promoVideosSlider,
+  tagTypes.contactus,
+  tagTypes.allcomment,
+  tagTypes.allReplay
 ];

@@ -6,7 +6,8 @@ export const navItems = [
         text: "Upload your video",
         href: "/upload",
     },
-    { icon: <Icon name="ssetting"/>, text: "Settings", href: "/dashboard" },
+    { icon: <Icon name="ssetting"/>, text: "Settings", href: "/dashboard/settings" },
+
     { icon: <Icon name="svideos" />, text: "My videos", href: "/dashboard/my-videos" },
     { text: "separator" },
     { icon: <Icon name="shome" />, text: "Home", href: "/", active: true },

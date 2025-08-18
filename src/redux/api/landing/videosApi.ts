@@ -27,7 +27,7 @@ export const videosApi = baseApi.injectEndpoints({
       providesTags: [tagTypes.categories],
       transformResponse: (response: any) => {
         return {
-          data: response.data.data
+          data: response.data.data,
         };
       },
     }),
@@ -38,27 +38,42 @@ export const videosApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.sinlgeVideo],
       transformResponse: (response: any) => {
-        return response.data
+        return response.data;
       },
     }),
     RelatedVideos: build.query({
-      query: ({ id, params}: { id: string; params?: Record<string, any> }) => ({
+      query: ({
+        id,
+        params,
+      }: {
+        id: string;
+        params?: Record<string, any>;
+      }) => ({
         url: `/get-related-video/${id}`,
         method: "GET",
-         params,
+        params,
       }),
       providesTags: [tagTypes.relatedVideos],
       transformResponse: (response: any) => {
-        return buildResponse(response?.data)
+        return buildResponse(response?.data);
       },
     }),
-     storeReport: build.mutation({
+    storeReport: build.mutation({
       query: (data) => ({
         url: "/add-report",
         method: "POST",
         ContentType: "multipart/form-data",
         data,
       }),
+    }),
+    storeLikeDisLike: build.mutation({
+      query: (data) => ({
+        url: "/add_like_dislike",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+      invalidatesTags: [tagTypes.sinlgeVideo],
     }),
   }),
 });
@@ -68,5 +83,6 @@ export const {
   useCategoriesQuery,
   useRelatedVideosQuery,
   useVideosDetailsQuery,
-  useStoreReportMutation
+  useStoreReportMutation,
+  useStoreLikeDisLikeMutation,
 } = videosApi;

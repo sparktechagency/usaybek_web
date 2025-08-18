@@ -1,104 +1,120 @@
-import assets from "@/assets";
+import { ImgBox } from "@/components/common/admin/reuseable";
 import Img from "@/components/reuseable/img";
 import SectionNav from "@/components/reuseable/section-nav";
-import { Card,CardText } from "@/components/ui/card"
+import { Card } from "@/components/ui/card";
+import { authKey } from "@/lib";
+import { Seo } from "@/lib/seo";
+import { Metadata } from "next";
+import { cookies } from "next/headers";
 
+export const metadata: Metadata = Seo({
+  title: "About Us | MyTsv",
+  description:
+    "At MyTSV, we believe that powerful ideas deserve a platform. Whether you're an individual looking to share your voice, a business seeking exposure, or a curious mind in search of new opportunities, we provide the digital space and tools to help you thrive",
+  keywords: [
+    "MyTsv Terms",
+    "MyTsv Conditions",
+    "MyTsv policy",
+    "MyTsv legal",
+    "terms and conditions MyTsv",
+  ],
+  url: `/about-us`,
+  image: "/images/about-img.svg",
+});
 
+export default async function AboutUs() {
+  const tokon = (await cookies()).get(authKey)?.value;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/about-us`, {
+    headers: { Authorization: `Bearer ${tokon}` },
+    cache: "force-cache",
+  });
 
+  const { data } = await res.json();
+  if (!data || !Array.isArray(data)) return null;
 
-export default function AbountUs() {
-    return (
-        <div className="m-auto lg:px-20">
-            <SectionNav src={assets.basic.about.about} title="About Us" className="mb-5" imgStyle="w-80 h-[186px]" titleStyle="px-1 max-w-md" />
-            <div className="text-center space-y-4 mb-6">
-                <h2 className="text-lg md:text-2xl font-semibold text-blacks">
-                    Welcome to mytsv.com - your destination for connection, creativity, and community.
-                </h2>
-                <p className="text-blacks text-base">
-                    At MyTSV, we believe that powerful ideas deserve a platform. Whether you&apos;re an individual looking to
-                    share your voice, a business seeking exposure, or a curious mind in search of new opportunities, we provide
-                    the digital space and tools to help you thrive.
-                </p>
-            </div>
-            <div>
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-3">
-                    {/* Our Mission Card */}
-                    <div className="col-span-1 lg:col-span-2 space-y-2">
-                          <Card className="gap-3">
-                        <div className="flex items-center gap-x-5">
-                            <Img src={assets.basic.about.mission} className="size-20" imgStyle="object-left-top object-fill" title="mission" />
-                            <h3 className="text-2xl font-semibold text-blacks">Our Mission</h3>
-                        </div>
-                        <CardText>
-                            To empower individuals and businesses through a dynamic, user-focused platform that fosters growth,
-                            creativity, and meaningful connections across communities.Over the years, we&apos;ve expanded our offerings, refined our technology
-                        </ CardText>
-                    </Card>
-                    <Card className="gap-3">
-                        <div className="flex items-center gap-x-5">
-                            <Img src={assets.basic.about.temp} className="size-16" imgStyle="object-left-top object-fill" title="mission" />
-                            <h3 className="text-2xl font-semibold text-blacks">Meet with the Team</h3>
-                        </div>
-                        <CardText>
-                            Behind MyTSV is a passionate team of creators, developers, and community builders. We come from diverse backgrounds, but we&apos;re united by one goal: to make mytsv.com a place where ideas come to life and connections lead to real impact.
+  // group items
+  const firstGroup = data.slice(0, 2);
+  const secondGroup = data.slice(2, 4);
+  const lastItem = data[4];
 
-                        </ CardText>
-                        <CardText>
-                            We&apos;re designers and storytellers, strategists and support heroes, all working together to make your experience seamless, enriching, and inspiring.
-                        </ CardText>
-                    </Card>
-                    </div>
-                    <div className="col-span-1 lg:col-span-3 space-y-2">
-                        <Card className="gap-3">
-                        <div className="flex items-center gap-x-5">
-                            <Img src={assets.basic.about.story} className="size-16" imgStyle="object-left-top object-fill" title="Our Story" />
-                            <h3 className="text-2xl font-semibold text-blacks">Our Story</h3>
-                        </div>
-                        <CardText>
-                            Founded with a vision to bring people and ideas together, MyTSV began as a local project with a big dream. What started as a small initiative to highlight community talent and services in Chicagoland has now grown into a multi-faceted platform serving users from all walks of life
-                        </ CardText>
-                        <CardText>
-                            We&apos;re designers and storytellers, strategists and support heroes, all working together to make your experience seamless, enriching, and inspiring.
-                        </ CardText>
-                        <CardText>
-                            Over the years, we&apos;ve expanded our offerings, refined our technology, and stayed committed to the needs of our growing user base—all while keeping our core values front and center.
-                        </ CardText>
-                    </Card>
-                    <Card className="gap-3">
-                        <div className="flex items-center gap-x-5">
-                            <Img src={assets.basic.about.choose} className="size-16" imgStyle="object-left-top object-fill" title="Our Story" />
-                            <h3 className="text-2xl font-semibold text-blacks">Why choose MyTsv ?</h3>
-                        </div>
-                        <ul className="list-disc pl-5 space-y-1">
-                            <li>
-                                <span className="font-semibold">User-First Design:</span> We&apos;re constantly evolving to make sure
-                                your experience is smooth and meaningful.
-                            </li>
-                            <li>
-                                <span className="font-semibold">Community Focused:</span> We highlight real people, real businesses,
-                                and real stories.
-                            </li>
-                            <li>
-                                <span className="font-semibold">Versatility:</span> Whether you&apos;re promoting a service, launching
-                                a project, or exploring new trends, there&apos;s a place for you here.
-                            </li>
-                        </ul>
-                    </Card>
-                    </div>
+  // reusable renderer
+  const renderCard = (item: any) => (
+    <Card key={item.id} className="gap-3">
+      <div className="flex items-center gap-x-5">
+        <ImgBox
+          src={item.icon}
+          className="size-16 rounded-full"
+          alt={item.title}
+        ></ImgBox>
 
-                </div>
-                   <Card className="gap-3 mt-3">
-                        <div className="flex items-center justify-center gap-x-5">
-                            <Img src={assets.basic.about.join} className="size-16" imgStyle="object-left-top object-fill" title="Our Story" />
-                            <h3 className="text-2xl font-semibold text-blacks">Join Us</h3>
-                        </div>
-                        <CardText className="text-center">
-                             Whether you&apos;re a local business owner, a creative mind, or someone searching for inspiration—MyTSV is your stage. Explore, connect, grow. We&apos;re glad yo&apos;re here.
-                        </CardText>
-                    </Card>
-            </div>
+        <h3 className="text-2xl font-semibold text-blacks">{item.title}</h3>
+      </div>
+      <div
+        className="space-y-2"
+        dangerouslySetInnerHTML={{ __html: item.description }}
+      />
+    </Card>
+  );
+
+  return (
+    <div className="m-auto lg:px-20">
+      <SectionNav
+        src="/images/about-img.svg"
+        title="About Us"
+        className="mb-5"
+        imgStyle="w-80 h-[186px]"
+        titleStyle="px-1 max-w-md"
+      />
+
+      {/* Top Section */}
+      <div className="text-center space-y-4 mb-6">
+        <h2 className="text-lg md:text-2xl font-semibold text-blacks">
+          Welcome to mytsv.com your destination for connection, creativity, and
+          community
+        </h2>
+        <p className="text-blacks text-base xl:px-20">
+          At MyTSV, we believe that powerful ideas deserve a platform. Whether
+          you&apos;re an individual looking to share your voice, a business
+          seeking exposure, or a curious mind in search of new opportunities, we
+          provide the digital space and tools to help you thrive.
+        </p>
+      </div>
+
+      {/* Dynamic Groups */}
+      <div>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-3">
+          {/* first group (left side) */}
+          <div className="col-span-1 lg:col-span-2 space-y-2">
+            {firstGroup.map(renderCard)}
+          </div>
+
+          {/* second group (right side) */}
+          <div className="col-span-1 lg:col-span-3 space-y-2">
+            {secondGroup.map(renderCard, "h-1/2")}
+          </div>
         </div>
-    );
+
+        {/* Last Item */}
+        {lastItem && (
+          <Card key={lastItem.id} className="gap-3 mt-3">
+            <div className="flex items-center justify-center gap-x-5">
+              <Img
+                src={lastItem.icon}
+                className="size-16"
+                imgStyle="object-left-top object-fill"
+                title={lastItem.title}
+              />
+              <h3 className="text-2xl font-semibold text-blacks">
+                {lastItem.title}
+              </h3>
+            </div>
+            <div
+              className="space-y-2"
+              dangerouslySetInnerHTML={{ __html: lastItem.description }}
+            />
+          </Card>
+        )}
+      </div>
+    </div>
+  );
 }
-
-

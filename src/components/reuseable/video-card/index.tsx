@@ -3,7 +3,7 @@ import Link from "next/link";
 import Avatars from "../avater";
 import FavIcon from "@/icon/admin/favIcon";
 import { cn } from "@/lib/utils";
-
+import { ImgBox } from "@/components/common/admin/reuseable";
 
 export function VideoCard({ item, className }: any) {
   const {
@@ -18,24 +18,17 @@ export function VideoCard({ item, className }: any) {
   return (
     <Link
       href={`/video/${id}`}
-      className={cn("max-w-sm  lg:w-full lg:max-w-full", className)}
+      className={cn("", className)}
     >
       <div className="relative">
-        <div className="">
-          <Image
-            src={thumbnail}
-            alt={title}
-            width={400}
-            height={225}
-            className="w-full h-auto rounded-md object-cover aspect-video"
-          />
-        </div>
-        {!!is_promoted && (
-          <div className="absolute top-2 right-2  bg-reds/80 text-white text-xs font-semibold px-4 py-2 rounded-full flex items-center gap-1">
-            <FavIcon name="rocket" className="size-4 mr-1" />
-            <span> Promoted</span>
-          </div>
-        )}
+        <ImgBox src={thumbnail || "/blur.png"} alt={title || "logo"} className="w-full h-[220px]">
+          {!!is_promoted && (
+            <div className="absolute top-2 right-2  bg-reds/80 text-white text-xs font-semibold px-4 py-2 rounded-full flex items-center gap-1">
+              <FavIcon name="rocket" className="size-4 mr-1" />
+              <span> Promoted</span>
+            </div>
+          )}
+        </ImgBox>
       </div>
       <div>
         <div className="flex gap-2 pt-2">

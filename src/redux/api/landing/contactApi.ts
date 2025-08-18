@@ -1,4 +1,5 @@
 import { baseApi } from "../baseApi";
+import { tagTypes } from "@/redux/tag-types";
 
 export const contactApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -7,6 +8,8 @@ export const contactApi = baseApi.injectEndpoints({
         url: "/contact",
         method: "GET",
       }),
+      providesTags:[tagTypes.contactus]
+
     }),
     storeContact: build.mutation({
         query: (data) => ({

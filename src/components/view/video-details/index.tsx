@@ -9,6 +9,7 @@ import VideoPlayer from "@/components/common/video-player";
 import FavIcon from "@/icon/admin/favIcon";
 import {
   useRelatedVideosQuery,
+  useStoreLikeDisLikeMutation,
   useStoreReportMutation,
   useVideosDetailsQuery,
 } from "@/redux/api/landing/videosApi";
@@ -43,6 +44,7 @@ const options = [
 
 export default function VideoDetails({ slug }: any) {
   const path = usePathname();
+  const [storeLikeDisLike] = useStoreLikeDisLikeMutation();
   const { data, isLoading } = useVideosDetailsQuery(slug);
   const [storeReport, { isLoading: ReportLoading }] = useStoreReportMutation();
   const { data: relVideos, isLoading: relLoading } = useRelatedVideosQuery({
@@ -71,7 +73,7 @@ export default function VideoDetails({ slug }: any) {
     is_liked,
     is_disliked,
     type,
-    link
+    link,
   } = data || {};
 
   const SubmitReport = async () => {
@@ -96,6 +98,15 @@ export default function VideoDetails({ slug }: any) {
     }
   };
 
+  const handleLikeDislike = async (video_id: string, action: string) => {
+    const value = {
+      video_id,
+      action,
+    };
+    const data = modifyPayload(value);
+    await storeLikeDisLike(data).unwrap();
+  };
+
   return (
     <div className="container py-10">
       <div className="flex flex-col">
@@ -107,11 +118,11 @@ export default function VideoDetails({ slug }: any) {
               <DetailsSkeleton />
             ) : (
               <>
-                <VideoPlayer 
-                    type={type}
-                    video={video}
-                    link={link}
-                    thumbnail={thumbnail}
+                <VideoPlayer
+                  type={type}
+                  video={video}
+                  link={link}
+                  thumbnail={thumbnail}
                 />
                 {/* Video Title and Actions */}
                 <div>
@@ -143,20 +154,26 @@ export default function VideoDetails({ slug }: any) {
                           {views_count_formated}
                         </span>
                       </div>
-                      <div className="flex border px-3 h-8 space-x-1 items-center rounded-full">
+                      <div
+                        onClick={() => handleLikeDislike(id, "like")}
+                        className="flex border px-3 h-8 space-x-1 items-center rounded-full"
+                      >
                         <FavIcon
                           name="likeUp"
-                          color={is_liked ? "#ff0000" : "#888888"}
+                          color={is_liked ? "#b64e4e" : "#888888"}
                           className="size-5 relative mb-[1px]"
                         />
                         <span className="text-blacks font-semibold">
                           {likes_count_formated}
                         </span>
                       </div>
-                      <div className="flex border px-3 h-8 items-center space-x-1 rounded-full">
+                      <div
+                        onClick={() => handleLikeDislike(id, "dislike")}
+                        className="flex border  px-3 h-8 items-center space-x-1 rounded-full"
+                      >
                         <FavIcon
                           name="likeDown"
-                          color={is_disliked ? "#ff0000" : "#888888"}
+                          color={is_disliked ? "#b64e4e" : "#888888"}
                           className="size-5 relative mr-1 top-[2px]"
                         />
                         <span className="text-blacks font-semibold">
@@ -205,18 +222,11 @@ export default function VideoDetails({ slug }: any) {
               </>
             )}
             {/* Comments */}
-            <div className="border-gray-200">
-              <h2 className="text-lg font-semibold">
-                {comment_replies_count_formated} Comments
-              </h2>
-              <div className="flex items-center gap-3 mt-4">
-                <Avatars src="" fallback="M" alt="Channel Avatar" />
-                <Input
-                  placeholder={`Comment as ${user?.name}`}
-                  className="flex-1 rounded-full bg-white"
-                />
-              </div>
-              <CommentBox />
+            <div>
+              <CommentBox
+                id={id}
+                commentCount={comment_replies_count_formated}
+              />
             </div>
           </div>
 
