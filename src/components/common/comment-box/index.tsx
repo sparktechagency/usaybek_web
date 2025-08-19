@@ -24,7 +24,7 @@ export default function CommentBox({ id, commentCount }: any) {
   const [page, setPage] = useState(1);
   const { data: profileData } = useGetProfileQuery({});
   const [storeComments] = useStoreCommentsMutation();
-  const [isModifyId, setIsModifyId] = useState();
+  const [isModifyId, setIsModifyId] = useState<any>();
   const { data: comments, isLoading: commentLoading } = useGetCommentQuery({
     video_id: id,
     page,
@@ -49,7 +49,7 @@ export default function CommentBox({ id, commentCount }: any) {
 
   // modify the totalComment for the item
   useEffect(() => {
-    if (!isModifyId) return;
+    if (!isModifyId?.id) return;
 
     setTotalComment(
       (
@@ -60,21 +60,17 @@ export default function CommentBox({ id, commentCount }: any) {
         }>
       ) => {
         return prevComments.map((comment) => {
-          if (comment.id !== isModifyId) return comment;
+          if (comment.id !== isModifyId?.id) return comment;
+
           return {
             ...comment,
-            is_react: true,
-            reactions_count_format: comment.reactions_count_format + 1,
+            is_react: isModifyId?.is_react,
+            reactions_count_format: isModifyId?.reactions_count_format,
           };
         });
       }
     );
   }, [isModifyId]);
-
-  // console.log(isModifyId)
-  // console.log(totalComment)
-  // frontend update reactions_count_format promal -- kisu aro kaj kora lakbe // setTotalComment --update
-
   // Handlers
   const handleCommentSubmit = async (
     e: React.KeyboardEvent<HTMLInputElement>
@@ -170,7 +166,12 @@ function CommentItem({
     if (isLoading) return;
     const value = modifyPayload({ comment_id: parseInt(id) });
     const res = await toggleReaction(value).unwrap();
-    if (res?.status) setIsModifyId(id);
+    if (res?.status)
+      setIsModifyId({
+        id,
+        is_react: res.is_react,
+        reactions_count_format: res.reactions_count_format,
+      });
   };
 
   return (

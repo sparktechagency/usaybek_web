@@ -20,9 +20,7 @@ import React, {
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useOtpVarifyMutation } from "@/redux/api/authApi";
-import { delay, modifyPayload, setCookie } from "@/lib";
-import { toast } from "sonner";
-import { authKey } from "@/lib";
+import { modifyPayload } from "@/lib";
 
 export default function ForgotPassword() {
   const searchParams = useSearchParams();
@@ -68,7 +66,7 @@ export default function ForgotPassword() {
   };
 
   const handleVerify = async () => {
-    setIsError("")
+    setIsError("");
     try {
       const joinedCode = code.join("");
       if (joinedCode.length < 6) {
@@ -78,24 +76,19 @@ export default function ForgotPassword() {
         const data = modifyPayload(value);
         const res = await otpVarify(data).unwrap();
         if (res.status) {
-          setCookie(authKey, res.data.access_token);
-          toast("Login Successfull", {
-            description: res?.message,
-          });
+          router.push(`/reset-password?email=${email}`);
         }
-        await delay(4050);
-        router.push(`/`);
         setError("");
       }
     } catch (err: any) {
-      if(err?.data?.message){
-        setIsError(err?.data?.message)
+      if (err?.data?.message) {
+        setIsError(err?.data?.message);
       }
     }
   };
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className='opacity-0'>Loading...</div>}>
       <div className="fixed inset-0 m-0 md:m-3">
         <Image
           src={assets.auth.forgotImg}

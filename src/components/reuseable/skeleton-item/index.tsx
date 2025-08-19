@@ -56,7 +56,12 @@ export function DetailsSkeleton() {
       {/* Channel Info */}
       <div className="border p-4 rounded-md my-5 shadow-xs">
         <Skeleton className="w-[150px] h-4 rounded-full bg-blacks/20" />
-        <Skeleton className="w-full h-30 rounded-xl mt-2 bg-blacks/20" />
+       <div className="space-y-2">
+          <Skeleton className="w-full h-3 rounded-xl mt-2 bg-blacks/20" />
+          <Skeleton className="w-full h-3 rounded-xl mt-2 bg-blacks/20" />
+          <Skeleton className="w-full h-3 rounded-xl mt-2 bg-blacks/20" />
+          <Skeleton className="w-full h-3 rounded-xl mt-2 bg-blacks/20" />
+       </div>
       </div>
     </>
   );

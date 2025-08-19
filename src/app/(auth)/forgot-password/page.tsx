@@ -3,19 +3,28 @@ import assets from '@/assets'
 import Form from '@/components/reuseable/from'
 import { FromInputs } from '@/components/reuseable/from-inputs'
 import { Button, Card, CardDescription, CardHeader, CardTitle} from '@/components/ui'
+import { ResponseApiErrors } from '@/helpers/error/ApiResponseError'
+import { delay, modifyPayload } from '@/lib'
+import { useForgotPasswordMutation } from '@/redux/api/authApi'
 import { ForgotSchema } from '@/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowLeft} from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import React, { Suspense } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import z from 'zod'
 
 
 type forgotProps=z.infer<typeof ForgotSchema>
 
 export default function ForgotPassword() {
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
+  const router=useRouter()
+  const [forgotPassword,{isLoading}]=useForgotPasswordMutation()
   const from = useForm<forgotProps>({
     resolver: zodResolver(ForgotSchema),
     defaultValues: {
@@ -25,13 +34,30 @@ export default function ForgotPassword() {
 
 
   const handleSubmit = async (values: FieldValues) => {
-    console.log("Login form:", values);
+    const value={
+      email:values.email
+    }
+    try {
+      const data = modifyPayload(value);
+      const res = await forgotPassword(data).unwrap();
+      if (res.status) {
+        toast.success("Code sent to your email", {
+          description: "Check your email to get the code",
+        });
+      }
+      await delay(4050);
+      router.push(`/varify-otp-password?email=${values.email}`);
+      from.reset();
+    } catch (err: any) {
+      ResponseApiErrors(err.data, from)
+    }
   };
 
  
 
   return (
-    <div className="fixed inset-0 m-0 md:m-3">
+  <Suspense fallback={<div className='opacity-0'>Loading...</div>}>
+       <div className="fixed inset-0 m-0 md:m-3">
       <Image
         src={assets.auth.forgotImg}
         alt="title"
@@ -59,6 +85,7 @@ export default function ForgotPassword() {
               type="submit"
               variant={"primary"}
               className="w-full rounded-full"
+              disabled={isLoading}
             >
               Send
             </Button>
@@ -66,6 +93,7 @@ export default function ForgotPassword() {
         </Card>
       </div>
     </div>
+  </Suspense>
 
   )
 }

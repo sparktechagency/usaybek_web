@@ -11,8 +11,12 @@ export const commentApi = baseApi.injectEndpoints({
         params: arg,
       }),
       providesTags: [tagTypes.allcomment],
-      transformResponse: (response: any) => {
-        return buildResponse(response?.data.comments)
+      transformResponse: (res: any) => {
+        const rest = buildResponse(res?.data.comments);
+        return {
+          ...rest,
+          total_comment: res?.data?.total_comment,
+        };
       },
     }),
     storeComments: build.mutation({
@@ -79,5 +83,5 @@ export const {
   useGetReplayQuery,
   useToggleReplayReactionMutation,
   useStoreReplayMutation,
-  useCommentDeleteMutation
+  useCommentDeleteMutation,
 } = commentApi;

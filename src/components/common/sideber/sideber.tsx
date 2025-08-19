@@ -14,13 +14,14 @@ import PaymentBox from "../payment-box";
 import { useAuth } from "@/redux/features/authSlice";
 import { authKey } from "@/lib";
 import { useGetProfileQuery } from "@/redux/api/authApi";
+import { useHandleLogout } from "@/lib/logout";
 
 export default function Sidebar() {
+  const logout = useHandleLogout();
   const [isUpload, setIsUpload] = useState(false);
   const [isPayment, setIsPayment] = useState(false);
   const { isExpanded, toggleSidebar } = useSidebar();
   const pathname = usePathname();
-  const auth = useAuth();
   const token = getCookie(authKey);
   const { data: profileData, isLoading } = useGetProfileQuery(
     {},
@@ -29,9 +30,9 @@ export default function Sidebar() {
       skip: !token,
     }
   );
-  const { name, avatar, role } = profileData?.data || {};
+  const { name, avatar } = profileData?.data || {};
 
-  const Items = role == "USER" ? navItems : signOutItems;
+  const Items = token ? navItems : signOutItems;
 
   //  colse pay
   // isUpload modal close
@@ -131,14 +132,14 @@ export default function Sidebar() {
               </Link>
             )
           )}
-          {auth && (
-            <Link
-              className={`flex items-center gap-3  rounded-full hover:bg-gray-100 transition-colors text-red-500 ${
+          {token && (
+            <div
+              className={`flex cursor-pointer items-center gap-3  rounded-full hover:bg-gray-100 transition-colors text-red-500 ${
                 isExpanded
                   ? "justify-start px-3 py-2"
                   : "justify-center m-auto my-3 size-10"
               }`}
-              href={"/"}
+              onClick={() => logout()}
             >
               <Icon name="ssignout" />{" "}
               {isExpanded && (
@@ -146,7 +147,7 @@ export default function Sidebar() {
                   {"Sign out"}
                 </span>
               )}
-            </Link>
+            </div>
           )}
         </nav>
       </div>

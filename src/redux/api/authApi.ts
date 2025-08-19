@@ -19,9 +19,25 @@ export const authApi = baseApi.injectEndpoints({
         data,
       }),
     }),
+    forgotPassword: build.mutation({
+      query: (data) => ({
+        url: "/auth/forget-password",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+    }),
     otpVarify: build.mutation({
       query: (data) => ({
         url: "/auth/otp-verification",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+    }),
+    resetPassword: build.mutation({
+      query: (data) => ({
+        url: "/auth/reset-password",
         method: "POST",
         ContentType: "multipart/form-data",
         data,
@@ -42,4 +58,7 @@ export const {
   useSignInMutation,
   useOtpVarifyMutation,
   useGetProfileQuery,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+  useLazyGetProfileQuery
 } = authApi;

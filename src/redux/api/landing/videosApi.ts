@@ -46,7 +46,7 @@ export const videosApi = baseApi.injectEndpoints({
       query: ({ id, arg }: Args) => ({
         url: `/get-related-video/${id}`,
         method: "GET",
-        params:arg,
+        params: arg,
       }),
       providesTags: [tagTypes.relatedVideos],
       transformResponse: (response: any) => {
@@ -70,6 +70,24 @@ export const videosApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.sinlgeVideo],
     }),
+    getLinkeVideos: build.query({
+      query: (arg: Record<string, any>) => ({
+        url: "/like_videos",
+        method: "GET",
+        params: arg,
+      }),
+      providesTags: [tagTypes.getlikeVideo],
+      transformResponse: (response: any) => {
+        return buildResponse(response?.data);
+      },
+    }),
+    removeLike: build.mutation({
+      query: (id) => ({
+        url: `/like_videos/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypes.getlikeVideo],
+    }),
   }),
 });
 
@@ -80,4 +98,6 @@ export const {
   useVideosDetailsQuery,
   useStoreReportMutation,
   useStoreLikeDisLikeMutation,
+  useGetLinkeVideosQuery,
+  useRemoveLikeMutation
 } = videosApi;
