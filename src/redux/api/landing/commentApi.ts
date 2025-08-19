@@ -1,5 +1,6 @@
 import { tagTypes } from "@/redux/tag-types";
 import { baseApi } from "../baseApi";
+import { buildResponse } from "@/lib";
 
 export const commentApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -11,7 +12,7 @@ export const commentApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.allcomment],
       transformResponse: (response: any) => {
-        return response?.data;
+        return buildResponse(response?.data.comments)
       },
     }),
     storeComments: build.mutation({
@@ -20,6 +21,13 @@ export const commentApi = baseApi.injectEndpoints({
         method: "POST",
         ContentType: "multipart/form-data",
         data,
+      }),
+      invalidatesTags: [tagTypes.allcomment],
+    }),
+    commentDelete: build.mutation({
+      query: (id) => ({
+        url: `/comments/${id}`,
+        method: "DELETE",
       }),
       invalidatesTags: [tagTypes.allcomment],
     }),
@@ -70,5 +78,6 @@ export const {
   useToggleReactionMutation,
   useGetReplayQuery,
   useToggleReplayReactionMutation,
-  useStoreReplayMutation
+  useStoreReplayMutation,
+  useCommentDeleteMutation
 } = commentApi;

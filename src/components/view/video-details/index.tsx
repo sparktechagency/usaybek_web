@@ -1,29 +1,24 @@
 "use client";
 import CommentBox from "@/components/common/comment-box";
 import { Button } from "@/components/ui/button";
-import { Input, Label, Textarea } from "@/components/ui";
+import { Label, Textarea } from "@/components/ui";
 import Avatars from "@/components/reuseable/avater";
 import Modal from "@/components/reuseable/modal";
 import { RadioGroup, RadioGroupItem } from "@/components/ui";
 import VideoPlayer from "@/components/common/video-player";
 import FavIcon from "@/icon/admin/favIcon";
 import {
-  useRelatedVideosQuery,
   useStoreLikeDisLikeMutation,
   useStoreReportMutation,
   useVideosDetailsQuery,
 } from "@/redux/api/landing/videosApi";
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import {
-  DetailsSkeleton,
-  RelatedVideoCard,
-} from "@/components/reuseable/skeleton-item";
-import SkeletonCount from "@/components/reuseable/skeleton-item/count";
+import { DetailsSkeleton } from "@/components/reuseable/skeleton-item";
 import { delay, modifyPayload } from "@/lib";
 import { toast } from "sonner";
 import { usePathname } from "next/navigation";
+import RelatedVideosRight from "@/components/common/releted-videos";
 
 const options = [
   { value: "Sexual content", label: "Sexual content" },
@@ -47,9 +42,6 @@ export default function VideoDetails({ slug }: any) {
   const [storeLikeDisLike] = useStoreLikeDisLikeMutation();
   const { data, isLoading } = useVideosDetailsQuery(slug);
   const [storeReport, { isLoading: ReportLoading }] = useStoreReportMutation();
-  const { data: relVideos, isLoading: relLoading } = useRelatedVideosQuery({
-    id: data?.category_id,
-  });
   const [isReprot, setIsReport] = useState(false);
   const [isText, setIsText] = useState(false);
   const [isShare, setIsShare] = useState(false);
@@ -74,6 +66,7 @@ export default function VideoDetails({ slug }: any) {
     is_disliked,
     type,
     link,
+    category_id,
   } = data || {};
 
   const SubmitReport = async () => {
@@ -223,60 +216,18 @@ export default function VideoDetails({ slug }: any) {
             )}
             {/* Comments */}
             <div>
-              <CommentBox
-                id={id}
-                commentCount={comment_replies_count_formated}
-              />
+              {!!id && (
+                <CommentBox
+                  id={id}
+                  commentCount={comment_replies_count_formated}
+                />
+              )}
             </div>
           </div>
 
           {/* Right column - Related videos */}
           <div className="w-full lg:w-96 flex-shrink-0 mt-6 lg:mt-0">
-            <h2 className="text-xl font-semibold mb-4">Related videos</h2>
-            <div className="space-y-5">
-              {/* <RelatedVideoCard/> */}
-              {relLoading ? (
-                <SkeletonCount count={10}>
-                  <RelatedVideoCard />
-                </SkeletonCount>
-              ) : (
-                relVideos?.data.map((item: any) => (
-                  <Link
-                    href={`/video/${item.id}`}
-                    key={item.id}
-                    className="flex gap-3 group"
-                  >
-                    <div className="relative w-37 h-22 flex-shrink-0 rounded-md overflow-hidden">
-                      <Image
-                        src={item.thumbnail}
-                        alt="Related video thumbnail"
-                        fill
-                        style={{ objectFit: "cover" }}
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-sm  font-medium line-clamp-2 text-blacks">
-                        {item.title}
-                      </h3>
-                      <ul>
-                        <li className="text-gray-600 text-base mt-1">
-                          {item?.user?.channel_name}
-                        </li>
-                        <li className="text-grays flex space-x-2 items-center text-sm">
-                          <span className="text-xs">
-                            {item.views_count_formated} views
-                          </span>
-                          <span className="flex items-center text-sm">
-                            <span className="inline-block w-2 h-2 bg-[#D9D9D9] rounded-full mr-1"></span>
-                            {item.created_at_format}
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                  </Link>
-                ))
-              )}
-            </div>
+            {!!category_id && <RelatedVideosRight id={category_id} />}
           </div>
         </div>
       </div>

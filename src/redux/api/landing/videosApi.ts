@@ -1,6 +1,7 @@
 import { tagTypes } from "@/redux/tag-types";
 import { baseApi } from "../baseApi";
 import { buildResponse } from "@/lib";
+import { Args } from "@/types";
 
 export const videosApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -42,16 +43,10 @@ export const videosApi = baseApi.injectEndpoints({
       },
     }),
     RelatedVideos: build.query({
-      query: ({
-        id,
-        params,
-      }: {
-        id: string;
-        params?: Record<string, any>;
-      }) => ({
+      query: ({ id, arg }: Args) => ({
         url: `/get-related-video/${id}`,
         method: "GET",
-        params,
+        params:arg,
       }),
       providesTags: [tagTypes.relatedVideos],
       transformResponse: (response: any) => {

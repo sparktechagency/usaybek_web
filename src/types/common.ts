@@ -1,9 +1,9 @@
 export type IdParams = {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 };
 
 export type SlugParams = {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 };
 
 export interface childrenProps {
@@ -13,4 +13,9 @@ export interface childrenProps {
 export interface TabBoxProps {
   isTab: string;
   setIsTab: (tab: string) => void;
+}
+
+export interface Args {
+  id?: string;
+  arg?: Record<string, any>;
 }

@@ -20,7 +20,7 @@ export default function Avatars({
 }: AvatarsProps) {
   // src
   return (
-    <Avatar className={cn("size-10", className)}>
+    <Avatar className={cn("size-10 2xl:size-11", className)}>
       <AvatarImage className={imgstyle} src={src} alt={alt} />
       <AvatarFallback
         className={cn("bg-grays-place text-blacks font-medium", fallbackStyle)}

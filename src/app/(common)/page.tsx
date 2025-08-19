@@ -31,7 +31,7 @@ export default function Home() {
 
   const { data: relatedVideos, isLoading: relatedLoading } =
     useRelatedVideosQuery(
-      { id: isCategory.id, params: query },
+      { id: isCategory.id, arg: query },
       { skip: isCategory.id === "all" }
     );
 

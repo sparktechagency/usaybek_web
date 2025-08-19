@@ -30,7 +30,7 @@ export function TableNoItem({
 
 export function NoItemData({ title = "No Data Found", className }: any) {
   return (
-    <div className={cn("py-24 text-center flex flex-col justify-center", className)}>
+    <div className={cn("py-24 2xl:py-40 text-center flex flex-col justify-center", className)}>
       <div className="flex justify-center">
         <FavIcon color="#99a1af" name="svgFile" />
       </div>

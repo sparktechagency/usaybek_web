@@ -1,8 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Avatars from "@/components/reuseable/avater";
 import { SmallCicle } from "@/components/reuseable/small-circle";
-import { Button, Input } from "@/components/ui";
+import { Button, Input, Skeleton } from "@/components/ui";
 import FavIcon from "@/icon/admin/favIcon";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
@@ -16,79 +16,144 @@ import {
   useToggleReplayReactionMutation,
 } from "@/redux/api/landing/commentApi";
 import { modifyPayload } from "@/lib";
+import SkeletonCount from "@/components/reuseable/skeleton-item/count";
+import { useInView } from "react-intersection-observer";
 
 export default function CommentBox({ id, commentCount }: any) {
+  const { ref, inView } = useInView();
+  const [page, setPage] = useState(1);
   const { data: profileData } = useGetProfileQuery({});
   const [storeComments] = useStoreCommentsMutation();
-  const { data } = useGetCommentQuery({ video_id: id });
+  const [isModifyId, setIsModifyId] = useState();
+  const { data: comments, isLoading: commentLoading } = useGetCommentQuery({
+    video_id: id,
+    page,
+  });
+
   const [openReplies, setOpenReplies] = useState<number | null>(null);
   const [openReplyBox, setOpenReplyBox] = useState<number | null>(null);
+  const [totalComment, setTotalComment] = useState<any>([]);
 
-  const toggleReplies = (id: number) => {
-    setOpenReplies(openReplies === id ? null : id);
+  // Pagination
+  const hasMore = totalComment.length < comments?.meta?.total;
+  useEffect(() => {
+    if (inView && hasMore) setPage((prev) => prev + 1);
+  }, [inView, hasMore]);
+
+  const commentData = comments?.data;
+  useEffect(() => {
+    if (commentData) {
+      setTotalComment((prev: any) => [...prev, ...commentData]);
+    }
+  }, [commentData]);
+
+  // modify the totalComment for the item
+  useEffect(() => {
+    if (!isModifyId) return;
+
+    setTotalComment(
+      (
+        prevComments: Array<{
+          id: number;
+          is_react: boolean;
+          reactions_count_format: number;
+        }>
+      ) => {
+        return prevComments.map((comment) => {
+          if (comment.id !== isModifyId) return comment;
+          return {
+            ...comment,
+            is_react: true,
+            reactions_count_format: comment.reactions_count_format + 1,
+          };
+        });
+      }
+    );
+  }, [isModifyId]);
+
+  // console.log(isModifyId)
+  // console.log(totalComment)
+  // frontend update reactions_count_format promal -- kisu aro kaj kora lakbe // setTotalComment --update
+
+  // Handlers
+  const handleCommentSubmit = async (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key !== "Enter") return;
+    const target = e.target as HTMLInputElement;
+    const value = { video_id: id, comment: target.value };
+    const data = modifyPayload(value);
+    const res = await storeComments(data).unwrap();
+    if (res?.status) target.value = "";
   };
 
-  const toggleReplyBox = (id: number) => {
-    setOpenReplyBox(openReplyBox === id ? null : id);
-  };
+  const toggleReplies = useCallback((id: number) => {
+    setOpenReplies((prev) => (prev === id ? null : id));
+  }, []);
+
+  const toggleReplyBox = useCallback((id: number) => {
+    setOpenReplyBox((prev) => (prev === id ? null : id));
+  }, []);
 
   return (
     <div className="border-gray-200">
       <h2 className="text-lg font-semibold">{commentCount} Comments</h2>
-      <div className="flex items-center gap-3 mt-4">
-        <Avatars
-          src={profileData?.data?.avatar}
-          fallback={profileData?.data?.name}
-          alt={profileData?.data?.name}
-        />
-        <Input
-          onKeyDown={async (e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === "Enter") {
-              const target = e.target as HTMLInputElement;
-              const value = {
-                video_id: id,
-                comment: target?.value,
-              };
-              const data = modifyPayload(value);
-              const res = await storeComments(data).unwrap();
-              if (res?.status) {
-                target.value = "";
-              }
-            }
-          }}
-          placeholder={`Comment as ${profileData?.data?.name}`}
-          className="flex-1 h-11 rounded-full bg-white"
-        />
-      </div>
-      <div className="mt-6 space-y-6">
-        {data?.comments?.data?.map((item: any) => (
-          <CommentItem
-            key={item.id}
-            comment={item}
-            isRepliesOpen={openReplies === item.id}
-            isReplyBoxOpen={openReplyBox === item.id}
-            onToggleReplies={() => toggleReplies(item.id)}
-            onToggleReplyBox={() => toggleReplyBox(item.id)}
+
+      {commentLoading ? (
+        <CommentBoxSkeleton />
+      ) : (
+        <div className="flex items-center gap-3 mt-4">
+          <Avatars
+            src={profileData?.data?.avatar}
+            fallback={profileData?.data?.name}
+            alt={profileData?.data?.name}
           />
-        ))}
+          <Input
+            onKeyDown={handleCommentSubmit}
+            placeholder={`Comment as ${profileData?.data?.name}`}
+            className="flex-1 h-11 rounded-full bg-white"
+          />
+        </div>
+      )}
+
+      <div className="mt-6 space-y-6">
+        {commentLoading ? (
+          <SkeletonCount count={8}>{CommentSkeleton()}</SkeletonCount>
+        ) : totalComment && totalComment.length > 0 ? (
+          totalComment.map((item: any, idx: any) => (
+            <CommentItem
+              key={idx}
+              comment={item}
+              isRepliesOpen={openReplies === item.id}
+              isReplyBoxOpen={openReplyBox === item.id}
+              onToggleReplies={() => toggleReplies(item.id)}
+              onToggleReplyBox={() => toggleReplyBox(item.id)}
+              setIsModifyId={setIsModifyId}
+            />
+          ))
+        ) : (
+          <p className="text-gray-500">No comments yet</p>
+        )}
+
+        {hasMore && !commentLoading && (
+          <div ref={ref} className="flex flex-col mt-5">
+            <CommentSkeleton />
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
+// ---------------- Comment Item ----------------
 function CommentItem({
   comment,
   isRepliesOpen,
   isReplyBoxOpen,
   onToggleReplies,
   onToggleReplyBox,
-}: {
-  comment: any;
-  isRepliesOpen: boolean;
-  isReplyBoxOpen: boolean;
-  onToggleReplies: () => void;
-  onToggleReplyBox: () => void;
-}) {
+  setIsModifyId,
+}: any) {
   const {
     id,
     user,
@@ -97,12 +162,21 @@ function CommentItem({
     is_react,
     reactions_count_format,
   } = comment || {};
+
   const [toggleReaction, { isLoading }] = useToggleReactionMutation();
+
+  const handleReactionClick = async (e: React.MouseEvent<HTMLSpanElement>) => {
+    e.stopPropagation();
+    if (isLoading) return;
+    const value = modifyPayload({ comment_id: parseInt(id) });
+    const res = await toggleReaction(value).unwrap();
+    if (res?.status) setIsModifyId(id);
+  };
+
   return (
     <div className="flex gap-3">
       <Avatars src={user?.avatar} fallback={user?.name} alt={user.name} />
       <div className="flex-1">
-        {/* Name and Time */}
         <div className="flex items-center gap-2 text-sm">
           <span className="font-semibold">{user.name}</span>
           <span className="text-gray-500">
@@ -110,35 +184,24 @@ function CommentItem({
           </span>
         </div>
 
-        {/* Comment Text and Like */}
         <div className="flex items-center space-x-8 mt-1">
           <p className="text-gray-800">{text}</p>
           <span className="flex items-center gap-1 text-gray-600">
             <span className="flex items-center gap-1">
-              <span
-                onClick={async () => {
-                  if (!isLoading) {
-                    const value = modifyPayload({ comment_id: id });
-                    await toggleReaction(value).unwrap();
-                  }
-                }}
-              >
+              <span onClick={handleReactionClick}>
                 {is_react ? (
                   <FavIcon name="lovefill" className="size-4 cursor-pointer" />
                 ) : (
                   <FavIcon name="love" className="size-4 cursor-pointer" />
                 )}
               </span>
-              <span className="text-blacks">
-                {" "}
-                {reactions_count_format == "0" ? "" : reactions_count_format}
+              <span>
+                {reactions_count_format !== "0" ? reactions_count_format : ""}
               </span>
             </span>
-            {comment.likes}
           </span>
         </div>
 
-        {/* Actions */}
         <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
           <Button
             variant="ghost"
@@ -164,10 +227,7 @@ function CommentItem({
           </Button>
         </div>
 
-        {/* Replies */}
         {isRepliesOpen && <Replies comment_id={id} className="mt-3" />}
-
-        {/* Reply Box */}
         {isReplyBoxOpen && (
           <ReplyBox
             onToggleReplyBox={onToggleReplyBox}
@@ -180,6 +240,7 @@ function CommentItem({
   );
 }
 
+// Replies -------------------------------
 function Replies({ className, comment_id }: any) {
   const { data } = useGetReplayQuery(
     { comment_id },
@@ -260,6 +321,7 @@ function Replies({ className, comment_id }: any) {
   );
 }
 
+// ReplyBox --------------------
 function ReplyBox({ comment_id, className, onToggleReplyBox }: any) {
   const [isText, setIsText] = useState("");
   const { data: profileData } = useGetProfileQuery({});
@@ -275,7 +337,7 @@ function ReplyBox({ comment_id, className, onToggleReplyBox }: any) {
     const res = await storeReplay(data).unwrap();
     if (res.status) {
       setIsText("");
-      onToggleReplyBox?.(); 
+      onToggleReplyBox?.();
     }
   };
 
@@ -301,7 +363,7 @@ function ReplyBox({ comment_id, className, onToggleReplyBox }: any) {
               size="sm"
               onClick={() => {
                 setIsText("");
-                onToggleReplyBox?.(); 
+                onToggleReplyBox?.();
               }}
             >
               Cancel
@@ -323,3 +385,30 @@ function ReplyBox({ comment_id, className, onToggleReplyBox }: any) {
   );
 }
 
+// Skeleton
+function CommentSkeleton() {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex  gap-2">
+        <Skeleton className="size-10 2xl:size-11 rounded-full" />
+        <div className="flex flex-col gap-2">
+          <Skeleton className="w-60 h-3" />
+          <Skeleton className="w-50 h-3" />
+          <div className="flex items-center gap-2">
+            <Skeleton className="w-12 h-3" />
+            <Skeleton className="w-12 h-3" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CommentBoxSkeleton() {
+  return (
+    <div className="flex items-center gap-3 mt-4">
+      <Skeleton className="size-10 2xl:size-11 rounded-full" />
+      <Skeleton className="flex-1 h-11 rounded-full" />
+    </div>
+  );
+}
