@@ -3,24 +3,25 @@ import React from "react";
 import { Alert, AlertDescription } from "@/components/ui";
 import Icon from "@/icon";
 import OnSideBox from "@/components/common/onslide";
-import { Metadata } from "next";
-import { Seo } from "@/lib";
 
-export const metadata:Metadata = Seo({
-  title: "Get Discovered Locally: Sign Up Your Business on MyTSV.com",
-  description:
-    'Our representatives are visiting local businesses like yours to offer an exclusive opportunity to join "MyTSV.com"—the video-first platform connecting local services with real local customers.',
-  keywords: [
-    "Onside",
-    "Onsite Account",
-    "Business Registration",
-    "MyTSV",
-    "Local Business",
-    "Video Platform",
-  ],
-  url: `/onside-account`,
-  image: "/images/onsideImg.jpg",
-});
+
+
+// export const metadata = Seo({
+//   title: "Get Discovered Locally: Sign Up Your Business on MyTSV.com",
+//   description:
+//     'Our representatives are visiting local businesses like yours to offer an exclusive opportunity to join "MyTSV.com"—the video-first platform connecting local services with real local customers.',
+//   keywords: [
+//     "Onside",
+//     "Onsite Account",
+//     "Business Registration",
+//     "MyTSV",
+//     "Local Business",
+//     "Video Platform",
+//   ],
+//   url: `/onside-account`,
+//   image: "/images/onsideImg.jpg",
+// });
+
 
 export default function OnSidePage() {
   return (

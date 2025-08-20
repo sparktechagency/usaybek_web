@@ -32,9 +32,9 @@ export default function LinkVideos() {
           <li>
             {" "}
             <ImgBox
-             src={historyImg || "/blur.png"}
-             className="rounded-md h-[150px] border-7 w-full"
-             alt="video"
+              src={historyImg || "/blur.png"}
+              className="rounded-md h-[150px] border-7 w-full"
+              alt="video"
             />
           </li>
           <li>

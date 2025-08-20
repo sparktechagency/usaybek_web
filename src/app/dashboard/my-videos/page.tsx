@@ -281,7 +281,7 @@ export default function MyVideos() {
               ))
             ) : (
               <TableNoItem
-                title="No data is currently available for this section"
+                title="No videos found in your My Videos"
                 className="xl:py-40"
                 colSpan={7}
               />

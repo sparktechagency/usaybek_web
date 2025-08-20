@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@/components/ui";
-import { Search } from "lucide-react";
 import Image from "next/image";
 import Img from "@/components/reuseable/img";
 import Link from "next/link";
@@ -11,6 +10,7 @@ import { useState } from "react";
 import SidebarFixed from "@/components/common/sideber/sideber-fixed";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 import { authKey, getCookie } from "@/lib";
+import NavberSearchBox from "@/components/common/navber-search-box";
 
 export default function Navber() {
   // const headerRef = useRef<HTMLDivElement>(null);
@@ -18,15 +18,15 @@ export default function Navber() {
   const path = usePathname();
   const patterns = [/^\/video\/.+/, /^\/profile$/];
   const isMenu = patterns.some((regex) => regex.test(path));
-  const token=getCookie(authKey)
-  const {data:profileData, isLoading, }=useGetProfileQuery({}, {
-    refetchOnFocus: true,
-    skip: !token
-  })
+  const token = getCookie(authKey);
+  const { data: profileData, isLoading } = useGetProfileQuery(
+    {},
+    {
+      refetchOnFocus: true,
+      skip: !token,
+    }
+  );
 
-  
-
- 
   // console.log(login)
 
   // useEffect(() => {
@@ -57,28 +57,7 @@ export default function Navber() {
           </Link>
         </li>
         <li className="hidden md:block">
-          <div className="flex items-center  rounded-full bg-[white] px-2 shadow  w-full md:max-w-5xl mx-auto">
-            <input
-              type="text"
-              placeholder="Service"
-              className="flex-1 h-full px-4 bg-transparent outline-none text-[#767676] placeholder:text-[#767676] text-base"
-              aria-label="Service search input"
-            />
-            <div />
-            <input
-              type="text"
-              placeholder="Location"
-              className="flex-1 h-full px-4 bg-transparent outline-none text-[#767676] placeholder:text-[#767676] text-base border-l-[1px] border-[#A0A0A0]"
-              aria-label="Location search input"
-            />
-            <Button
-              variant={"primary"}
-              className="w-[120px] px-0  h-11 my-1 rounded-full has-[>svg]:px-0"
-            >
-              <Search className="w-5 h-5" />
-              Search
-            </Button>
-          </div>
+          <NavberSearchBox />
         </li>
         <li>
           {token && !isLoading ? (
@@ -92,7 +71,7 @@ export default function Navber() {
                   className="size-10"
                   title="img"
                 />
-                 {profileData?.data?.name}
+                {profileData?.data?.name}
               </Button>
             </Link>
           ) : (
