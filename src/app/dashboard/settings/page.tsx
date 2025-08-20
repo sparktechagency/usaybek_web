@@ -120,6 +120,7 @@ export default function Settings() {
                     avatar: file,
                     avatarPreview: URL.createObjectURL(file),
                   });
+                  console.log(file)
                 }}
               >
                 <div className="size-9 absolute cursor-pointer grid place-items-center rounded-full bottom-0 right-0">

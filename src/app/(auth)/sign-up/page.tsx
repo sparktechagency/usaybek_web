@@ -50,18 +50,16 @@ export default function SignUp() {
       const data = modifyPayload(value);
       const res = await signUp(data).unwrap();
       if (res.status) {
-        toast("Create Account Successfull", {
+        toast("Create Account Successful", {
           description: res?.message,
         });
       }
       await delay(4050);
-      window.open("https://mail.google.com/mail/u/0/#inbox", "_blank");
       router.push(`/varify-otp?email=${values?.email}`);
       from.reset();
     } catch (err: any) {
       ResponseApiErrors(err?.data, from);
     }
-    
   };
 
   return (

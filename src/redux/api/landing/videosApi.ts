@@ -68,7 +68,7 @@ export const videosApi = baseApi.injectEndpoints({
         ContentType: "multipart/form-data",
         data,
       }),
-      invalidatesTags: [tagTypes.sinlgeVideo],
+      invalidatesTags: [tagTypes.sinlgeVideo, tagTypes.getlikeVideo],
     }),
     getLinkeVideos: build.query({
       query: (arg: Record<string, any>) => ({
@@ -99,5 +99,5 @@ export const {
   useStoreReportMutation,
   useStoreLikeDisLikeMutation,
   useGetLinkeVideosQuery,
-  useRemoveLikeMutation
+  useRemoveLikeMutation,
 } = videosApi;

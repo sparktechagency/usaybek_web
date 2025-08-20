@@ -15,7 +15,7 @@ import {
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import Icon from "@/icon";
 import { authKey, delay, modifyPayload, setCookie } from "@/lib";
-import { useSignInMutation } from "@/redux/api/authApi";
+import { useSignInMutation, useSocialLoginMutation } from "@/redux/api/authApi";
 import { setUser } from "@/redux/features/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
 import { loginSchema } from "@/schema";
@@ -27,8 +27,11 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import auth from "@/firebase.config";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 export default function Login() {
+  const [socialLogin,{isLoading:socialLoading}]=useSocialLoginMutation()
   const [signIn, { isLoading }] = useSignInMutation();
   const [isError, setIsError] = useState("");
   const dispatch = useAppDispatch();
@@ -74,6 +77,38 @@ export default function Login() {
         setIsError(err.data.message);
       }
     }
+  };
+
+  async function urlToFileJpg(url: string, filename?: string): Promise<File> {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const mimeType = "image/jpeg";
+    const finalName = (filename || `file_${Date.now()}`).replace(/\.[^/.]+$/, "") + ".jpg";
+    return new File([blob], finalName, { type: mimeType });
+  }
+
+  const handleGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then(async (result: any) => {
+        const user = result.user;
+        const file = await urlToFileJpg(user?.photoURL);
+        const value = {
+          name: user?.displayName,
+          email: user?.email,
+          photo:file,
+          google_id: user?.uid,
+        };
+        console.log(value)
+        const data=modifyPayload(value)
+        const res = await socialLogin(data).unwrap();
+        console.log(res)
+        
+        // console.log(file);
+
+        // ...
+      })
+      .catch((error: any) => {});
   };
 
   return (
@@ -174,6 +209,8 @@ export default function Login() {
                 variant="outline"
                 size={"lg"}
                 className="w-full rounded-full border flex justify-between shadow-none px-1"
+                onClick={() => handleGoogle()}
+                disabled={socialLoading}
               >
                 <div className="flex items-center">
                   <Icon name="google" className="mr-1" />

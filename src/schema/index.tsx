@@ -68,9 +68,31 @@ export const SignUpSchema = loginSchema
   });
 
 // onSide account
-export const onSideSchema = SignUpSchema.extend({
-  secret: z.string().nonempty("Representative secret is required"),
-});
+// channel_name: "",
+//         full_name: "",
+//         email: "",
+//         password: "",
+//         confirm_password: "",
+//         representative_secret_key:""
+
+export const onSideSchema = z
+  .object({
+    representative_secret_key: z.string().nonempty("Secret Key is required"),
+    channel_name: z.string().nonempty("Channel Name is required"),
+    full_name: z.string().nonempty("Full Name is required"),
+    email: z
+      .string()
+      .nonempty("Email is required")
+      .refine((val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
+        message: "Invalid email address",
+      }),
+    password: z.string().nonempty("New Password is required"),
+    confirm_password: z.string().nonempty("Confirm password is required"),
+  })
+  .refine((value) => value?.password === value?.confirm_password, {
+    path: ["confirm_password"],
+    message: "Passwords must be match.",
+  });
 
 // /passwordSchema
 export const passwordChangeSchema = z

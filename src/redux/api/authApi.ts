@@ -50,6 +50,14 @@ export const authApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.profile],
     }),
+    socialLogin: build.mutation({
+      query: (data) => ({
+        url: "/auth/social-login",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+    }),
   }),
 });
 
@@ -60,5 +68,6 @@ export const {
   useGetProfileQuery,
   useForgotPasswordMutation,
   useResetPasswordMutation,
-  useLazyGetProfileQuery
+  useLazyGetProfileQuery,
+  useSocialLoginMutation,
 } = authApi;

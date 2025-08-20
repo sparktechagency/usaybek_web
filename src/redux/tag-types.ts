@@ -19,7 +19,8 @@ export enum tagTypes {
   contactus="contactus",
   allcomment="allcomment",
   allReplay="getReplay",
-  getlikeVideo="getlikeVideo"
+  getlikeVideo="getlikeVideo",
+  watchHistory="watchHistory"
 
 }
 
@@ -44,6 +45,7 @@ export const tagTypesList = [
   tagTypes.contactus,
   tagTypes.allcomment,
   tagTypes.allReplay,
-  tagTypes.getlikeVideo
+  tagTypes.getlikeVideo,
+  tagTypes.watchHistory
 
 ];

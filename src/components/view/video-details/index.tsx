@@ -12,13 +12,14 @@ import {
   useStoreReportMutation,
   useVideosDetailsQuery,
 } from "@/redux/api/landing/videosApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { DetailsSkeleton } from "@/components/reuseable/skeleton-item";
 import { delay, modifyPayload } from "@/lib";
 import { toast } from "sonner";
 import { usePathname } from "next/navigation";
 import RelatedVideosRight from "@/components/common/releted-videos";
+import { useStoreHistoryMutation } from "@/redux/api/landing/historyApi";
 
 const options = [
   { value: "Sexual content", label: "Sexual content" },
@@ -42,6 +43,7 @@ export default function VideoDetails({ slug }: any) {
   const [storeLikeDisLike] = useStoreLikeDisLikeMutation();
   const { data, isLoading } = useVideosDetailsQuery(slug);
   const [storeReport, { isLoading: ReportLoading }] = useStoreReportMutation();
+  const [storeHistory] = useStoreHistoryMutation();
   const [isReprot, setIsReport] = useState(false);
   const [isText, setIsText] = useState(false);
   const [isShare, setIsShare] = useState(false);
@@ -99,6 +101,17 @@ export default function VideoDetails({ slug }: any) {
     const data = modifyPayload(value);
     await storeLikeDisLike(data).unwrap();
   };
+
+  // views count this video
+  useEffect(() => {
+    (async () => {
+      if (slug) {
+        const fromData = new FormData();
+        fromData.append("video_id", slug);
+        await storeHistory(fromData).unwrap();
+      }
+    })();
+  }, [slug, storeHistory]);
 
   return (
     <div className="container py-10">

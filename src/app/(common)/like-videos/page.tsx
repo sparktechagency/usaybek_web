@@ -1,7 +1,6 @@
 "use client";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Img from "@/components/reuseable/img";
 import Icon from "@/icon";
 import {
   useGetLinkeVideosQuery,
@@ -12,9 +11,10 @@ import { Pagination } from "@/components/reuseable/pagination";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
+import historyImg from "@/assets/historyImg.jpg";
 
 export default function LinkVideos() {
-  const [isPage, setIsPage] = useState<number>();
+  const [isPage, setIsPage] = useState<number>(1);
   const query: Record<string, any> = { page: isPage };
   const { data: likeVideos, isLoading } = useGetLinkeVideosQuery({ ...query });
   const [removeLike, { isLoading: removeLoading }] = useRemoveLikeMutation();
@@ -31,10 +31,10 @@ export default function LinkVideos() {
         <ul className="space-y-6 like-gradient p-2 rounded-t-2xl [&>li>h1]:text-white">
           <li>
             {" "}
-            <Img
-              src={"https://surl.li/lzklum"}
-              title="video"
-              className="rounded-md h-[150px] border-7 w-full"
+            <ImgBox
+             src={historyImg || "/blur.png"}
+             className="rounded-md h-[150px] border-7 w-full"
+             alt="video"
             />
           </li>
           <li>
@@ -102,7 +102,7 @@ export default function LinkVideos() {
                   disabled={removeLoading}
                   variant="ghost"
                   size="icon"
-                  className="ml-auto"
+                  className="ml-auto disabled:opacity-100"
                   onClick={() => handlelike(item?.id)}
                 >
                   <X className="size-5 text-blacks" />
