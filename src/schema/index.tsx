@@ -1,5 +1,15 @@
 import { z } from "zod";
 
+export const salesSchema = z.object({
+  name: z.string().nonempty("Name is required"),
+  phone: z.string().nonempty("Phone is required"),
+  email: z.string().nonempty("Email is required"),
+  location: z.string().nonempty("Location is required"),
+  photo: z
+    .any()
+    .refine((file) => file instanceof File, { message: "Photo is required" }),
+});
+
 // uploadVideo
 export const uploadVideo = z.object({
   title: z.string().nonempty("Title is required"),
@@ -67,13 +77,6 @@ export const SignUpSchema = loginSchema
     message: "Passwords must be match.",
   });
 
-// onSide account
-// channel_name: "",
-//         full_name: "",
-//         email: "",
-//         password: "",
-//         confirm_password: "",
-//         representative_secret_key:""
 
 export const onSideSchema = z
   .object({

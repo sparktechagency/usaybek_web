@@ -6,29 +6,63 @@ import Form from "@/components/reuseable/from";
 import { Button } from "@/components/ui";
 import FavIcon from "@/icon/admin/favIcon";
 import ImageUploader from "../reuseable/img-upload/img-upload";
+import { salesSchema } from "@/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CircleAlert } from "lucide-react";
+import { useStoreSalesRepresenMutation } from "@/redux/api/admin/salesresApi";
+import { delay, modifyPayload } from "@/lib";
+import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
+import { toast } from "sonner";
 
-export default function SalesStore() {
+export default function SalesStore({ setIsStore }: any) {
+  const [storeSalesRepresen, { isLoading }] = useStoreSalesRepresenMutation();
+
   const from = useForm({
-    // resolver: zodResolver(SignUpSchema),
+    resolver: zodResolver(salesSchema),
     defaultValues: {
-      representative: "",
-      phone_number: "",
+      name: "",
+      phone: "",
       email: "",
       location: "",
+      photo: null,
     },
   });
 
   // handleSubmit
   const handleSubmit = async (values: FieldValues) => {
-    console.log("Login form:", values);
+    try {
+      const data = modifyPayload(values);
+      const res = await storeSalesRepresen(data).unwrap();
+      if (res.status) {
+        toast.success("Store Successful", {
+          description: "Sales representative created successfully",
+        });
+        await delay()
+        setIsStore(false);
+      }
+      from.reset();
+    } catch (err: any) {
+      ResponseApiErrors(err.data, from);
+    }
   };
 
   return (
     <div>
       <Form className="space-y-4 pt-4" from={from} onSubmit={handleSubmit}>
-        <ImageUploader title="Drag and drop representative photo here" />
+        <div>
+          <ImageUploader
+            title="Drag and drop representative photo here"
+            fileSelect={(file) => from.setValue("photo", file)}
+          />
+          {from?.formState?.errors?.photo && (
+            <p className="text-reds flex justify-end items-center gap-1 text-sm">
+              {from?.formState?.errors?.photo?.message as string}
+              <CircleAlert size={14} />
+            </p>
+          )}
+        </div>
         <FromField
-          name="representative"
+          name="name"
           placeholder="Enter representative name "
           className="h-11 rounded-2xl"
           icon={
@@ -36,7 +70,7 @@ export default function SalesStore() {
           }
         />
         <FromField
-          name="phone_number"
+          name="phone"
           placeholder="Phone number"
           type="number"
           className="h-11 rounded-2xl"
@@ -60,6 +94,7 @@ export default function SalesStore() {
           type="submit"
           variant={"primary"}
           className="w-full rounded-full"
+          disabled={isLoading}
         >
           Submit
         </Button>

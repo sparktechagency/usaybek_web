@@ -1,0 +1,37 @@
+import { tagTypes } from "@/redux/tag-types";
+import { baseApi } from "../baseApi";
+import { buildResponse } from "@/lib";
+import { Args } from "@/types";
+
+export const channelApi = baseApi.injectEndpoints({
+  endpoints: (build) => ({
+    getChannels: build.query({
+      query: (arg?: Record<string, any>) => ({
+        url: "/admin/get-channels",
+        method: "GET",
+        params: arg,
+      }),
+      providesTags: [tagTypes.getChannels],
+      transformResponse: (res: any) => {
+        return buildResponse(res?.data);
+      },
+    }),
+    // getChannelsDetails: build.query({
+    //   query: ({ id, arg }: Args) => ({
+    //     url: `/channel-details/${id}`,
+    //     method: "GET",
+    //     params: arg,
+    //   }),
+    //   providesTags: [tagTypes.reportDetails],
+    // }),
+    channelDelete: build.mutation({
+      query: (id) => ({
+        url: `/admin/delete-channel/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypes.getChannels],
+    }),
+  }),
+});
+
+export const { useGetChannelsQuery, useChannelDeleteMutation } = channelApi;

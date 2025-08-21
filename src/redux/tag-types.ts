@@ -16,12 +16,15 @@ export enum tagTypes {
   sinlgeVideo = "sinlgeVideo",
   states = "states",
   cities = "cities",
-  contactus="contactus",
-  allcomment="allcomment",
-  allReplay="getReplay",
-  getlikeVideo="getlikeVideo",
-  watchHistory="watchHistory"
-
+  contactus = "contactus",
+  allcomment = "allcomment",
+  allReplay = "getReplay",
+  getlikeVideo = "getlikeVideo",
+  watchHistory = "watchHistory",
+  // admin start ---------
+  getChannels = "getChannels",
+  salesRepresentatives = "salesRepresentatives",
+  salesRepresentDetails = "salesRepresentDetails",
 }
 
 export const tagTypesList = [
@@ -46,6 +49,8 @@ export const tagTypesList = [
   tagTypes.allcomment,
   tagTypes.allReplay,
   tagTypes.getlikeVideo,
-  tagTypes.watchHistory
-
+  tagTypes.watchHistory,
+  tagTypes.getChannels,
+  tagTypes.salesRepresentatives,
+  tagTypes.salesRepresentDetails,
 ];

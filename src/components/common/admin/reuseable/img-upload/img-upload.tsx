@@ -9,20 +9,23 @@ import { ImgBox } from "../Img-box";
 type uploaderProps = {
   title: string;
   className?: string;
+  fileSelect: (file: File) => void;
 };
 
-export default function ImageUploader({ title, className }: uploaderProps) {
+export default function ImageUploader({
+  title,
+  className,
+  fileSelect,
+}: uploaderProps) {
   const { dragActive, preview, handleDrag, handleDrop, handleBrowse } =
     useDragAndDrop({
-      onFileSelect: (file) => console.log("Selected file:", file),
+      onFileSelect: (file) => fileSelect(file),
     });
-
- console.log(preview)
 
   return (
     <div
       className={cn(
-        `border-2 border-dashed rounded-lg h-[200px] w-full p-2 flex flex-col items-center justify-center text-center transition-colors  ${
+        `border-2 border-dashed rounded-lg h-[200px] w-full p-1 flex flex-col items-center justify-center text-center transition-colors  ${
           dragActive ? "border-red-400 bg-red-50" : "border-gray-300"
         }`,
         className
@@ -33,7 +36,14 @@ export default function ImageUploader({ title, className }: uploaderProps) {
       onDrop={handleDrop}
     >
       {preview ? (
-        <ImgBox src={preview} alt="img" className="w-full h-full"/>
+        <ImgBox src={preview} alt="img" className="w-full h-full">
+          <div
+            onClick={() => document.getElementById("file-input")?.click()}
+            className="size-8 absolute cursor-pointer grid place-items-center rounded-md  top-2 right-2 backdrop-blur-3xl bg-black/50"
+          >
+            <FavIcon className="size-4" name="editprofile" />
+          </div>
+        </ImgBox>
       ) : (
         <div>
           <div className="flex justify-center mb-2">
@@ -47,6 +57,7 @@ export default function ImageUploader({ title, className }: uploaderProps) {
 
           <Button
             variant="primary"
+            type="button"
             onClick={() => document.getElementById("file-input")?.click()}
           >
             Browse files

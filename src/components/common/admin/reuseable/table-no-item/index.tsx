@@ -7,17 +7,19 @@ interface itemProps {
   title?: string;
   colSpan: number;
   className?: string;
+  tdStyle?:string
 }
 
 export function TableNoItem({
   title = "No Data Found",
   colSpan,
   className,
+  tdStyle
 }: itemProps) {
   return (
     <TableRow>
-      <TableCell colSpan={colSpan} className="text-center">
-        <div className={cn("py-24 text-center", className)}>
+      <TableCell colSpan={colSpan} className={cn("text-center",tdStyle)}>
+        <div className={cn("py-24 2xl:py-40 text-center", className)}>
           <div className="flex justify-center">
             <FavIcon color="#99a1af" name="svgFile" />
           </div>

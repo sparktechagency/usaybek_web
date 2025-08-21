@@ -17,7 +17,7 @@
     {
       label: "Sales representatives",
       icon: "sales",
-      to: "/admin/sales",
+      to: "/admin/sales-representative",
     },
     {
       label: "Pricings",

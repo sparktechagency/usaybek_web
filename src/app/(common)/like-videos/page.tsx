@@ -12,6 +12,7 @@ import { useState } from "react";
 import { Skeleton } from "@/components/ui";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import historyImg from "@/assets/historyImg.jpg";
+import Link from "next/link";
 
 export default function LinkVideos() {
   const [isPage, setIsPage] = useState<number>(1);
@@ -75,11 +76,13 @@ export default function LinkVideos() {
                 key={item?.id}
                 className="flex items-start gap-4 p-4 border-b"
               >
-                <ImgBox
-                  className="rounded-sm h-[125px] w-[200px]"
-                  src={item?.video?.thumbnail}
-                  alt={item?.video?.title}
-                />
+                <Link href={`/video/${item?.video?.id}`}>
+                  <ImgBox
+                    className="rounded-sm h-[125px] w-[200px]"
+                    src={item?.video?.thumbnail}
+                    alt={item?.video?.title}
+                  />
+                </Link>
                 <div className="flex-1 grid gap-1">
                   <h2 className="font-semibold text-lg">
                     {item?.video?.title}
