@@ -16,8 +16,6 @@ import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import Icon from "@/icon";
 import { authKey, delay, modifyPayload, setCookie } from "@/lib";
 import { useSignInMutation, useSocialLoginMutation } from "@/redux/api/authApi";
-import { setUser } from "@/redux/features/authSlice";
-import { useAppDispatch } from "@/redux/hooks";
 import { loginSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
@@ -31,10 +29,9 @@ import auth from "@/firebase.config";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 export default function Login() {
-  const [socialLogin,{isLoading:socialLoading}]=useSocialLoginMutation()
+  const [socialLogin, { isLoading: socialLoading }] = useSocialLoginMutation();
   const [signIn, { isLoading }] = useSignInMutation();
   const [isError, setIsError] = useState("");
-  const dispatch = useAppDispatch();
   const router = useRouter();
   const from = useForm({
     resolver: zodResolver(loginSchema),
@@ -55,20 +52,18 @@ export default function Login() {
       const res = await signIn(data).unwrap();
       if (res.status) {
         const { access_token: token, user: info } = res.data;
-        const user = {
-          id: info.id,
-          name: info.name,
-          email: info.email,
-          avatar: info.avatar,
-        };
-        dispatch(setUser({ user, token }));
         setCookie(authKey, token);
         toast.success("Login Successful", {
           description: "Welcome back! You're now logged in",
         });
+        await delay(4050);
+        if (info.role == "USER") {
+          router.push("/");
+        } else if (info.role == "ADMIN") {
+          router.push("/admin");
+        }
       }
-      await delay(4050);
-      router.push(`/`);
+
       from.reset();
     } catch (err: any) {
       if (err?.data?.errors) {
@@ -83,7 +78,8 @@ export default function Login() {
     const response = await fetch(url);
     const blob = await response.blob();
     const mimeType = "image/jpeg";
-    const finalName = (filename || `file_${Date.now()}`).replace(/\.[^/.]+$/, "") + ".jpg";
+    const finalName =
+      (filename || `file_${Date.now()}`).replace(/\.[^/.]+$/, "") + ".jpg";
     return new File([blob], finalName, { type: mimeType });
   }
 
@@ -96,14 +92,14 @@ export default function Login() {
         const value = {
           name: user?.displayName,
           email: user?.email,
-          photo:file,
+          photo: file,
           google_id: user?.uid,
         };
-        console.log(value)
-        const data=modifyPayload(value)
+        console.log(value);
+        const data = modifyPayload(value);
         const res = await socialLogin(data).unwrap();
-        console.log(res)
-        
+        console.log(res);
+
         // console.log(file);
 
         // ...

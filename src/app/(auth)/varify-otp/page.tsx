@@ -68,7 +68,7 @@ export default function ForgotPassword() {
   };
 
   const handleVerify = async () => {
-    setIsError("")
+    setIsError("");
     try {
       const joinedCode = code.join("");
       if (joinedCode.length < 6) {
@@ -78,18 +78,24 @@ export default function ForgotPassword() {
         const data = modifyPayload(value);
         const res = await otpVarify(data).unwrap();
         if (res.status) {
-          setCookie(authKey, res.data.access_token);
+          const { access_token: token, user: info } = res.data;
+          setCookie(authKey, token);
           toast("Login Successfull", {
             description: res?.message,
           });
+          await delay(4050);
+          if (info.role == "USER") {
+            router.push("/");
+          } else if (info.role == "ADMIN") {
+            router.push("/admin");
+          }
         }
-        await delay(4050);
-        router.push(`/`);
+
         setError("");
       }
     } catch (err: any) {
-      if(err?.data?.message){
-        setIsError(err?.data?.message)
+      if (err?.data?.message) {
+        setIsError(err?.data?.message);
       }
     }
   };

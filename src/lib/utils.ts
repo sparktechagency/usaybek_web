@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
 import Cookies from "js-cookie";
 
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -51,3 +52,4 @@ export function removeCookie(key: string) {
   return Cookies.remove(key);
 }
 
+// url modigy 

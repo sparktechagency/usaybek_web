@@ -14,6 +14,7 @@ import {
 import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import slugify from "slugify";
 
 export default function Home() {
   const { ref, inView } = useInView();
@@ -76,7 +77,10 @@ export default function Home() {
                   <div key={channel.id}>
                     <SeeNav
                       title={channel.name}
-                      href={`/videos/${channel.id}`}
+                      href={`/videos/${channel.id}_${slugify(channel.name, {
+                        lower: true,
+                        strict: true,
+                      })}`}
                     />
                     <div className="home gap-6">
                       {channel.videos.map((video: any) => (

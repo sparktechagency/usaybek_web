@@ -5,6 +5,7 @@ import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import SubTilte from "@/components/reuseable/sub-title";
 import { VideoCard } from "@/components/reuseable/video-card";
 import { useRelatedVideosQuery } from "@/redux/api/landing/videosApi";
+import { useParams } from "next/navigation";
 import React, { use } from "react";
 
 // Define the shape of params
@@ -12,14 +13,15 @@ interface VideoListParams {
   id: string;
 }
 
-export default function VideoList({
-  params,
-}: {
-  params: Promise<VideoListParams>;
-}) {
-  const { id } = use(params);
-  const { data, isLoading } = useRelatedVideosQuery({id:id});
-
+export default function VideoList() {
+  const { id } = useParams();
+  const slugId = id ? id[0]?.toString() : "";
+  const { data, isLoading } = useRelatedVideosQuery(
+    { id: slugId },
+    {
+      skip: !slugId,
+    }
+  );
 
   return (
     <div>
