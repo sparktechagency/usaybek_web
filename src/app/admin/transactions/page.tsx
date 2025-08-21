@@ -6,14 +6,22 @@ import Avatars from "@/components/reuseable/avater";
 import { Pagination } from "@/components/reuseable/pagination";
 import { Button, TableCell, TableRow } from "@/components/ui";
 import FavIcon from "@/icon/admin/favIcon";
-import { PlaceholderImg } from "@/lib/utils";
-import Image from "next/image";
-import React from "react";
+import { useGetTransactionsQuery } from "@/redux/api/admin/pricingApi";
+import React, { useState } from "react";
+import { useDebounce } from "use-debounce";
 
 export default function Channels() {
+  const [isPage, setIsPage] = useState<number>(1);
+  const [isSearch, setIsSearch] = useState("");
+  const [value] = useDebounce(isSearch, 1000);
+  const query: Record<string, any> = {
+    page: isPage,
+    ...(value && { search: value }),
+  };
+  const {data,isLoading}= useGetTransactionsQuery({...query})
   const headers = ["Sl. No", "Channel name", "Reason", "Amount"];
 
-  const data = [
+  const data1= [
     {
       slNo: "001",
       channelName: "Haircut pro",
@@ -64,6 +72,7 @@ export default function Channels() {
     },
   ];
 
+  console.log(data)
   return (
     <div>
       <NavTitle
@@ -92,7 +101,7 @@ export default function Channels() {
       </ul>
       <div>
         <CustomTable headers={headers}>
-          {data.map((item, index) => (
+          {data1.map((item, index) => (
             <TableRow key={index}>
               {/* Sl No */}
               <TableCell>{item.slNo}</TableCell>
