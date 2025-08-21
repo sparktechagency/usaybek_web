@@ -67,25 +67,26 @@ export default function NavberSearchBox({ className }: any) {
   }, [citys]);
 
   // Selected state & city name
-  const state_name = states?.find(
-    (s: any) => String(s.id) === isValue.state
-  )?.name || "";
-  const city_name = citys?.find(
-    (c: any) => String(c.id) === isValue.city
-  )?.name || "";
+  const state_name =
+    states?.find((s: any) => String(s.id) === isValue.state)?.name || "";
+  const city_name =
+    citys?.find((c: any) => String(c.id) === isValue.city)?.name || "";
 
   //  handleSearch
-const handleSearch = () => {
-  const value= {
-    service: isValue.service,
-    state: state_name,
-    city: city_name,
-  };
-  
-if(!value.service && !value.state && !value.city) return;
+  const handleSearch = () => {
+    const value = {
+      service: isValue.service,
+      state: state_name,
+      city: city_name,
+    };
 
-  console.log(value);
-};
+    // Only proceed with search if all fields are filled
+    if (value.service === "" || value.state === "" || value.city === "") {
+      return;
+    }
+
+    console.log(value);
+  };
 
   return (
     <div
