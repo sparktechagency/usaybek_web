@@ -1,26 +1,37 @@
 "use client";
-
 import React from "react";
 import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
 import { cn } from "@/lib/utils";
+import { Loader } from "lucide-react";
 
-// ✅ Dynamically import ReactQuill to avoid SSR issue
+// Dynamically import ReactQuill to avoid SSR issues
 const ReactQuill = dynamic(() => import("react-quill-new"), {
   ssr: false,
-  loading: () => <div>Loading editor...</div>,
+  loading: () => (
+    <div className="mx-auto min-h-[280px] flex items-center justify-center">
+      <Loader className="animate-spin text-reds" />
+    </div>
+  ),
 });
 
 interface TextEditorProps {
   value: string;
   onChange: (content: string) => void;
-  className?:string
+  className?: string;
 }
 
-const TextEditor: React.FC<TextEditorProps> = ({ value, onChange,className }) => {
+const TextEditor: React.FC<TextEditorProps> = ({
+  value,
+  onChange,
+  className,
+}) => {
   const modules = {
     toolbar: [
-      [{ header: [1, 2, 3, false] }, { size: ["small", false, "large", "huge"] }],
+      [
+        { header: [1, 2, 3, false] },
+        { size: ["small", false, "large", "huge"] },
+      ],
       ["bold", "italic", "underline", "strike"],
       [{ color: [] }, { background: [] }],
       [{ script: "sub" }, { script: "super" }],
@@ -60,7 +71,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ value, onChange,className }) =>
           onChange={onChange}
           modules={modules}
           formats={formats}
-          className={cn(`min-h-[280px] rounded-b-xl bg-white`,className)}
+          className={cn(`min-h-[280px] rounded-b-xl bg-white`, className)}
         />
       </div>
     </div>
