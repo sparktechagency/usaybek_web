@@ -4,68 +4,117 @@ import NavTitle from "@/components/common/admin/reuseable/nav-title";
 import Form from "@/components/reuseable/from";
 import { FromInput } from "@/components/reuseable/from-input";
 import Modal from "@/components/reuseable/modal";
-import { Button } from "@/components/ui";
+import SkeletonCount from "@/components/reuseable/skeleton-item/count";
+import { Button, Skeleton } from "@/components/ui";
 import useConfirmation from "@/context/delete-modal";
+import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
+import { modifyPayload } from "@/lib";
+import {
+  useDeleteCategoryMutation,
+  useGetCategoryQuery,
+  useStoreCategoryMutation,
+  useUpdateCategoryMutation,
+} from "@/redux/api/admin/categoryApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
-const categories = [
-  "Beauty esthetics",
-  "Restaurant & Catering",
-  "Antiques",
-  "Hair stylists",
-  "Supermarket malls",
-  "Electronic stores",
-  "Auto mechanics",
-  "Medical doctors",
-];
 // schema
 const CategorySchema = z.object({
-  category_name: z.string().nonempty("Category is required"),
+  name: z.string().nonempty("Category is required"),
 });
 
 export default function ManageCategory() {
+  const { confirm } = useConfirmation();
+  const { data: categories, isLoading } = useGetCategoryQuery({});
+  const [storeCategory, { isLoading: storeLoading }] =
+    useStoreCategoryMutation();
+  const [updateCategory, { isLoading: updateLoading }] =
+    useUpdateCategoryMutation();
+  const [deleteCategory] = useDeleteCategoryMutation();
+  const [isEditId, setIsEditId] = useState({
+    id: "",
+    name: "",
+  });
+
   const [isStore, setIsStore] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const { confirm } = useConfirmation();
 
-  //   create section
+  // create section
   const createfrom = useForm({
     resolver: zodResolver(CategorySchema),
     defaultValues: {
-      category_name: "",
+      name: "",
     },
   });
 
   const CreateSubmit = async (values: FieldValues) => {
-    console.log("Login form:", values);
-    createfrom.reset();
+    try {
+      const data = modifyPayload(values);
+      const res = await storeCategory(data).unwrap();
+      if (res.status) {
+        toast.success("Category Added", {
+          description: "A new category has been successfully added",
+        });
+        createfrom.reset();
+        setIsStore(false);
+      }
+    } catch (err: any) {
+      ResponseApiErrors(err.data, createfrom);
+    }
   };
 
   // edit section
   const editfrom = useForm({
     resolver: zodResolver(CategorySchema),
     defaultValues: {
-      category_name: "Electronic stores",
+      name: isEditId?.name,
     },
   });
+  useEffect(() => {
+    editfrom.reset({
+      name: isEditId?.name,
+    });
+  }, [isEditId, editfrom]);
 
   const EditSubmit = async (values: FieldValues) => {
-    console.log("Login form:", values);
+    const value = {
+      name: values.name,
+      _method: "PUT",
+    };
+    try {
+      const data = modifyPayload(value);
+      const res = await updateCategory({
+        id: isEditId.id,
+        data,
+      }).unwrap();
+      if (res.status) {
+        toast.success("Category updated", {
+          description: "Category has been successfully updated",
+        });
+        setIsEdit(false);
+      }
+    } catch (err: any) {
+      ResponseApiErrors(err.data, editfrom);
+    }
+    setIsEditId({
+      id: "",
+      name: "",
+    });
     editfrom.reset();
   };
 
-  //   handledelete
+  // handledelete
   const handleDelete = async (id: any) => {
     const con = await confirm({
       title: "Are you sure to delete this category ?",
       description: "Users will not be able to find this category.",
     });
     if (con) {
-      console.log(id);
+      await deleteCategory(id).unwrap();
     }
   };
 
@@ -76,20 +125,34 @@ export default function ManageCategory() {
         subTitle="You can manage your video categories of your website from here."
       />
       <div className="flex gap-6 flex-wrap">
-        {categories.map((category, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-2xl p-3 flex items-center justify-between"
-          >
-            <span className="text-lg font-semibold text-blacks flex-1">
-              <span className="font-medium">{index + 1}.</span> {category}
-            </span>
-            <div className="flex items-center gap-2 ml-3">
-              <Editbtn onClick={() => setIsEdit(!isEdit)} />
-              <Deletebtn onClick={() => handleDelete(index)} />
+        {isLoading ? (
+          <SkeletonCount count={10}>
+            <Skeleton className="w-50 h-12 rounded-xl" />
+          </SkeletonCount>
+        ) : (
+          categories?.data?.map((item: any) => (
+            <div
+              key={item.id}
+              className="bg-white rounded-2xl p-3 flex items-center justify-between"
+            >
+              <span className="text-lg font-semibold text-blacks flex-1">
+                <span className="font-medium">{item?.id}.</span> {item?.name}
+              </span>
+              <div className="flex items-center gap-2 ml-3">
+                <Editbtn
+                  onClick={() => {
+                    setIsEditId({
+                      id: item?.id,
+                      name: item?.name,
+                    });
+                    setIsEdit(!isEdit);
+                  }}
+                />
+                <Deletebtn onClick={() => handleDelete(item?.id)} />
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
       <Button
         onClick={() => setIsStore(!isStore)}
@@ -105,7 +168,7 @@ export default function ManageCategory() {
         open={isStore}
         setIsOpen={setIsStore}
         titleStyle="text-center"
-        title="Create a new category"
+        title="Add New Category"
       >
         <Form
           className="space-y-6 pt-4"
@@ -115,27 +178,42 @@ export default function ManageCategory() {
           <FromInput
             className="bg-white border rounded-2xl"
             label="Category name"
-            name="category_name"
-            placeholder="Type hare"
+            name="name"
+            placeholder="Type here"
             matching={true}
           />
-          <Button variant="primary" size="lg" className="w-full rounded-full">
+          <Button
+            variant="primary"
+            disabled={storeLoading}
+            size="lg"
+            className="w-full rounded-full"
+          >
             Save
           </Button>
         </Form>
       </Modal>
       {/* edit */}
-      <Modal open={isEdit} setIsOpen={setIsEdit}  titleStyle="text-center" title="Edit category">
+      <Modal
+        open={isEdit}
+        setIsOpen={setIsEdit}
+        titleStyle="text-center"
+        title="Edit category"
+      >
         <Form className="space-y-6 pt-4" from={editfrom} onSubmit={EditSubmit}>
           <FromInput
             className="bg-white border rounded-2xl"
             label="Category name"
-            name="category_name"
-            placeholder="Type hare"
+            name="name"
+            placeholder="Type here"
             matching={true}
           />
-          <Button variant="primary" size="lg" className="w-full rounded-full">
-          Save changes
+          <Button
+            disabled={updateLoading}
+            variant="primary"
+            size="lg"
+            className="w-full rounded-full"
+          >
+            Save changes
           </Button>
         </Form>
       </Modal>

@@ -25,8 +25,10 @@ export enum tagTypes {
   getChannels = "getChannels",
   salesRepresentatives = "salesRepresentatives",
   salesRepresentDetails = "salesRepresentDetails",
-  getPricings="getPricings",
-  transactionsAdmin="transactionsAdmin"
+  getPricings = "getPricings",
+  transactionsAdmin = "transactionsAdmin",
+  getProBanner = "getProBanner",
+  categoriesAdmin = "categoriesAdmin",
 }
 
 export const tagTypesList = [
@@ -56,5 +58,7 @@ export const tagTypesList = [
   tagTypes.salesRepresentatives,
   tagTypes.salesRepresentDetails,
   tagTypes.getPricings,
-  tagTypes.transactionsAdmin
+  tagTypes.transactionsAdmin,
+  tagTypes.getProBanner,
+  tagTypes.categoriesAdmin,
 ];

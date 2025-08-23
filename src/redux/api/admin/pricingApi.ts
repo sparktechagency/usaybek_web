@@ -24,9 +24,10 @@ export const pricingApi = baseApi.injectEndpoints({
       invalidatesTags: [tagTypes.getPricings],
     }),
     getTransactions: build.query({
-      query: () => ({
+      query: (arg: Record<string, any>) => ({
         url: "/admin/transactions",
         method: "GET",
+        params: arg,
       }),
       providesTags: [tagTypes.transactionsAdmin],
       transformResponse: (res: any) => {
