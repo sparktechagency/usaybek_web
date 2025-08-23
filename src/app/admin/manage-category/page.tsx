@@ -4,6 +4,7 @@ import NavTitle from "@/components/common/admin/reuseable/nav-title";
 import Form from "@/components/reuseable/from";
 import { FromInput } from "@/components/reuseable/from-input";
 import Modal from "@/components/reuseable/modal";
+import { Pagination } from "@/components/reuseable/pagination";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import { Button, Skeleton } from "@/components/ui";
 import useConfirmation from "@/context/delete-modal";
@@ -29,7 +30,8 @@ const CategorySchema = z.object({
 
 export default function ManageCategory() {
   const { confirm } = useConfirmation();
-  const { data: categories, isLoading } = useGetCategoryQuery({});
+  const [isPage, setIsPage] = useState<number>(1);
+  const { data: categories, isLoading } = useGetCategoryQuery({ page: isPage });
   const [storeCategory, { isLoading: storeLoading }] =
     useStoreCategoryMutation();
   const [updateCategory, { isLoading: updateLoading }] =
@@ -154,15 +156,23 @@ export default function ManageCategory() {
           ))
         )}
       </div>
-      <Button
-        onClick={() => setIsStore(!isStore)}
-        variant="primary"
-        size="lg"
-        className="rounded-full mt-7"
-      >
-        <Plus className="text-white size-5" />
-        Add more
-      </Button>
+      <div className="flex items-center justify-between">
+        <Button
+          onClick={() => setIsStore(!isStore)}
+          variant="primary"
+          size="lg"
+          className="rounded-full mt-7"
+        >
+          <Plus className="text-white size-5" />
+          Add more
+        </Button>
+        <Pagination
+          onPageChange={(v: any) => setIsPage(v)}
+          {...categories?.meta}
+          activeStyle="!rounded-full !bg-reds !border-none !text-white hover:!text-white"
+          itemStyle="rounded-full"
+        ></Pagination>
+      </div>
       {/* store */}
       <Modal
         open={isStore}

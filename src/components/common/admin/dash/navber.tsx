@@ -5,6 +5,7 @@ import { useTitle } from "@/context/title";
 import FavIcon from "@/icon/admin/favIcon";
 import { authKey, getCookie } from "@/lib";
 import { useGetProfileQuery } from "@/redux/api/authApi";
+import { ImgBox } from "../reuseable";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -49,7 +50,7 @@ export default function Navber({ sidebarOpen, setSidebarOpen }: SidebarProps) {
           <div>
             <div className="flex mr-6 items-center gap-2">
               <Link href={"/admin/notification"}>
-                <div className="relative cursor-pointer bg-reds text-green-900 size-12  grid place-items-center rounded-full">
+                <div className="relative cursor-pointer bg-reds text-green-900 size-11 2xl:size-12  grid place-items-center rounded-full">
                   {/* <Icon name="bell"/> */}
                   <FavIcon name="bell" />
                 </div>
@@ -57,12 +58,10 @@ export default function Navber({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
               <Link href={"/admin/profile"}>
                 <div className="relative flex items-center gap-2 rounded-full cursor-pointer">
-                  <Image
+                  <ImgBox
                     src={profileData?.data?.avatar || "/blur.png"}
-                    className="rounded-full"
+                    className="rounded-full size-11 2xl:size-12"
                     alt="User Icon"
-                    width={50}
-                    height={50}
                   />
                   <span className="text-blacks text-xl font-medium">
                     {profileData?.data?.name || ""}

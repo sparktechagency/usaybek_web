@@ -5,7 +5,7 @@ import React from 'react'
 export default function Profile() {
   return (
     <>
-      <NavTitle title="Profile" subTitle="You can manage your admin profile from here." />
+      <NavTitle title="Profile" subTitle="You can manage your admin profile from here" />
       <ProfileBox/>
      </>
   )

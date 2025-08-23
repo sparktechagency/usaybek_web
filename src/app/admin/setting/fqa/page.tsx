@@ -7,32 +7,23 @@ import { FromTextAreas } from "@/components/reuseable/from-textareas";
 import Modal from "@/components/reuseable/modal";
 import { Button } from "@/components/ui";
 import useConfirmation from "@/context/delete-modal";
+import { modifyPayload } from "@/lib";
+import {
+  useDeleteAdminFqaMutation,
+  useGetAdminFqaQuery,
+  useStoreAdminFqaMutation,
+  useUpdateAdminFqaMutation,
+} from "@/redux/api/admin/fqa1Api";
 import { ChevronDown, ChevronUp, Plus } from "lucide-react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-const questionsData = [
-  {
-    title: "Sign Up and Onboard",
-    content:
-      "Create your account and set up your first campaign with ease. Our user-friendly interface and guided setup process make it simple to get started.",
-  },
-  {
-    title: "Recruit Affiliates",
-    content:
-      "Launch your advertising campaigns across various channels. Whether you're focusing on display ads, social media, or search, Affity supports all major advertising platforms.",
-  },
-  {
-    title: "Track and Optimize",
-    content:
-      "Monitor your campaigns in real-time and use our advanced analytics to optimize performance. Make data-driven decisions to enhance your ROI.",
-  },
-  {
-    title: "Scale Your Efforts",
-    content:
-      "As you refine your strategy, scale your campaigns to reach a larger audience. Affity provides the tools you need to grow your advertising efforts successfully.",
-  },
-];
+const intEditInfo = {
+  id: "",
+  question: "",
+  answer: "",
+};
 
 export default function FQA() {
   const { confirm } = useConfirmation();
@@ -40,26 +31,52 @@ export default function FQA() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [editOpen, setEditOpen] = useState(false);
   const [storeOpen, setStoreOpen] = useState(false);
+  const { data: fqaData } = useGetAdminFqaQuery({});
+  const [storeAdminFqa, { isLoading: storeLoading }] =
+    useStoreAdminFqaMutation();
+  const [updateAdminFqa, { isLoading: updateLoading }] =
+    useUpdateAdminFqaMutation();
+  const [deleteAdminFqa] = useDeleteAdminFqaMutation();
+  const [isEditInfo, setIsEditInfo] = useState(intEditInfo);
 
   const toggleAccordion = (index: number) => {
     setActiveAccordion((prev) => (prev === index ? null : index));
   };
 
-  // edit  question
+  // edit  question & answer ====================
   const editfrom = useForm({
     defaultValues: {
-      question: "Sign Up and Onboard",
-      answer:
-        "Create your account and set up your first campaign with ease. Our user-friendly interface and guided setup process make it simple to get started",
+      question: "",
+      answer: "",
     },
   });
 
+  useEffect(() => {
+    if (isEditInfo) {
+      editfrom.reset({
+        question: isEditInfo.question,
+        answer: isEditInfo.answer,
+      });
+    }
+  }, [isEditInfo, editfrom]);
+
   const editSubmit = async (values: FieldValues) => {
-    console.log("Profile form:", values);
-    editfrom.reset();
+    const value = {
+      ...values,
+      _method: "PUT",
+    };
+    const data = modifyPayload(value);
+    const res = await updateAdminFqa({ id: isEditInfo.id, data }).unwrap();
+    if (res.status) {
+      toast.success("Update Successfull", {
+        description: "Question & answer have been updated",
+      });
+      editfrom.reset();
+      setEditOpen(false);
+    }
   };
 
-  // add question
+  // add question & answer ====================
   const storefrom = useForm({
     defaultValues: {
       question: "",
@@ -67,8 +84,15 @@ export default function FQA() {
     },
   });
   const StoreSubmit = async (values: FieldValues) => {
-    console.log("Profile form:", values);
-    storefrom.reset();
+    const data = modifyPayload(values);
+    const res = await storeAdminFqa(data).unwrap();
+    if (res.status) {
+      toast.success("Add Successfull", {
+        description: "Question & answer have been added",
+      });
+      storefrom.reset();
+      setStoreOpen(false);
+    }
   };
 
   const handleDelete = async (id: any) => {
@@ -78,7 +102,7 @@ export default function FQA() {
         "After deleting, users can't find this question & answer anymore.",
     });
     if (confirmed) {
-      console.log(id);
+      await deleteAdminFqa(id).unwrap();
     }
   };
 
@@ -91,15 +115,15 @@ export default function FQA() {
       <div className="py-5" ref={containerRef}>
         <div className="flex flex-col lg:flex-row">
           <div className="w-full">
-            {questionsData.map((item, index) => (
-              <div key={index} className="flex">
+            {fqaData?.map((item: any, index: number) => (
+              <div key={item.id} className="flex">
                 <div className="py-[10px] px-5 mb-4 bg-white rounded-md border cursor-pointer w-full">
                   <div
                     className="flex items-center justify-between"
                     onClick={() => toggleAccordion(index)}
                   >
                     <h4 className="text-base font-medium text-[#1B1B1B]">
-                      {item.title}
+                      {item.question}
                     </h4>
                     <span>
                       {activeAccordion === index ? (
@@ -123,16 +147,23 @@ export default function FQA() {
                       maxHeight: activeAccordion === index ? "500px" : "0px",
                     }}
                   >
-                    <p className="text-sm lg:text-base mt-1">{item.content}</p>
+                    <p className="text-sm lg:text-base mt-1">{item.answer}</p>
                   </div>
                 </div>
                 <div className="ml-2 w-32 flex gap-2">
                   <Editbtn
-                    onClick={() => setEditOpen(!editOpen)}
+                    onClick={() => {
+                      setIsEditInfo({
+                        id: item?.id,
+                        question: item?.question,
+                        answer: item?.answer,
+                      });
+                      setEditOpen(true);
+                    }}
                     className="rounded-md size-11"
                   />
                   <Deletebtn
-                    onClick={() => handleDelete(index)}
+                    onClick={() => handleDelete(item?.id)}
                     className="rounded-md size-11"
                   />
                 </div>
@@ -161,7 +192,7 @@ export default function FQA() {
         <Form from={editfrom} onSubmit={editSubmit} className="space-y-6 pt-4">
           <FromInputs
             label="Question"
-            name="Question"
+            name="question"
             placeholder="Enter your Question"
             stylelabel="bg-white"
           />
@@ -172,7 +203,12 @@ export default function FQA() {
             className="min-h-44 rounded-3xl"
             stylelabel="bg-white"
           />
-          <Button variant="primary" className="rounded-full w-full" size="lg">
+          <Button
+            disabled={updateLoading}
+            variant="primary"
+            className="rounded-full w-full"
+            size="lg"
+          >
             Save changes
           </Button>
         </Form>
@@ -193,7 +229,7 @@ export default function FQA() {
         >
           <FromInputs
             label="Question"
-            name="Question"
+            name="question"
             placeholder="Enter your Question"
             stylelabel="bg-white"
           />
@@ -204,7 +240,12 @@ export default function FQA() {
             className="min-h-44 rounded-3xl"
             stylelabel="bg-white"
           />
-          <Button variant="primary" className="rounded-full w-full" size="lg">
+          <Button
+            disabled={storeLoading}
+            variant="primary"
+            className="rounded-full w-full"
+            size="lg"
+          >
             Add
           </Button>
         </Form>

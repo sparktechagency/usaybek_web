@@ -8,18 +8,30 @@ export const contactApi = baseApi.injectEndpoints({
         url: "/contact",
         method: "GET",
       }),
-      providesTags:[tagTypes.contactus]
-
+      providesTags: [tagTypes.contactus],
+    }),
+    updateContact: build.mutation({
+      query: (data) => ({
+        url: "/admin/contact",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+      invalidatesTags: [tagTypes.contactus],
     }),
     storeContact: build.mutation({
-        query: (data) => ({
-          url: "/send-message",
-          method: "POST",
-          ContentType: "multipart/form-data",
-          data,
-        }),
+      query: (data) => ({
+        url: "/send-message",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
       }),
+    }),
   }),
 });
 
-export const {useGetContactQuery,useStoreContactMutation} = contactApi;
+export const {
+  useGetContactQuery,
+  useStoreContactMutation,
+  useUpdateContactMutation,
+} = contactApi;

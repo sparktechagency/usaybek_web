@@ -6,25 +6,70 @@ import { FromInputs } from "@/components/reuseable/from-inputs";
 import { FromTagInputs } from "@/components/reuseable/from-tag-inputs";
 import { FromTextAreas } from "@/components/reuseable/from-textareas";
 import { Button } from "@/components/ui";
-import React, { useState } from "react";
+import { useGetSeoQuery, useUpdateSeoMutation } from "@/redux/api/admin/seoApi";
+import React, { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 
-interface SocialMediaLink {
+interface SocialMediaLinkType {
   id: string;
   platform: string;
   url: string;
 }
 
 export default function Seo() {
-  const [socialLinks, setSocialLinks] = useState<SocialMediaLink[]>([]);
+  const { data, isLoading } = useGetSeoQuery({});
+  const [updateSeo, { isLoading: updateLoading }] = useUpdateSeoMutation();
+  const [socialLinks, setSocialLinks] = useState<SocialMediaLinkType[]>([]);
   const form = useForm({
     defaultValues: {
       title: "",
       description: "",
-      tags: ["React", "Next.js", "Tailwind"],
+      tags: [],
     },
   });
-  const handleSubmit = (values: FieldValues) => console.log("Form:", values);
+
+  const handleSubmit = async (values: FieldValues) => {
+    const value = {
+      ...values,
+      links: socialLinks.reduce((acc, item) => {
+        const existing = acc.find((link) => link.key === item.platform);
+        if (existing) {
+          existing.value.push(item.url);
+        } else {
+          acc.push({
+            key: item.platform,
+            value: [item.url],
+          });
+        }
+        return acc;
+      }, [] as { key: string; value: string[] }[]),
+    };
+    // api call all ok
+    await updateSeo(value).unwrap();
+  };
+
+  // Reset form + socialLinks when data changes
+  useEffect(() => {
+    if (data) {
+      form.reset({
+        title: data?.title,
+        description: data?.description,
+        tags: data?.tags,
+      });
+
+      // ✅ Transform "links" JSON into [{id, platform, url}, ...]
+      if (data.links && Array.isArray(data.links)) {
+        const transformedLinks = data.links.flatMap((link: any) =>
+          link.value.map((url: string, idx: number) => ({
+            id: `${link.key}-${idx}`,
+            platform: link.key,
+            url,
+          }))
+        );
+        setSocialLinks(transformedLinks);
+      }
+    }
+  }, [data, form]);
 
   return (
     <div>
@@ -46,11 +91,18 @@ export default function Seo() {
             className="min-h-44 rounded-3xl"
           />
           <FromTagInputs label="Tags" name="tags" />
-          <SocialMediaLink socialLinks={socialLinks} setSocialLinks={setSocialLinks}/>
+
+          {/* ✅ Pass default socialLinks */}
+          <SocialMediaLink
+            socialLinks={socialLinks}
+            setSocialLinks={setSocialLinks}
+          />
+
           <Button
             variant="primary"
             size="lg"
             className="rounded-full float-end"
+            disabled={updateLoading}
           >
             Save changes
           </Button>

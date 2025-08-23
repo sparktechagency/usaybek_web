@@ -102,9 +102,9 @@ export const passwordChangeSchema = z
   .object({
     current_password: z.string().nonempty("Current Password is required"),
     new_password: z.string().nonempty("New Password is required"),
-    confirm_password: z.string().nonempty("Confirm password is required"),
+    c_password: z.string().nonempty("Confirm password is required"),
   })
-  .refine((value) => value.new_password === value.confirm_password, {
-    path: ["confirm_password"],
+  .refine((value) => value.new_password === value.c_password, {
+    path: ["c_password"],
     message: "Passwords must be match.",
   });

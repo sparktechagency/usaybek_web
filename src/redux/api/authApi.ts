@@ -50,6 +50,23 @@ export const authApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.profile],
     }),
+    updateProfile: build.mutation({
+      query: (data) => ({
+        url: "/edit-profile",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+      invalidatesTags: [tagTypes.profile],
+    }),
+    updatePassword: build.mutation({
+      query: (data) => ({
+        url: "/change-password",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+    }),
     socialLogin: build.mutation({
       query: (data) => ({
         url: "/auth/social-login",
@@ -70,4 +87,6 @@ export const {
   useResetPasswordMutation,
   useLazyGetProfileQuery,
   useSocialLoginMutation,
+  useUpdateProfileMutation,
+  useUpdatePasswordMutation
 } = authApi;

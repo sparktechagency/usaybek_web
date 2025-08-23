@@ -19,4 +19,4 @@ export const fqaApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {useGetFaqsQuery} = fqaApi;
+export const { useGetFaqsQuery } = fqaApi;

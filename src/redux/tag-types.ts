@@ -29,6 +29,8 @@ export enum tagTypes {
   transactionsAdmin = "transactionsAdmin",
   getProBanner = "getProBanner",
   categoriesAdmin = "categoriesAdmin",
+  adminSeo = "adminSeo",
+  fqaAdmin="fqaAdmin"
 }
 
 export const tagTypesList = [
@@ -61,4 +63,6 @@ export const tagTypesList = [
   tagTypes.transactionsAdmin,
   tagTypes.getProBanner,
   tagTypes.categoriesAdmin,
+  tagTypes.adminSeo,
+  tagTypes.fqaAdmin
 ];
