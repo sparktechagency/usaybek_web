@@ -35,6 +35,7 @@ export enum tagTypes {
   aboutAdmin = "aboutAdmin",
   channelDetailsAdmin = "channeldetailsAdmin",
   overviewAdmin = "overviewAdmin",
+  reportAdmin = " reportAdmin",
 }
 
 export const tagTypesList = [
@@ -73,4 +74,5 @@ export const tagTypesList = [
   tagTypes.aboutAdmin,
   tagTypes.channelDetailsAdmin,
   tagTypes.overviewAdmin,
+  tagTypes.reportAdmin,
 ];

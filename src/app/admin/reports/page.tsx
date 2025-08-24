@@ -7,16 +7,18 @@ import {
 } from "@/components/common/admin/reuseable";
 import NavTitle from "@/components/common/admin/reuseable/nav-title";
 import SearchBox from "@/components/common/admin/reuseable/search";
-import VideoPlayer from "@/components/common/video-player";
+import { TableNoItem } from "@/components/common/admin/reuseable/table-no-item";
+import { TableSkeleton } from "@/components/common/admin/reuseable/table-skeleton";
 import Avatars from "@/components/reuseable/avater";
 import Modal from "@/components/reuseable/modal";
 import { Pagination } from "@/components/reuseable/pagination";
-import SelectBox from "@/components/reuseable/select-box";
 import { Button, TableCell, TableRow, Textarea } from "@/components/ui";
 import useConfirmation from "@/context/delete-modal";
 import FavIcon from "@/icon/admin/favIcon";
+import { useGetAreportQuery } from "@/redux/api/admin/reportsApi";
 import Link from "next/link";
 import React, { useState } from "react";
+import { useDebounce } from "use-debounce";
 
 const options = [
   { label: "Suspend for 7 days", value: "suspend_7_days" },
@@ -26,9 +28,17 @@ const options = [
 ];
 
 export default function Reports() {
+  const { confirm } = useConfirmation();
   const [isPreview, setIsPreview] = useState<boolean>(false);
   const [isTake, setIsTake] = useState<boolean>(false);
-  const { confirm } = useConfirmation();
+  const [isPage, setIsPage] = useState<number>(1);
+  const [isSearch, setIsSearch] = useState("");
+  const [value] = useDebounce(isSearch, 1000);
+  const query: Record<string, any> = {
+    page: isPage,
+    ...(value && { search: value }),
+  };
+  const { data: reports, isLoading } = useGetAreportQuery({ ...query });
   const headers = [
     "Sl. No",
     "Report from",
@@ -37,50 +47,7 @@ export default function Reports() {
     "Action",
   ];
 
-  const reports = [
-    {
-      slNo: "001",
-      reportFrom: "Haircut pro",
-      reportedChannel: "Mr. Beast",
-      reason: "Spreading misinformation",
-    },
-    {
-      slNo: "002",
-      reportFrom: "Haircut pro",
-      reportedChannel: "Mr. Beast",
-      reason: "Spreading misinformation",
-    },
-    {
-      slNo: "003",
-      reportFrom: "Haircut pro",
-      reportedChannel: "Mr. Beast",
-      reason: "Spreading misinformation",
-    },
-    {
-      slNo: "004",
-      reportFrom: "Haircut pro",
-      reportedChannel: "Mr. Beast",
-      reason: "Spreading misinformation",
-    },
-    {
-      slNo: "005",
-      reportFrom: "Haircut pro",
-      reportedChannel: "Mr. Beast",
-      reason: "Spreading misinformation",
-    },
-    {
-      slNo: "006",
-      reportFrom: "Haircut pro",
-      reportedChannel: "Mr. Beast",
-      reason: "Spreading misinformation",
-    },
-    {
-      slNo: "007",
-      reportFrom: "Haircut pro",
-      reportedChannel: "Mr. Beast",
-      reason: "Spreading misinformation",
-    },
-  ];
+  console.log(reports?.total_appeals);
 
   const handleDelete = async () => {
     const con = await confirm({
@@ -101,70 +68,84 @@ export default function Reports() {
         subTitle="You can see & manage all the reports of MyTSV from here."
       />
       <div className="flex justify-between items-center">
-        <SearchBox placeholder="Search channel" />
+        <SearchBox
+          placeholder="Search Reports"
+          onSearch={(text) => setIsSearch(text)}
+        />
         <Link href="/admin/appeals">
           <Button variant="primary" size="lg" className="rounded-full">
-            Appeals (10)
+            Appeals ({reports?.total_appeals || 0})
           </Button>
         </Link>
       </div>
 
       <div>
         <CustomTable headers={headers}>
-          {reports.map((item, index) => (
-            <TableRow key={index}>
-              {/* Sl No */}
-              <TableCell>{item.slNo}</TableCell>
+          {isLoading ? (
+            <TableSkeleton
+              colSpan={headers?.length}
+              tdStyle="!pl-0 !bg-background"
+            />
+          ) : reports?.data?.length > 0 ? (
+            reports?.data?.map((item: any) => (
+              <TableRow key={item?.id}>
+                {/* Sl No */}
+                <TableCell>{item.id}</TableCell>
 
-              <TableCell className="relative">
-                <div className="flex items-center gap-3">
-                  <Avatars
-                    src=""
-                    fallback={item.reportFrom}
-                    alt="profile"
-                    fallbackStyle="avatar"
-                  />
-                  <span>{item.reportFrom}</span>
-                </div>
-              </TableCell>
+                <TableCell className="relative">
+                  <div className="flex items-center gap-3">
+                    <Avatars
+                      src={item?.user?.avatar}
+                      fallback={item.user?.name}
+                      alt={item?.user?.name}
+                      fallbackStyle="avatar"
+                    />
+                    <span>{item?.user?.name}</span>
+                  </div>
+                </TableCell>
 
-              <TableCell className="relative">
-                <div className="flex items-center gap-3">
-                  <Avatars
-                    src=""
-                    fallback={item.reportedChannel}
-                    alt="profile"
-                    fallbackStyle="avatar"
-                  />
-                  <span>{item.reportedChannel}</span>
-                </div>
-              </TableCell>
+                <TableCell className="relative">
+                  <div className="flex items-center gap-3">
+                    <Avatars
+                      src={item?.video?.user?.avatar}
+                      fallback={item?.video?.user?.channel_name}
+                      alt={item?.video?.user?.channel_name}
+                      fallbackStyle="avatar"
+                    />
+                    <span>{item?.video?.user?.channel_name}</span>
+                  </div>
+                </TableCell>
 
-              {/* Email */}
-              <TableCell>{item.reason}</TableCell>
+                {/* Email */}
+                <TableCell>{item.reason}</TableCell>
 
-              {/* Action Buttons */}
-              <TableCell>
-                <ul className="flex gap-2">
-                  <li>
-                    <Previewbtn onClick={() => setIsPreview(!isPreview)} />
-                  </li>
-                  <li>
-                    <Deletebtn onClick={handleDelete} />
-                  </li>
-                </ul>
-              </TableCell>
-            </TableRow>
-          ))}
+                {/* Action Buttons */}
+                <TableCell>
+                  <ul className="flex gap-2">
+                    <li>
+                      <Previewbtn onClick={() => setIsPreview(!isPreview)} />
+                    </li>
+                    <li>
+                      <Deletebtn onClick={handleDelete} />
+                    </li>
+                  </ul>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableNoItem
+              colSpan={headers?.length}
+              title="No reports are available at the moment"
+              tdStyle="!bg-background"
+            />
+          )}
         </CustomTable>
       </div>
       <ul className="flex flex-wrap justify-end my-7">
         <li className="font-medium">
           <Pagination
-            current_page={1}
-            onPageChange={() => {}}
-            total={10}
-            per_page={2}
+            onPageChange={(v: any) => setIsPage(v)}
+            {...reports?.meta}
             activeStyle="!rounded-full !bg-reds !border-none !text-white hover:!text-white"
             itemStyle="rounded-full"
           ></Pagination>
