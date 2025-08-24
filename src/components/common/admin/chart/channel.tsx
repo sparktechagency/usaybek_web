@@ -2,7 +2,8 @@
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import { ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart"
 
-export default function ChannelChart() {
+export default function ChannelChart({item}:any) {
+
   const chartConfig = {
     channels: {
       label: "Channels",
@@ -10,15 +11,10 @@ export default function ChannelChart() {
     },
   }
 
-  const chartData = [
-    { day: "Sat", channels: 18 },
-    { day: "Sun", channels: 92 },
-    { day: "Mon", channels: 30 },
-    { day: "Tue", channels: 14 },
-    { day: "Wed", channels: 81 },
-    { day: "Thu", channels: 48 },
-    { day: "Fri", channels: 83 },
-  ]
+  const chartData = item?.map((entry: any) => ({
+    day: entry?.day,
+    channels: entry?.count || 0,
+  })) || []
 
   return (
     <div className="bg-white p-3 rounded-xl">

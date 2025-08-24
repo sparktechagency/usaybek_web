@@ -23,6 +23,7 @@ export function Deletebtn({ onClick,className }: BtnProps) {
   return (
     <button
       onClick={onClick}
+      type="submit"
       className={cn(`size-[37px] grid place-items-center text-[#FF5353] bg-[#FFE8E8] rounded-lg cursor-pointer`,className)}
     >
       <FavIcon name="delete" />

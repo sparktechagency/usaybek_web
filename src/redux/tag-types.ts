@@ -1,4 +1,3 @@
-
 export enum tagTypes {
   videos = "videos",
   promoVideosSlider = "promoVideosSlider",
@@ -31,9 +30,11 @@ export enum tagTypes {
   getProBanner = "getProBanner",
   categoriesAdmin = "categoriesAdmin",
   adminSeo = "adminSeo",
-  fqaAdmin="fqaAdmin",
-  termsAdmin="termsAdmin",
-  aboutAdmin="aboutAdmin"
+  fqaAdmin = "fqaAdmin",
+  termsAdmin = "termsAdmin",
+  aboutAdmin = "aboutAdmin",
+  channelDetailsAdmin = "channeldetailsAdmin",
+  overviewAdmin = "overviewAdmin",
 }
 
 export const tagTypesList = [
@@ -69,5 +70,7 @@ export const tagTypesList = [
   tagTypes.adminSeo,
   tagTypes.fqaAdmin,
   tagTypes.termsAdmin,
-  tagTypes.aboutAdmin
+  tagTypes.aboutAdmin,
+  tagTypes.channelDetailsAdmin,
+  tagTypes.overviewAdmin,
 ];

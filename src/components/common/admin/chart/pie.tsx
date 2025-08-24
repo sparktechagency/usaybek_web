@@ -9,52 +9,19 @@ import {
   ChartLegendContent,
 } from "@/components/ui/chart"
 
-const chartData = [
-  { day: "Fri", value: 1264.2, fill: "hsl(260 80% 60%)" }, // Medium purple
-  { day: "Thu", value: 1308.7, fill: "hsl(140 70% 70%)" }, // Light green
-  { day: "Wed", value: 1110.7, fill: "hsl(240 60% 40%)" }, // Darker blue-purple
-  { day: "Tue", value: 954.6, fill: "hsl(36 90% 60%)" }, // Orange
-  { day: "Mon", value: 1201.8, fill: "hsl(190 70% 60%)" }, // Light blue
-  { day: "Sun", value: 740.1, fill: "hsl(0 80% 70%)" }, // Light coral
-  { day: "Sat", value: 1343.3, fill: "hsl(280 70% 40%)" }, // Darker purple
-]
+// Define types for the data structure
+interface ChartData {
+  day: string;
+  total: number;
+}
 
-const chartConfig = {
-  value: {
-    label: "Value",
-  },
-  Fri: {
-    label: "Fri",
-    color: "hsl(260 80% 60%)",
-  },
-  Thu: {
-    label: "Thu",
-    color: "hsl(140 70% 70%)",
-  },
-  Wed: {
-    label: "Wed",
-    color: "hsl(240 60% 40%)",
-  },
-  Tue: {
-    label: "Tue",
-    color: "hsl(36 90% 60%)",
-  },
-  Mon: {
-    label: "Mon",
-    color: "hsl(190 70% 60%)",
-  },
-  Sun: {
-    label: "Sun",
-    color: "hsl(0 80% 70%)",
-  },
-  Sat: {
-    label: "Sat",
-    color: "hsl(280 70% 40%)",
-  },
-} satisfies ChartConfig
+interface PieChartsProps {
+  item: ChartData[];
+}
 
 const RADIAN = Math.PI / 180
 
+// Function to render customized label for pie chart
 const renderCustomizedLabel = ({
   cx,
   cy,
@@ -102,8 +69,60 @@ const renderCustomizedLabel = ({
   )
 }
 
-export function PieCharts() {
-  const totalValue = chartData.reduce((sum, entry) => sum + entry.value, 0)
+export function PieCharts({ item }: PieChartsProps) {
+  // Map `item` to create chartData dynamically
+  const chartData = item?.map((entry, index) => {
+    const colors = [
+      "hsl(260 80% 60%)", // Purple Fri
+      "hsl(140 70% 70%)", // Green Thu
+      "hsl(240 60% 40%)", // Blue Wed
+      "hsl(36 90% 60%)",  // Orange Tue
+      "hsl(190 70% 60%)", // Light Blue Mon
+      "hsl(0 80% 70%)",   // Coral Sun
+      "hsl(280 70% 40%)", // Dark Purple star
+    ]
+    return {
+      day: entry.day,
+      value: entry.total,
+      fill: colors[index % colors.length],
+    }
+  })
+
+  const totalValue = chartData?.reduce((sum, entry) => sum + entry.value, 0)
+
+const chartConfig = {
+  value: {
+    label: "Value",
+  },
+  Fri: {
+    label: "Fri",
+    color: "hsl(260 80% 60%)",
+  },
+  Thu: {
+    label: "Thu",
+    color: "hsl(140 70% 70%)",
+  },
+  Wed: {
+    label: "Wed",
+    color: "hsl(240 60% 40%)",
+  },
+  Tue: {
+    label: "Tue",
+    color: "hsl(36 90% 60%)",
+  },
+  Mon: {
+    label: "Mon",
+    color: "hsl(190 70% 60%)",
+  },
+  Sun: {
+    label: "Sun",
+    color: "hsl(0 80% 70%)",
+  },
+  Sat: {
+    label: "Sat",
+    color: "hsl(280 70% 40%)",
+  },
+} as any
 
   return (
     <div className="bg-white p-3 rounded-xl h-fit">
@@ -120,11 +139,11 @@ export function PieCharts() {
             labelLine={false}
             label={renderCustomizedLabel}
           >
-            {chartData.map((entry, index) => (
+            {chartData?.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} />
             ))}
             <Label
-              value={`$${totalValue.toFixed(1)}`}
+              value={`$${totalValue?.toFixed(1)}`}
               position="center"
               className="fill-foreground text-3xl font-bold"
             />
@@ -135,3 +154,4 @@ export function PieCharts() {
     </div>
   )
 }
+

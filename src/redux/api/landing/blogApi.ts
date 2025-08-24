@@ -1,5 +1,6 @@
 import { tagTypes } from "@/redux/tag-types";
 import { baseApi } from "../baseApi";
+import { buildResponse } from "@/lib";
 
 export const blogApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -10,11 +11,8 @@ export const blogApi = baseApi.injectEndpoints({
         params: arg,
       }),
       providesTags: [tagTypes.blogs],
-      transformResponse: (response: any, meta: any) => {
-        return {
-          data: response.data.data,
-          meta,
-        };
+      transformResponse: (response: any) => {
+        return buildResponse(response.data);
       },
     }),
     singleBlog: build.query({
@@ -27,7 +25,38 @@ export const blogApi = baseApi.injectEndpoints({
         return response.data;
       },
     }),
+    storeBlogs: build.mutation({
+      query: (data) => ({
+        url: "/admin/blogs",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+      invalidatesTags: [tagTypes.blogs],
+    }),
+    updateBlog: build.mutation({
+      query: ({ id, data }: any) => ({
+        url: `/admin/blogs/${id}`,
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+      invalidatesTags: [tagTypes.blogs],
+    }),
+    deleteBlog: build.mutation({
+      query: (id) => ({
+        url: `/admin/blogs/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypes.blogs],
+    }),
   }),
 });
 
-export const { useGetBlogsQuery, useSingleBlogQuery } = blogApi;
+export const {
+  useGetBlogsQuery,
+  useSingleBlogQuery,
+  useStoreBlogsMutation,
+  useUpdateBlogMutation,
+  useDeleteBlogMutation
+} = blogApi;

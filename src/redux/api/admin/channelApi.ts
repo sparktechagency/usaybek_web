@@ -16,14 +16,17 @@ export const channelApi = baseApi.injectEndpoints({
         return buildResponse(res?.data);
       },
     }),
-    // getChannelsDetails: build.query({
-    //   query: ({ id, arg }: Args) => ({
-    //     url: `/channel-details/${id}`,
-    //     method: "GET",
-    //     params: arg,
-    //   }),
-    //   providesTags: [tagTypes.reportDetails],
-    // }),
+    getChannelsDetails: build.query({
+      query: ({ id, arg }: Args) => ({
+        url: `/channel-details/${id}`,
+        method: "GET",
+        params: arg,
+      }),
+      providesTags: [tagTypes.channelDetailsAdmin],
+      transformResponse: (res: any) => {
+        return res?.data
+      },
+    }),
     channelDelete: build.mutation({
       query: (id) => ({
         url: `/admin/delete-channel/${id}`,
@@ -34,4 +37,8 @@ export const channelApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetChannelsQuery, useChannelDeleteMutation } = channelApi;
+export const {
+  useGetChannelsQuery,
+  useChannelDeleteMutation,
+  useGetChannelsDetailsQuery,
+} = channelApi;

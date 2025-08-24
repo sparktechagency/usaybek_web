@@ -3,7 +3,6 @@ import { ImgBox } from "@/components/common/admin/reuseable";
 import NavTitle from "@/components/common/admin/reuseable/nav-title";
 import Form from "@/components/reuseable/from";
 import { FromInputs } from "@/components/reuseable/from-inputs";
-import { FromTextAreas } from "@/components/reuseable/from-textareas";
 import Img from "@/components/reuseable/img";
 import Modal from "@/components/reuseable/modal";
 import { Button, Card, Skeleton } from "@/components/ui";

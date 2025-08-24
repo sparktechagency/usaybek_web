@@ -31,7 +31,6 @@ export default function ProfileBox() {
   const {
     data: userVideos,
     isLoading: videosLoading,
-    isFetching,
   } = useUserVideosQuery({
     page: page,
   });
