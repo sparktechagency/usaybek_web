@@ -147,8 +147,8 @@ export default function ChannelDetails({ channel, rest }: any) {
 
             </CardContent>
           </Card>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-7">
-            <Card className="p-3 border-1 gap-0">
+          <div className="grid grid-cols-1 lg:grid-cols-2  gap-5 mt-7">
+            <Card className="p-3 border-1 gap-0 h-fit">
               <ul className="space-y-3">
                 <li className="flex gap-x-2 items-center text-blacks">
                   <Icon name="locationGary" />

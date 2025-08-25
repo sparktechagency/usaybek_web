@@ -24,7 +24,7 @@ export const channelApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.channelDetailsAdmin],
       transformResponse: (res: any) => {
-        return res?.data
+        return res?.data;
       },
     }),
     channelDelete: build.mutation({
@@ -34,6 +34,14 @@ export const channelApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.getChannels],
     }),
+    reportAction: build.mutation({
+      query: ({ id, data }: any) => ({
+        url: `/admin/take-report-action/${id}`,
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+    }),
   }),
 });
 
@@ -41,4 +49,5 @@ export const {
   useGetChannelsQuery,
   useChannelDeleteMutation,
   useGetChannelsDetailsQuery,
+  useReportActionMutation
 } = channelApi;

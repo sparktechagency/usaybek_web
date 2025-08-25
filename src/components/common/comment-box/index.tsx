@@ -94,7 +94,6 @@ export default function CommentBox({ id, commentCount }: any) {
   return (
     <div className="border-gray-200">
       <h2 className="text-lg font-semibold">{commentCount} Comments</h2>
-
       {commentLoading ? (
         <CommentBoxSkeleton />
       ) : (

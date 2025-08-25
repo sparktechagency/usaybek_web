@@ -66,6 +66,7 @@ export function VideoCard2({ item, className }: any) {
     views_count_formated,
     created_at_format,
     is_promoted,
+    is_suspend,
   } = item || {};
   return (
     <>
@@ -73,7 +74,7 @@ export function VideoCard2({ item, className }: any) {
         <ImgBox
           src={thumbnail || "/blur.png"}
           alt={title || "logo"}
-          className="w-full h-[220px]"
+          className="w-full h-[220px] rounded-none rounded-t-md"
         >
           {!!is_promoted && (
             <div className="absolute top-2 right-2  bg-reds/80 text-white text-xs font-semibold px-4 py-2 rounded-full flex items-center gap-1">
@@ -84,7 +85,11 @@ export function VideoCard2({ item, className }: any) {
         </ImgBox>
       </div>
       <div>
-        <div className="flex gap-2 pt-2">
+        <div
+          className={`flex gap-2 pt-2 ${
+            !!is_suspend && "border-reds"
+          } border-r border-l border-b rounded-b-md p-2`}
+        >
           <Avatars
             className="size-13"
             alt={title}
