@@ -105,9 +105,9 @@ function CommentItem({ comment, isRepliesOpen, onToggleReplies }: any) {
             <span className="flex items-center gap-1">
               <span>
                 {is_react ? (
-                  <FavIcon name="lovefill" className="size-4 cursor-pointer" />
+                  <FavIcon name="lovefill" className="size-4" />
                 ) : (
-                  <FavIcon name="love" className="size-4 cursor-pointer" />
+                  <FavIcon name="love" className="size-4" />
                 )}
               </span>
               <span>
@@ -184,12 +184,12 @@ function Replies({ className, comment_id }: any) {
                         {is_react ? (
                           <FavIcon
                             name="lovefill"
-                            className="size-4 cursor-pointer"
+                            className="size-4"
                           />
                         ) : (
                           <FavIcon
                             name="love"
-                            className="size-4 cursor-pointer"
+                            className="size-4"
                           />
                         )}
                       </span>

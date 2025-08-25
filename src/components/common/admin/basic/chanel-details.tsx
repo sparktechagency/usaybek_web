@@ -30,7 +30,6 @@ const initTakeInfo = {
 
 export default function ChannelBox({ totalVideos }: any) {
   const { id } = useParams();
-
   const [takeInfo, setTakeInfo] = useState<any>(initTakeInfo);
   const [isShow, setIsShow] = useState<boolean>(false);
   const [isTake, setIsTake] = useState<boolean>(false);
@@ -134,6 +133,7 @@ export default function ChannelBox({ totalVideos }: any) {
                 {isVideo?.description}
               </p>
             </div>
+            {/* CommentChanel ======== */}
             <div className="border rounded-md p-3">
               {!!isVideo?.id && <CommentChanel id={isVideo?.id} />}
             </div>
