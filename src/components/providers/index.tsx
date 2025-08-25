@@ -19,7 +19,7 @@ export default function Providers({ children }: childrenProps) {
           </SidebarControl>
         </SuccessDialogProvider>
       </ConfirmDialogProvider>
-      <Toaster position="top-right"/>
+      <Toaster richColors position="top-right"/>
     </Provider>
   );
 }

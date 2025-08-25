@@ -6,6 +6,7 @@ import FilterBox from "@/components/reuseable/filter-box";
 import { VideoCardSkeleton } from "@/components/reuseable/skeleton-item";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import { VideoCard } from "@/components/reuseable/video-card";
+import { Button } from "@/components/ui";
 import { capitalize } from "@/lib/utils";
 import {
   useHomeVideosQuery,
@@ -15,6 +16,7 @@ import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import slugify from "slugify";
+import { toast } from "sonner";
 
 export default function Home() {
   const { ref, inView } = useInView();

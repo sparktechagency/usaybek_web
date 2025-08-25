@@ -32,6 +32,8 @@ export default function Sidebar() {
   useEffect(() => {
     if (token && !isLoading) {
       setIsNavItem(navItems);
+    } else {
+      setIsNavItem(signOutItems);
     }
   }, [token, isLoading]);
 
