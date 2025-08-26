@@ -144,7 +144,6 @@ export default function ChannelDetails({ channel, rest }: any) {
             <CardTitle className="text-xl font-semibold mb-2">About</CardTitle>
             <CardContent className="p-1 text-blacks text-sm leading-relaxed">
               {bio || "Not available bio"}
-
             </CardContent>
           </Card>
           <div className="grid grid-cols-1 lg:grid-cols-2  gap-5 mt-7">

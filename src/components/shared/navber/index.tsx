@@ -61,7 +61,7 @@ export default function Navber() {
         </li>
         <li>
           {token && !isLoading ? (
-            <Link href={"/profile"}>
+            <Link href={"/dashboard"}>
               <Button
                 variant={"primary"}
                 className="h-12 pl-2 pr-4 rounded-full"

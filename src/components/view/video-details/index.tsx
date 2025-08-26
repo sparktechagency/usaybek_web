@@ -69,6 +69,7 @@ export default function VideoDetails({ slug }: any) {
     type,
     link,
     category_id,
+    user_id
   } = data || {};
 
   const SubmitReport = async () => {
@@ -137,15 +138,18 @@ export default function VideoDetails({ slug }: any) {
                   </h1>
                   <div className="flex items-center flex-wrap lg:flex-nowrap justify-between mt-5">
                     <div className="flex items-center gap-3">
-                      <Avatars
-                        src={user?.avatar}
-                        fallback={user?.name}
-                        alt={user?.name}
-                      />
+                      <Link href={`/channel-details/${user_id}`}>
+                        <Avatars
+                          src={user?.avatar}
+                          fallback={user?.name}
+                          alt={user?.name}
+                        />
+                      </Link>
                       <div className="flex-1">
-                        <Link href="#" className="font-semibold text-gray-900">
+                        <span className="font-semibold text-gray-900">
+                          {" "}
                           {user?.channel_name}
-                        </Link>
+                        </span>
                       </div>
                     </div>
                     {/* Right actions */}

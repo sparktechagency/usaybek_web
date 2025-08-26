@@ -11,24 +11,30 @@ import {
 import FavIcon from "@/icon/admin/favIcon";
 import { cn } from "@/lib";
 import { useGetCitiesQuery, useGetStatesQuery } from "@/redux/api/commonApi";
+import { useCategoriesQuery } from "@/redux/api/landing/videosApi";
 import { Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 
 const intValue = {
+  title: "",
   service: "",
   state: "",
   city: "",
 };
 
 export default function NavberSearchBox({ className }: any) {
+  const router = useRouter();
   const [isLocation, setIsLocation] = useState(false);
   const [isValue, setIsValue] = useState(intValue);
   const [isSelect, setIsSelect] = useState({
     state: [] as { label: string; value: string }[],
     city: [] as { label: string; value: string }[],
+    service: [] as { label: string; value: string }[],
   });
 
   // Fetch states only when location modal is open
+  const { data: categories } = useCategoriesQuery({ per_page: 1000 });
   const { data: states } = useGetStatesQuery({}, { skip: !isLocation });
   const { data: citys } = useGetCitiesQuery(isValue.state, {
     skip: !isValue.state,
@@ -66,6 +72,18 @@ export default function NavberSearchBox({ className }: any) {
     }));
   }, [citys]);
 
+  // service
+  useEffect(() => {
+    if (!categories?.data?.length) return;
+    setIsSelect((prev) => ({
+      ...prev,
+      service: categories?.data?.map(({ name, id }: any) => ({
+        label: name,
+        value: id?.toString(),
+      })),
+    }));
+  }, [categories]);
+
   // Selected state & city name
   const state_name =
     states?.find((s: any) => String(s.id) === isValue.state)?.name || "";
@@ -75,63 +93,96 @@ export default function NavberSearchBox({ className }: any) {
   //  handleSearch
   const handleSearch = () => {
     const value = {
-      service: isValue.service,
+      search: isValue.title,
       state: state_name,
       city: city_name,
+      service: isValue.service,
     };
+    const params: Record<string, string> = {};
+    if (isValue.title) params.search = isValue.title;
+    if (isValue.service) params.service = isValue.service;
+    if (state_name) params.state = state_name;
+    if (city_name) params.city = city_name;
 
-    // Only proceed with search if all fields are filled
-    if (value.service === "" || value.state === "" || value.city === "") {
-      return;
+    const hasSearchAndService =
+      value?.search?.length > 0 && value?.service?.length > 0;
+    const hasStateAndCity = value.state?.length > 0 && value.city?.length > 0;
+
+    if (
+      (hasSearchAndService ||
+        value?.search?.length > 0 !== value?.service?.length > 0) &&
+      hasStateAndCity &&
+      Object.keys(params).length > 0
+    ) {
+      const queryString = new URLSearchParams(params).toString();
+      router.push(`/videos/global?${queryString}`);
+      setTimeout(() => {
+        setIsValue(intValue);
+      }, 1000);
     }
-
-    console.log(value);
   };
 
   return (
-    <div
-      className={cn(
-        "flex items-center rounded-full bg-white px-2 shadow w-full md:max-w-5xl mx-auto",
-        className
-      )}
-    >
-      {/* Service Input */}
-      <input
-        type="text"
-        placeholder="Service"
-        className="flex-1 h-full px-4 bg-transparent outline-none text-[#767676] placeholder:text-[#767676] text-base"
-        aria-label="Service search input"
-        value={isValue.service}
-        onChange={(e: any) => handleChange("service", e.target.value)}
-      />
+    <div>
+      <div className="rounded-full bg-white px-2 shadow w-fit mx-4 xl:mx-auto flex items-center">
+        <div className={cn("flex justify-between items-center", className)}>
+          {/* Service Input */}
+          <input
+            type="text"
+            placeholder="Title"
+            className="w-full h-full px-4 bg-transparent outline-none text-[#767676] placeholder:text-[#767676] text-base"
+            aria-label="Service search input"
+            value={isValue.title}
+            onChange={(e: any) => handleChange("title", e.target.value)}
+          />
 
-      {/* Location Input (click to open modal) */}
-      <input
-        type="text"
-        placeholder="Location"
-        readOnly
-        className={`flex-1 h-full text-base px-4 bg-transparent outline-none text-[#767676] placeholder:text-[#767676]  border-l border-[#A0A0A0] cursor-pointer`}
-        aria-label="Location search input"
-        value={
-          isValue?.state
-            ? `${state_name}${city_name ? `, ${city_name}` : ""}`
-            : "Location"
-        }
-        onClick={(e) => {
-          e.stopPropagation();
-          setIsLocation(true);
-        }}
-      />
+          <div className="w-full">
+            <Select
+              onValueChange={(value) => handleChange("service", value)}
+              value={isValue.service}
+            >
+              <SelectTrigger className="!w-full  cursor-pointer py-0 my-0 border-l !h-5 border-[#A0A0A0]  border-r-0 border-y-0 rounded-none shadow-none">
+                <SelectValue placeholder="Select Service" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {isSelect.service.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
 
-      {/* Search Button */}
-      <Button
-        variant="primary"
-        className="w-[120px] px-0 h-11 my-1 rounded-full has-[>svg]:px-0"
-        onClick={() => handleSearch()}
-      >
-        <Search className="w-5 h-5" />
-        Search
-      </Button>
+          {/* Location Input (click to open modal) */}
+          <input
+            type="text"
+            placeholder="Location"
+            readOnly
+            className={`w-full h-5 text-base px-4 bg-transparent outline-none text-[#767676] placeholder:text-[#767676]  border-l border-[#A0A0A0] cursor-pointer`}
+            aria-label="Location search input"
+            value={
+              isValue?.state
+                ? `${state_name}${city_name ? `, ${city_name}` : ""}`
+                : "Location"
+            }
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsLocation(true);
+            }}
+          />
+        </div>
+        <Button
+          variant="primary"
+          className="w-[100px] px-0 h-11 my-1 rounded-full has-[>svg]:px-0"
+          onClick={() => handleSearch()}
+        >
+          <Search className="w-5 h-5" />
+          Search
+        </Button>
+      </div>
 
       {/* Location Modal */}
       <Modal open={isLocation} setIsOpen={setIsLocation} title="Location">

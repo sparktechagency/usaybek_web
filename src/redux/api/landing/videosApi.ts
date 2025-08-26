@@ -88,6 +88,22 @@ export const videosApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.getlikeVideo],
     }),
+    channelLandDetails: build.query({
+      query: ({ id, arg }: Args) => ({
+        url: `/channel-details/${id}`,
+        method: "GET",
+        params: arg,
+      }),
+      providesTags: [tagTypes.channelLanDetails],
+      transformResponse: (response: any) => {
+        const { videos, ...rest } = response?.data;
+        const videoAll = buildResponse(videos);
+        return {
+          ...rest,
+          videoAll,
+        };
+      },
+    }),
   }),
 });
 
@@ -100,4 +116,5 @@ export const {
   useStoreLikeDisLikeMutation,
   useGetLinkeVideosQuery,
   useRemoveLikeMutation,
+  useChannelLandDetailsQuery,
 } = videosApi;

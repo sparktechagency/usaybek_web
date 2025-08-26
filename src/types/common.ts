@@ -16,6 +16,6 @@ export interface TabBoxProps {
 }
 
 export interface Args {
-  id?: string;
+  id?:any;
   arg?: Record<string, any>;
 }

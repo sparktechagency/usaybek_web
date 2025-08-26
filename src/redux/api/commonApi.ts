@@ -24,7 +24,20 @@ export const commonApi = baseApi.injectEndpoints({
         return res?.data;
       },
     }),
+    golbalSearch: build.query({
+      query: (arg?: Record<string, any>) => ({
+        url: `/global-search-videos`,
+        method: "GET",
+        params: arg,
+      }),
+      providesTags: [tagTypes.cities],
+      transformResponse: (res: any) => {
+        return buildResponse(res?.data.videos);
+      },
+    }),
   }),
 });
 
-export const { useGetStatesQuery, useGetCitiesQuery } = commonApi;
+export const { useGetStatesQuery, useGetCitiesQuery, useGolbalSearchQuery } =
+  commonApi;
+

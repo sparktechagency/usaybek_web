@@ -1,5 +1,6 @@
 "use client";
 import assets from "@/assets";
+import { NoItemData } from "@/components/common/admin/reuseable/table-no-item";
 import ProfileMapbox from "@/components/common/profile-map-box";
 import { VideoCardSkeleton } from "@/components/reuseable";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
@@ -13,52 +14,43 @@ import {
   CardTitle,
 } from "@/components/ui";
 import Icon from "@/icon";
-import { useGetProfileQuery } from "@/redux/api/authApi";
-import { useUserDashboardQuery } from "@/redux/api/dashboard/simpleApi";
-import { useUserVideosQuery } from "@/redux/api/dashboard/videosApi";
-import { useGetContactQuery } from "@/redux/api/landing/contactApi";
+import { useChannelLandDetailsQuery } from "@/redux/api/landing/videosApi";
 import { Loader } from "lucide-react";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
 export default function ProfileBox() {
+  const { id } = useParams();
   const { ref, inView } = useInView();
   const [page, setPage] = useState(1);
-  const { data: profile, isLoading: profileLoading } = useGetProfileQuery({});
-  const { data: dashboard } = useUserDashboardQuery({ type: "yearly" });
-  const { data: contact } = useGetContactQuery({});
-  const {
-    data: userVideos,
-    isLoading: videosLoading,
-  } = useUserVideosQuery({
-    page: page,
+  const { data: channelData, isLoading } = useChannelLandDetailsQuery({
+    id,
+    arg: { page },
   });
-  const { name, avatar, cover_image, bio, services, locations } =
-    profile?.data || {};
-  const { phone, email, address } = contact?.data || {};
-  const { views, likes, videos } = dashboard?.data || {};
+  const { channel, total_likes, total_videos, total_views, videoAll } =
+    channelData || {};
 
   const ViewItem = [
     {
       label: "Views",
-      value: views,
+      value: total_views,
       icon: assets.dashboard.views,
     },
     {
       label: "Videos",
-      value: videos,
+      value: total_videos,
       icon: assets.dashboard.videos,
     },
     {
       label: "Likes",
-      value: likes,
+      value: total_likes,
       icon: assets.dashboard.likes,
     },
   ];
   const [totalVideos, setTotalVideos] = useState<any>([]);
-
-  const hasMore = totalVideos.length < userVideos?.meta.total;
+  const hasMore = totalVideos?.length < videoAll?.meta.total;
   useEffect(() => {
     if (inView && hasMore) {
       setPage((prevPage) => prevPage + 1);
@@ -66,10 +58,10 @@ export default function ProfileBox() {
   }, [inView, hasMore]);
 
   useEffect(() => {
-    if (userVideos?.data) {
-      setTotalVideos((prev: any) => [...prev, ...userVideos?.data]);
+    if (videoAll?.data) {
+      setTotalVideos((prev: any) => [...prev, ...videoAll?.data]);
     }
-  }, [userVideos]);
+  }, [videoAll]);
 
   return (
     <div className="container pb-5 lg:pb-10 overflow-hidden">
@@ -77,7 +69,7 @@ export default function ProfileBox() {
         <Card className="p-2 border-1 gap-0">
           <div className="relative h-48 md:h-64">
             <Image
-              src={cover_image || "/blur.png"}
+              src={channel?.cover_image || "/blur.png"}
               alt="Cover image"
               layout="fill"
               objectFit="cover"
@@ -85,30 +77,36 @@ export default function ProfileBox() {
             />
             <div className="absolute bottom-0 left-15 translate-y-1/2 ">
               <Avatar className="size-24  shadow-md">
-                <AvatarImage src={avatar} alt={`${name}-Profile picture`} />
-                <AvatarFallback>{name?.slice(0, 2)}</AvatarFallback>
+                <AvatarImage
+                  src={channel?.avatar}
+                  alt={`${channel?.channel_name}`}
+                />
+                <AvatarFallback>
+                  {channel?.channel_name?.slice(0, 2)}
+                </AvatarFallback>
               </Avatar>
-              <h2 className="text-xl font-semibold text-blacks relative -left-7">
-                {name}
+              <h2 className="text-xl font-semibold text-blacks relative">
+                {channel?.channel_name}
               </h2>
             </div>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 py-3">
+          <div className="flex justify-between gap-4 py-3">
             <h2 className="opacity-0">left</h2>
-            <h2 className="opacity-0">middle</h2>
-            <Card>
+            <Card className="w-fit">
               <ul className="space-y-1">
                 <li className="flex gap-x-2 items-center text-blacks">
                   <Icon name="locationGary" />
-                  {address}
+                  {channel?.locations?.find(
+                    (item: any) => item?.type === "head-office"
+                  )?.location || "No location"}
                 </li>
                 <li className="flex gap-x-2 items-center text-blacks">
                   <Icon name="phoneGray" />
-                  {phone}
+                  {channel?.contact}
                 </li>
                 <li className="flex gap-x-2 items-center text-blacks">
                   <Icon name="mailGray" />
-                  {email}
+                  {channel?.email}
                 </li>
               </ul>
             </Card>
@@ -139,45 +137,47 @@ export default function ProfileBox() {
                 About
               </CardTitle>
               <CardContent className="p-0 text-blacks text-sm leading-relaxed">
-                {bio}
+                {channel?.bio}
               </CardContent>
             </Card>
             <Card className="p-3 border-1 gap-0">
               <CardTitle className="text-xl font-semibold mb-4">
                 Services
               </CardTitle>
-              <CardContent className="p-0 flex flex-col max-w-xs gap-2 [&>button]:text-blacks">
-                {services?.map((item: any, index: any) => (
-                  <h1 key={index}>
-                    {index + 1} {item}
-                  </h1>
+              <CardContent className="p-0 flex flex-wrap gap-2">
+                {channel?.services?.map((service: string, index: number) => (
+                  <span key={`service-${index}`}>{service},</span>
                 ))}
               </CardContent>
             </Card>
           </div>
         </Card>
         <Card className="p-1">
-          <ProfileMapbox locations={locations} />
+          <ProfileMapbox locations={channel?.locations} />
         </Card>
       </div>
       {/* Videos */}
       <div>
-      <h1 className="font-medium text-xl py-5">Videos</h1>
-      <div className="home gap-6">
-        {videosLoading ? (
-          <SkeletonCount count={10}>
-            <VideoCardSkeleton />
-          </SkeletonCount>
-        ) : (
-            totalVideos?.length && totalVideos.map((video: any) => (
-            <VideoCard key={video.id} item={video} />
-          ))
-        )}
-      </div>
-      {hasMore && !videosLoading && (
-          <div ref={ref} className="mx-auto opacity-0 flex justify-center mt-5">
-          <Loader className="animate-spin text-blacks/20" />
+        <h1 className="font-medium text-xl py-5">Videos</h1>
+        <div className="home gap-6">
+          {isLoading ? (
+            <SkeletonCount count={10}>
+              <VideoCardSkeleton />
+            </SkeletonCount>
+          ) : totalVideos?.length > 0 ? (
+            totalVideos?.map((video: any) => (
+              <VideoCard key={video.id} item={video} />
+            ))
+          ) : (
+            <div className="col-span-4">
+              <NoItemData title="this channel No videos found" />
+            </div>
+          )}
         </div>
+        {hasMore && !isLoading && (
+          <div ref={ref} className="mx-auto opacity-0 flex justify-center mt-5">
+            <Loader className="animate-spin text-blacks/20" />
+          </div>
         )}
       </div>
     </div>

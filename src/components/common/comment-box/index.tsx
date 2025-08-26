@@ -47,7 +47,7 @@ export default function CommentBox({ id, commentCount }: any) {
     }
   }, [commentData]);
 
-  // modify the totalComment for the item
+  // Modify the totalComment for the item
   useEffect(() => {
     if (!isModifyId?.id) return;
 
@@ -71,15 +71,21 @@ export default function CommentBox({ id, commentCount }: any) {
       }
     );
   }, [isModifyId]);
+
   // Handlers
   const handleCommentSubmit = async (
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    if (e.key !== "Enter") return;
+    e.stopPropagation(); // Prevent event bubbling
+    if (e.key !== "Enter") return; // Handle only Enter key
     const target = e.target as HTMLInputElement;
     const value = { video_id: id, comment: target.value };
     const data = modifyPayload(value);
+
+    // Store the comment
     const res = await storeComments(data).unwrap();
+
+    // Reset the input value if submission is successful
     if (res?.status) target.value = "";
   };
 
@@ -107,6 +113,7 @@ export default function CommentBox({ id, commentCount }: any) {
             onKeyDown={handleCommentSubmit}
             placeholder={`Comment as ${profileData?.data?.name}`}
             className="flex-1 h-11 rounded-full bg-white"
+            autoFocus // Auto-focus input
           />
         </div>
       )}
@@ -161,16 +168,18 @@ function CommentItem({
   const [toggleReaction, { isLoading }] = useToggleReactionMutation();
 
   const handleReactionClick = async (e: React.MouseEvent<HTMLSpanElement>) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent click event from bubbling up
     if (isLoading) return;
     const value = modifyPayload({ comment_id: parseInt(id) });
     const res = await toggleReaction(value).unwrap();
-    if (res?.status)
+
+    if (res?.status) {
       setIsModifyId({
         id,
         is_react: res.is_react,
         reactions_count_format: res.reactions_count_format,
       });
+    }
   };
 
   return (

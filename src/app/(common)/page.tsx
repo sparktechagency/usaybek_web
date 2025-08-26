@@ -16,7 +16,7 @@ import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import slugify from "slugify";
-import { toast } from "sonner";
+
 
 export default function Home() {
   const { ref, inView } = useInView();

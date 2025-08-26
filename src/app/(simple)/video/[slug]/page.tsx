@@ -1,25 +1,29 @@
 import VideoDetails from "@/components/view/video-details";
 import { authKey } from "@/lib";
 import { SlugParams } from "@/types";
-import { Metadata } from "next";
 import { cookies } from "next/headers";
 
-
-export async function generateMetadata({
-  params,
-}: SlugParams): Promise<Metadata> {
-  const { slug} = await params;
+export async function generateMetadata({ params }: SlugParams): Promise<any> {
+  const { slug } = await params;
   const tokon = (await cookies()).get(authKey)?.value;
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/videos/${slug}`, {
     headers: { Authorization: `Bearer ${tokon}` },
     cache: "force-cache",
   });
   const data = await res.json();
-  const {title,description,thumbnail:image,video}=data?.data || {}
+  const {
+    title,
+    description,
+    thumbnail: image,
+    video,
+    tags,
+  } = data?.data || {};
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
   const url = `${baseUrl}/video/${slug}`;
+  console.log(tags);
   return {
     title,
+    keywords: tags,
     description,
     openGraph: {
       title,
@@ -32,7 +36,7 @@ export async function generateMetadata({
               url: video,
               width: 1920,
               height: 1080,
-              type: "video/*"
+              type: "video/*",
             },
           ]
         : undefined,
