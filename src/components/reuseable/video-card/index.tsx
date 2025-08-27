@@ -1,11 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import Avatars from "../avater";
 import FavIcon from "@/icon/admin/favIcon";
 import { ImgBox } from "@/components/common/admin/reuseable";
+import { cn } from "@/lib";
 
-
-export function VideoCard({ item, className }: any) {
+export function VideoCard({ item, className, imgStyle }: any) {
   const {
     id,
     title,
@@ -22,7 +21,7 @@ export function VideoCard({ item, className }: any) {
           <ImgBox
             src={thumbnail || "/blur.png"}
             alt={title || "logo"}
-            className="w-full h-[220px]"
+            className={cn("w-full h-[220px]", imgStyle)}
           >
             {!!is_promoted && (
               <div className="absolute top-2 right-2  bg-reds/80 text-white text-xs font-semibold px-4 py-2 rounded-full flex items-center gap-1">

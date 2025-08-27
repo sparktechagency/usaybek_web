@@ -61,6 +61,7 @@
   --color-greens: #009411;
   --width-sideber-md: 256px;
   --width-sideber-xs: 80px;
+  --height-img-xs: 220px;
 }
 
 :root {
@@ -230,5 +231,3 @@
 .see-more {
   @apply grid grid-cols-1 md:col-span-2 lg:col-span-3 2xl:col-span-4 gap-6;
 }
-
-
