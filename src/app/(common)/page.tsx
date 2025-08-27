@@ -1,6 +1,5 @@
 "use client";
 import { NoItemData } from "@/components/common/admin/reuseable/table-no-item";
-import HomeCarousel from "@/components/common/home-carousel";
 import HomePromotion from "@/components/common/home-promotion";
 import SeeNav from "@/components/common/see-nav";
 import FilterBox from "@/components/reuseable/filter-box";
@@ -55,9 +54,7 @@ export default function Home() {
 
   const isNoVideos = relatedVideos?.data?.length === 0;
 
-  // const currentTotal = relatedVideos?.meta?.total ?? 0;
-  // const hasMore = similarVideos.length < currentTotal;
-
+ 
   // ✅ Only trigger when loader in view + has more
   useEffect(() => {
     if (inView && !isFetching && isCategory.id !== "all" && !relatedLoading) {
@@ -77,7 +74,9 @@ export default function Home() {
 
         {isCategory.id === "all" ? (
           <>
-            {/* <HomePromotion /> */}
+            <div>
+            <HomePromotion />
+            </div>
             {videoLoading ? (
               <div className="home gap-6 mt-5">{Skeleton(8)}</div>
             ) : (

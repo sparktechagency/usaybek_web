@@ -2,6 +2,7 @@ import { Poppins } from "next/font/google"; // Import Poppins
 import "@/app/style/globals.css";
 import Providers from "@/components/providers";
 
+
 // Load Poppins font
 const poppins = Poppins({
   variable: "--font-poppins",
