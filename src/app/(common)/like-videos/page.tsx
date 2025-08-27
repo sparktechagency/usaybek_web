@@ -12,7 +12,6 @@ import { useState } from "react";
 import { Skeleton } from "@/components/ui";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import historyImg from "@/assets/historyImg.jpg";
-import Link from "next/link";
 import { cn } from "@/lib";
 import { useRouter } from "next/navigation";
 
@@ -24,7 +23,9 @@ export default function LinkVideos() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-5 text-blacks">Liked Videos History</h1>
+      <h1 className="text-2xl font-bold mb-5 text-blacks">
+        Liked Videos History
+      </h1>
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-10">
         {/* Right Column: Search and Actions */}
         <ul className="space-y-6 like-gradient p-2 rounded-t-2xl [&>li>h1]:text-white">
