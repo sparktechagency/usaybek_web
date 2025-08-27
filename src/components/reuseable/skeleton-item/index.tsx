@@ -1,9 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib";
 import React from "react";
 
-export function VideoCardSkeleton() {
+export function VideoCardSkeleton({ className }:any) {
   return (
-    <div className="max-w-sm  lg:w-full lg:max-w-full">
+    <div className={className}>
       <div className="relative">
         <Skeleton className="w-full h-[220px] bg-blacks/10" />
       </div>
@@ -56,21 +57,21 @@ export function DetailsSkeleton() {
       {/* Channel Info */}
       <div className="border p-4 rounded-md my-5 shadow-xs">
         <Skeleton className="w-[150px] h-4 rounded-full bg-blacks/20" />
-       <div className="space-y-2">
+        <div className="space-y-2">
           <Skeleton className="w-full h-3 rounded-xl mt-2 bg-blacks/20" />
           <Skeleton className="w-full h-3 rounded-xl mt-2 bg-blacks/20" />
           <Skeleton className="w-full h-3 rounded-xl mt-2 bg-blacks/20" />
           <Skeleton className="w-full h-3 rounded-xl mt-2 bg-blacks/20" />
-       </div>
+        </div>
       </div>
     </>
   );
 }
 
-export function RelatedVideoCard() {
+export function RelatedVideoCard({ className }: any) {
   return (
     <>
-      <div className="flex gap-3 group">
+      <div className={cn("flex gap-3 group", className)}>
         <div className="relative w-37 h-22 flex-shrink-0 rounded-md overflow-hidden">
           <Skeleton className="w-full h-full absolute inset-0 bg-blacks/10" />
         </div>

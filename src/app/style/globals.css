@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import 'tailwind-scrollbar-hide/v4';
-
+@import "tailwind-scrollbar-hide/v4";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -13,7 +12,6 @@
     padding-inline: 0rem;
   }
 }
-
 
 @theme inline {
   --color-background: var(--background);
@@ -56,11 +54,11 @@
   --color-reds: #ef4444;
   --color-blacks: #000000;
   --color-grays: #535353;
-  --color-gray1:#888;
-  --color-gray2:#888888;
+  --color-gray1: #888;
+  --color-gray2: #888888;
   --color-grays-place: #dddddd;
   --color-body: #f6f6f6;
-  --color-greens:#009411;
+  --color-greens: #009411;
   --width-sideber-md: 256px;
   --width-sideber-xs: 80px;
 }
@@ -145,27 +143,42 @@
 }
 
 .like-gradient {
-  background: linear-gradient(0deg, rgba(204, 43, 94, 0) 0%, rgba(239, 68, 68, 0.80) 50%, #753A88 100%)
+  background: linear-gradient(
+    0deg,
+    rgba(204, 43, 94, 0) 0%,
+    rgba(239, 68, 68, 0.8) 50%,
+    #753a88 100%
+  );
 }
 
 .onside-get {
-  background: linear-gradient(124deg, #EC008C 0.15%, #FC6767 99.85%);
+  background: linear-gradient(124deg, #ec008c 0.15%, #fc6767 99.85%);
 }
 
 .onside-for {
-  background: linear-gradient(123deg, #8A2387 1.07%, #E94057 50%, #F27121 98.93%);
+  background: linear-gradient(
+    123deg,
+    #8a2387 1.07%,
+    #e94057 50%,
+    #f27121 98.93%
+  );
 }
 
 .onside-free {
-  background: linear-gradient(90deg, #EC008C 0%, #FC6767 100%);
+  background: linear-gradient(90deg, #ec008c 0%, #fc6767 100%);
 }
 
-.alart{
-  background:linear-gradient(90deg, rgba(239, 68, 68, 0.00) 0%, #EF4444 50%, rgba(239, 68, 68, 0.00) 100%);
+.alart {
+  background: linear-gradient(
+    90deg,
+    rgba(239, 68, 68, 0) 0%,
+    #ef4444 50%,
+    rgba(239, 68, 68, 0) 100%
+  );
 }
 
-.avatar{
-  @apply bg-[#FFE9E9] text-reds
+.avatar {
+  @apply bg-[#FFE9E9] text-reds;
 }
 
 .ql-toolbar {
@@ -208,9 +221,12 @@
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
 }
 
-
 /* home page grid  */
 
 .home {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6;
+}
+
+.see-more {
+  @apply grid grid-cols-1 md:col-span-2 lg:col-span-3 2xl:col-span-4 gap-6;
 }

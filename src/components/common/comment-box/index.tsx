@@ -5,7 +5,7 @@ import { SmallCicle } from "@/components/reuseable/small-circle";
 import { Button, Input, Skeleton } from "@/components/ui";
 import FavIcon from "@/icon/admin/favIcon";
 import { cn } from "@/lib/utils";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 import {
   useGetCommentQuery,
@@ -25,6 +25,7 @@ export default function CommentBox({ id, commentCount }: any) {
   const { data: profileData } = useGetProfileQuery({});
   const [storeComments] = useStoreCommentsMutation();
   const [isModifyId, setIsModifyId] = useState<any>();
+  const [isSmall, setIsSmall] = useState(false);
   const { data: comments, isLoading: commentLoading } = useGetCommentQuery({
     video_id: id,
     page,
@@ -34,6 +35,8 @@ export default function CommentBox({ id, commentCount }: any) {
   const [openReplyBox, setOpenReplyBox] = useState<number | null>(null);
   const [totalComment, setTotalComment] = useState<any>([]);
 
+  const [isSubmitting, setIsSubmitting] = useState(false); // New state to track submission status
+
   // Pagination
   const hasMore = totalComment.length < comments?.meta?.total;
   useEffect(() => {
@@ -41,11 +44,22 @@ export default function CommentBox({ id, commentCount }: any) {
   }, [inView, hasMore]);
 
   const commentData = comments?.data;
+
+  // Filter out duplicates and add new unique comments
   useEffect(() => {
     if (commentData) {
-      setTotalComment((prev: any) => [...prev, ...commentData]);
+      const uniqueComments = commentData.filter(
+        (newComment: any) =>
+          !totalComment.some(
+            (existingComment: any) => existingComment.id === newComment.id
+          )
+      );
+
+      if (uniqueComments.length > 0) {
+        setTotalComment((prev: any) => [...prev, ...uniqueComments]);
+      }
     }
-  }, [commentData]);
+  }, [commentData, totalComment]);
 
   // Modify the totalComment for the item
   useEffect(() => {
@@ -78,6 +92,12 @@ export default function CommentBox({ id, commentCount }: any) {
   ) => {
     e.stopPropagation(); // Prevent event bubbling
     if (e.key !== "Enter") return; // Handle only Enter key
+    e.preventDefault();
+
+    // Prevent multiple submissions
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     const target = e.target as HTMLInputElement;
     const value = { video_id: id, comment: target.value };
     const data = modifyPayload(value);
@@ -87,6 +107,8 @@ export default function CommentBox({ id, commentCount }: any) {
 
     // Reset the input value if submission is successful
     if (res?.status) target.value = "";
+
+    setIsSubmitting(false); // Re-enable submission
   };
 
   const toggleReplies = useCallback((id: number) => {
@@ -96,6 +118,35 @@ export default function CommentBox({ id, commentCount }: any) {
   const toggleReplyBox = useCallback((id: number) => {
     setOpenReplyBox((prev) => (prev === id ? null : id));
   }, []);
+
+  // comment item box start =======
+  const commentItemBox = commentLoading ? (
+    <SkeletonCount count={8}>{CommentSkeleton()}</SkeletonCount>
+  ) : totalComment && totalComment.length > 0 ? (
+    totalComment
+      ?.sort((a: any, b: any) => b.id - a.id)
+      ?.map((item: any, idx: any) => (
+        <CommentItem
+          key={idx}
+          comment={item}
+          isRepliesOpen={openReplies === item.id}
+          isReplyBoxOpen={openReplyBox === item.id}
+          onToggleReplies={() => toggleReplies(item.id)}
+          onToggleReplyBox={() => toggleReplyBox(item.id)}
+          setIsModifyId={setIsModifyId}
+        />
+      ))
+  ) : (
+    <p className="text-gray-500">No comments yet</p>
+  );
+
+  // pagination see more
+  const handleSeeMore = hasMore && !commentLoading && (
+    <div ref={ref} className="flex flex-col mt-5">
+      <CommentSkeleton />
+    </div>
+  );
+  // comment item box end =======
 
   return (
     <div className="border-gray-200">
@@ -118,30 +169,35 @@ export default function CommentBox({ id, commentCount }: any) {
         </div>
       )}
 
-      <div className="mt-6 space-y-6">
-        {commentLoading ? (
-          <SkeletonCount count={8}>{CommentSkeleton()}</SkeletonCount>
-        ) : totalComment && totalComment.length > 0 ? (
-          totalComment.map((item: any, idx: any) => (
-            <CommentItem
-              key={idx}
-              comment={item}
-              isRepliesOpen={openReplies === item.id}
-              isReplyBoxOpen={openReplyBox === item.id}
-              onToggleReplies={() => toggleReplies(item.id)}
-              onToggleReplyBox={() => toggleReplyBox(item.id)}
-              setIsModifyId={setIsModifyId}
-            />
-          ))
-        ) : (
-          <p className="text-gray-500">No comments yet</p>
-        )}
+      <div className="mt-6">
+        {/* laptop and above  start*/}
+        <div className="hidden lg:block space-y-6">
+          {commentItemBox}
+          {handleSeeMore}
+        </div>
 
-        {hasMore && !commentLoading && (
-          <div ref={ref} className="flex flex-col mt-5">
-            <CommentSkeleton />
-          </div>
-        )}
+        {/* small device start */}
+        <div className="block lg:hidden space-y-6  rounded-md">
+          <ul
+            onClick={() => setIsSmall(!isSmall)}
+            className="border p-3 *:text-grays rounded-xl cursor-pointer  justify-between"
+          >
+            <li>
+              <ul className="flex items-center justify-between">
+                <li>See all Comments</li>
+                <li>{isSmall ? <ChevronUp /> : <ChevronDown />}</li>
+              </ul>
+            </li>
+            {isSmall && (
+              <li className="mt-5">
+                <div>
+                  {commentItemBox}
+                  {handleSeeMore}
+                </div>
+              </li>
+            )}
+          </ul>
+        </div>
       </div>
     </div>
   );
@@ -398,7 +454,7 @@ function ReplyBox({ comment_id, className, onToggleReplyBox }: any) {
 function CommentSkeleton() {
   return (
     <div className="flex items-center gap-3">
-      <div className="flex  gap-2">
+      <div className="flex gap-2">
         <Skeleton className="size-10 2xl:size-11 rounded-full" />
         <div className="flex flex-col gap-2">
           <Skeleton className="w-60 h-3" />

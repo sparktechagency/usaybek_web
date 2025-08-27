@@ -17,7 +17,6 @@ import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import slugify from "slugify";
 
-
 export default function Home() {
   const { ref, inView } = useInView();
   const [page, setPage] = useState(1);
@@ -30,31 +29,41 @@ export default function Home() {
   }, [isCategory]);
 
   const { data: chVideos, isLoading: videoLoading } = useHomeVideosQuery({});
-  const query = { page, per_page: 6 };
+  const query = { page };
 
-  const { data: relatedVideos, isLoading: relatedLoading } =
-    useRelatedVideosQuery(
-      { id: isCategory.id, arg: query },
-      { skip: isCategory.id === "all" }
-    );
+  const {
+    data: relatedVideos,
+    isFetching,
+    isLoading: relatedLoading,
+  } = useRelatedVideosQuery(
+    { id: isCategory.id, arg: query },
+    { skip: isCategory.id === "all" }
+  );
 
   // ✅ Append new videos only when new data comes
-  const totalCount = !!relatedVideos?.data?.length;
   useEffect(() => {
-    if (totalCount) {
-      setSimilarVideos((prev) => [...prev, ...relatedVideos.data]);
+    if (relatedVideos?.data) {
+      setSimilarVideos((prev: any) => {
+        const existingIds = new Set(prev.map((v: any) => v.id));
+        const newOnes = relatedVideos.data.filter(
+          (v: any) => !existingIds.has(v.id)
+        );
+        return [...prev, ...newOnes];
+      });
     }
-  }, [relatedVideos, totalCount]);
+  }, [relatedVideos?.data]);
+
+  const isNoVideos = relatedVideos?.data?.length === 0;
 
   // const currentTotal = relatedVideos?.meta?.total ?? 0;
   // const hasMore = similarVideos.length < currentTotal;
 
   // ✅ Only trigger when loader in view + has more
   useEffect(() => {
-    if (inView && isCategory.id !== "all" && !relatedLoading) {
+    if (inView && !isFetching && isCategory.id !== "all" && !relatedLoading) {
       setPage((p) => p + 1);
     }
-  }, [inView, isCategory.id, relatedLoading]);
+  }, [inView, isCategory.id, relatedLoading, isFetching]);
 
   console.log(relatedVideos?.data.length);
   console.log(relatedVideos?.data?.length);
@@ -80,7 +89,6 @@ export default function Home() {
                     <SeeNav
                       title={channel.name}
                       href={`/videos/${channel.id}_${slugify(channel.name, {
-                        lower: true,
                         strict: true,
                       })}`}
                     />
@@ -99,17 +107,20 @@ export default function Home() {
             <div className="home gap-6">
               {relatedLoading ? (
                 Skeleton(6)
-              ) : !!similarVideos ? (
+              ) : similarVideos?.length > 0 ? (
                 similarVideos?.map((video: any, idx: number) => (
                   <VideoCard key={idx} item={video} />
                 ))
               ) : (
-                <NoItemData title="No Video Found" className="col-span-4" />
+                <NoItemData
+                  title="No videos are currently available in this category"
+                  className="col-span-4"
+                />
               )}
             </div>
             {/* ✅ Loader only when more pages left */}
-            <div className="ttttt">
-              {totalCount && (
+            <div>
+              {!relatedLoading && !isNoVideos && (
                 <div ref={ref} className="mx-auto flex justify-center mt-5">
                   <Loader className="animate-spin text-blacks/20" />
                 </div>

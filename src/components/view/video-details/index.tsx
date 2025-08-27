@@ -69,7 +69,7 @@ export default function VideoDetails({ slug }: any) {
     type,
     link,
     category_id,
-    user_id
+    user_id,
   } = data || {};
 
   const SubmitReport = async () => {
