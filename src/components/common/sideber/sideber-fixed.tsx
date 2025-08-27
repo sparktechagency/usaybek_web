@@ -1,13 +1,18 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { navItems } from "./nav-data";
+import { navItems, signOutItems } from "./nav-data";
 import { Separator } from "@/components/ui";
-import { useLogin } from "../login-provider";
-import { cn, PlaceholderImg } from "@/lib/utils";
-import { usePathname } from "next/navigation";
+import { cn, getCookie} from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
 import Img from "@/components/reuseable/img";
 import Icon from "@/icon";
+import { authKey } from "@/lib";
+import { useGetProfileQuery } from "@/redux/api/authApi";
+import { useHandleLogout } from "@/lib/logout";
+import Modal from "@/components/reuseable/modal";
+import TabList from "../upload/tab";
+import PaymentBox from "../payment-box";
 
 type SidebarFixedProps = {
   isSide: boolean;
@@ -15,8 +20,30 @@ type SidebarFixedProps = {
 };
 
 export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
+  const router=useRouter()
+  const [isUpload, setIsUpload] = useState(false);
+  const [isPayment, setIsPayment] = useState(false);
+  const logout = useHandleLogout();
+  const [navItem, setIsNavItem] = useState<any>(signOutItems);
   const pathname = usePathname();
-  const { login } = useLogin();
+  const token = getCookie(authKey);
+  const { data: profileData, isLoading } = useGetProfileQuery(
+    {},
+    { refetchOnFocus: true, skip: !token }
+  );
+  const { name, avatar } = profileData?.data || {};
+
+  useEffect(() => {
+    if (token && !isLoading) {
+      setIsNavItem(navItems);
+    } else {
+      setIsNavItem(signOutItems);
+    }
+  }, [token, isLoading]);
+
+  useEffect(() => {
+    setIsUpload(false);
+  }, [isPayment]);
 
   // ✅ Prevent background scroll when sidebar is open
   useEffect(() => {
@@ -56,15 +83,15 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
           </div>
           {/* sign in /sign out */}
           <div className="flex items-center gap-3 py-1 border mx-3  my-3  px-1  rounded-full transition-colors justify-start">
-            {login ? (
+            {token && !isLoading ? (
               <>
                 <Img
                   className="size-9 rounded-full"
-                  src={PlaceholderImg()}
+                  src={avatar}
                   title="User avatar"
                 ></Img>
                 <span className="font-medium text-gray-800 whitespace-nowrap">
-                  Md. Julfiker Islam
+                  {name}
                 </span>
               </>
             ) : (
@@ -78,7 +105,7 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
           </div>
 
           <nav className="flex-1 py-2 mx-2 space-y-3">
-            {navItems.map((item: any, index) =>
+            {navItem.map((item: any, index:any) =>
               item.text === "separator" ? (
                 <Separator key={`separator-${index}`} />
               ) : (
@@ -89,6 +116,12 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
                     "flex items-center gap-3 px-3 py-2 text-blacks hover:bg-gray-100 rounded-full transition-colors justify-start",
                     item.href === pathname && "bg-gray-100 font-semibold"
                   )}
+                  onClick={(e) => {
+                    if (item.href === "/upload") {
+                      e.preventDefault();
+                      setIsUpload(true);
+                    }
+                  }}
                 >
                   {item.icon}
                   <span className="whitespace-nowrap font-normal">
@@ -97,20 +130,44 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
                 </Link>
               )
             )}
-            {login && (
-              <Link
-                className={`flex items-center gap-3 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors text-red-500 justify-start`}
-                href={"/"}
+            {token && !isLoading && (
+              <div
+                className={`flex items-center gap-3 px-3 py-2 rounded-full cursor-pointer hover:bg-gray-100 transition-colors text-red-500 justify-start`}
+                onClick={()=>{
+                  setIsSide(false)
+                  router.push("/")
+                  logout()
+                }}
               >
                 <Icon name="ssignout" />{" "}
-                <span className="whitespace-nowrap font-normal">
-                  {"Sign out"}
-                </span>
-              </Link>
+                <span className="whitespace-nowrap font-normal">Sign out</span>
+              </div>
             )}
           </nav>
         </div>
       </aside>
+
+      {/* Upload Modal ======== */}
+      <Modal
+        open={isUpload}
+        setIsOpen={setIsUpload}
+        title="Upload a new video"
+        titleStyle="text-center"
+        className="sm:max-w-4xl"
+      >
+        <TabList setIsPayment={setIsPayment} />
+      </Modal>
+
+      {/* Payment Modal ======*/}
+      <Modal
+        title="Pay to MyTSV"
+        open={isPayment}
+        setIsOpen={setIsPayment}
+        titleStyle="text-center"
+        className="sm:max-w-3xl"
+      >
+        <PaymentBox setIsPayment={setIsPayment} />
+      </Modal>
     </div>
   );
 }

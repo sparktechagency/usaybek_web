@@ -91,6 +91,7 @@ export default function Sidebar() {
   );
 }
 
+// SidebarHeader
 const SidebarHeader = ({ isExpanded, toggleSidebar }: any) => (
   <div
     className={`flex items-center p-4 h-20 ${
@@ -106,6 +107,7 @@ const SidebarHeader = ({ isExpanded, toggleSidebar }: any) => (
   </div>
 );
 
+// UserProfile
 const UserProfile = ({ token, isLoading, name, avatar, isExpanded }: any) => (
   <div className="p-4">
     <div
@@ -137,6 +139,7 @@ const UserProfile = ({ token, isLoading, name, avatar, isExpanded }: any) => (
   </div>
 );
 
+// NavigationLinks
 const NavigationLinks = ({
   navItem,
   pathname,

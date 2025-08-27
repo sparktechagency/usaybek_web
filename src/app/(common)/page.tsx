@@ -1,12 +1,12 @@
 "use client";
 import { NoItemData } from "@/components/common/admin/reuseable/table-no-item";
+import HomeCarousel from "@/components/common/home-carousel";
 import HomePromotion from "@/components/common/home-promotion";
 import SeeNav from "@/components/common/see-nav";
 import FilterBox from "@/components/reuseable/filter-box";
 import { VideoCardSkeleton } from "@/components/reuseable/skeleton-item";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import { VideoCard } from "@/components/reuseable/video-card";
-import { Button } from "@/components/ui";
 import { capitalize } from "@/lib/utils";
 import {
   useHomeVideosQuery,
@@ -65,9 +65,6 @@ export default function Home() {
     }
   }, [inView, isCategory.id, relatedLoading, isFetching]);
 
-  console.log(relatedVideos?.data.length);
-  console.log(relatedVideos?.data?.length);
-
   return (
     <div>
       <FilterBox isCategory={isCategory} setIsCategory={setIsCategory} />
@@ -80,6 +77,7 @@ export default function Home() {
 
         {isCategory.id === "all" ? (
           <>
+            {/* <HomePromotion /> */}
             {videoLoading ? (
               <div className="home gap-6 mt-5">{Skeleton(8)}</div>
             ) : (
