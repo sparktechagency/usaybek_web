@@ -72,6 +72,7 @@ export default function VideoDetails({ slug }: any) {
     user_id,
   } = data || {};
 
+ 
   const SubmitReport = async () => {
     const value = {
       video_id: slug,

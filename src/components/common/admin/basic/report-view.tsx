@@ -19,7 +19,7 @@ export default function ReportView({ onChange, options, item }: any) {
           video={video?.video}
           link={video?.link}
           thumbnail={video?.thumbnail}
-          className="h-[300px]"
+          className="md:h-[300px]"
         />
         <div className="flex items-center flex-wrap lg:flex-nowrap justify-between mt-5">
           <div className="flex items-center gap-3">

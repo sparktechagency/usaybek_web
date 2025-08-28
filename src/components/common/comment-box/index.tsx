@@ -30,6 +30,10 @@ export default function CommentBox({ id, commentCount }: any) {
     video_id: id,
     page,
   });
+// scroll refresh
+  // useEffect(() => {
+  //   window.scrollTo(0, 0); 
+  // }, []); 
 
   const [openReplies, setOpenReplies] = useState<number | null>(null);
   const [openReplyBox, setOpenReplyBox] = useState<number | null>(null);

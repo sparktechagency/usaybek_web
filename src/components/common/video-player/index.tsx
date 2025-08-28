@@ -31,7 +31,7 @@ interface PlayerProps {
 const VideoComponent = ({video, thumbnail, className }:Partial<PlayerProps>) => (
   <VideoPlayer
   className={cn(
-    "overflow-hidden w-full h-[650px] rounded-lg border",
+    "overflow-hidden w-full h-[300px] md:h-[650px] rounded-lg border",
     className
   )}
 >
@@ -58,16 +58,9 @@ const VideoComponent = ({video, thumbnail, className }:Partial<PlayerProps>) => 
 
 // A more realistic component for the 'link' type, e.g., an iframe
 const LinkComponent = ({link, className }:Partial<PlayerProps>) => (
-  <div className={cn("overflow-hidden w-full h-[650px] rounded-lg border", className)}>
+  <div className={cn("overflow-hidden w-full h-[300px] md:h-[650px] rounded-lg border", className)}>
     {link ? (
       <ReactPlayer src={link} height={'100%'} width={"100%"} />
-      // <iframe
-      //   src={"https://www.youtube.com/watch?v=bXlQ3Mw4uGc"}
-      //   className="w-full h-full"
-      //   title="Embedded Content"
-      //   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      //   allowFullScreen
-      // />
     ) : (
       <div className="w-full h-full flex items-center justify-center bg-muted">
         <p className="text-muted-foreground">Invalid link provided.</p>
@@ -77,7 +70,7 @@ const LinkComponent = ({link, className }:Partial<PlayerProps>) => (
 );
 
 const SkeletonLoader = ({ className }:Partial<PlayerProps>) => (
-  <div className={cn("overflow-hidden w-full h-[650px] rounded-lg border", className)}>
+  <div className={cn("overflow-hidden w-full h-[300px] md:h-[650px] rounded-lg border", className)}>
     <Skeleton className="w-full h-full bg-blacks/5" />
   </div>
 );

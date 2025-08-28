@@ -14,6 +14,7 @@ import Modal from "@/components/reuseable/modal";
 import { Pagination } from "@/components/reuseable/pagination";
 import { Button, TableCell, TableRow, Textarea } from "@/components/ui";
 import useConfirmation from "@/context/delete-modal";
+import { TakeOptions } from "@/dummy-data";
 import FavIcon from "@/icon/admin/favIcon";
 import { delay, modifyPayload } from "@/lib";
 import { useReportActionMutation } from "@/redux/api/admin/channelApi";
@@ -27,12 +28,6 @@ import React, { useState } from "react";
 import { toast } from "sonner";
 import { useDebounce } from "use-debounce";
 
-const options = [
-  { label: "Suspend for 7 days", value: "Suspend for 7 days" },
-  { label: "Suspend for 30 days", value: "Suspend for 30 days" },
-  { label: "Give a warning", value: "Give a warning" },
-  { label: "Suspend permanently", value: "Suspend permanently" },
-];
 
 const initTakeInfo = {
   id: "",
@@ -212,7 +207,7 @@ export default function Reports() {
         className="sm:max-w-5xl"
       >
         <ReportView
-          options={options}
+          options={TakeOptions}
           onChange={(value: any) => {
             setTakeInfo({ ...takeInfo, action_name: value });
             setIsTake(true);

@@ -100,7 +100,7 @@ export default function ChannelBox({ totalVideos }: any) {
               video={isVideo?.video}
               link={isVideo?.link}
               thumbnail={isVideo?.thumbnail}
-              className="h-[300px]"
+              className="md:h-[300px]"
             />
             <div className="pt-5">
               <SelectBox
