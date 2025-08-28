@@ -15,21 +15,18 @@ import {
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import Icon from "@/icon";
 import { authKey, delay, modifyPayload, setCookie } from "@/lib";
-import { useSignInMutation, useSocialLoginMutation } from "@/redux/api/authApi";
+import { useSignInMutation} from "@/redux/api/authApi";
 import { loginSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import auth from "@/firebase.config";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+
 
 export default function Login() {
-  const [socialLogin, { isLoading: socialLoading }] = useSocialLoginMutation();
   const [signIn, { isLoading }] = useSignInMutation();
   const [isError, setIsError] = useState("");
   const router = useRouter();
@@ -74,38 +71,29 @@ export default function Login() {
     }
   };
 
-  async function urlToFileJpg(url: string, filename?: string): Promise<File> {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    const mimeType = "image/jpeg";
-    const finalName =
-      (filename || `file_${Date.now()}`).replace(/\.[^/.]+$/, "") + ".jpg";
-    return new File([blob], finalName, { type: mimeType });
-  }
+  // const handleGoogle = async () => {
+  //   const provider = new GoogleAuthProvider();
+  //   signInWithPopup(auth, provider)
+  //     .then(async (result: any) => {
+  //       const user = result.user;
+  //       const file = await urlToFileJpg(user?.photoURL);
+  //       const value = {
+  //         name: user?.displayName,
+  //         email: user?.email,
+  //         photo: file,
+  //         google_id: user?.uid,
+  //       };
+  //       console.log(value);
+  //       const data = modifyPayload(value);
+  //       const res = await socialLogin(data).unwrap();
+  //       console.log(res);
 
-  const handleGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then(async (result: any) => {
-        const user = result.user;
-        const file = await urlToFileJpg(user?.photoURL);
-        const value = {
-          name: user?.displayName,
-          email: user?.email,
-          photo: file,
-          google_id: user?.uid,
-        };
-        console.log(value);
-        const data = modifyPayload(value);
-        const res = await socialLogin(data).unwrap();
-        console.log(res);
+  //       // console.log(file);
 
-        // console.log(file);
-
-        // ...
-      })
-      .catch((error: any) => {});
-  };
+  //       // ...
+  //     })
+  //     .catch((error: any) => {});
+  // };
 
   return (
     <div className="fixed inset-0 m-0 md:m-3">
@@ -162,7 +150,7 @@ export default function Login() {
                   name="email"
                   placeholder="Enter your Email"
                 />
-                <FromInput
+                <FromInputs
                   eye={true}
                   label="Password"
                   name="password"
@@ -201,7 +189,7 @@ export default function Login() {
                   Sign Up <Icon name="arrowRight" />
                 </Link>
               </div>
-              <Button
+              {/* <Button
                 variant="outline"
                 size={"lg"}
                 className="w-full rounded-full border flex justify-between shadow-none px-1"
@@ -213,7 +201,7 @@ export default function Login() {
                   <span>Continue with Google</span>
                 </div>
                 <ArrowRight className="size-4 text-blacks rotate-[-20deg]" />
-              </Button>
+              </Button> */}
             </Card>
           </div>
         </div>

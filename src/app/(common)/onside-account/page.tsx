@@ -3,8 +3,8 @@ import React from "react";
 import { Alert, AlertDescription } from "@/components/ui";
 import Icon from "@/icon";
 import OnSideBox from "@/components/common/onslide";
-
-
+import { makeStore } from "@/redux/store";
+import { pricingApi } from "@/redux/api/admin/pricingApi";
 
 // export const metadata = Seo({
 //   title: "Get Discovered Locally: Sign Up Your Business on MyTSV.com",
@@ -22,8 +22,12 @@ import OnSideBox from "@/components/common/onslide";
 //   image: "/images/onsideImg.jpg",
 // });
 
+export default async function OnSidePage() {
+  const store = makeStore();
+  const { data: pricing } = await store.dispatch(
+    pricingApi.endpoints.getPrice.initiate({})
+  );
 
-export default function OnSidePage() {
   return (
     <div className="max-w-6xl m-auto">
       <div className="relative h-48 md:h-64">
@@ -104,7 +108,7 @@ export default function OnSidePage() {
             </div>
             <div className="mx-auto">
               <h3 className="text-[22px] font-semibold mb-5 w-full text-center">
-                One-Time Sign-Up Fee: $99.99
+                One-Time Sign-Up Fee: {`${pricing?.onsite_account_creation}`}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-lg">
                 <ul className="list-none space-y-3">

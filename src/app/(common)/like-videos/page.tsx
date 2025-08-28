@@ -14,6 +14,7 @@ import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import historyImg from "@/assets/historyImg.jpg";
 import { cn } from "@/lib";
 import { useRouter } from "next/navigation";
+import { NoItemData } from "@/components/common/admin/reuseable/table-no-item";
 
 export default function LinkVideos() {
   const router = useRouter();
@@ -69,7 +70,7 @@ export default function LinkVideos() {
                 <Skeleton className="size-7 hidden md:block rounded-full" />
               </div>
             </SkeletonCount>
-          ) : (
+          ) : likeVideos?.data?.length > 0 ? (
             likeVideos?.data?.map((item: any) => (
               <div
                 key={item?.id}
@@ -116,6 +117,8 @@ export default function LinkVideos() {
                 />
               </div>
             ))
+          ) : (
+            <NoItemData title="You haven't liked any videos yet" />
           )}
 
           <ul className="flex flex-wrap justify-end my-7">

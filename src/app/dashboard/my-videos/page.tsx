@@ -156,7 +156,7 @@ export default function MyVideos() {
                           />
                         </div>
                       )}
-                      <div className="flex space-x-4">
+                      <div className="flex group space-x-4">
                         <div className="w-[150px] h-[95px]">
                           <ImgBox
                             src={item.thumbnail}

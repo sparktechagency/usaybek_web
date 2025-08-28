@@ -38,6 +38,14 @@ const options = [
   { value: "Captions issue", label: "Captions issue" },
 ];
 
+const useScrollToTop = () => {
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.scrollTo(0, 0); // Scroll to top
+    }
+  }, []);
+};
+
 export default function VideoDetails({ slug }: any) {
   const path = usePathname();
   const [storeLikeDisLike] = useStoreLikeDisLikeMutation();
@@ -51,6 +59,10 @@ export default function VideoDetails({ slug }: any) {
     reason: "Sexual content",
     issue: "",
   });
+
+  // scroll refresh
+  // Call to scroll to the top
+  useScrollToTop();
 
   const {
     id,
@@ -72,7 +84,6 @@ export default function VideoDetails({ slug }: any) {
     user_id,
   } = data || {};
 
- 
   const SubmitReport = async () => {
     const value = {
       video_id: slug,

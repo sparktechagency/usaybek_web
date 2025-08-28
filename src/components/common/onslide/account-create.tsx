@@ -1,22 +1,18 @@
 "use client";
 import assets from "@/assets";
 import Form from "@/components/reuseable/from";
-import { FromInput } from "@/components/reuseable/from-input";
 import { FromInputs } from "@/components/reuseable/from-inputs";
 import { Button, Card, CardHeader, CardTitle } from "@/components/ui";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
-import Icon from "@/icon";
 import { delay, modifyPayload } from "@/lib";
 import { useSignUpMutation } from "@/redux/api/authApi";
 import { onSideSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import VarifyOtpOside from "./varify-otp-onside";
 import { toast } from "sonner";
-
 
 export default function OnSideAccount() {
   const [isEmail, setIsEmail] = useState("");
@@ -111,13 +107,15 @@ export default function OnSideAccount() {
                 stylelabel="bg-white"
                 placeholder="Your full name hare"
               />
-              <FromInput
+              <FromInputs
+                stylelabel="bg-white"
                 eye={true}
                 label="Password"
                 name="password"
                 placeholder="Enter your Password"
               />
-              <FromInput
+              <FromInputs
+                stylelabel="bg-white"
                 eye={true}
                 label="Confirm Password"
                 name="confirm_password"
@@ -133,7 +131,7 @@ export default function OnSideAccount() {
                 Create account
               </Button>
             </Form>
-            <Button
+            {/* <Button
               variant="outline"
               size={"lg"}
               className="w-full mt-5 rounded-full border flex justify-between shadow-none px-1"
@@ -143,7 +141,7 @@ export default function OnSideAccount() {
                 <span>Continue with Google</span>
               </div>
               <ArrowRight className="size-4 text-blacks rotate-[-20deg]" />
-            </Button>
+            </Button> */}
           </>
         ) : (
           <VarifyOtpOside setIsEmail={setIsEmail} isEmail={isEmail} />

@@ -26,14 +26,15 @@ export default function CommentBox({ id, commentCount }: any) {
   const [storeComments] = useStoreCommentsMutation();
   const [isModifyId, setIsModifyId] = useState<any>();
   const [isSmall, setIsSmall] = useState(false);
-  const { data: comments, isLoading: commentLoading } = useGetCommentQuery({
-    video_id: id,
-    page,
-  });
-// scroll refresh
-  // useEffect(() => {
-  //   window.scrollTo(0, 0); 
-  // }, []); 
+  const { data: comments, isLoading: commentLoading } = useGetCommentQuery(
+    {
+      video_id: id,
+      page,
+    },
+    {
+      skip: !id,
+    }
+  );
 
   const [openReplies, setOpenReplies] = useState<number | null>(null);
   const [openReplyBox, setOpenReplyBox] = useState<number | null>(null);
@@ -168,7 +169,6 @@ export default function CommentBox({ id, commentCount }: any) {
             onKeyDown={handleCommentSubmit}
             placeholder={`Comment as ${profileData?.data?.name}`}
             className="flex-1 h-11 rounded-full bg-white"
-            autoFocus // Auto-focus input
           />
         </div>
       )}
@@ -441,6 +441,7 @@ function ReplyBox({ comment_id, className, onToggleReplyBox }: any) {
           <li>
             <Button
               onClick={() => hanldeReplay()}
+              disabled={isText?.length > 0 ? false : true}
               variant="ghost"
               className="bg-grays-place hover:bg-grays-place rounded-full text-blacks/80 h-6"
               size="sm"

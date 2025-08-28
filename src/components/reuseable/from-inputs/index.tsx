@@ -53,7 +53,7 @@ export function FromInputs({
             <Input
               id={inputId}
               className={cn(
-                "h-12 w-full rounded-full pl-4 pr-3  text-blacks placeholder:text-grays  text-sm",
+                "h-12 w-full rounded-full pl-4 pr-3  text-blacks  text-sm",
                 className
               )}
               {...field}

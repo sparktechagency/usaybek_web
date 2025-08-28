@@ -2,9 +2,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 import Link from "next/link";
 
-export function BlogsCard({ id, title, image,description}: any) {
+export function BlogsCard({ id, title, image, description }: any) {
   return (
-    <div className="max-w-sm  lg:w-full lg:max-w-full">
+    <Link href={`/blogs/${id}`}>
       <div className="relative">
         <div className="">
           <Image
@@ -21,15 +21,16 @@ export function BlogsCard({ id, title, image,description}: any) {
           {title}
         </li>
         <li>
-          <div className="h-[50px] overflow-hidden" dangerouslySetInnerHTML={{ __html: description }}></div>
+          <div
+            className="h-[50px] overflow-hidden"
+            dangerouslySetInnerHTML={{ __html: description }}
+          ></div>
         </li>
         <li>
-          <Link href={`/blogs/${id}`} className="text-reds/90">
-            Read more...
-          </Link>
+          <span className="text-reds/90">Read more...</span>
         </li>
       </ul>
-    </div>
+    </Link>
   );
 }
 

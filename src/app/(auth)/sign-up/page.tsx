@@ -109,14 +109,14 @@ export default function SignUp() {
                   name="email"
                   placeholder="Enter your Email"
                 />
-                <FromInput
+                <FromInputs
                   eye={true}
                   label="Password"
                   name="password"
                   type="password"
                   placeholder="Enter your Password"
                 />
-                <FromInput
+                <FromInputs
                   eye={true}
                   label="Confirm Password"
                   name="confirm_password"

@@ -47,12 +47,12 @@ export default function Footer() {
             <h3 className="text-lg font-semibold text-blacks">Useful Links</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="#" className="text-blacks">
+                <Link href="/faq" className="text-blacks">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-blacks ">
+                <Link href="/blogs" className="text-blacks ">
                   Blogs
                 </Link>
               </li>
@@ -64,17 +64,17 @@ export default function Footer() {
             <h3 className="text-lg font-semibold text-blacks">Company</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="#" className="text-blacks ">
+                <Link href="/about-us" className="text-blacks ">
                   About us
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-blacks ">
+                <Link href="/contact-us" className="text-blacks ">
                   Contact
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-blacks ">
+                <Link href="/terms" className="text-blacks ">
                   Terms & Conditions
                 </Link>
               </li>

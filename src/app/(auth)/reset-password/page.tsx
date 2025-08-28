@@ -1,7 +1,6 @@
 "use client";
 import assets from "@/assets";
 import Form from "@/components/reuseable/from";
-import { FromInput } from "@/components/reuseable/from-input";
 import {
   Button,
   Card,
@@ -19,6 +18,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import React from "react";
 import z from "zod";
+import { FromInputs } from "@/components/reuseable/from-inputs";
 
 export const passwordSchema = z
   .object({
@@ -93,18 +93,21 @@ export default function ForgotPassword() {
             </CardDescription>
           </CardHeader>
           <Form className="space-y-6 pt-8" from={from} onSubmit={handleSubmit}>
-            <FromInput
+            <FromInputs
               eye={true}
               label="Password"
               name="password"
+              type="password"
               placeholder="Enter your Password"
             />
-            <FromInput
+            <FromInputs
               eye={true}
-              label="Confirm password"
+              label="Confirm Password"
               name="c_password"
-              placeholder="Enter your Confirm password"
+              type="password"
+              placeholder="Enter your Confirm Password"
             />
+
             <Button
               type="submit"
               variant={"primary"}

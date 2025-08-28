@@ -7,7 +7,7 @@ import Link from "next/link";
 import Icon from "@/icon";
 import { useSidebar } from "@/context/useSideber";
 import { navItems, signOutItems } from "./nav-data";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Modal from "@/components/reuseable/modal";
 import TabList from "../upload/tab";
 import PaymentBox from "../payment-box";
@@ -45,7 +45,7 @@ export default function Sidebar() {
     <>
       <div
         className={cn(
-          "flex flex-col h-full bg-white rounded-tr-md transition-all duration-300 ease-in-out",
+          "flex flex-col h-full bg-white rounded-tr-md  transition-all duration-300 ease-in-out",
           isExpanded ? "w-sideber-md" : "w-sideber-xs"
         )}
       >
@@ -63,6 +63,7 @@ export default function Sidebar() {
           isExpanded={isExpanded}
           setIsUpload={setIsUpload}
           logout={logout}
+          token={token}
         />
       </div>
 
@@ -146,6 +147,7 @@ const NavigationLinks = ({
   isExpanded,
   setIsUpload,
   logout,
+  token,
 }: any) => (
   <nav className="flex-1 py-2 mx-2 space-y-3">
     {navItem?.map((item: any, index: any) =>
@@ -176,18 +178,20 @@ const NavigationLinks = ({
         </Link>
       )
     )}
-    <div
-      className={`flex cursor-pointer items-center gap-3 rounded-full hover:bg-gray-100 transition-colors text-red-500 ${
-        isExpanded
-          ? "justify-start px-3 py-2"
-          : "justify-center m-auto my-3 size-10"
-      }`}
-      onClick={logout}
-    >
-      <Icon name="ssignout" />
-      {isExpanded && (
-        <span className="whitespace-nowrap font-normal">Sign out</span>
-      )}
-    </div>
+    {token && (
+      <div
+        className={`flex cursor-pointer items-center gap-3 rounded-full hover:bg-gray-100 transition-colors text-red-500 ${
+          isExpanded
+            ? "justify-start px-3 py-2"
+            : "justify-center m-auto my-3 size-10"
+        }`}
+        onClick={logout}
+      >
+        <Icon name="ssignout" />
+        {isExpanded && (
+          <span className="whitespace-nowrap font-normal">Sign out</span>
+        )}
+      </div>
+    )}
   </nav>
 );

@@ -231,3 +231,11 @@
 .see-more {
   @apply grid grid-cols-1 md:col-span-2 lg:col-span-3 2xl:col-span-4 gap-6;
 }
+
+
+.sticky-custom {
+  position: sticky !important;
+  top: 0;
+  left: 0;
+  transition: all 0.3s;
+}

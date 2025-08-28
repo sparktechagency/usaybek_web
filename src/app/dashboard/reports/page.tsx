@@ -245,10 +245,10 @@ export default function Reports() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
             <VideoPlayer
-             type={video.type}
-             video={video.video}
-             link={video.link}
-             thumbnail={video.thumbnail}
+             type={video?.type}
+             video={video?.video}
+             link={video?.link}
+             thumbnail={video?.thumbnail}
               className="md:h-[300px]"
             />
             <div>
