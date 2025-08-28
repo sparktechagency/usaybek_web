@@ -75,7 +75,7 @@ export default function Sidebar() {
         titleStyle="text-center"
         className="sm:max-w-4xl"
       >
-        <TabList setIsPayment={setIsPayment} />
+        <TabList setIsOpen={setIsUpload} setIsPayment={setIsPayment} />
       </Modal>
 
       {/* Payment Modal */}

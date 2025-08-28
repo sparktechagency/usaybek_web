@@ -98,29 +98,18 @@ export default function NavberSearchBox({ className }: any) {
       city: city_name,
       service: isValue.service,
     };
-    const params: Record<string, string> = {};
-    if (isValue.title) params.search = isValue.title;
-    if (isValue.service) params.service = isValue.service;
-    if (state_name) params.state = state_name;
-    if (city_name) params.city = city_name;
-
-    const hasSearchAndService =
-      value?.search?.length > 0 && value?.service?.length > 0;
-    const hasStateAndCity = value.state?.length > 0 && value.city?.length > 0;
-
-    if (
-      (hasSearchAndService ||
-        value?.search?.length > 0 !== value?.service?.length > 0) &&
-      hasStateAndCity &&
-      Object.keys(params).length > 0
-    ) {
-      const queryString = new URLSearchParams(params).toString();
-      router.push(`/videos/global?${queryString}`);
-      setTimeout(() => {
-        setIsValue(intValue);
-      }, 1000);
-    }
+  
+    const res = Object.fromEntries(
+      Object.entries(value).filter(([_, v]) => v?.length)
+    );
+  
+    const params = new URLSearchParams(res);
+    router.push(`/videos/global?${params.toString()}`);
+    setTimeout(() => setIsValue(intValue), 1000);
   };
+  
+
+
 
   return (
     <div>

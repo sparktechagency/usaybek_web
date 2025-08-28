@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { navItems, signOutItems } from "./nav-data";
 import { Separator } from "@/components/ui";
-import { cn, getCookie} from "@/lib/utils";
+import { cn, getCookie } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import Img from "@/components/reuseable/img";
 import Icon from "@/icon";
@@ -20,7 +20,7 @@ type SidebarFixedProps = {
 };
 
 export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
-  const router=useRouter()
+  const router = useRouter();
   const [isUpload, setIsUpload] = useState(false);
   const [isPayment, setIsPayment] = useState(false);
   const logout = useHandleLogout();
@@ -105,7 +105,7 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
           </div>
 
           <nav className="flex-1 py-2 mx-2 space-y-3">
-            {navItem.map((item: any, index:any) =>
+            {navItem.map((item: any, index: any) =>
               item.text === "separator" ? (
                 <Separator key={`separator-${index}`} />
               ) : (
@@ -133,10 +133,10 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
             {token && !isLoading && (
               <div
                 className={`flex items-center gap-3 px-3 py-2 rounded-full cursor-pointer hover:bg-gray-100 transition-colors text-red-500 justify-start`}
-                onClick={()=>{
-                  setIsSide(false)
-                  router.push("/")
-                  logout()
+                onClick={() => {
+                  setIsSide(false);
+                  router.push("/");
+                  logout();
                 }}
               >
                 <Icon name="ssignout" />{" "}
@@ -155,7 +155,7 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
         titleStyle="text-center"
         className="sm:max-w-4xl"
       >
-        <TabList setIsPayment={setIsPayment} />
+        <TabList setIsOpen={setIsUpload} setIsPayment={setIsPayment} />
       </Modal>
 
       {/* Payment Modal ======*/}

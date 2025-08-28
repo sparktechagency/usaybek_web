@@ -20,12 +20,19 @@ import { linkSchema } from "@/schema";
 import { modifyPayloadAll } from "@/lib";
 import { toast } from "sonner";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
+import FavIcon from "@/icon/admin/favIcon";
 
 const intImg = {
   thumbnailPreview: "",
 };
 
-export default function YoutubeLink({ type, setIsPayment }: any) {
+export default function YoutubeLink({
+  type,
+  setIsPayment,
+  setIsUpload,
+  price,
+}: any) {
+  const [progress, setProgress] = useState<number>();
   const { data: states } = useGetStatesQuery({});
   const [isImg, setIsImg] = useState<any>(intImg);
   const [storeVideos, { isLoading }] = useStoreVideosMutation();
@@ -37,7 +44,7 @@ export default function YoutubeLink({ type, setIsPayment }: any) {
     city: [],
   });
 
-  const [isPay, setIsPay] = useState(true);
+  const [isPay, setIsPay] = useState(false);
   const from = useForm({
     resolver: zodResolver(linkSchema),
     defaultValues: {
@@ -57,7 +64,9 @@ export default function YoutubeLink({ type, setIsPayment }: any) {
   const { data: citys } = useGetCitiesQuery(stateId, {
     skip: !stateId,
   });
-  const stateName=stateId && (states?.find((item:any)=>item?.id === parseInt(stateId))?.name)
+  const stateName =
+    stateId &&
+    states?.find((item: any) => item?.id === parseInt(stateId))?.name;
 
   useEffect(() => {
     if (!citys?.length) return;
@@ -83,21 +92,31 @@ export default function YoutubeLink({ type, setIsPayment }: any) {
 
   //  handleSubmit
   const handleSubmit = async (values: FieldValues) => {
-    const { states, ...rest}=values
+    const { states, ...rest } = values;
     const value = {
       ...rest,
-      states:stateName,
+      states: stateName,
       type,
-      is_promoted:0,
+      is_promoted: isPay ? 0 : 1,
     };
     try {
       const data = modifyPayloadAll(value);
-      const res = await storeVideos(data).unwrap();
+      const res = await storeVideos({
+        data,
+        onUploadProgress: (progressEvent: ProgressEvent) => {
+          if (progressEvent.total) {
+            const progress = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setProgress(progress);
+          }
+        },
+      }).unwrap();
       if (res.status) {
-        toast("Video Uploaded", {
-          description: res?.message,
+        toast.success("Uploaded Successful", {
+          description: "Your video has been uploaded successfully",
         });
-        setIsPayment(true);
+        setIsUpload(false);
       }
       from.reset();
       setIsImg(intImg);
@@ -142,13 +161,20 @@ export default function YoutubeLink({ type, setIsPayment }: any) {
             itemStyle="py-2"
           />
           {/* Promoted Button */}
-          <Button
-            variant={"primary"}
-            className="rounded-full font-normal mt-4 text-base"
-          >
-            <Icon name="promoted" width={20} />
-            <span>{isPay ? "Promoted" : "Promote for $99 / Month"}</span>
-          </Button>
+          <div>
+            <Button
+              variant="primary"
+              onClick={() => setIsPay(!isPay)}
+              type="button"
+              className={`rounded-full ${
+                !isPay && "bg-[#EFEFEF] text-blacks"
+              } font-normal text-base`}
+            >
+              <Icon name="promoted" width={20} />
+              <span>{` Promote for ${price || 0} / Month`}</span>
+            </Button>
+            {!isPay && <span className="text-gray1 ml-3">/ Optional</span>}
+          </div>
         </div>
 
         {/* Right Column */}
@@ -247,42 +273,44 @@ export default function YoutubeLink({ type, setIsPayment }: any) {
           />
           {/* Description Textarea */}
         </div>
-        <div className="col-span-1 lg:col-span-2">
-          <div className="flex justify-end">
-            <Button disabled={isLoading} variant={"primary"}>
-              {isLoading ? (
-                <span className="flex items-center">
-                  <Loader className="animate-spin size-4 mr-1" />
-                  Uploading
-                </span>
-              ) : (
-                "Publish"
-              )}
-            </Button>
-          </div>
-        </div>
-        {/* {isPay ? (
-          <div className="col-span-1 lg:col-span-2">
-            <div className="flex justify-end">
-              <Button disabled={isLoading} onClick={() => setIsPay(!isPay)} variant={"primary"}>
-                Publish
-              </Button>
+        {isLoading ? (
+          <div className="w-full col-span-1 lg:col-span-2">
+            <div>
+              <div className="bg-[#fff0ee]  h-3 mb-2.5 rounded-full w-full">
+                <div
+                  className="bg-reds  h-3 rounded-full"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+            </div>
+            <div className="text-xs font-semibold flex justify-end">
+              {progress}% Completed
             </div>
           </div>
         ) : (
-          <div className="col-span-1 lg:col-span-2">
-            <div className="flex space-x-3 items-center justify-end">
-              <h1 className="text-grays">
-                {" "}
-                After payment you will be returned here immediately.
-              </h1>
-              <Button variant={"out"}>$99.00</Button>
-              <Button onClick={() => setIsPayment(true)} variant={"primary"}>
-                Pay now
-              </Button>
-            </div>
+          <div className="col-span-1 lg:col-span-2 flex justify-end">
+            {isPay ? (
+              <div className="col-span-1 lg:col-span-2 flex space-x-3 items-center justify-end">
+                <h1 className="text-gray-500 flex items-center gap-x-2">
+                  <FavIcon name="questionPayment" />
+                  After payment you will be returned here immediately.
+                </h1>
+                <Button type="button" variant="outline">
+                  ${price || 0}
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => setIsPayment(true)}
+                  variant="primary"
+                >
+                  Pay now
+                </Button>
+              </div>
+            ) : (
+              <Button variant="primary">Publish</Button>
+            )}
           </div>
-        )} */}
+        )}
       </Form>
     </div>
   );

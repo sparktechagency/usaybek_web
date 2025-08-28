@@ -4,14 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Upload, Youtube } from "lucide-react";
 import UplaodVideo from "./video";
 import YoutubeLink from "./youtube";
+import { useGetPriceQuery } from "@/redux/api/admin/pricingApi";
 
 const tabs = [
   { id: "video", label: "Upload Video", Icon: Upload },
   { id: "link", label: "YouTube Link", Icon: Youtube },
 ];
 
-export default function TabList({ setIsPayment }: any) {
+export default function TabList({ setIsPayment,setIsUpload }: any) {
   const [activeTab, setActiveTab] = useState("video");
+  const { data } = useGetPriceQuery({});
 
   return (
     <div className="p-2">
@@ -32,9 +34,19 @@ export default function TabList({ setIsPayment }: any) {
       </div>
 
       {activeTab === "video" ? (
-        <UplaodVideo type={activeTab} setIsPayment={setIsPayment} />
+        <UplaodVideo
+          price={data?.uploading_video}
+          type={activeTab}
+          setIsPayment={setIsPayment}
+          setIsUpload={setIsUpload}
+        />
       ) : (
-        <YoutubeLink type={activeTab}  setIsPayment={setIsPayment} />
+        <YoutubeLink
+          price={data?.uploading_youTube_link}
+          type={activeTab}
+          setIsPayment={setIsPayment}
+          setIsUpload={setIsUpload}
+        />
       )}
     </div>
   );

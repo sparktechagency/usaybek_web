@@ -138,7 +138,7 @@ export default function ManageCategory() {
               className="bg-white rounded-2xl p-3 flex items-center justify-between"
             >
               <span className="text-lg font-semibold text-blacks flex-1">
-                <span className="font-medium">{item?.id}.</span> {item?.name}
+                {item?.name}
               </span>
               <div className="flex items-center gap-2 ml-3">
                 <Editbtn

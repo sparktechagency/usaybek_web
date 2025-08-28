@@ -1,25 +1,33 @@
-import type { BaseQueryFn } from '@reduxjs/toolkit/query';
-import type { AxiosRequestConfig, AxiosError } from 'axios';
-import { authKey, getCookie } from '@/lib';
-import axios from 'axios';
-
+import type { BaseQueryFn } from "@reduxjs/toolkit/query";
+import type { AxiosRequestConfig, AxiosError } from "axios";
+import { authKey, getCookie } from "@/lib";
+import axios from "axios";
 
 export const axiosBaseQuery =
   (
-    { baseUrl }: { baseUrl: string } = { baseUrl: '' }
+    { baseUrl }: { baseUrl: string } = { baseUrl: "" }
   ): BaseQueryFn<
     {
       url: string;
-      method?: AxiosRequestConfig['method'];
-      data?: AxiosRequestConfig['data'];
-      params?: AxiosRequestConfig['params'];
-      headers?: AxiosRequestConfig['headers'];
+      method?: AxiosRequestConfig["method"];
+      data?: AxiosRequestConfig["data"];
+      params?: AxiosRequestConfig["params"];
+      headers?: AxiosRequestConfig["headers"];
       ContentType?: string;
+      onUploadProgress?: AxiosRequestConfig['onUploadProgress'];
     },
     unknown,
     unknown
   > =>
-  async ({ url, method, data, params, headers, ContentType }) => {
+  async ({
+    url,
+    method,
+    data,
+    params,
+    headers,
+    ContentType,
+    onUploadProgress,
+  }) => {
     const accessToken = getCookie(authKey);
     try {
       const result = await axios({
@@ -27,8 +35,9 @@ export const axiosBaseQuery =
         method,
         data,
         params,
+        onUploadProgress,
         headers: {
-          'Content-Type': ContentType || 'application/json',
+          "Content-Type": ContentType || "application/json",
           Authorization: `Bearer ${accessToken}`,
           ...headers, // Spread the headers from the function parameters
         },
@@ -44,5 +53,3 @@ export const axiosBaseQuery =
       };
     }
   };
-
-  

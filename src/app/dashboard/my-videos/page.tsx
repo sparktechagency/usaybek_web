@@ -48,10 +48,8 @@ export default function MyVideos() {
   const [bulkDelete] = useBulkDeleteMutation();
   const [singleDelete] = useSingleDeleteMutation();
 
-  // isUpload modal close
-  useEffect(() => {
-    setIsUpload(false);
-  }, [isPayment]);
+  
+
 
   const handleSelect = (id: string, checked: boolean) => {
     if (checked) {
@@ -305,7 +303,7 @@ export default function MyVideos() {
         titleStyle="text-center"
         className="sm:max-w-4xl"
       >
-        <TabList setIsPayment={setIsPayment} />
+        <TabList setIsUpload={setIsUpload} setIsPayment={setIsPayment} />
       </Modal>
       {/* payment */}
       <Modal

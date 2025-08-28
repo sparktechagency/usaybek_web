@@ -84,17 +84,5 @@ export default function HomePromotion() {
         }
       `}</style>
     </div>
-    // <div className="container pb-10 lg:pb-20">
-    //   <Title title="Testimonials" text="15k Users Trust healthCare Worldwide" />
-    //   <Fade>
-
-    //   </Fade>
-    // <style jsx global>{`
-    //   .slick-prev,
-    //   .slick-next {
-    //     display: none !important;
-    //   }
-    // `}</style>
-    // </div>
   );
 }
