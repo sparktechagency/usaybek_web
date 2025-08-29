@@ -12,7 +12,7 @@ import { useInView } from "react-intersection-observer";
 import { Loader } from "lucide-react";
 
 // service:3
-export default function GlobalSearch() {
+function GlobalSearchChild() {
   const searchParams = useSearchParams();
   const paramsObject = Object.fromEntries(searchParams.entries());
   const { ref, inView } = useInView();
@@ -37,7 +37,7 @@ export default function GlobalSearch() {
   }, [videos]);
 
   return (
-    <Suspense fallback={<h1 className="opacity-0">Loading...</h1>}>
+    <div>
       <div className="flex justify-between">
         <Back />
         <SubTilte title="All Videos" />
@@ -64,6 +64,15 @@ export default function GlobalSearch() {
           <Loader className="animate-spin text-blacks/20" />
         </div>
       )}
+    </div>
+  );
+}
+
+// GlobalSearch
+export default function GlobalSearch() {
+  return (
+    <Suspense>
+      <GlobalSearchChild />
     </Suspense>
   );
 }

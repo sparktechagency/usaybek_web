@@ -20,9 +20,7 @@ import React, { Suspense } from "react";
 import { FromInputs } from "@/components/reuseable/from-inputs";
 import { passwordSchema11 } from "@/schema";
 
-
-
-export default function ForgotPassword() {
+function ResetPasswordChild() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
   const router = useRouter();
@@ -57,66 +55,69 @@ export default function ForgotPassword() {
   };
 
   return (
-    <Suspense fallback={<h1 className="opacity-0">Loading...</h1>}>
-      <div className="fixed inset-0 m-0 md:m-3">
-        <Image
-          src={assets.auth.forgotImg}
-          alt="title"
-          fill
-          className="object-cover z-0 md:rounded-md"
-        />
-        <div className="relative z-10 max-w-7xl h-full mx-auto flex flex-col  justify-center">
-          <Card className="w-full max-w-md rounded-md md:rounded-none md:rounded-t-xl px-4 pt-8 pb-15 md:pb-50 bg-body border-none mx-auto md:absolute md:left-1/2 md:[transform:translateX(-50%)] md:bottom-0">
-            <CardHeader className="flex flex-col items-center space-y-0 gap-0 pt-6">
-              <div className="mb-1 flex items-center justify-center w-full">
-                <Image
-                  src={assets.logo}
-                  alt="MYTSV Logo"
-                  width={150}
-                  height={50}
-                  className="object-contain"
-                />
-              </div>
-              <CardTitle className="text-2xl font-bold text-reds mt-3">
-                Enter new password
-              </CardTitle>
-              <CardDescription className="text-blacks font-normal text-center mt-1">
-                Enter a new password that&lsquo;s secure and memorable. Include
-                a mix of letters, numbers and symbols.
-              </CardDescription>
-            </CardHeader>
-            <Form
-              className="space-y-6 pt-8"
-              from={from}
-              onSubmit={handleSubmit}
-            >
-              <FromInputs
-                eye={true}
-                label="Password"
-                name="password"
-                type="password"
-                placeholder="Enter your Password"
+    <div className="fixed inset-0 m-0 md:m-3">
+      <Image
+        src={assets.auth.forgotImg}
+        alt="title"
+        fill
+        className="object-cover z-0 md:rounded-md"
+      />
+      <div className="relative z-10 max-w-7xl h-full mx-auto flex flex-col  justify-center">
+        <Card className="w-full max-w-md rounded-md md:rounded-none md:rounded-t-xl px-4 pt-8 pb-15 md:pb-50 bg-body border-none mx-auto md:absolute md:left-1/2 md:[transform:translateX(-50%)] md:bottom-0">
+          <CardHeader className="flex flex-col items-center space-y-0 gap-0 pt-6">
+            <div className="mb-1 flex items-center justify-center w-full">
+              <Image
+                src={assets.logo}
+                alt="MYTSV Logo"
+                width={150}
+                height={50}
+                className="object-contain"
               />
-              <FromInputs
-                eye={true}
-                label="Confirm Password"
-                name="c_password"
-                type="password"
-                placeholder="Enter your Confirm Password"
-              />
+            </div>
+            <CardTitle className="text-2xl font-bold text-reds mt-3">
+              Enter new password
+            </CardTitle>
+            <CardDescription className="text-blacks font-normal text-center mt-1">
+              Enter a new password that&lsquo;s secure and memorable. Include a
+              mix of letters, numbers and symbols.
+            </CardDescription>
+          </CardHeader>
+          <Form className="space-y-6 pt-8" from={from} onSubmit={handleSubmit}>
+            <FromInputs
+              eye={true}
+              label="Password"
+              name="password"
+              type="password"
+              placeholder="Enter your Password"
+            />
+            <FromInputs
+              eye={true}
+              label="Confirm Password"
+              name="c_password"
+              type="password"
+              placeholder="Enter your Confirm Password"
+            />
 
-              <Button
-                type="submit"
-                variant={"primary"}
-                className="w-full rounded-full"
-                disabled={isLoading}
-              >
-                Send
-              </Button>
-            </Form>
-          </Card>
-        </div>
+            <Button
+              type="submit"
+              variant={"primary"}
+              className="w-full rounded-full"
+              disabled={isLoading}
+            >
+              Send
+            </Button>
+          </Form>
+        </Card>
       </div>
+    </div>
+  );
+}
+
+// ResetPassword
+export default function ResetPassword() {
+  return (
+    <Suspense>
+      <ResetPasswordChild />
     </Suspense>
   );
 }
