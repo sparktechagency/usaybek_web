@@ -17,6 +17,7 @@ import Image from "next/image";
 import { modifyPayloadAll } from "@/lib";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import avaterImg from "@/assets/avaterImg.svg";
+import { toast } from "sonner";
 
 const intImg = {
   coverPreview: "",
@@ -89,6 +90,9 @@ export default function Settings() {
       const data = modifyPayloadAll(valueItem);
       const res = await editProfile(data).unwrap();
       if (res.status) {
+        toast.success("Profile updated successfully", {
+          description: "Your profile information has been updated",
+        });
         setIsImg(intImg);
         from.reset();
       }
@@ -129,7 +133,6 @@ export default function Settings() {
                     avatar: file,
                     avatarPreview: URL.createObjectURL(file),
                   });
-                  console.log(file);
                 }}
               >
                 <div className="size-9 absolute cursor-pointer grid place-items-center rounded-full bottom-0 right-0">
@@ -165,6 +168,7 @@ export default function Settings() {
               label="Email"
               name="email"
               placeholder="Enter your Email"
+              readOnly={true}
             />
             <FromTagInputs
               label="Services"

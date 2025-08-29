@@ -19,6 +19,7 @@ interface formInputProps {
   eye?: boolean;
   placeholder?: string;
   className?: string;
+  [key: string]: any
 }
 
 export function FromInputs({
@@ -29,6 +30,7 @@ export function FromInputs({
   placeholder,
   stylelabel,
   className,
+  ...rest
 }: formInputProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(true);
   const { control } = useFormContext();
@@ -57,6 +59,7 @@ export function FromInputs({
                 className
               )}
               {...field}
+              {...rest}
               type={inputType}
               placeholder={placeholder}
             />
