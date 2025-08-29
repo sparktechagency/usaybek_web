@@ -17,7 +17,9 @@ interface CategoryFiltersProps {
 }
 
 function FilterBox({ isCategory, setIsCategory }: CategoryFiltersProps) {
-  const { data: categories, isLoading } = useCategoriesQuery({per_page:1000});
+  const { data: categories, isLoading } = useCategoriesQuery({
+    per_page: 1000,
+  });
   const { isExpanded } = useSidebar();
   const scrollRef = useRef<HTMLDivElement>(null);
   const scrollAmount = 200;
@@ -30,7 +32,7 @@ function FilterBox({ isCategory, setIsCategory }: CategoryFiltersProps) {
       setCanScroll(hasOverflow);
     }
   };
-//   const query: Record<string, any> = { page: isPage, limit: isLimit };
+  //   const query: Record<string, any> = { page: isPage, limit: isLimit };
   useEffect(() => {
     checkScroll();
     window.addEventListener("resize", checkScroll);
@@ -57,8 +59,8 @@ function FilterBox({ isCategory, setIsCategory }: CategoryFiltersProps) {
 
   return (
     <div
-      className={`${
-        isExpanded ? "w-[calc(100vw-325px)]" : "w-[calc(100vw-150px)]"
+      className={`w-full ${
+        isExpanded ? "md:w-[calc(100vw-325px)]" : "md:w-[calc(100vw-150px)]"
       }`}
     >
       {isLoading ? (

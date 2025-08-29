@@ -20,7 +20,7 @@ export default function CommonLayout({ children }: childrenProps) {
       <div className="flex flex-1">
         {/* Sidebar must be inside a tall parent */}
         <div
-          className={`transition-all duration-300 ease-in-out ${
+          className={`hidden md:block  transition-all duration-300 ease-in-out ${
             isExpanded ? "w-sideber-md" : "w-sideber-xs"
           } shrink-0`}
         >

@@ -7,7 +7,7 @@ import Link from "next/link";
 import Icon from "@/icon";
 import { useSidebar } from "@/context/useSideber";
 import { navItems, signOutItems } from "./nav-data";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "@/components/reuseable/modal";
 import TabList from "../upload/tab";
 import PaymentBox from "../payment-box";
@@ -108,30 +108,34 @@ const UserProfile = ({ token, isLoading, name, avatar, isExpanded }: any) => (
   <div className="p-4">
     <div
       className={cn(
-        "flex items-center gap-3 py-1  px-1  rounded-full transition-colors",
+        "rounded-full",
         isExpanded ? "justify-start border" : "justify-center"
       )}
     >
       {token && !isLoading ? (
-        <>
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-3 py-1  px-1  transition-colors"
+        >
           <Img className="size-10 rounded-full" src={avatar} title={name}></Img>
           {isExpanded && (
             <span className="font-medium text-gray-800 whitespace-nowrap">
               {name}
             </span>
           )}
-        </>
+        </Link>
       ) : (
-        <>
+        <Link
+          href="/sign-in"
+          className="flex items-center gap-3 py-1  px-1 transition-colors"
+        >
           <Icon name="suser" width={36} height={36} />
           {isExpanded && (
-           <Link href="/sign-in">
-              <span className="font-medium text-gray-800 whitespace-nowrap">
+            <span className="font-medium text-gray-800 whitespace-nowrap">
               Sign in
             </span>
-           </Link>
           )}
-        </>
+        </Link>
       )}
     </div>
   </div>

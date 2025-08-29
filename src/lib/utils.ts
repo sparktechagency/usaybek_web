@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
 import Cookies from "js-cookie";
-
+import { authKey } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -38,7 +38,6 @@ export const PlaceholderImg = (
   return `https://placehold.co/${width}x${height}.png`;
 };
 
-
 // Cookies
 export function setCookie(key: string, value: string) {
   return Cookies.set(key, value);
@@ -52,4 +51,8 @@ export function removeCookie(key: string) {
   return Cookies.remove(key);
 }
 
-// url modigy 
+export function IsToken() {
+  return Cookies.get(authKey);
+}
+
+// url modigy

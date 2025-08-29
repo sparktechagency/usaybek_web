@@ -12,9 +12,9 @@ import { useGetProfileQuery } from "@/redux/api/authApi";
 import { authKey, getCookie } from "@/lib";
 import NavberSearchBox from "@/components/common/navber-search-box";
 import SearchIcon from "@/components/common/navber-search-box/search-icon";
+import Icon from "@/icon";
 
 export default function Navber() {
-  // const headerRef = useRef<HTMLDivElement>(null);
   const [isSide, setIsSide] = useState(false);
   const path = usePathname();
   const patterns = [/^\/video\/.+/, /^\/profile$/];
@@ -28,27 +28,22 @@ export default function Navber() {
     }
   );
 
-  // console.log(login)
-
-  // useEffect(() => {
-  //   const el = headerRef.current;
-  //   const onScroll = () =>
-  //     el?.classList.toggle("navber-box-shadow", window.scrollY > 0);
-  //   window.addEventListener("scroll", onScroll);
-  //   return () => window.removeEventListener("scroll", onScroll);
-  // }, []);
-  // ref={headerRef}
-
   return (
     <div className="py-8">
       <div className="container">
         <ul className="relative  flex items-center  justify-between">
           <li className="flex space-x-5 items-center">
-            {isMenu && (
+            {token && (
               <span onClick={() => setIsSide(!isSide)}>
-                <FavIcon name="menu" className="size-6 cursor-pointer" />
+                <FavIcon
+                  name="menu"
+                  className={`size-6 cursor-pointer ${
+                    isMenu ? "block" : "block md:hidden"
+                  }`}
+                />
               </span>
             )}
+
             <Link href={"/"}>
               <Image
                 src={assets.logo}
@@ -72,50 +67,38 @@ export default function Navber() {
               <Link href={"/dashboard"}>
                 <Button
                   variant={"primary"}
-                  className="h-12 pl-2 pr-4 rounded-full"
+                  className="h-12 px-1 md:pl-2 md:pr-4 rounded-full"
                 >
                   <Img
                     src={profileData?.data?.avatar}
                     className="size-10"
                     title="img"
                   />
-                  {profileData?.data?.name}
+                  <span className="hidden md:block">
+                    {profileData?.data?.name}
+                  </span>
                 </Button>
               </Link>
             ) : (
               <Link href="/sign-in">
-                <Button variant={"primary"} className="h-12 px-4 rounded-full">
-                  Sign in to your Account
+                <Button
+                  variant={"primary"}
+                  className="h-12 has-[>svg]:px-1 md:px-4  rounded-full"
+                >
+                  <FavIcon
+                    name="unUser"
+                    color="#ffffff"
+                    className="size-10 md:hidden"
+                  />
+                  <span className="hidden md:block">
+                    {" "}
+                    Sign in to your Account
+                  </span>
                 </Button>
               </Link>
             )}
           </li>
         </ul>
-        {/* <style jsx global>{`
-        .navber-box-shadow {
-          position: sticky;
-          top: 0;
-          left: 0;
-          z-index: 1000;  
-          background-color:#f6f6f6;
-          animation: navber_animation 1s;
-          padding-top: 15px !important;
-          padding-bottom: 15px !important;
-          margin: 0;
-          width: 100%;
-          box-sizing: border-box;
-        }
-
-        @keyframes navber_animation {
-          from {
-            top: -40px;
-          }
-          to {
-            top: 0;
-          }
-        }
-      `}</style> */}
-
         {/* navber fixed */}
         <SidebarFixed isSide={isSide} setIsSide={setIsSide} />
       </div>

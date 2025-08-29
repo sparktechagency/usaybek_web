@@ -13,12 +13,19 @@ import Fade from "embla-carousel-fade";
 import Autoplay from "embla-carousel-autoplay";
 import Navber from "@/components/shared/navber";
 import { Skeleton } from "@/components/ui";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function HomeCarousel() {
   const { data: banners, isLoading } = useGetBannerQuery({});
   const [api, setApi] = useState<any | null>(null);
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
+  const { isMobile } = useIsMobile();
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: isMobile ? 350 : 400, behavior: "smooth" });
+    }
+  }, [isMobile]);
 
   useEffect(() => {
     if (!api) return;

@@ -5,7 +5,7 @@ export default function SearchIcon() {
     const [isShow,setIsShow]=useState(false)
   return (
     <div>
-      <h1 className="size-10 bg-reds/80 rounded-full cursor-pointer grid place-items-center">
+      <h1 className="size-12 bg-reds/80 rounded-full cursor-pointer grid place-items-center">
         <Search className="text-white size-5" />
       </h1>
     </div>

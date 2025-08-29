@@ -1,7 +1,8 @@
 import { Poppins } from "next/font/google"; // Import Poppins
 import "@/app/style/globals.css";
 import Providers from "@/components/providers";
-
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 
 // Load Poppins font
 const poppins = Poppins({

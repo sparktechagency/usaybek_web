@@ -1,7 +1,7 @@
 "use client";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
+
 import Slider from "react-slick";
+import { useEffect, useRef } from "react";
 import { useSidebar } from "@/context/useSideber";
 import { usePromoVideosSliderQuery } from "@/redux/api/landing/promotionApi";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
@@ -16,40 +16,22 @@ const settings = {
   speed: 500,
   slidesToShow: 4,
   slidesToScroll: 1,
-  initialSlide: 0,
-  // rtl: true,
   responsive: [
     {
-      breakpoint: 1536, // xl
-      settings: {
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        infinite: true,
-      },
+      breakpoint: 1536, // <= 1536px
+      settings: { slidesToShow: 3 },
     },
     {
-      breakpoint: 1280, // lg
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 1,
-        infinite: true,
-      },
+      breakpoint: 1280, // <= 1280px
+      settings: { slidesToShow: 2 },
     },
     {
-      breakpoint: 1024, // md
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        initialSlide: 0,
-      },
+      breakpoint: 1024, // <= 1024px
+      settings: { slidesToShow: 1 },
     },
     {
-      breakpoint: 640, // sm
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        initialSlide: 0,
-      },
+      breakpoint: 640, // <= 640px
+      settings: { slidesToShow: 1 },
     },
   ],
 };
@@ -58,10 +40,18 @@ export default function HomePromotion() {
   const { isExpanded } = useSidebar();
   const { data: promoVideos, isLoading: proLoading } =
     usePromoVideosSliderQuery({ per_page: 20 });
+
+  const sliderRef = useRef<any>(null);
+
+  // refresh slick on sidebar toggle
+  useEffect(() => {
+    sliderRef.current?.slickGoTo(0);
+  }, [isExpanded]);
+
   return (
     <div
-      className={`${
-        isExpanded ? "w-[calc(100vw-325px)] " : "w-[calc(100vw-150px)]"
+      className={`overflow-hidden w-full transition-all duration-300 ${
+        isExpanded ? "md:w-[calc(100vw-325px)]" : "md:w-[calc(100vw-150px)]"
       }`}
     >
       {proLoading ? (
@@ -71,16 +61,26 @@ export default function HomePromotion() {
           </SkeletonCount>
         </div>
       ) : (
-        <Slider {...settings}>
+        <Slider ref={sliderRef} {...settings}>
           {promoVideos?.map((video: any) => (
-            <VideoCard className="lg:mx-2" key={video.id} item={video} />
+            <div key={video.id} className="px-2"> 
+              <VideoCard item={video} />
+            </div>
           ))}
         </Slider>
       )}
+
       <style jsx global>{`
         .slick-prev,
         .slick-next {
           display: none !important;
+        }
+        .slick-slide {
+          display: flex !important;
+          height: auto !important;
+        }
+        .slick-slide > div {
+          width: 100% !important; /* ✅ ensures slide takes full width */
         }
       `}</style>
     </div>
