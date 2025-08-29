@@ -101,7 +101,7 @@ export default function ForgotPassword() {
   };
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<h1 className="opacity-0">Loading...</h1>}>
       <div className="fixed inset-0 m-0 md:m-3">
         <Image
           src={assets.auth.forgotImg}

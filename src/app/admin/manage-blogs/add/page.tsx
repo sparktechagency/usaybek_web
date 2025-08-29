@@ -8,21 +8,14 @@ import { Button } from "@/components/ui";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import { delay, modifyPayload } from "@/lib";
 import { useStoreBlogsMutation } from "@/redux/api/landing/blogApi";
+import { blogSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import z from "zod";
 
-export const blogSchema = z.object({
-  title: z.string().nonempty("Title is required"),
-  description: z.string().nonempty("Description is required"),
-  image: z.any().refine((file) => file instanceof File, {
-    message: "Image is required",
-  }),
-});
 
 export default function AddBlog() {
   const router = useRouter();

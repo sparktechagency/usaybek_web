@@ -6,7 +6,7 @@ import { VideoCard } from "@/components/reuseable/video-card";
 import { useGolbalSearchQuery } from "@/redux/api/commonApi";
 import { useSearchParams } from "next/navigation";
 import { Back } from "@/components/reuseable/icon-list";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { NoItemData } from "@/components/common/admin/reuseable/table-no-item";
 import { useInView } from "react-intersection-observer";
 import { Loader } from "lucide-react";
@@ -19,7 +19,7 @@ export default function GlobalSearch() {
   const [page, setPage] = useState(1);
   const query = {
     page: page,
-      ...paramsObject,
+    ...paramsObject,
   };
   const { data: videos, isLoading } = useGolbalSearchQuery({ ...query });
   const [totalVideos, setTotalVideos] = useState<any>([]);
@@ -37,7 +37,7 @@ export default function GlobalSearch() {
   }, [videos]);
 
   return (
-    <div>
+    <Suspense fallback={<h1 className="opacity-0">Loading...</h1>}>
       <div className="flex justify-between">
         <Back />
         <SubTilte title="All Videos" />
@@ -64,6 +64,6 @@ export default function GlobalSearch() {
           <Loader className="animate-spin text-blacks/20" />
         </div>
       )}
-    </div>
+    </Suspense>
   );
 }

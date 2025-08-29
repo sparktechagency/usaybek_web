@@ -122,3 +122,13 @@ export const passwordChangeSchema = z
     path: ["c_password"],
     message: "Passwords must be match.",
   });
+
+
+// blogSchema
+  export const blogSchema = z.object({
+  title: z.string().nonempty("Title is required"),
+  description: z.string().nonempty("Description is required"),
+  image: z.any().refine((file) => file instanceof File, {
+    message: "Image is required",
+  }),
+});
