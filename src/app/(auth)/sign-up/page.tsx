@@ -1,7 +1,6 @@
 "use client";
 import assets from "@/assets";
 import Form from "@/components/reuseable/from";
-import { FromInput } from "@/components/reuseable/from-input";
 import { FromInputs } from "@/components/reuseable/from-inputs";
 import {
   Button,
@@ -73,7 +72,7 @@ export default function SignUp() {
       <div className="relative z-10 max-w-7xl h-full mx-auto flex flex-col  justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           <div>
-            <Card className="w-full max-w-lg rounded-md md:rounded-none md:rounded-t-xl px-4 py-8 bg-body border-none mx-auto md:absolute md:left-0 md:bottom-0">
+            <Card className="w-full max-w-lg rounded-md lg:rounded-none lg:rounded-t-xl px-4 py-8 bg-body border-none mx-auto lg:absolute left-10 2xl:left-0 lg:bottom-0">
               <CardHeader className="flex flex-col items-center space-y-0 gap-0 pt-6">
                 <Image
                   src={assets.logo}
@@ -144,7 +143,7 @@ export default function SignUp() {
               </div>
             </Card>
           </div>
-          <div className="text-center hidden md:block text-white self-center">
+          <div className="text-center hidden lg:block text-white self-center">
             <h1 className="text-3xl font-bold">MyTSV</h1>
             <h1 className="font-medium text-xl">
               Connect with your town like never before

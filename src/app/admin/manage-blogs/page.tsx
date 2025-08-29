@@ -24,7 +24,8 @@ export default function ManageBlogs() {
           <SkeletonCount count={8}>{SkeletonBox()}</SkeletonCount>
         ) : (
           blogItem?.data?.map((item: any) => (
-            <div
+            <Link
+              href={`/admin/manage-blogs/${item.id}`}
               key={item.id}
               className="bg-white rounded-lg  h-[170px]  overflow-hidden  duration-200  p-2"
             >
@@ -37,12 +38,9 @@ export default function ManageBlogs() {
                   />
                 </div>
                 <div className="flex-1 p-4 relative">
-                  <Link
-                    href={`/admin/manage-blogs/${item.id}`}
-                    className="absolute top-3 right-3"
-                  >
+                  <div className="absolute top-3 right-3">
                     <ArrowUpRight className="size-4" />
-                  </Link>
+                  </div>
                   <div className="pr-6">
                     <h3 className="font-semibold text-blacks text-base mb-2 leading-tight">
                       {item.title}
@@ -53,7 +51,7 @@ export default function ManageBlogs() {
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))
         )}
       </div>

@@ -14,7 +14,7 @@ import {
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import Icon from "@/icon";
 import { authKey, delay, modifyPayload, setCookie } from "@/lib";
-import { useSignInMutation} from "@/redux/api/authApi";
+import { useSignInMutation } from "@/redux/api/authApi";
 import { loginSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -23,7 +23,6 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
-
 
 export default function Login() {
   const [signIn, { isLoading }] = useSignInMutation();
@@ -104,7 +103,7 @@ export default function Login() {
       />
       <div className="relative z-10 max-w-7xl h-full mx-auto flex flex-col  justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <div className="text-center hidden md:block text-white self-center">
+          <div className="text-center hidden lg:block text-white self-center">
             <h1 className="text-3xl font-bold">MyTSV</h1>
             <h1 className="font-medium text-xl">
               Connect with your town like never before
@@ -123,7 +122,7 @@ export default function Login() {
             </ul>
           </div>
           <div>
-            <Card className="w-full clip-path-[polygon(0_0,100%_0,100%_90%,50%_100%,0_90%)] max-w-md rounded-md md:rounded-none md:rounded-t-xl px-4 py-8 bg-body border-none mx-auto md:absolute md:right-0 md:bottom-0">
+            <Card className="w-full clip-path-[polygon(0_0,100%_0,100%_90%,50%_100%,0_90%)] max-w-md rounded-md lg:rounded-none lg:rounded-t-xl px-4 py-8 bg-body border-none mx-auto lg:absolute right-10 2xl:right-0 md:bottom-0">
               <CardHeader className="flex flex-col items-center space-y-0 gap-0 pt-6">
                 <Image
                   src={assets.logo}

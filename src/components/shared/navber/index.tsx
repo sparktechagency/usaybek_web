@@ -83,7 +83,7 @@ export default function Navber() {
               <Link href="/sign-in">
                 <Button
                   variant={"primary"}
-                  className="h-12 has-[>svg]:px-1 md:px-4  rounded-full"
+                  className="h-12 has-[>svg]:px-1 md:!px-4  rounded-full"
                 >
                   <FavIcon
                     name="unUser"

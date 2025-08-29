@@ -109,7 +109,7 @@ import { authKey } from "@/lib";
       className="object-cover z-0 md:rounded-md"
     />
     <div className="relative z-10 max-w-7xl h-full mx-auto flex flex-col justify-center">
-      <Card className="w-full max-w-md rounded-md md:rounded-none md:rounded-t-xl px-4 pt-8 pb-15 md:pb-50 bg-body border-none mx-auto md:absolute md:left-1/2 md:[transform:translateX(-50%)] md:bottom-0">
+      <Card className="w-full max-w-md rounded-md lg:rounded-none lg:rounded-t-xl px-4 pt-8 pb-15 lg:pb-50 bg-body border-none mx-auto lg:absolute lg:left-1/2 lg:[transform:translateX(-50%)] lg:bottom-0">
         <CardHeader className="flex flex-col items-center space-y-0 gap-0 pt-6">
           <div className="mb-1 flex items-center justify-between w-full">
             <Link href="/forgot-password">
