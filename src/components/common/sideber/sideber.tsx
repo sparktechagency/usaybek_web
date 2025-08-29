@@ -43,12 +43,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <div
-        className={cn(
-          "flex flex-col h-full bg-white rounded-tr-md  transition-all duration-300 ease-in-out",
-          isExpanded ? "w-sideber-md" : "w-sideber-xs"
-        )}
-      >
+      <div className={cn("flex flex-col h-full bg-white rounded-tr-md")}>
         <SidebarHeader isExpanded={isExpanded} toggleSidebar={toggleSidebar} />
         <UserProfile
           token={token}
@@ -130,9 +125,11 @@ const UserProfile = ({ token, isLoading, name, avatar, isExpanded }: any) => (
         <>
           <Icon name="suser" width={36} height={36} />
           {isExpanded && (
-            <span className="font-medium text-gray-800 whitespace-nowrap">
+           <Link href="/sign-in">
+              <span className="font-medium text-gray-800 whitespace-nowrap">
               Sign in
             </span>
+           </Link>
           )}
         </>
       )}

@@ -18,8 +18,6 @@ import { modifyPayloadAll } from "@/lib";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import avaterImg from "@/assets/avaterImg.svg";
 
-
-
 const intImg = {
   coverPreview: "",
   avatarPreview: "",
@@ -67,13 +65,25 @@ export default function Settings() {
         services: services,
       });
     }
-  }, [data?.data, from]);
+  }, [
+    data?.data,
+    from,
+    channel_name,
+    name,
+    email,
+    contact,
+    bio,
+    services,
+    cover_image,
+    avatar,
+    locations,
+  ]);
 
   const handleSubmit = async (values: FieldValues) => {
     const valueItem = {
       ...values,
       ...(isImg.cover_image ? { cover_image: isImg.cover_image } : {}),
-      ...(isImg.avatar ? {image: isImg.avatar } : {}),
+      ...(isImg.avatar ? { image: isImg.avatar } : {}),
     };
     try {
       const data = modifyPayloadAll(valueItem);
@@ -88,8 +98,6 @@ export default function Settings() {
       }
     }
   };
-
-  
 
   return (
     <div>
@@ -121,15 +129,11 @@ export default function Settings() {
                     avatar: file,
                     avatarPreview: URL.createObjectURL(file),
                   });
-                  console.log(file)
+                  console.log(file);
                 }}
               >
                 <div className="size-9 absolute cursor-pointer grid place-items-center rounded-full bottom-0 right-0">
-                  <Image
-                    src={avaterImg}
-                    alt={"avaterimg"}
-                    fill
-                  />
+                  <Image src={avaterImg} alt={"avaterimg"} fill />
                 </div>
               </ImgUpload>
             </div>

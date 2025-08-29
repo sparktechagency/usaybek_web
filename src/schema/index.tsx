@@ -108,3 +108,17 @@ export const passwordChangeSchema = z
     path: ["c_password"],
     message: "Passwords must be match.",
   });
+
+
+
+
+  // forgot password
+  export const passwordSchema11 = z
+  .object({
+    password: z.string().nonempty("Password is required"),
+    c_password: z.string().nonempty("Confirm Password is required"),
+  })
+  .refine((value) => value.password === value.c_password, {
+    path: ["c_password"],
+    message: "Passwords must be match.",
+  });

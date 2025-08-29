@@ -35,6 +35,7 @@ export default function Notification() {
     if (!order) {
       await markNotification(id).unwrap();
     }
+    console.log(order)
     router.push(`/admin/reports/${id}`);
   };
 
@@ -53,7 +54,7 @@ export default function Notification() {
           notification?.data?.map((noti: any) => {
             const type = noti?.data?.type as NotificationType;
             const borderColor = isColor[type];
-            const show = noti?.read_at?.length > 0 ? true : false;
+            const show = noti?.read_at == null ? true : false;
             return (
               <div
                 key={noti.id}

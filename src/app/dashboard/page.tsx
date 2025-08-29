@@ -128,7 +128,7 @@ export default function Dashboard() {
                 </h2>
                 <p className="text-base flex items-center justify-center text-center gap-1 mt-1">
                   <Icon name="locationGary" />
-                  {user?.locations.map(
+                  {user?.locations?.map(
                     (loc: any, idx: number) =>
                       loc.type === "head-office" && (
                         <span key={idx}>{loc.location}</span>

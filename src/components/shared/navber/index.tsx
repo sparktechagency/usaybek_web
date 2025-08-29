@@ -11,6 +11,7 @@ import SidebarFixed from "@/components/common/sideber/sideber-fixed";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 import { authKey, getCookie } from "@/lib";
 import NavberSearchBox from "@/components/common/navber-search-box";
+import SearchIcon from "@/components/common/navber-search-box/search-icon";
 
 export default function Navber() {
   // const headerRef = useRef<HTMLDivElement>(null);
@@ -58,8 +59,13 @@ export default function Navber() {
               />
             </Link>
           </li>
-          <li className="hidden md:block">
-            <NavberSearchBox />
+          <li>
+            <span className="hidden md:block">
+              <NavberSearchBox />
+            </span>
+            <span className="block md:hidden">
+              <SearchIcon />
+            </span>
           </li>
           <li>
             {token && !isLoading ? (

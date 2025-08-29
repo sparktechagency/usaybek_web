@@ -67,20 +67,20 @@ export default function FromLocation({
     (loc: any) => loc?.type === "head-office"
   );
 
-
   const [suggestions, setSuggestions] = useState<{ [key: number]: any[] }>({});
 
-  const handleSearch = useCallback(
-    debounce(async (query: string, index: number) => {
-      if (query) {
-        const results = await fetchGooglePlaces(query);
-        setSuggestions(prev => ({ ...prev, [index]: results }));
+  const handleSearch = useCallback((query: string, index: number) => {
+    const debouncedSearch = debounce(async (searchQuery: string, searchIndex: number) => {
+      if (searchQuery) {
+        const results = await fetchGooglePlaces(searchQuery);
+        setSuggestions(prev => ({ ...prev, [searchIndex]: results }));
       } else {
-        setSuggestions(prev => ({ ...prev, [index]: [] }));
+        setSuggestions(prev => ({ ...prev, [searchIndex]: [] }));
       }
-    }, 500),
-    []
-  );
+    }, 500);
+    
+    debouncedSearch(query, index);
+  }, []);
 
   const handleSelectSuggestion = (suggestion: any, index: number) => {
     setValue(`${name}.${index}.location`, suggestion.formatted_address, { shouldValidate: true });
