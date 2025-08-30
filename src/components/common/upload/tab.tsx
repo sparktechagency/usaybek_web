@@ -37,7 +37,6 @@ export default function TabList({ setIsPayment,setIsUpload }: any) {
         <UplaodVideo
           price={data?.uploading_video}
           type={activeTab}
-          setIsPayment={setIsPayment}
           setIsUpload={setIsUpload}
         />
       ) : (

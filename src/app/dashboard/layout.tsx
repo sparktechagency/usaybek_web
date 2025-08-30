@@ -3,5 +3,9 @@ import { childrenProps } from "@/types";
 import React from "react";
 
 export default function UserLayout({ children }: childrenProps) {
-  return <UserDashboardLayout>{children}</UserDashboardLayout>;
+  return (
+  <UserDashboardLayout>
+    {children}
+  </UserDashboardLayout>
+);
 }

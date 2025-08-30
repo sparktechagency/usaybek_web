@@ -239,3 +239,7 @@
   left: 0;
   transition: all 0.3s;
 }
+
+.stripe-payment-element__link-text {
+  display: none !important;
+}

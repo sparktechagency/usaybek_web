@@ -58,7 +58,7 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
       {/* Overlay */}
       <div
         role="presentation"
-        className={`fixed inset-0 bg-black/50 z-20 transition-opacity duration-300 ${
+        className={`fixed inset-0  bg-black/50 z-20 transition-opacity duration-300 ${
           isSide ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
         onClick={() => setIsSide(false)}
@@ -67,7 +67,7 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
       {/* Sidebar */}
       <aside
         role="dialog"
-        className={`fixed top-0 left-0 w-64 h-full bg-white z-30 shadow-lg transform transition-transform duration-300 ${
+        className={`fixed top-0 h-screen overflow-y-scroll scrollbar-hide left-0 w-64  bg-white z-30 shadow-lg transform transition-transform duration-300 ${
           isSide ? "translate-x-0" : "-translate-x-full"
         }`}
       >

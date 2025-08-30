@@ -21,7 +21,10 @@ import { useGetCitiesQuery, useGetStatesQuery } from "@/redux/api/commonApi";
 import { useStoreVideosMutation } from "@/redux/api/dashboard/videosApi";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import { toast } from "sonner";
-import { modifyPayloadAll } from "@/lib";
+import { modifyPayloadAll, reasonType } from "@/lib";
+import Modal from "@/components/reuseable/modal";
+import StripeBox from "../stripe";
+import StripePaymentWrapper from "../stripe";
 
 // local preview state
 const intImg = {
@@ -29,12 +32,8 @@ const intImg = {
   thumbnailPreview: "",
 };
 
-export default function UploadVideo({
-  type,
-  price,
-  setIsUpload,
-  setIsPayment,
-}: any) {
+export default function UploadVideo({ type, price, setIsUpload }: any) {
+  const [isPayment, setIsPayment] = useState(false);
   const [progress, setProgress] = useState<number>();
   const { data: states } = useGetStatesQuery({});
   const [isImg, setIsImg] = useState<any>(intImg);
@@ -368,6 +367,20 @@ export default function UploadVideo({
           </div>
         )}
       </Form>
+      {/* isPayment all isPayment, setIsPayment  */}
+      <Modal
+        title="Pay to MyTSV"
+        open={isPayment}
+        setIsOpen={setIsPayment}
+        titleStyle="text-center"
+      >
+        {price && (
+          <StripePaymentWrapper
+            amount={price}
+            reason={reasonType.uploading_video}
+          />
+        )}
+      </Modal>
     </div>
   );
 }

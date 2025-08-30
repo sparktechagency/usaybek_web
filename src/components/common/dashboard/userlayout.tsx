@@ -21,7 +21,9 @@ export function UserDashboardLayout({ children }: childrenProps) {
   return (
     <SidebarContext.Provider value={{ sidebarOpen, setSidebarOpen }}>
       <div className="flex h-screen overflow-hidden">
+        {/* side ber */}
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        {/* main content all  */}
         <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
           <div className="p-4">{children}</div>
         </div>

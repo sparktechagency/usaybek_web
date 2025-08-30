@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui";
 import useConfirmation from "@/context/delete-modal";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Pagination } from "@/components/reuseable/pagination";
 import { DeleteBtn } from "@/components/reuseable/btn";
 import Modal from "@/components/reuseable/modal";
