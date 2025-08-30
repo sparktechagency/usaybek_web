@@ -53,7 +53,7 @@ export default function Details({ slug, isTab, setIsTab }: any) {
 
   return (
     <div>
-      <ul className="flex justify-between my-4">
+      <ul className="flex items-center justify-between my-4">
         <li>
           <Link
             className="font-medium text-lg flex items-center"
@@ -68,21 +68,22 @@ export default function Details({ slug, isTab, setIsTab }: any) {
             <Button
               variant={"primary"}
               size={"lg"}
-              className="rounded-full bg-transparent text-blacks border shadow-none text-base"
+              className="rounded-full bg-transparent text-blacks border px-3 lg:px-4 shadow-none text-base"
             >
               {" "}
-              <Icon name="editBlack" /> Edit this video
+              <Icon name="editBlack" />
+              <span className="hidden md:block">Edit this video</span>
             </Button>
           </Link>
           <Button
             onClick={() => handleDelete(id)}
             variant={"primary"}
             size={"lg"}
-            className="rounded-full text-base"
+            className="rounded-full text-base  px-4 lg:px-4"
             disabled={deleteLoading}
           >
             <Icon name="deleteWhite" />
-            Delete this video
+            <span className="hidden md:block">Delete this video</span>
           </Button>
         </li>
       </ul>

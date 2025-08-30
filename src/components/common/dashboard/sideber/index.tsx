@@ -5,25 +5,13 @@ import Link from "next/link";
 import Icon from "@/icon";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import { use, useEffect, useState } from "react";
-import { useIsMobile } from "@/hooks/useIsMobile";
+import { useState } from "react";
 import SideberFixed from "../../sideber/sideber-fixed";
 
-export default function Sidebar() {
-  const { isMobile } = useIsMobile();
+// main side ber component
+export default function Sidebar({ sidebarOpen, setSidebarOpen }: any) {
   const pathname = usePathname();
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [isSide,setIsSide]=useState(false)
-
-
-  // resize screen
-  useEffect(() => {
-    if (isMobile) {
-      setIsExpanded(false);
-    } else {
-      setIsExpanded(true);
-    }
-  }, [isMobile]);
+  const [isSide, setIsSide] = useState(false);
 
   const navItems = [
     { icon: <Icon name="sdashboard" />, text: "Dashboard", href: "/dashboard" },
@@ -50,12 +38,17 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="flex">
+    <div className="">
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-20 bg-black/40 opacity-50"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
       <aside
-        className={cn(
-          "flex flex-col h-full bg-white rounded-tr-md  transition-all duration-300 ease-in-out",
-          isExpanded ? "w-64" : "w-20"
-        )}
+        className={`absolute left-0 top-0 w-64 z-20 bg-white flex h-screen  transition-transform transform duration-300 ease-linear flex-col overflow-y-hidden  text-white  lg:static lg:translate-x-0 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         <div className="flex flex-col ">
           <div>
@@ -67,18 +60,16 @@ export default function Sidebar() {
                 height={25}
                 className="cursor-pointer"
               />
-              {isExpanded && (
-                <Link href={"/"} className="ml-4">
-                  <div className="relative w-40 h-13 overflow-hidden">
-                    <Image
-                      src={assets.logo}
-                      alt={"author.name"}
-                      fill
-                      className="object-fill"
-                    />
-                  </div>
-                </Link>
-              )}
+              <Link href={"/"} className="ml-4">
+                <div className="relative w-40 h-13 overflow-hidden">
+                  <Image
+                    src={assets.logo}
+                    alt={"author.name"}
+                    fill
+                    className="object-fill"
+                  />
+                </div>
+              </Link>
             </div>
             <nav className="flex-1 py-2 mx-2 space-y-3">
               {navItems.map((item: any, index) => (
@@ -86,26 +77,22 @@ export default function Sidebar() {
                   key={item.text}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2 text-blacks hover:bg-gray-100 rounded-lg transition-colors",
-                    item.href === pathname && "bg-gray-100 font-semibold",
-                    isExpanded
-                      ? "justify-start"
-                      : "justify-center m-auto my-3 w-fit"
+                    "flex items-center gap-3 px-3 py-2 text-blacks hover:bg-gray-100 justify-start rounded-lg transition-colors",
+                    item.href === pathname && "bg-gray-100 font-semibold"
                   )}
                 >
                   {item.icon}
-                  {isExpanded && (
-                    <span className="whitespace-nowrap font-normal">
-                      {item.text}
-                    </span>
-                  )}
+                  <span className="whitespace-nowrap font-normal">
+                    {item.text}
+                  </span>
                 </Link>
               ))}
             </nav>
           </div>
         </div>
       </aside>
-      <SideberFixed isSide={isSide} setIsSide={setIsSide}/>
+      {/* fixed side ber */}
+      <SideberFixed isSide={isSide} setIsSide={setIsSide} />
     </div>
   );
 }

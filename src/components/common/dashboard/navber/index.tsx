@@ -2,6 +2,7 @@ import { Button, Input } from "@/components/ui";
 import Icon from "@/icon";
 import { Search } from "lucide-react";
 import React, { useState } from "react";
+import ToggleButton from "../sideber/toggle-btn";
 
 interface NavItemProps {
   title: string;
@@ -31,7 +32,10 @@ export default function NavItem({
 
   return (
     <div className="flex items-center space-y-2 md:space-y-0 flex-wrap md:flex-nowrap justify-between py-2">
-      <h1 className="text-2xl font-bold text-blacks">{title}</h1>
+      <h1 className="text-2xl font-bold text-blacks flex items-center gap-x-1">
+        <ToggleButton />
+        {title}
+      </h1>
 
       {search && (
         <div className="relative w-full max-w-xs xl:max-w-xl 2xl:max-w-2xl bg-white rounded-md lg:rounded-full py-1">
@@ -53,10 +57,10 @@ export default function NavItem({
           onClick={onClick}
           variant="primary"
           size="lg"
-          className="rounded-full w-full lg:w-fit h-11"
+          className="rounded-full px-4 md:px-4 w-fit h-11"
         >
-          <Icon name="uploadWhite" width={16} height={16} className="mr-1" />
-          Upload a new video
+          <Icon name="uploadWhite" width={16} height={16} className="md:mr-1" />
+          <span className="hidden md:block"> Upload a new video</span>
         </Button>
       )}
     </div>
