@@ -55,12 +55,7 @@ export default function Navber() {
             </Link>
           </li>
           <li>
-            <span className="hidden md:block">
-              <NavberSearchBox />
-            </span>
-            <span className="block md:hidden">
-              <SearchIcon />
-            </span>
+            <NavberSearchBox />
           </li>
           <li>
             {token && !isLoading ? (

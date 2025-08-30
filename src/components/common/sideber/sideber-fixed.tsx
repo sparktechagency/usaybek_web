@@ -88,7 +88,7 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
           >
             <Img
               className="size-9 rounded-full"
-              src={avatar}
+              src={avatar || "/blur.png"}
               title="User avatar"
             ></Img>
             <span className="font-medium text-gray-800 whitespace-nowrap">
