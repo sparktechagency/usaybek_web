@@ -95,7 +95,7 @@ export default function Details({ slug, isTab, setIsTab }: any) {
             video={video}
             link={link}
             thumbnail={thumbnail}
-            className="h-[450px]"
+            className="md:h-[450px]"
           />
           <h1 className="text-xl font-medium mt-6">{title}</h1>
           <p className="text-grays mt-3">{description}</p>

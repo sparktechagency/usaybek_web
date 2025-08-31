@@ -15,7 +15,7 @@ import {
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { DetailsSkeleton } from "@/components/reuseable/skeleton-item";
-import { delay, modifyPayload } from "@/lib";
+import { delay, IsToken, modifyPayload } from "@/lib";
 import { toast } from "sonner";
 import { usePathname } from "next/navigation";
 import RelatedVideosRight from "@/components/common/releted-videos";
@@ -41,7 +41,7 @@ const options = [
 const useScrollToTop = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
-      window.scrollTo(0, 0); // Scroll to top
+      window.scrollTo(0, 0);
     }
   }, []);
 };
@@ -55,6 +55,7 @@ export default function VideoDetails({ slug }: any) {
   const [isReprot, setIsReport] = useState(false);
   const [isText, setIsText] = useState(false);
   const [isShare, setIsShare] = useState(false);
+  const IsAccess = IsToken() ? true : false;
   const [reportText, setReportText] = useState({
     reason: "Sexual content",
     issue: "",
@@ -165,7 +166,7 @@ export default function VideoDetails({ slug }: any) {
                       </div>
                     </div>
                     {/* Right actions */}
-                    <div className="flex mt-2 md:mt-0 flex-wrap items-center gap-x-4 gap-y-2 text-sm has-[>div]:cursor-pointer">
+                    <div className="flex mt-2 md:mt-0 flex-wrap items-center gap-x-4 gap-y-2 text-sm">
                       <div className="flex border px-3 space-x-1 h-8 items-center rounded-full">
                         <FavIcon
                           name="eye"
@@ -177,8 +178,14 @@ export default function VideoDetails({ slug }: any) {
                         </span>
                       </div>
                       <div
-                        onClick={() => handleLikeDislike(id, "like")}
-                        className="flex border px-3 h-8 space-x-1 items-center rounded-full"
+                        onClick={() => {
+                          if (IsAccess) {
+                            handleLikeDislike(id, "like");
+                          }
+                        }}
+                        className={`flex border px-3 h-8 space-x-1 items-center rounded-full ${
+                          IsAccess && "cursor-pointer"
+                        }`}
                       >
                         <FavIcon
                           name="likeUp"
@@ -190,8 +197,14 @@ export default function VideoDetails({ slug }: any) {
                         </span>
                       </div>
                       <div
-                        onClick={() => handleLikeDislike(id, "dislike")}
-                        className="flex border  px-3 h-8 items-center space-x-1 rounded-full"
+                        onClick={() => {
+                          if (IsAccess) {
+                            handleLikeDislike(id, "dislike");
+                          }
+                        }}
+                        className={`flex border  px-3 h-8 items-center space-x-1 rounded-full ${
+                          IsAccess && "cursor-pointer"
+                        }`}
                       >
                         <FavIcon
                           name="likeDown"
@@ -214,20 +227,22 @@ export default function VideoDetails({ slug }: any) {
                       </div>
                       <div
                         onClick={() => setIsShare(!isShare)}
-                        className="flex border px-3 h-8 items-center space-x-1 rounded-full"
+                        className="flex border px-3 h-8 items-center space-x-1 rounded-full cursor-pointer"
                       >
                         <FavIcon name="share" />
                         <span className="text-blacks font-semibold">Share</span>
                       </div>
-                      <div
-                        onClick={() => setIsReport(!isReprot)}
-                        className="flex border px-3 h-8 items-center space-x-1 rounded-full"
-                      >
-                        <FavIcon name="report1" className="size-5" />
-                        <span className="text-blacks font-semibold">
-                          Report
-                        </span>
-                      </div>
+                      {IsAccess && (
+                        <div
+                          onClick={() => setIsReport(!isReprot)}
+                          className="flex border px-3 h-8 items-center space-x-1 rounded-full cursor-pointer"
+                        >
+                          <FavIcon name="report1" className="size-5" />
+                          <span className="text-blacks font-semibold">
+                            Report
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -274,7 +289,7 @@ export default function VideoDetails({ slug }: any) {
             }
             className="grid space-y-0"
           >
-            {options.map((option) => (
+            {options?.map((option) => (
               <div key={option.value} className="flex items-center space-x-2">
                 <RadioGroupItem
                   value={option.value}
@@ -363,7 +378,10 @@ export default function VideoDetails({ slug }: any) {
                 navigator.clipboard.writeText(
                   `${process.env.NEXT_PUBLIC_APP_URL}${path}`
                 );
-                toast.success("Link copied to clipboard!", { duration: 2000 });
+                toast.success("Link copied to clipboard!", {
+                  description: "You can now share this video link with others",
+                  duration: 2000,
+                });
                 await delay(2400);
                 setIsShare(false);
               }}

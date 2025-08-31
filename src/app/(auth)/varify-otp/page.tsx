@@ -20,7 +20,7 @@ import React, {
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useOtpVarifyMutation } from "@/redux/api/authApi";
-import { delay, modifyPayload, setCookie } from "@/lib";
+import { delay, modifyPayload, RoleSetCookie, setCookie } from "@/lib";
 import { toast } from "sonner";
 import { authKey } from "@/lib";
 
@@ -80,6 +80,7 @@ function VarifyOtpChild() {
         if (res.status) {
           const { access_token: token, user: info } = res?.data;
           setCookie(authKey, token);
+          RoleSetCookie(info.role);
           toast("Login Successfull", {
             description: res?.message,
           });

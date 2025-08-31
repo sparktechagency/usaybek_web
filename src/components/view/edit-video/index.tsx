@@ -172,7 +172,7 @@ export default function EditVideo({ slug }: { slug: string }) {
                   video={isImg?.videoPreview || video}
                   link={link}
                   thumbnail={isImg?.thumbnailPreview || thumbnail} // Also fallback for thumbnail
-                  className="h-[450px]"
+                  className="md:h-[450px]"
                 />
                 {type === "video" && (
                   <VideoUpload

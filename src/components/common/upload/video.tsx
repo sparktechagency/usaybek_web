@@ -158,7 +158,6 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
                 <video
                   key={isImg.videoPreview}
                   autoPlay
-                  muted
                   loop
                   playsInline
                   style={{

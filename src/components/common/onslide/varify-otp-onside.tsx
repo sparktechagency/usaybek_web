@@ -5,16 +5,9 @@ import {
   CardTitle,
   Input,
 } from "@/components/ui";
-import { authKey, modifyPayload, setCookie } from "@/lib";
+import { authKey, modifyPayload, RoleSetCookie, setCookie } from "@/lib";
 import { useOtpVarifyMutation } from "@/redux/api/authApi";
-import { useRouter } from "next/navigation";
-import React, {
-  ChangeEvent,
-  KeyboardEvent,
-  useContext,
-  useRef,
-  useState,
-} from "react";
+import React, { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
 import { useManageState } from ".";
 
 export default function VarifyOtpOside({ isEmail, setIsEmail }: any) {
@@ -24,7 +17,6 @@ export default function VarifyOtpOside({ isEmail, setIsEmail }: any) {
   const [error, setError] = useState<string>("");
   const [isError, setIsError] = useState<string>("");
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const router = useRouter();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, i: number) => {
     const { value } = e.target;
@@ -70,8 +62,9 @@ export default function VarifyOtpOside({ isEmail, setIsEmail }: any) {
         const data = modifyPayload(value);
         const res = await otpVarify(data).unwrap();
         if (res.status) {
-          const { access_token: token } = res?.data;
+          const { access_token: token, user: info } = res?.data;
           setCookie(authKey, token);
+          RoleSetCookie(info.role);
           setIsEmail("");
           setIsAccount(!isAccount);
           setIsPayment(!isPayment);

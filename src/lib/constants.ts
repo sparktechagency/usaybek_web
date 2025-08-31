@@ -1,4 +1,5 @@
 export const authKey = "accessToken";
+export const roleKey="__secure_key"
 
 export enum reasonType {
   uploading_video = "Uploading video",
