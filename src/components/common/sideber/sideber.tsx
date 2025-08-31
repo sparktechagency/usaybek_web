@@ -10,7 +10,6 @@ import { navItems, signOutItems } from "./nav-data";
 import { useEffect, useState } from "react";
 import Modal from "@/components/reuseable/modal";
 import TabList from "../upload/tab";
-import PaymentBox from "../payment-box";
 import { authKey } from "@/lib";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 import { useHandleLogout } from "@/lib/logout";
@@ -19,7 +18,6 @@ export default function Sidebar() {
   const logout = useHandleLogout();
   const [navItem, setIsNavItem] = useState<any>(signOutItems);
   const [isUpload, setIsUpload] = useState(false);
-  const [isPayment, setIsPayment] = useState(false);
   const { isExpanded, toggleSidebar } = useSidebar();
   const pathname = usePathname();
   const token = getCookie(authKey);
@@ -36,10 +34,6 @@ export default function Sidebar() {
       setIsNavItem(signOutItems);
     }
   }, [token, isLoading]);
-
-  useEffect(() => {
-    setIsUpload(false);
-  }, [isPayment]);
 
   return (
     <>
@@ -70,18 +64,7 @@ export default function Sidebar() {
         titleStyle="text-center"
         className="sm:max-w-4xl"
       >
-        <TabList setIsOpen={setIsUpload} setIsPayment={setIsPayment} />
-      </Modal>
-
-      {/* Payment Modal */}
-      <Modal
-        title="Pay to MyTSV"
-        open={isPayment}
-        setIsOpen={setIsPayment}
-        titleStyle="text-center"
-        className="sm:max-w-3xl"
-      >
-        <PaymentBox setIsPayment={setIsPayment} />
+        <TabList setIsUpload={setIsUpload} />
       </Modal>
     </>
   );

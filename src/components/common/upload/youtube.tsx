@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CircleAlert, Loader, Upload } from "lucide-react";
+import { CircleAlert, Upload } from "lucide-react";
 import { FieldValues, useForm } from "react-hook-form";
 import Form from "@/components/reuseable/from";
 import { FromInput } from "@/components/reuseable/from-input";
@@ -17,21 +17,20 @@ import { useCategoriesQuery } from "@/redux/api/landing/videosApi";
 import ImgUpload from "@/components/reuseable/img-uplod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { linkSchema } from "@/schema";
-import { modifyPayloadAll } from "@/lib";
+import { delay, modifyPayloadAll, reasonType } from "@/lib";
 import { toast } from "sonner";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import FavIcon from "@/icon/admin/favIcon";
+import StripePaymentWrapper from "../stripe";
+import Modal from "@/components/reuseable/modal";
 
 const intImg = {
   thumbnailPreview: "",
 };
 
-export default function YoutubeLink({
-  type,
-  setIsPayment,
-  setIsUpload,
-  price,
-}: any) {
+export default function YoutubeLink({ type, setIsUpload, price }: any) {
+  const [isPayment, setIsPayment] = useState(false);
+  const [isColor, setIsColor] = useState(false);
   const [progress, setProgress] = useState<number>();
   const { data: states } = useGetStatesQuery({});
   const [isImg, setIsImg] = useState<any>(intImg);
@@ -97,7 +96,7 @@ export default function YoutubeLink({
       ...rest,
       states: stateName,
       type,
-      is_promoted: isPay ? 0 : 1,
+      is_promoted: isColor ? 1 : 0,
     };
     try {
       const data = modifyPayloadAll(value);
@@ -118,11 +117,19 @@ export default function YoutubeLink({
         });
         setIsUpload(false);
       }
+      await delay()
       from.reset();
       setIsImg(intImg);
     } catch (err: any) {
       ResponseApiErrors(err?.data, from);
     }
+  };
+
+  // handlePaymentSuccess
+  const handlePaymentSuccess = () => {
+    setIsPayment(false);
+    setIsPay(false);
+    setIsColor(true);
   };
 
   return (
@@ -161,20 +168,31 @@ export default function YoutubeLink({
             itemStyle="py-2"
           />
           {/* Promoted Button */}
-          <div>
+          {isColor ? (
             <Button
               variant="primary"
-              onClick={() => setIsPay(!isPay)}
               type="button"
-              className={`rounded-full ${
-                !isPay && "bg-[#EFEFEF] text-blacks"
-              } font-normal text-base`}
+              className="rounded-full cursor-default text-white font-normal text-base"
             >
               <Icon name="promoted" width={20} />
               <span>{` Promote for ${price || 0} / Month`}</span>
             </Button>
-            {!isPay && <span className="text-gray1 ml-3">/ Optional</span>}
-          </div>
+          ) : (
+            <div>
+              <Button
+                variant="primary"
+                onClick={() => setIsPay(!isPay)}
+                type="button"
+                className={`rounded-full ${
+                  !isPay && "bg-[#EFEFEF] text-blacks"
+                } font-normal text-base`}
+              >
+                <Icon name="promoted" width={20} />
+                <span>{` Promote for ${price || 0} / Month`}</span>
+              </Button>
+              {!isPay && <span className="text-gray1 ml-3">/ Optional</span>}
+            </div>
+          )}
         </div>
 
         {/* Right Column */}
@@ -312,6 +330,21 @@ export default function YoutubeLink({
           </div>
         )}
       </Form>
+      {/* isPayment all isPayment, setIsPayment  */}
+      <Modal
+        title="Pay to MyTSV"
+        open={isPayment}
+        setIsOpen={setIsPayment}
+        titleStyle="text-center"
+      >
+        {price && (
+          <StripePaymentWrapper
+            amount={price}
+            reason={reasonType.youTube_link}
+            onSuccess={handlePaymentSuccess}
+          />
+        )}
+      </Modal>
     </div>
   );
 }

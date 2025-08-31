@@ -21,9 +21,8 @@ import { useGetCitiesQuery, useGetStatesQuery } from "@/redux/api/commonApi";
 import { useStoreVideosMutation } from "@/redux/api/dashboard/videosApi";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import { toast } from "sonner";
-import { modifyPayloadAll, reasonType } from "@/lib";
+import { delay, modifyPayloadAll, reasonType } from "@/lib";
 import Modal from "@/components/reuseable/modal";
-import StripeBox from "../stripe";
 import StripePaymentWrapper from "../stripe";
 
 // local preview state
@@ -33,6 +32,8 @@ const intImg = {
 };
 
 export default function UploadVideo({ type, price, setIsUpload }: any) {
+  const [isColor, setIsColor] = useState(false);
+  const [isPay, setIsPay] = useState(false);
   const [isPayment, setIsPayment] = useState(false);
   const [progress, setProgress] = useState<number>();
   const { data: states } = useGetStatesQuery({});
@@ -45,8 +46,6 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
     state: [],
     city: [],
   });
-
-  const [isPay, setIsPay] = useState(false);
 
   const from = useForm({
     resolver: zodResolver(uploadVideo),
@@ -99,7 +98,7 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
       ...rest,
       states: stateName,
       type,
-      is_promoted: isPay ? 0 : 1,
+      is_promoted: isColor ? 1 : 0,
     };
     try {
       const data = modifyPayloadAll(value);
@@ -118,6 +117,7 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
         toast.success("Uploaded Successful", {
           description: "Your video has been uploaded successfully",
         });
+        await delay();
         setIsUpload(false);
         from.reset();
         setIsImg(intImg);
@@ -125,6 +125,13 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
     } catch (err: any) {
       ResponseApiErrors(err?.data, from);
     }
+  };
+
+  // handlePaymentSuccess
+  const handlePaymentSuccess = () => {
+    setIsPayment(false);
+    setIsPay(false);
+    setIsColor(true);
   };
 
   return (
@@ -191,20 +198,31 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
           </VideoUpload>
 
           {/* Promoted Button */}
-          <div>
+          {isColor ? (
             <Button
               variant="primary"
-              onClick={() => setIsPay(!isPay)}
               type="button"
-              className={`rounded-full ${
-                !isPay && "bg-[#EFEFEF] text-blacks"
-              } font-normal text-base`}
+              className="rounded-full cursor-default text-white font-normal text-base"
             >
               <Icon name="promoted" width={20} />
               <span>{` Promote for ${price || 0} / Month`}</span>
             </Button>
-            {!isPay && <span className="text-gray1 ml-3">/ Optional</span>}
-          </div>
+          ) : (
+            <div>
+              <Button
+                variant="primary"
+                onClick={() => setIsPay(!isPay)}
+                type="button"
+                className={`rounded-full ${
+                  !isPay && "bg-[#EFEFEF] text-blacks"
+                } font-normal text-base`}
+              >
+                <Icon name="promoted" width={20} />
+                <span>{` Promote for ${price || 0} / Month`}</span>
+              </Button>
+              {!isPay && <span className="text-gray1 ml-3">/ Optional</span>}
+            </div>
+          )}
 
           {/* State Dropdown */}
           <InputSelectField
@@ -378,6 +396,7 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
           <StripePaymentWrapper
             amount={price}
             reason={reasonType.uploading_video}
+            onSuccess={handlePaymentSuccess}
           />
         )}
       </Modal>

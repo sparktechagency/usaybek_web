@@ -108,7 +108,7 @@ export default async function OnSidePage() {
             </div>
             <div className="mx-auto">
               <h3 className="text-[22px] font-semibold mb-5 w-full text-center">
-                One-Time Sign-Up Fee: {`${pricing?.onsite_account_creation}`}
+                One-Time Sign-Up Fee: {`${pricing?.onsite_account_creation || 0}`}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-lg">
                 <ul className="list-none space-y-3">

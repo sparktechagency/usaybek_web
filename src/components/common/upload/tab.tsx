@@ -11,7 +11,7 @@ const tabs = [
   { id: "link", label: "YouTube Link", Icon: Youtube },
 ];
 
-export default function TabList({ setIsPayment,setIsUpload }: any) {
+export default function TabList({ setIsUpload }: any) {
   const [activeTab, setActiveTab] = useState("video");
   const { data } = useGetPriceQuery({});
 
@@ -43,7 +43,6 @@ export default function TabList({ setIsPayment,setIsUpload }: any) {
         <YoutubeLink
           price={data?.uploading_youTube_link}
           type={activeTab}
-          setIsPayment={setIsPayment}
           setIsUpload={setIsUpload}
         />
       )}

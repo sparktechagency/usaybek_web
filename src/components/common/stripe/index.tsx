@@ -12,7 +12,7 @@ import {
   useSuccessPaymentMutation,
 } from "@/redux/api/stripeApi";
 import { toast } from "sonner";
-import { modifyPayload } from "@/lib";
+import { delay, modifyPayload } from "@/lib";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 
 // Custom Hook for managing the payment process
@@ -34,7 +34,7 @@ export const usePayment = (amount: number, reason: string) => {
     const initializePayment = async () => {
       const value = {
         amount,
-        payment_method: "pm_card_visa",
+        payment_method: "pm_card_visa", // Default payment method
         reason,
       };
 
@@ -74,10 +74,11 @@ export const usePayment = (amount: number, reason: string) => {
     try {
       const res = await successPayment(modifyPayload(paymentInfo)).unwrap();
       if (res.status) {
-        setIsPaymentSuccessful(true);
         toast.success("Payment Successful!", {
           description: "Your payment has been processed successfully.",
         });
+        await delay();
+        setIsPaymentSuccessful(true);
       }
     } catch (error) {
       setErrorMessage("Payment processing failed.");
@@ -97,12 +98,19 @@ export const usePayment = (amount: number, reason: string) => {
 interface StripeBoxProps {
   amount: number;
   reason: string;
+  onSuccess: () => void; // Callback to handle success
 }
 
-// StripeBox
-const StripeBox: React.FC<StripeBoxProps> = ({ amount, reason }) => {
+// StripeBox Component
+const StripeBox: React.FC<StripeBoxProps> = ({ amount, reason, onSuccess }) => {
   const { loading, errorMessage, isPaymentSuccessful, handleSubmit } =
     usePayment(amount, reason);
+
+  useEffect(() => {
+    if (isPaymentSuccessful) {
+      onSuccess(); // Trigger on success callback when payment is successful
+    }
+  }, [isPaymentSuccessful, onSuccess]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -120,11 +128,12 @@ const StripeBox: React.FC<StripeBoxProps> = ({ amount, reason }) => {
   );
 };
 
-// StripePaymentWrapper
+// StripePaymentWrapper Component
 const StripePaymentWrapper: React.FC<StripeBoxProps> = ({
   amount,
   reason,
-}: any) => {
+  onSuccess,
+}) => {
   const stripePromise = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_CLIENT_KEY as string
   );
@@ -134,11 +143,11 @@ const StripePaymentWrapper: React.FC<StripeBoxProps> = ({
       stripe={stripePromise}
       options={{
         mode: "payment",
-        amount: amount * 100,
-        currency: "usd",
+        amount: amount * 100, // Convert amount to cents for Stripe
+        currency: "usd", // Set currency to USD
       }}
     >
-      <StripeBox amount={amount} reason={reason} />
+      <StripeBox amount={amount} reason={reason} onSuccess={onSuccess} />
     </Elements>
   );
 };

@@ -16,7 +16,6 @@ import { Pagination } from "@/components/reuseable/pagination";
 import { DeleteBtn } from "@/components/reuseable/btn";
 import Modal from "@/components/reuseable/modal";
 import TabList from "@/components/common/upload/tab";
-import PaymentBox from "@/components/common/payment-box";
 import {
   useBulkDeleteMutation,
   useSingleDeleteMutation,
@@ -36,7 +35,6 @@ export default function MyVideos() {
   const [isSearch, setIsSearch] = useState("");
   const [value] = useDebounce(isSearch, 1000);
   const [isUpload, setIsUpload] = useState(false);
-  const [isPayment, setIsPayment] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
   const [isPage, setIsPage] = useState<number>();
   const query: Record<string, any> = {
@@ -47,9 +45,6 @@ export default function MyVideos() {
   const [selectedVideoIds, setSelectedVideoIds] = useState<string[]>([]);
   const [bulkDelete] = useBulkDeleteMutation();
   const [singleDelete] = useSingleDeleteMutation();
-
-  
-
 
   const handleSelect = (id: string, checked: boolean) => {
     if (checked) {
@@ -303,17 +298,7 @@ export default function MyVideos() {
         titleStyle="text-center"
         className="sm:max-w-4xl"
       >
-        <TabList setIsUpload={setIsUpload} setIsPayment={setIsPayment} />
-      </Modal>
-      {/* payment */}
-      <Modal
-        title="Pay to MyTSV"
-        open={isPayment}
-        setIsOpen={setIsPayment}
-        titleStyle="text-center"
-        className="sm:max-w-3xl"
-      >
-        <PaymentBox setIsPayment={setIsPayment} />
+        <TabList setIsUpload={setIsUpload} />
       </Modal>
     </div>
   );

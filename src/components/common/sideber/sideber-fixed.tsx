@@ -12,7 +12,7 @@ import { useGetProfileQuery } from "@/redux/api/authApi";
 import { useHandleLogout } from "@/lib/logout";
 import Modal from "@/components/reuseable/modal";
 import TabList from "../upload/tab";
-import PaymentBox from "../payment-box";
+
 
 type SidebarFixedProps = {
   isSide: boolean;
@@ -22,7 +22,6 @@ type SidebarFixedProps = {
 export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
   const router = useRouter();
   const [isUpload, setIsUpload] = useState(false);
-  const [isPayment, setIsPayment] = useState(false);
   const logout = useHandleLogout();
   const [navItem, setIsNavItem] = useState<any>(signOutItems);
   const pathname = usePathname();
@@ -41,9 +40,6 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
     }
   }, [token, isLoading]);
 
-  useEffect(() => {
-    setIsUpload(false);
-  }, [isPayment]);
 
   // ✅ Prevent background scroll when sidebar is open
   useEffect(() => {
@@ -147,18 +143,7 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
         titleStyle="text-center"
         className="sm:max-w-4xl"
       >
-        <TabList setIsOpen={setIsUpload} setIsPayment={setIsPayment} />
-      </Modal>
-
-      {/* Payment Modal ======*/}
-      <Modal
-        title="Pay to MyTSV"
-        open={isPayment}
-        setIsOpen={setIsPayment}
-        titleStyle="text-center"
-        className="sm:max-w-3xl"
-      >
-        <PaymentBox setIsPayment={setIsPayment} />
+        <TabList setIsUpload={setIsUpload}/>
       </Modal>
     </div>
   );

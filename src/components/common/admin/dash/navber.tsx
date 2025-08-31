@@ -1,11 +1,11 @@
 import { Menu } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useTitle } from "@/context/title";
 import FavIcon from "@/icon/admin/favIcon";
 import { authKey, getCookie } from "@/lib";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 import { ImgBox } from "../reuseable";
+
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -22,6 +22,7 @@ export default function Navber({ sidebarOpen, setSidebarOpen }: SidebarProps) {
       skip: !token,
     }
   );
+
 
   return (
     <div className="sticky top-0  flex w-full bg-[white] py-3 z-10 shadow-xs">

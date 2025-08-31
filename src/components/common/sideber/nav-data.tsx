@@ -53,9 +53,14 @@ export const signOutItems = [
     href: "/promotions",
   },
   {
+    icon: <Icon name="strams" />,
+    text: "Terms & Conditions",
+    href: "/terms",
+  },
+  // { icon: <Icon name="sabout" />, text: "About us", href: "/about-us" },
+  {
     icon: <Icon name="sonSide" />,
     text: "Onsite account creation",
     href: "/onside-account",
   },
 ];
-

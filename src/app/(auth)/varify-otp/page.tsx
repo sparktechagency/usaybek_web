@@ -24,7 +24,7 @@ import { delay, modifyPayload, setCookie } from "@/lib";
 import { toast } from "sonner";
 import { authKey } from "@/lib";
 
- function VarifyOtpChild() {
+function VarifyOtpChild() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
   const [otpVarify, { isLoading }] = useOtpVarifyMutation();
@@ -78,7 +78,7 @@ import { authKey } from "@/lib";
         const data = modifyPayload(value);
         const res = await otpVarify(data).unwrap();
         if (res.status) {
-          const { access_token: token, user: info } = res.data;
+          const { access_token: token, user: info } = res?.data;
           setCookie(authKey, token);
           toast("Login Successfull", {
             description: res?.message,
@@ -86,8 +86,6 @@ import { authKey } from "@/lib";
           await delay(4050);
           if (info.role == "USER") {
             router.push("/");
-          } else if (info.role == "ADMIN") {
-            router.push("/admin");
           }
         }
 
@@ -102,82 +100,81 @@ import { authKey } from "@/lib";
 
   return (
     <div className="fixed inset-0 m-0 md:m-3">
-    <Image
-      src={assets.auth.forgotImg}
-      alt="background image"
-      fill
-      className="object-cover z-0 md:rounded-md"
-    />
-    <div className="relative z-10 max-w-7xl h-full mx-auto flex flex-col justify-center">
-      <Card className="w-full max-w-md rounded-md lg:rounded-none lg:rounded-t-xl px-4 pt-8 pb-15 lg:pb-50 bg-body border-none mx-auto lg:absolute lg:left-1/2 lg:[transform:translateX(-50%)] lg:bottom-0">
-        <CardHeader className="flex flex-col items-center space-y-0 gap-0 pt-6">
-          <div className="mb-1 flex items-center justify-between w-full">
-            <Link href="/forgot-password">
-              <h1 className="bg-white size-8 rounded-full grid place-items-center relative -left-4 cursor-pointer">
-                <ArrowLeft size={20} />
-              </h1>
-            </Link>
-            <Image
-              src={assets.logo}
-              alt="MYTSV Logo"
-              width={150}
-              height={50}
-              className="object-contain"
-            />
-            <h1 className="opacity-0">0</h1>
+      <Image
+        src={assets.auth.forgotImg}
+        alt="background image"
+        fill
+        className="object-cover z-0 md:rounded-md"
+      />
+      <div className="relative z-10 max-w-7xl h-full mx-auto flex flex-col justify-center">
+        <Card className="w-full max-w-md rounded-md lg:rounded-none lg:rounded-t-xl px-4 pt-8 pb-15 lg:pb-50 bg-body border-none mx-auto lg:absolute lg:left-1/2 lg:[transform:translateX(-50%)] lg:bottom-0">
+          <CardHeader className="flex flex-col items-center space-y-0 gap-0 pt-6">
+            <div className="mb-1 flex items-center justify-between w-full">
+              <Link href="/forgot-password">
+                <h1 className="bg-white size-8 rounded-full grid place-items-center relative -left-4 cursor-pointer">
+                  <ArrowLeft size={20} />
+                </h1>
+              </Link>
+              <Image
+                src={assets.logo}
+                alt="MYTSV Logo"
+                width={150}
+                height={50}
+                className="object-contain"
+              />
+              <h1 className="opacity-0">0</h1>
+            </div>
+            <CardTitle className="text-2xl font-bold text-reds mt-3">
+              Verify Code
+            </CardTitle>
+            <CardDescription className="text-blacks font-normal text-center mt-1">
+              Enter the 6 digit code that we sent to{" "}
+              {email || "your provided email"}.
+            </CardDescription>
+          </CardHeader>
+          <div className="flex justify-center space-x-3 mb-2">
+            {code.map((digit, i) => (
+              <Input
+                key={i}
+                type="text"
+                inputMode="numeric"
+                maxLength={1}
+                value={digit}
+                onChange={(e) => handleChange(e, i)}
+                onKeyDown={(e) => handleKeyDown(e, i)}
+                onPaste={handlePaste}
+                ref={(el) => {
+                  inputRefs.current[i] = el;
+                }}
+                className="w-12 h-12 text-center text-lg font-medium border-gray-300"
+              />
+            ))}
           </div>
-          <CardTitle className="text-2xl font-bold text-reds mt-3">
-            Verify Code
-          </CardTitle>
-          <CardDescription className="text-blacks font-normal text-center mt-1">
-            Enter the 6 digit code that we sent to{" "}
-            {email || "your provided email"}.
-          </CardDescription>
-        </CardHeader>
-        <div className="flex justify-center space-x-3 mb-2">
-          {code.map((digit, i) => (
-            <Input
-              key={i}
-              type="text"
-              inputMode="numeric"
-              maxLength={1}
-              value={digit}
-              onChange={(e) => handleChange(e, i)}
-              onKeyDown={(e) => handleKeyDown(e, i)}
-              onPaste={handlePaste}
-              ref={(el) => {
-                inputRefs.current[i] = el;
-              }}
-              className="w-12 h-12 text-center text-lg font-medium border-gray-300"
-            />
-          ))}
-        </div>
-        {error && (
-          <p className="text-red-500 text-sm text-center mb-4">{error}</p>
-        )}
-        {isError && (
-          <p className="text-red-500 text-sm text-center mb-4">{isError}</p>
-        )}
-        <Button
-          type="button"
-          variant="primary"
-          className="w-full rounded-full"
-          disabled={isLoading}
-          onClick={handleVerify}
-        >
-          Verify
-        </Button>
-      </Card>
+          {error && (
+            <p className="text-red-500 text-sm text-center mb-4">{error}</p>
+          )}
+          {isError && (
+            <p className="text-red-500 text-sm text-center mb-4">{isError}</p>
+          )}
+          <Button
+            type="button"
+            variant="primary"
+            className="w-full rounded-full"
+            disabled={isLoading}
+            onClick={handleVerify}
+          >
+            Verify
+          </Button>
+        </Card>
+      </div>
     </div>
-  </div>
   );
 }
 
-
 export default function VarifyOtp() {
   return (
-   <Suspense fallback={<h1>Loading....</h1>}>
-      <VarifyOtpChild/>
-   </Suspense>
-  )
+    <Suspense fallback={<h1>Loading....</h1>}>
+      <VarifyOtpChild />
+    </Suspense>
+  );
 }

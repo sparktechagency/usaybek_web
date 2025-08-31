@@ -5,7 +5,7 @@ import {
   CardTitle,
   Input,
 } from "@/components/ui";
-import { modifyPayload } from "@/lib";
+import { authKey, modifyPayload, setCookie } from "@/lib";
 import { useOtpVarifyMutation } from "@/redux/api/authApi";
 import { useRouter } from "next/navigation";
 import React, {
@@ -70,6 +70,8 @@ export default function VarifyOtpOside({ isEmail, setIsEmail }: any) {
         const data = modifyPayload(value);
         const res = await otpVarify(data).unwrap();
         if (res.status) {
+          const { access_token: token } = res?.data;
+          setCookie(authKey, token);
           setIsEmail("");
           setIsAccount(!isAccount);
           setIsPayment(!isPayment);
@@ -86,45 +88,47 @@ export default function VarifyOtpOside({ isEmail, setIsEmail }: any) {
     <div>
       <CardHeader className="flex flex-col items-center space-y-0 gap-0  mb-10">
         <CardTitle className="text-2xl font-semibold text-reds mt-2">
-          Create an account
+          Verify Code
         </CardTitle>
         <CardDescription className="text-blacks font-normal text-center mt-1">
           Enter the 6 digit code that we sent you to your provided email.
         </CardDescription>
       </CardHeader>
-      <div className="flex justify-center space-x-3 mb-2">
-        {code.map((digit, i) => (
-          <Input
-            key={i}
-            type="text"
-            inputMode="numeric"
-            maxLength={1}
-            value={digit}
-            onChange={(e) => handleChange(e, i)}
-            onKeyDown={(e) => handleKeyDown(e, i)}
-            onPaste={handlePaste}
-            ref={(el) => {
-              inputRefs.current[i] = el;
-            }}
-            className="w-12 h-12 text-center text-lg font-medium border-gray-300"
-          />
-        ))}
+      <div className="w-full md:max-w-sm mx-auto">
+        <div className="flex justify-between mb-5">
+          {code.map((digit, i) => (
+            <Input
+              key={i}
+              type="text"
+              inputMode="numeric"
+              maxLength={1}
+              value={digit}
+              onChange={(e) => handleChange(e, i)}
+              onKeyDown={(e) => handleKeyDown(e, i)}
+              onPaste={handlePaste}
+              ref={(el) => {
+                inputRefs.current[i] = el;
+              }}
+              className="w-12 h-12 text-center text-lg font-medium border-gray-300"
+            />
+          ))}
+        </div>
+        {error && (
+          <p className="text-red-500 text-sm text-center mb-4">{error}</p>
+        )}
+        {isError && (
+          <p className="text-red-500 text-sm text-center mb-4">{isError}</p>
+        )}
+        <Button
+          type="button"
+          variant="primary"
+          className="w-full rounded-full"
+          disabled={isLoading}
+          onClick={handleVerify}
+        >
+          Verify
+        </Button>
       </div>
-      {error && (
-        <p className="text-red-500 text-sm text-center mb-4">{error}</p>
-      )}
-      {isError && (
-        <p className="text-red-500 text-sm text-center mb-4">{isError}</p>
-      )}
-      <Button
-        type="button"
-        variant="primary"
-        className="w-full rounded-full"
-        disabled={isLoading}
-        onClick={handleVerify}
-      >
-        Verify
-      </Button>
     </div>
   );
 }

@@ -6,6 +6,10 @@ import React, { createContext, useState, useContext } from "react";
 import Modal from "@/components/reuseable/modal";
 import OnSideAccount from "./account-create";
 import PaymentBox from "../payment-box";
+import StripePaymentWrapper from "../stripe";
+import { reasonType } from "@/lib";
+import { useGetPriceQuery } from "@/redux/api/admin/pricingApi";
+import { useRouter } from "next/navigation";
 
 // Define a proper context type
 type ManageStateType = {
@@ -28,8 +32,16 @@ export const useManageState = () => {
 };
 
 export default function OnSideBox() {
+  const router = useRouter();
   const [isPayment, setIsPayment] = useState(false);
   const [isAccount, setIsAccount] = useState(false);
+  const { data } = useGetPriceQuery({});
+
+  // handlePaymentSuccess
+  const handlePaymentSuccess = () => {
+    setIsPayment(false);
+    router.push("/");
+  };
 
   return (
     <ManageState.Provider
@@ -52,7 +64,7 @@ export default function OnSideBox() {
         setIsOpen={setIsAccount}
         title="Onsite account creation"
         titleStyle="text-center"
-        className="sm:max-w-3xl"
+        className="sm:max-w-2xl"
       >
         <OnSideAccount />
       </Modal>
@@ -62,9 +74,14 @@ export default function OnSideBox() {
         setIsOpen={setIsPayment}
         title="Pay to MyTSV"
         titleStyle="text-center"
-        className="sm:max-w-3xl"
       >
-        <PaymentBox />
+        {data?.onsite_account_creation && (
+          <StripePaymentWrapper
+            amount={data?.onsite_account_creation}
+            reason={reasonType.onsite_account}
+            onSuccess={handlePaymentSuccess}
+          />
+        )}
       </Modal>
     </ManageState.Provider>
   );

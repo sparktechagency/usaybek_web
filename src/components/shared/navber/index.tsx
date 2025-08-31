@@ -11,8 +11,7 @@ import SidebarFixed from "@/components/common/sideber/sideber-fixed";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 import { authKey, getCookie } from "@/lib";
 import NavberSearchBox from "@/components/common/navber-search-box";
-import SearchIcon from "@/components/common/navber-search-box/search-icon";
-import Icon from "@/icon";
+
 
 export default function Navber() {
   const [isSide, setIsSide] = useState(false);

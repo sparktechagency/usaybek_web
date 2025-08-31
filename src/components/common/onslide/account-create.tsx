@@ -46,15 +46,23 @@ export default function OnSideAccount() {
       const data = modifyPayload(value);
       const res = await signUp(data).unwrap();
       if (res.status) {
-        toast("Create Account Successful", {
+        toast.success("Create Account Successful", {
           description: res?.message,
         });
+        await delay(4050);
+        setIsVarify(false);
+        from.reset();
+      } else {
+        toast.error("Account Creation Failed", {
+          description:
+            "The representative secret key you entered is invalid. Please check and try again.",
+        });
       }
-      await delay(4050);
-      setIsVarify(false);
-      from.reset();
     } catch (err: any) {
-      ResponseApiErrors(err?.data, from);
+      console.log(err);
+      if (err?.data) {
+        ResponseApiErrors(err?.data, from);
+      }
     }
   };
 
