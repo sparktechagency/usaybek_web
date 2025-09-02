@@ -11,12 +11,15 @@ import {
   Checkbox,
   Label,
 } from "@/components/ui";
+// import auth from "@/firebase.config";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import Icon from "@/icon";
 import { authKey, delay, modifyPayload, RoleSetCookie, setCookie } from "@/lib";
-import { useSignInMutation } from "@/redux/api/authApi";
+import { useSignInMutation, useSocialLoginMutation } from "@/redux/api/authApi";
 import { loginSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+// import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+// import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -26,6 +29,8 @@ import { toast } from "sonner";
 
 export default function Login() {
   const [signIn, { isLoading }] = useSignInMutation();
+  // const [socialLogin, { isLoading: isLoadingSocial }] =
+  //   useSocialLoginMutation();
   const [isError, setIsError] = useState("");
   const router = useRouter();
   const from = useForm({
@@ -48,7 +53,7 @@ export default function Login() {
       if (res.status) {
         const { access_token: token, user: info } = res.data;
         setCookie(authKey, token);
-        RoleSetCookie(info.role)
+        RoleSetCookie(info.role);
         toast.success("Login Successful", {
           description: "Welcome back! You're now logged in",
         });
@@ -70,28 +75,97 @@ export default function Login() {
     }
   };
 
+  // const urlToFileJpg = (
+  //   url: string,
+  //   filename: string = "photo.jpg",
+  //   retries: number = 3,
+  //   delayTime: number = 2000
+  // ): Promise<File> => {
+  //   return new Promise((resolve, reject) => {
+  //     // Check if the URL is cached in localStorage
+  //     const cachedFile = localStorage.getItem(url);
+  //     if (cachedFile) {
+  //       resolve(
+  //         new File([new Blob([cachedFile], { type: "image/jpeg" })], filename, {
+  //           type: "image/jpeg",
+  //         })
+  //       );
+  //       return;
+  //     }
+
+  //     const xhr = new XMLHttpRequest();
+  //     xhr.open("GET", url);
+  //     xhr.responseType = "blob"; // Expecting a blob response (image file)
+
+  //     const makeRequest = (attempt: number) => {
+  //       xhr.onload = () => {
+  //         if (xhr.status === 200) {
+  //           const blob = xhr.response;
+  //           // Create a file from the blob with the specified filename and mime type
+  //           const file = new File([blob], filename, { type: "image/jpeg" });
+  //           // Cache the file in localStorage as a base64 string
+  //           const reader = new FileReader();
+  //           reader.onloadend = () => {
+  //             localStorage.setItem(url, reader.result as string);
+  //           };
+  //           reader.readAsDataURL(file);
+  //           resolve(file);
+  //         } else if (xhr.status === 429 && attempt < retries) {
+  //           // Retry logic for 429 (Too Many Requests)
+  //           setTimeout(() => makeRequest(attempt + 1), delayTime);
+  //         } else {
+  //           reject(new Error("Failed to fetch image: " + xhr.statusText));
+  //         }
+  //       };
+
+  //       xhr.onerror = () => {
+  //         reject(new Error("Network error"));
+  //       };
+
+  //       xhr.send();
+  //     };
+
+  //     // Start the request with the first attempt
+  //     makeRequest(1);
+  //   });
+  // };
+
   // const handleGoogle = async () => {
   //   const provider = new GoogleAuthProvider();
   //   signInWithPopup(auth, provider)
   //     .then(async (result: any) => {
   //       const user = result.user;
-  //       const file = await urlToFileJpg(user?.photoURL);
-  //       const value = {
-  //         name: user?.displayName,
-  //         email: user?.email,
-  //         photo: file,
-  //         google_id: user?.uid,
-  //       };
-  //       console.log(value);
-  //       const data = modifyPayload(value);
-  //       const res = await socialLogin(data).unwrap();
-  //       console.log(res);
+  //       try {
+  //         // Assuming user.photoURL is the image URL
+  //         const file = await urlToFileJpg(
+  //           user?.photoURL,
+  //           `${user?.displayName}-profile.jpg`
+  //         );
+  //         console.log(file)
+  //         console.log(user)
 
-  //       // console.log(file);
+  //         const value = {
+  //           name: user?.displayName,
+  //           email: user?.email,
+  //           photo: file,
+  //           google_id: user?.uid,
+  //         };
 
-  //       // ...
+  //         const data = modifyPayload(value);
+  //         const res = await socialLogin(data).unwrap();
+  //         console.log(res);
+  //          if(res.status){
+  //           toast.success("Login Successful", {
+  //             description:res?.message,
+  //           });
+  //          }
+  //       } catch (error) {
+  //         console.error("Error fetching image:", error);
+  //       }
   //     })
-  //     .catch((error: any) => {});
+  //     .catch((error: any) => {
+  //       console.error("Google login failed:", error);
+  //     });
   // };
 
   return (
@@ -193,7 +267,7 @@ export default function Login() {
                 size={"lg"}
                 className="w-full rounded-full border flex justify-between shadow-none px-1"
                 onClick={() => handleGoogle()}
-                disabled={socialLoading}
+                disabled={isLoadingSocial}
               >
                 <div className="flex items-center">
                   <Icon name="google" className="mr-1" />
