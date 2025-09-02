@@ -4,8 +4,10 @@ import FavIcon from "@/icon/admin/favIcon";
 import { ImgBox } from "@/components/common/admin/reuseable";
 import ReactPlayer from "react-player";
 import { cn } from "@/lib";
+import { useState } from "react";
 
 export function VideoCard({ item, className, imgStyle }: any) {
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const {
     id,
     title,
@@ -19,10 +21,22 @@ export function VideoCard({ item, className, imgStyle }: any) {
     link,
   } = item || {};
 
+  const handleVideoHover = (id: string) => {
+    setActiveVideo(id);  
+  };
+
+  const handleVideoEnd = () => {
+    setActiveVideo(null); 
+  };
+
   return (
     <div className={className}>
       <Link href={`/video/${id}`}>
-        <div className="relative group">
+        <div
+          className="relative group"
+          onMouseEnter={() => handleVideoHover(id)}  
+          onMouseLeave={handleVideoEnd} 
+        >
           {/* Thumbnail and hover effect */}
           <ImgBox
             src={thumbnail || "/blur.png"}
@@ -37,26 +51,32 @@ export function VideoCard({ item, className, imgStyle }: any) {
 
           {/* Video player section */}
           <div className="h-[220px] absolute inset-0 hidden group-hover:block transition-all duration-300">
-            {type === "video" && (
+            {activeVideo === id && type === "video" && (
               <video
                 className="w-full h-full object-cover rounded-md"
                 src={video}
                 autoPlay
                 loop
-                muted
+                muted={false}  // Unmute for active video
+                playsInline
               />
             )}
-            {type === "link" && (
+            {activeVideo === id && type === "link" && (
               <div className="w-full h-full object-cover rounded-md overflow-hidden">
-                <ReactPlayer
+                <ReactPlayer controls>
+                  <source src={link} type="video/mp4" />
+                </ReactPlayer>
+                {/* <ReactPlayer
                   className="!w-full !h-full"
                   src={link}
                   playing={true}
+                  muted={false}  // Unmute for active video
                   width="100%"
                   height="100%"
                   style={{ borderRadius: "16px" }}
                   controls={false}
-                />
+                  playsInline={true}
+                /> */}
               </div>
             )}
           </div>
@@ -115,14 +135,16 @@ export function VideoCard2({ item, className }: any) {
           </ImgBox>
           <div className="h-[220px] relative hidden group-hover:block">
             {type === "video" && (
-              <video
-                className="w-full h-full object-cover rounded-md"
-                src={video}
-                autoPlay
-                loop
-              />
+              // <video
+              //   className="w-full h-full object-cover rounded-md"
+              //   src={video}
+              //   autoPlay
+              //   loop
+              //   muted
+              // />
+              <h1>Video Supported Soon</h1>
             )}
-            {type === "link" && (
+            {/* {type === "link" && (
               <div className="w-full h-full object-cover rounded-md overflow-hidden">
                 <ReactPlayer
                   className="!w-full !h-full"
@@ -133,7 +155,7 @@ export function VideoCard2({ item, className }: any) {
                   style={{ borderRadius: "16px" }}
                 />
               </div>
-            )}
+            )} */}
             {!!is_promoted && <PromatedText />}
           </div>
         </div>
