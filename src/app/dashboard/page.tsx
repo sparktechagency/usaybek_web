@@ -200,7 +200,7 @@ export default function Dashboard() {
         )}
       </div>
 
-      <ChartAreaOverView analytics={analytics}>
+      <ChartAreaOverView type={isMonth} analytics={analytics}>
         <MonthlyBox setIsMonth={setIsMonth} />
       </ChartAreaOverView>
     </div>

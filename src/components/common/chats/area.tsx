@@ -1,8 +1,5 @@
-"use client";
-
 import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -10,47 +7,71 @@ import {
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { cn } from "@/lib/utils";
 
-// Define color config for chart keys
+// Define month mapping
+const reverseMonthMap: Record<number, string> = {
+  1: "Jan",
+  2: "Feb",
+  3: "Mar",
+  4: "Apr",
+  5: "May",
+  6: "Jun",
+  7: "Jul",
+  8: "Aug",
+  9: "Sep",
+  10: "Oct",
+  11: "Nov",
+  12: "Dec",
+};
+
+// Chart configuration
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  like: {
-    label: "Likes",
-    color: "var(--chart-1)",
-  },
-  views: {
-    label: "Views",
-    color: "var(--chart-2)",
-  },
-  dislike: {
-    label: "Dislikes",
-    color: "var(--chart-3)",
-  },
+  like: { label: "Likes", color: "var(--chart-1)" },
+  views: { label: "Views", color: "var(--chart-2)" },
+  dislike: { label: "Dislikes", color: "var(--chart-3)" },
 } satisfies ChartConfig;
 
-// Helper: build YYYY-MM-DD string for June 2024 (adjust if needed)
-function buildDate(day: number) {
-  const month = 6; // June
-  const year = 2024;
-  return `${year}-${month?.toString()?.padStart(2, "0")}-${day
-    ?.toString()
-    ?.padStart(2, "0")}`;
+type Point = { date: number; views: number; like: number; dislike: number };
+
+const monthMap: Record<string, number> = {
+  Jan: 1,
+  Feb: 2,
+  Mar: 3,
+  Apr: 4,
+  May: 5,
+  Jun: 6,
+  Jul: 7,
+  Aug: 8,
+  Sep: 9,
+  Oct: 10,
+  Nov: 11,
+  Dec: 12,
+};
+
+function buildTimestamp(
+  unit: number,
+  chartType: "monthly" | "yearly",
+  month: number,
+  year: number
+): number {
+  if (chartType === "monthly") {
+    return new Date(year, month - 1, unit).getTime(); // daily
+  }
+  return new Date(year, unit - 1, 1).getTime(); // monthly
 }
 
-interface charProps {
+interface CharProps {
   analytics: {
-    views: { day: number; total_watch: number }[];
-    likes: { day: number; total_liked: number }[];
-    dislikes: { day: number; total_dislikes: number }[];
+    views: any[];
+    likes: any[];
+    dislikes: any[];
   };
   isActive?: boolean;
   children?: React.ReactNode;
   className?: string;
+  type?: any;
 }
 
 export function ChartAreaOverView({
@@ -58,57 +79,110 @@ export function ChartAreaOverView({
   analytics,
   isActive = true,
   className,
-}: charProps) {
-  const [status, setStatus] = React.useState("Views");
-  const [timeRange, setTimeRange] = React.useState("7d");
-  const [chartData, setChartData] = React.useState<
-    { date: string; views: number; like: number; dislike: number }[]
-  >([]);
+  type,
+}: CharProps) {
+  const [status, setStatus] = React.useState<"Views" | "Likes" | "Dislikes">(
+    "Views"
+  );
+  const [chartData, setChartData] = React.useState<Point[]>([]);
+
+  const chartType: "monthly" | "yearly" | "custom" = type?.type ?? "monthly";
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1;
+  const currentYear = now.getFullYear();
 
   React.useEffect(() => {
     if (!analytics) return;
 
-    const combinedData = analytics?.views?.map((viewEntry) => {
-      const day = viewEntry?.day;
-      const views = viewEntry?.total_watch;
-      const likeEntry = analytics?.likes?.find((l) => l.day === day);
-      const dislikeEntry = analytics?.dislikes?.find((d) => d.day === day);
-      const like = likeEntry ? likeEntry?.total_liked : 0;
-      const dislike = dislikeEntry ? dislikeEntry?.total_dislikes : 0;
+    let combined: Point[] = [];
+    let month = currentMonth;
+    let year = currentYear;
 
-      return {
-        date: buildDate(day),
-        views,
-        like,
-        dislike,
-      };
-    });
+    if (chartType === "custom") {
+      month = monthMap[type?.month] ?? currentMonth;
+      year = type?.year ?? currentYear;
+    }
 
-    setChartData(combinedData);
-  }, [analytics]);
+    if (chartType === "yearly") {
+      combined = Array.from({ length: 12 }, (_, i) => {
+        const monthIndex = i + 1;
+        const viewMatch = analytics.views?.find(
+          (v) => monthMap[v.month] === monthIndex
+        );
+        const likeMatch = analytics.likes?.find(
+          (l) => monthMap[l.month] === monthIndex
+        );
+        const dislikeMatch = analytics.dislikes?.find(
+          (d) => monthMap[d.month] === monthIndex
+        );
 
-  // Filter data based on selected time range (7d, 30d, 90d)
-  const filteredData = React.useMemo(() => {
-    if (chartData?.length === 0) return [];
+        return {
+          date: buildTimestamp(monthIndex, "yearly", month, year),
+          views: Number(viewMatch?.total_watch ?? 0),
+          like: Number(likeMatch?.total_liked ?? likeMatch?.total_likes ?? 0),
+          dislike: Number(dislikeMatch?.total_dislikes ?? 0),
+        };
+      });
+    } else {
+      combined =
+        (analytics?.views ?? []).map((v) => {
+          const day = v?.day;
+          const likeMatch = analytics?.likes?.find((l) => l.day === day);
+          const dislikeMatch = analytics?.dislikes?.find((d) => d.day === day);
 
-    const referenceDate = new Date("2024-06-30");
-    let daysToSubtract = 90;
-    if (timeRange === "30d") daysToSubtract = 30;
-    else if (timeRange === "7d") daysToSubtract = 7;
+          return {
+            date: buildTimestamp(day, "monthly", month, year),
+            views: Number(v?.total_watch ?? 0),
+            like: Number(likeMatch?.total_liked ?? likeMatch?.total_likes ?? 0),
+            dislike: Number(dislikeMatch?.total_dislikes ?? 0),
+          };
+        }) ?? [];
+    }
 
-    const startDate = new Date(referenceDate);
-    startDate?.setDate(startDate?.getDate() - daysToSubtract);
+    combined = combined.map((point) => ({
+      ...point,
+      views: point.views || 0,
+      like: point.like || 0,
+      dislike: point.dislike || 0,
+    }));
 
-    return chartData?.filter((item) => new Date(item.date) >= startDate) || [];
-  }, [chartData, timeRange]);
+    combined.sort((a, b) => a.date - b.date);
+    setChartData(combined);
+  }, [analytics, chartType, type, currentMonth, currentYear]);
 
-  const statusToDataKey = {
-    Views: "views",
-    Likes: "like",
-    Dislikes: "dislike",
+  const activeKey =
+    status === "Views" ? "views" : status === "Likes" ? "like" : "dislike";
+
+  // Format ticks for XAxis
+  const formatTick = (ts: number) => {
+    if (!ts || isNaN(ts)) return "";
+    const d = new Date(ts);
+    if (chartType === "yearly") {
+      return reverseMonthMap[d.getMonth() + 1] || "";
+    }
+    return d.getDate().toString();
   };
-  const activeDataKey =
-    statusToDataKey[status as keyof typeof statusToDataKey] || "views";
+
+
+  // Custom Tooltip
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (!active || !payload || payload.length === 0 || !label || isNaN(label)) return null;
+
+  const value = payload[0]?.value ?? 0;
+  const d = new Date(label);
+  const formattedLabel = chartType === "yearly" 
+    ? `${reverseMonthMap[d.getMonth() + 1]}`
+    : `${d.getDate()} ${reverseMonthMap[d.getMonth() + 1]}`;
+
+  return (
+    <div className="rounded-lg border bg-white px-3 py-2 shadow-md text-sm">
+      <div className="font-medium">{formattedLabel}</div>
+      <div className="text-gray-700">
+        {status}: <span className="font-semibold">{value}</span>
+      </div>
+    </div>
+  );
+};
 
   return (
     <div>
@@ -117,9 +191,10 @@ export function ChartAreaOverView({
           <h1 className="text-center text-base lg:text-2xl font-semibold my-6 lg:my-10">
             Overall statistics of your channel
           </h1>
+
           <div className="flex justify-between border-b border-gray-200">
             <div>
-              {["Views", "Likes", "Dislikes"].map((item) => (
+              {(["Views", "Likes", "Dislikes"] as const).map((item) => (
                 <button
                   key={item}
                   onClick={() => setStatus(item)}
@@ -141,10 +216,10 @@ export function ChartAreaOverView({
         <CardContent className="p-0">
           <ChartContainer
             config={chartConfig}
-            className="aspect-auto h-[250px] w-full  pb-4"
+            className="aspect-auto h-[350px] w-full pb-4"
           >
             <AreaChart
-              data={filteredData}
+              data={chartData}
               margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
             >
               <defs>
@@ -189,35 +264,28 @@ export function ChartAreaOverView({
               <CartesianGrid vertical={false} />
               <XAxis
                 dataKey="date"
-                tickLine={false}
-                axisLine={false}
+                type="number"
+                scale="time"
+                domain={
+                  chartType === "yearly"
+                    ? [
+                        new Date(currentYear, 0, 1).getTime(),
+                        new Date(currentYear, 11, 31).getTime(),
+                      ]
+                    : ["auto", "auto"]
+                }
                 tickMargin={8}
                 minTickGap={32}
-                tickFormatter={(value) => {
-                  const date = new Date(value);
-                  return date.toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  });
-                }}
+                tickLine={false}
+                axisLine={false}
+                interval={0}
+                tickFormatter={formatTick}
+                padding={{ left: 10, right: 10 }}
+                allowDuplicatedCategory={false}
               />
-              <ChartTooltip
-                cursor={false}
-                content={
-                  <ChartTooltipContent
-                    labelFormatter={(value) =>
-                      new Date(value).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      })
-                    }
-                    indicator="dot"
-                  />
-                }
-              />
+              <ChartTooltip cursor={false} content={<CustomTooltip />} />
 
-              {/* Render the active data area */}
-              {activeDataKey === "views" && (
+              {activeKey === "views" && (
                 <Area
                   dataKey="views"
                   type="natural"
@@ -226,7 +294,7 @@ export function ChartAreaOverView({
                   stackId="a"
                 />
               )}
-              {activeDataKey === "like" && (
+              {activeKey === "like" && (
                 <Area
                   dataKey="like"
                   type="natural"
@@ -235,7 +303,7 @@ export function ChartAreaOverView({
                   stackId="a"
                 />
               )}
-              {activeDataKey === "dislike" && (
+              {activeKey === "dislike" && (
                 <Area
                   dataKey="dislike"
                   type="natural"
@@ -244,7 +312,6 @@ export function ChartAreaOverView({
                   stackId="a"
                 />
               )}
-
               <ChartLegend content={<ChartLegendContent />} />
             </AreaChart>
           </ChartContainer>

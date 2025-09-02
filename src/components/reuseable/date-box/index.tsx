@@ -1,17 +1,17 @@
-"use client"
-import * as React from "react"
+"use client";
+import * as React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react"
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 
-export default function MonthlyBox({setIsMonth}:any) {
+export default function MonthlyBox({ setIsMonth }: any) {
   // Declare months array and helper function first
   const months = [
     "Jan",
@@ -26,35 +26,38 @@ export default function MonthlyBox({setIsMonth}:any) {
     "Oct",
     "Nov",
     "Dec",
-  ]
+  ];
 
   function getDisplayMonth(v: number) {
-    return months[(v + 12) % 12]
+    return months[(v + 12) % 12];
   }
 
   const [selectedRange, setSelectedRange] = React.useState<
     "monthly" | "yearly" | "custom"
-  >("monthly")
-  const [currentYear, setCurrentYear] = React.useState(new Date().getFullYear())
-  const [selectedMonth, setSelectedMonth] = React.useState(new Date().getMonth())
-  const [selectedYear, setSelectedYear] = React.useState(new Date().getFullYear())
+  >("monthly");
+  const [currentYear, setCurrentYear] = React.useState(
+    new Date().getFullYear()
+  );
+  const [selectedMonth, setSelectedMonth] = React.useState(
+    new Date().getMonth()
+  );
+  const [selectedYear, setSelectedYear] = React.useState(
+    new Date().getFullYear()
+  );
 
- 
-  const monthValue=getDisplayMonth(selectedMonth)
+  const monthValue = getDisplayMonth(selectedMonth);
 
   React.useEffect(() => {
     setIsMonth((prev: any) => ({
       ...prev,
-      type:selectedRange?.toString(),
+      type: selectedRange?.toString(),
       month: monthValue?.toString(),
       year: selectedYear,
-    }))
-  }, [monthValue, selectedYear, setIsMonth,selectedRange])
+    }));
+  }, [monthValue, selectedYear, setIsMonth, selectedRange]);
 
-  
-
-  const cardRef = React.useRef<HTMLDivElement>(null)
-  const yearsInGrid = 12 // Number of years to display in the grid
+  const cardRef = React.useRef<HTMLDivElement>(null);
+  const yearsInGrid = 12; // Number of years to display in the grid
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -63,15 +66,15 @@ export default function MonthlyBox({setIsMonth}:any) {
         cardRef.current &&
         !cardRef.current.contains(event.target as Node)
       ) {
-        setSelectedRange("monthly") // Close custom popup on outside click
+        setSelectedRange("monthly"); // Close custom popup on outside click
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [selectedRange])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [selectedRange]);
 
   const handleYearNavigation = (
     direction: "prev" | "next",
@@ -80,22 +83,22 @@ export default function MonthlyBox({setIsMonth}:any) {
     if (tab === "month") {
       setCurrentYear((prevYear) =>
         direction === "prev" ? prevYear - 1 : prevYear + 1
-      )
+      );
     } else if (tab === "year") {
       setCurrentYear((prevYear) =>
         direction === "prev" ? prevYear - yearsInGrid : prevYear + yearsInGrid
-      )
+      );
     }
-  }
+  };
 
   // Generate years for the grid, starting from currentYear backwards
   const getYearsForGrid = () => {
-    const years = []
+    const years = [];
     for (let i = 0; i < yearsInGrid; i++) {
-      years.push(currentYear - i)
+      years.push(currentYear - i);
     }
-    return years
-  }
+    return years;
+  };
 
   return (
     <div className="flex flex-col items-start relative">
@@ -107,24 +110,24 @@ export default function MonthlyBox({setIsMonth}:any) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-[150px] mr-10 border-0">
-        <DropdownMenuItem
-    onClick={() => {
-      setSelectedRange("monthly");
-      setSelectedMonth(new Date().getMonth());  // reset to current month
-      setSelectedYear(new Date().getFullYear()); // reset to current year
-    }}
-  >
-    Monthly
-  </DropdownMenuItem>
-  <DropdownMenuItem
-    onClick={() => {
-      setSelectedRange("yearly");
-      setSelectedMonth(new Date().getMonth());  // optionally reset month as well
-      setSelectedYear(new Date().getFullYear()); // reset to current year
-    }}
-  >
-    Yearly
-  </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              setSelectedRange("monthly");
+              setSelectedMonth(new Date().getMonth()); // reset to current month
+              setSelectedYear(new Date().getFullYear()); // reset to current year
+            }}
+          >
+            Monthly
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              setSelectedRange("yearly");
+              setSelectedMonth(new Date().getMonth()); // optionally reset month as well
+              setSelectedYear(new Date().getFullYear()); // reset to current year
+            }}
+          >
+            Yearly
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setSelectedRange("custom")}>
             Custom
           </DropdownMenuItem>
@@ -233,5 +236,5 @@ export default function MonthlyBox({setIsMonth}:any) {
         </Card>
       )}
     </div>
-  )
+  );
 }

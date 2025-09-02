@@ -9,7 +9,7 @@ import { useSidebarUser } from "../userlayout";
 export default function ToggleButton({ className }: { className?: string }) {
   const { sidebarOpen, setSidebarOpen } = useSidebarUser();
   return (
-    <div className={cn(`block md:hidden`, className)}>
+    <div className={cn(`block lg:hidden`, className)}>
       <Icon
         onClick={() => setSidebarOpen(!sidebarOpen)}
         name="menu"

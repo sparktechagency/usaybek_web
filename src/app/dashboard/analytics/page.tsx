@@ -1,5 +1,5 @@
 "use client";
-import { ChartAreaOverView } from "@/components/common/chats/area";
+import { ChartAreaOverView2 } from "@/components/common/chats/analytics-chart";
 import NavItem from "@/components/common/dashboard/navber";
 import MonthlyBox from "@/components/reuseable/date-box";
 import { Card } from "@/components/ui";
@@ -23,7 +23,7 @@ export default function Analytics() {
   const { data, isLoading } = useGetAnalyticsQuery(query);
   const { analytics, total_views, total_likes, total_dislikes } =
     data?.data || {};
-
+    console.log(analytics);
   return (
     <div>
       <NavItem title="Analytics" search={false} />
@@ -73,10 +73,11 @@ export default function Analytics() {
                 </div>
               ))}
             </div>
-            <ChartAreaOverView
+            <ChartAreaOverView2
               isActive={false}
-              className='border-none'
-              analytics={!isLoading && analytics}
+              type={isMonth}
+              className="border-none"
+              analytics={analytics}
             />
           </Card>
         </div>
