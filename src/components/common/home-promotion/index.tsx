@@ -62,7 +62,7 @@ export default function HomePromotion() {
         </div>
       ) : (
         <Slider ref={sliderRef} {...settings}>
-          {promoVideos?.map((video: any) => (
+          {promoVideos?.data?.map((video: any) => (
             <div key={video.id} className="px-2"> 
               <VideoCard item={video} />
             </div>

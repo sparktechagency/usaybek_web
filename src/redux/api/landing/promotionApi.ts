@@ -1,3 +1,4 @@
+import { buildResponse } from "@/lib";
 import { baseApi } from "../baseApi";
 import { tagTypes } from "@/redux/tag-types";
 
@@ -21,7 +22,7 @@ export const proApi = baseApi.injectEndpoints({
         params: arg,
       }),
       transformResponse: (response: any) => {
-        return response.data.data;
+        return buildResponse(response.data)
       },
       providesTags: [tagTypes.promoVideosSlider],
     }),
