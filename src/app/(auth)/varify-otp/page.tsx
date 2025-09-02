@@ -81,7 +81,7 @@ function VarifyOtpChild() {
           const { access_token: token, user: info } = res?.data;
           setCookie(authKey, token);
           RoleSetCookie(info.role);
-          toast("Login Successfull", {
+          toast.success("Login Successfull", {
             description: res?.message,
           });
           await delay(4050);

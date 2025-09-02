@@ -49,7 +49,7 @@ export default function SignUp() {
       const data = modifyPayload(value);
       const res = await signUp(data).unwrap();
       if (res.status) {
-        toast("Create Account Successful", {
+        toast.success("Create Account Successful", {
           description: res?.message,
         });
       }

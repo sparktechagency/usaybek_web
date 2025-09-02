@@ -28,9 +28,9 @@ const reverseMonthMap: Record<number, string> = {
 
 // Chart configuration
 const chartConfig = {
-  like: { label: "Likes", color: "var(--chart-1)" },
-  views: { label: "Views", color: "var(--chart-2)" },
-  dislike: { label: "Dislikes", color: "var(--chart-3)" },
+  like: { label: "Likes", color: "#8979FF" },
+  views: { label: "Views", color: "#8979FF" },
+  dislike: { label: "Dislikes", color: "#8979FF" },
 } satisfies ChartConfig;
 
 type Point = { date: number; views: number; like: number; dislike: number };
@@ -124,27 +124,28 @@ export function ChartAreaOverView({
         };
       });
     } else {
-      combined =
-        (analytics?.views ?? []).map((v) => {
-          const day = v?.day;
-          const likeMatch = analytics?.likes?.find((l) => l.day === day);
-          const dislikeMatch = analytics?.dislikes?.find((d) => d.day === day);
+      combined = (analytics?.views ?? []).map((v) => {
+        const day = v?.day;
+        const likeMatch = analytics?.likes?.find((l) => l.day === day);
+        const dislikeMatch = analytics?.dislikes?.find((d) => d.day === day);
 
-          return {
-            date: buildTimestamp(day, "monthly", month, year),
-            views: Number(v?.total_watch ?? 0),
-            like: Number(likeMatch?.total_liked ?? likeMatch?.total_likes ?? 0),
-            dislike: Number(dislikeMatch?.total_dislikes ?? 0),
-          };
-        }) ?? [];
+        return {
+          date: buildTimestamp(day, "monthly", month, year),
+          views: Number(v?.total_watch ?? 0),
+          like: Number(likeMatch?.total_liked ?? likeMatch?.total_likes ?? 0),
+          dislike: Number(dislikeMatch?.total_dislikes ?? 0),
+        };
+      });
     }
 
-    combined = combined.map((point) => ({
-      ...point,
-      views: point.views || 0,
-      like: point.like || 0,
-      dislike: point.dislike || 0,
-    }));
+    combined = combined
+      .filter((point) => !isNaN(point.date))
+      .map((point) => ({
+        ...point,
+        views: point.views || 0,
+        like: point.like || 0,
+        dislike: point.dislike || 0,
+      }));
 
     combined.sort((a, b) => a.date - b.date);
     setChartData(combined);
@@ -153,42 +154,41 @@ export function ChartAreaOverView({
   const activeKey =
     status === "Views" ? "views" : status === "Likes" ? "like" : "dislike";
 
-  // Format ticks for XAxis
   const formatTick = (ts: number) => {
-    if (!ts || isNaN(ts)) return "";
+    if (!ts || isNaN(ts)) return "Invalid";
     const d = new Date(ts);
-    if (chartType === "yearly") {
-      return reverseMonthMap[d.getMonth() + 1] || "";
-    }
-    return d.getDate().toString();
+    if (isNaN(d.getTime())) return "Invalid";
+    return chartType === "yearly"
+      ? reverseMonthMap[d.getMonth() + 1] || "Invalid"
+      : `${d.getDate()}`;
   };
 
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (!active || !payload || payload.length === 0 || !label || isNaN(label))
+      return null;
 
-  // Custom Tooltip
-const CustomTooltip = ({ active, payload, label }: any) => {
-  if (!active || !payload || payload.length === 0 || !label || isNaN(label)) return null;
+    const value = payload[0]?.value ?? 0;
+    const d = new Date(label);
+    const formattedLabel =
+      chartType === "yearly"
+        ? `${reverseMonthMap[d.getMonth() + 1]}`
+        : `${d.getDate()} ${reverseMonthMap[d.getMonth() + 1]}`;
 
-  const value = payload[0]?.value ?? 0;
-  const d = new Date(label);
-  const formattedLabel = chartType === "yearly" 
-    ? `${reverseMonthMap[d.getMonth() + 1]}`
-    : `${d.getDate()} ${reverseMonthMap[d.getMonth() + 1]}`;
-
-  return (
-    <div className="rounded-lg border bg-white px-3 py-2 shadow-md text-sm">
-      <div className="font-medium">{formattedLabel}</div>
-      <div className="text-gray-700">
-        {status}: <span className="font-semibold">{value}</span>
+    return (
+      <div className="rounded-lg border bg-white px-3 py-2 shadow-md text-sm">
+        <div className="font-medium">{formattedLabel}</div>
+        <div className="text-gray-700">
+          {status}: <span className="font-semibold">{value}</span>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
   return (
     <div>
       {isActive && (
         <>
-          <h1 className="text-center text-base lg:text-2xl font-semibold my-6 lg:my-10">
+          <h1 className="text-center text-base  lg:text-2xl font-semibold my-6 lg:my-10">
             Overall statistics of your channel
           </h1>
 

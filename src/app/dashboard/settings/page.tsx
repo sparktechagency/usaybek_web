@@ -57,13 +57,13 @@ export default function Settings() {
   useEffect(() => {
     if (data?.data) {
       from.reset({
-        channel_name: channel_name,
-        name: name,
-        email: email,
-        contact: contact,
-        locations: locations,
-        bio: bio,
-        services: services,
+        channel_name: channel_name || "",
+        name: name || "",
+        email: email || "",
+        contact: contact || "",
+        locations: locations || [],
+        bio: bio || "",
+        services: services || [],
       });
     }
   }, [

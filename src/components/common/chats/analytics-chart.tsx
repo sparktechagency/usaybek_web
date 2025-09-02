@@ -28,7 +28,7 @@ const reverseMonthMap: Record<number, string> = {
 
 // Chart config (only views)
 const chartConfig = {
-  views: { label: "Views", color: "var(--chart-2)" },
+  views: { label: "Views", color: "#8979FF" },
 } satisfies ChartConfig;
 
 type Point = { date: number; views: number };
@@ -41,13 +41,7 @@ interface CharProps {
   type?: any;
 }
 
-export function ChartAreaOverView2({
-  children,
-  analytics,
-  isActive = true,
-  className,
-  type,
-}: CharProps) {
+export function ChartAreaOverView2({ analytics, className, type }: CharProps) {
   const [chartData, setChartData] = React.useState<Point[]>([]);
   const chartType: "monthly" | "yearly" = type?.type ?? "monthly";
   const now = new Date();
@@ -96,7 +90,7 @@ export function ChartAreaOverView2({
       .sort((a, b) => a.date - b.date);
 
     setChartData(validData);
-  }, [analytics, chartType, type]);
+  }, [analytics, chartType, type, currentMonth, currentYear]);
 
   const formatTick = (ts: number) => {
     const d = new Date(ts);

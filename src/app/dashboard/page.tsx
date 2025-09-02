@@ -128,12 +128,9 @@ export default function Dashboard() {
                 </h2>
                 <p className="text-base flex items-center justify-center text-center gap-1 mt-1">
                   <Icon name="locationGary" />
-                  {user?.locations?.map(
-                    (loc: any, idx: number) =>
-                      loc.type === "head-office" && (
-                        <span key={idx}>{loc.location}</span>
-                      )
-                  )}
+                  {user?.locations?.find(
+                    (loc: any) => loc?.type === "head-office"
+                  )?.location ?? "No Location"}
                 </p>
               </CardContent>
               <div className="flex items-center justify-between mb-4">

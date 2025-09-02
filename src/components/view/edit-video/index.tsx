@@ -39,6 +39,7 @@ export default function EditVideo({ slug }: { slug: string }) {
   const { data: categories, isLoading: categoriLoading } = useCategoriesQuery({
     per_page: 1000,
   });
+  
   const { data, isLoading } = useVideosDetailsQuery(slug);
   const [videoEdit, { isLoading: editLoading }] = useVideoEditMutation();
   const {
