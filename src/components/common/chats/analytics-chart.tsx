@@ -1,10 +1,5 @@
 import * as React from "react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  XAxis,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -17,8 +12,18 @@ import { cn } from "@/lib/utils";
 
 // Month mapping
 const reverseMonthMap: Record<number, string> = {
-  1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun",
-  7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec",
+  1: "Jan",
+  2: "Feb",
+  3: "Mar",
+  4: "Apr",
+  5: "May",
+  6: "Jun",
+  7: "Jul",
+  8: "Aug",
+  9: "Sep",
+  10: "Oct",
+  11: "Nov",
+  12: "Dec",
 };
 
 // Chart config (only views)
@@ -33,7 +38,7 @@ interface CharProps {
   isActive?: boolean;
   children?: React.ReactNode;
   className?: string;
-  type?:any;
+  type?: any;
 }
 
 export function ChartAreaOverView2({
@@ -55,9 +60,13 @@ export function ChartAreaOverView2({
     let month = currentMonth;
     let year = currentYear;
 
-    if (type?.month) {
-      month = reverseMonthMap[month] ? Object.keys(reverseMonthMap).find(key => reverseMonthMap[+key] === type.month) as unknown as number : currentMonth;
+    if (type?.month && typeof type.month === "string") {
+      const found = Object.entries(reverseMonthMap).find(
+        ([_, name]) => name === type.month
+      );
+      if (found) month = Number(found[0]);
     }
+
     if (type?.year) {
       year = type.year;
     }
@@ -65,34 +74,47 @@ export function ChartAreaOverView2({
     let combined: Point[] = [];
 
     if (chartType === "yearly") {
-      combined = analytics.map((entry: any, i: number) => ({
-        date: new Date(year, i, 1).getTime(),
-        views: Number(entry.total_watch ?? 0),
-      }));
+      combined = analytics.map((entry: any, i: number) => {
+        const date = new Date(year, i, 1).getTime();
+        return {
+          date,
+          views: Number(entry.total_watch ?? 0),
+        };
+      });
     } else {
-      combined = analytics.map((entry: any) => ({
-        date: new Date(year, month - 1, entry.day).getTime(),
-        views: Number(entry.total_watch ?? 0),
-      }));
+      combined = analytics.map((entry: any) => {
+        const date = new Date(year, month - 1, entry.day).getTime();
+        return {
+          date,
+          views: Number(entry.total_watch ?? 0),
+        };
+      });
     }
 
-    setChartData(combined.sort((a, b) => a.date - b.date));
+    const validData = combined
+      .filter((point) => !isNaN(point.date))
+      .sort((a, b) => a.date - b.date);
+
+    setChartData(validData);
   }, [analytics, chartType, type]);
 
   const formatTick = (ts: number) => {
     const d = new Date(ts);
+    if (isNaN(d.getTime())) return "Invalid";
     return chartType === "yearly"
-      ? reverseMonthMap[d.getMonth() + 1] || ""
+      ? reverseMonthMap[d.getMonth() + 1] || "?"
       : d.getDate().toString();
   };
 
   const CustomTooltip = ({ active, payload, label }: any) => {
-    if (!active || !payload || !label) return null;
+    if (!active || !payload || !label || isNaN(label)) return null;
     const d = new Date(label);
     const formattedLabel =
       chartType === "yearly"
         ? `${reverseMonthMap[d.getMonth() + 1]} ${d.getFullYear()}`
-        : `${d.getDate()} ${reverseMonthMap[d.getMonth() + 1]} ${d.getFullYear()}`;
+        : `${d.getDate()} ${
+            reverseMonthMap[d.getMonth() + 1]
+          } ${d.getFullYear()}`;
 
     return (
       <div className="rounded-lg border bg-white px-3 py-2 shadow-md text-sm">
@@ -106,17 +128,6 @@ export function ChartAreaOverView2({
 
   return (
     <div>
-      {isActive && (
-        <>
-          <h1 className="text-center text-base lg:text-2xl font-semibold my-6 lg:my-10">
-            Overall statistics of your channel
-          </h1>
-          <div className="flex justify-between border-b border-gray-200">
-            {children}
-          </div>
-        </>
-      )}
-
       <Card className={cn("p-0 shadow-none border-[1px] mt-2", className)}>
         <CardContent className="p-0">
           <ChartContainer

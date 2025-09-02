@@ -3,11 +3,11 @@ import { TabBoxProps } from "@/types";
 import TabBox from "./tab-box";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { ChartAreaOverView } from "../../chats/area";
 import MonthlyBox from "@/components/reuseable/date-box";
 import { useVideoAnalyticsQuery } from "@/redux/api/dashboard/videosApi";
 import { useParams } from "next/navigation";
 import { Card } from "@/components/ui";
+import { ChartAreaOverView2 } from "../../chats/analytics-chart";
 
 export default function Analytics({ isTab, setIsTab }: TabBoxProps) {
   const { slug: id } = useParams();
@@ -16,7 +16,7 @@ export default function Analytics({ isTab, setIsTab }: TabBoxProps) {
     month: "",
     year: null,
   });
-  
+
   const query: Record<string, any> = {
     type: isMonth.type || "monthly",
     ...(isMonth.type === "custom" && {
@@ -24,7 +24,7 @@ export default function Analytics({ isTab, setIsTab }: TabBoxProps) {
       year: isMonth.year,
     }),
   };
-  
+
   const { data, isLoading } = useVideoAnalyticsQuery({ id, arg: query });
   const { analytics, total_views, total_likes, total_dislikes } = data || {};
 
@@ -47,7 +47,7 @@ export default function Analytics({ isTab, setIsTab }: TabBoxProps) {
           <ul className="flex items-center justify-between mt-8">
             <li className="opacity-0">0</li>
             <li className="text-xl md:text-2xl font-semibold">
-              {`Your channel got ${total_views || 0} views in this month`}
+              {`Your video got ${total_views || 0}  views in this month`}
             </li>
             <li>
               {" "}
@@ -88,9 +88,9 @@ export default function Analytics({ isTab, setIsTab }: TabBoxProps) {
                 </div>
               ))}
             </div>
-            <ChartAreaOverView
-              isActive={false}
+            <ChartAreaOverView2
               className="border-none"
+              type={isMonth}
               analytics={!isLoading && analytics}
             />
           </Card>
