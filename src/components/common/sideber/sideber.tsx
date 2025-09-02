@@ -53,6 +53,7 @@ export default function Sidebar() {
           setIsUpload={setIsUpload}
           logout={logout}
           token={token}
+          isLoading={isLoading}
         />
       </div>
 
@@ -132,6 +133,7 @@ const NavigationLinks = ({
   setIsUpload,
   logout,
   token,
+  isLoading
 }: any) => (
   <nav className="flex-1 py-2 mx-2 space-y-3">
     {navItem?.map((item: any, index: any) =>
@@ -162,7 +164,7 @@ const NavigationLinks = ({
         </Link>
       )
     )}
-    {token && (
+    {!isLoading && token && (
       <div
         className={`flex cursor-pointer items-center gap-3 rounded-full hover:bg-gray-100 transition-colors text-red-500 ${
           isExpanded

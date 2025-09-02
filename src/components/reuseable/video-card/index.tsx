@@ -2,6 +2,7 @@ import Link from "next/link";
 import Avatars from "../avater";
 import FavIcon from "@/icon/admin/favIcon";
 import { ImgBox } from "@/components/common/admin/reuseable";
+import ReactPlayer from "react-player";
 import { cn } from "@/lib";
 
 export function VideoCard({ item, className, imgStyle }: any) {
@@ -13,23 +14,52 @@ export function VideoCard({ item, className, imgStyle }: any) {
     views_count_formated,
     created_at_format,
     is_promoted,
+    video,
+    type,
+    link,
   } = item || {};
+
   return (
     <div className={className}>
       <Link href={`/video/${id}`}>
-        <div className="relative">
+        <div className="relative group">
+          {/* Thumbnail and hover effect */}
           <ImgBox
             src={thumbnail || "/blur.png"}
             alt={title || "logo"}
-            className={cn("w-full h-[220px]", imgStyle)}
+            className={cn(
+              "w-full h-[220px] group-hover:opacity-0 transition-all duration-300",
+              imgStyle
+            )}
           >
-            {!!is_promoted && (
-              <div className="absolute top-2 right-2  bg-reds/80 text-white text-xs font-semibold px-4 py-2 rounded-full flex items-center gap-1">
-                <FavIcon name="rocket" className="size-4 mr-1" />
-                <span> Promoted</span>
+            {!!is_promoted && <PromatedText />}
+          </ImgBox>
+
+          {/* Video player section */}
+          <div className="h-[220px] absolute inset-0 hidden group-hover:block transition-all duration-300">
+            {type === "video" && (
+              <video
+                className="w-full h-full object-cover rounded-md"
+                src={video}
+                autoPlay
+                loop
+                muted
+              />
+            )}
+            {type === "link" && (
+              <div className="w-full h-full object-cover rounded-md overflow-hidden">
+                <ReactPlayer
+                  className="!w-full !h-full"
+                  src={link}
+                  playing={true}
+                  width="100%"
+                  height="100%"
+                  style={{ borderRadius: "16px" }}
+                  controls={false}
+                />
               </div>
             )}
-          </ImgBox>
+          </div>
         </div>
         <div>
           <div className="flex gap-2 pt-2">
@@ -42,7 +72,7 @@ export function VideoCard({ item, className, imgStyle }: any) {
             <ul className="[&>li]:text-blacks">
               <li className="text-lg font-semibold line-clamp-2">{title}</li>
               <li>{user?.channel_name}</li>
-              <li className="*:text-grays  flex space-x-2 items-center">
+              <li className="text-grays flex space-x-2 items-center">
                 <span className="text-sm">{views_count_formated} views</span>
                 <span className="flex items-center text-sm">
                   <span className="inline-block w-2 h-2 bg-[#D9D9D9] rounded-full mr-1"></span>
@@ -68,22 +98,45 @@ export function VideoCard2({ item, className }: any) {
     created_at_format,
     is_promoted,
     is_suspend,
+    video,
+    type,
+    link,
   } = item || {};
   return (
     <>
-      <div className="relative">
-        <ImgBox
-          src={thumbnail || "/blur.png"}
-          alt={title || "logo"}
-          className="w-full h-[220px] rounded-none rounded-t-md"
-        >
-          {!!is_promoted && (
-            <div className="absolute top-2 right-2  bg-reds/80 text-white text-xs font-semibold px-4 py-2 rounded-full flex items-center gap-1">
-              <FavIcon name="rocket" className="size-4 mr-1" />
-              <span> Promoted</span>
-            </div>
-          )}
-        </ImgBox>
+      <div>
+        <div className="relative group">
+          <ImgBox
+            src={thumbnail || "/blur.png"}
+            alt={title || "logo"}
+            className={"w-full h-[220px] group-hover:!hidden"}
+          >
+            {!!is_promoted && <PromatedText />}
+          </ImgBox>
+          <div className="h-[220px] relative hidden group-hover:block">
+            {type === "video" && (
+              <video
+                className="w-full h-full object-cover rounded-md"
+                src={video}
+                autoPlay
+                loop
+              />
+            )}
+            {type === "link" && (
+              <div className="w-full h-full object-cover rounded-md overflow-hidden">
+                <ReactPlayer
+                  className="!w-full !h-full"
+                  src={link}
+                  playing={true} // Auto-play
+                  width="100%"
+                  height="100%"
+                  style={{ borderRadius: "16px" }}
+                />
+              </div>
+            )}
+            {!!is_promoted && <PromatedText />}
+          </div>
+        </div>
       </div>
       <div>
         <div
@@ -113,3 +166,12 @@ export function VideoCard2({ item, className }: any) {
     </>
   );
 }
+
+const PromatedText = () => {
+  return (
+    <div className="absolute top-2 right-2  bg-reds/80 text-white text-xs font-semibold px-4 py-2 rounded-full flex items-center gap-1">
+      <FavIcon name="rocket" className="size-4 mr-1" />
+      <span> Promoted</span>
+    </div>
+  );
+};
