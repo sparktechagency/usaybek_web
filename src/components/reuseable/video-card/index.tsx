@@ -63,20 +63,16 @@ export function VideoCard({ item, className, imgStyle }: any) {
             )}
             {activeVideo === id && type === "link" && (
               <div className="w-full h-full object-cover rounded-md overflow-hidden">
-                <ReactPlayer controls>
-                  <source src={link} type="video/mp4" />
-                </ReactPlayer>
-                {/* <ReactPlayer
+                <ReactPlayer
                   className="!w-full !h-full"
                   src={link}
                   playing={true}
-                  muted={false}  // Unmute for active video
                   width="100%"
                   height="100%"
-                  style={{ borderRadius: "16px" }}
+                  style={{ borderRadius: "16px", pointerEvents: 'none' }}
                   controls={false}
                   playsInline={true}
-                /> */}
+                />
               </div>
             )}
           </div>
@@ -109,6 +105,7 @@ export function VideoCard({ item, className, imgStyle }: any) {
 
 // link is no show VideoCard2
 export function VideoCard2({ item, className }: any) {
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const {
     id,
     title,
@@ -122,41 +119,58 @@ export function VideoCard2({ item, className }: any) {
     type,
     link,
   } = item || {};
+
+  const handleVideoHover = (id: string) => {
+    setActiveVideo(id);  
+  };
+
+  const handleVideoEnd = () => {
+    setActiveVideo(null); 
+  };
+
   return (
     <>
       <div>
-        <div className="relative group">
+      <div
+          className="relative group"
+          onMouseEnter={() => handleVideoHover(id)}  
+          onMouseLeave={handleVideoEnd} 
+        >
+          {/* Thumbnail and hover effect */}
           <ImgBox
             src={thumbnail || "/blur.png"}
             alt={title || "logo"}
-            className={"w-full h-[220px] group-hover:!hidden"}
+            className={cn("w-full h-[220px] group-hover:opacity-0 transition-all duration-300")}
           >
             {!!is_promoted && <PromatedText />}
           </ImgBox>
-          <div className="h-[220px] relative hidden group-hover:block">
-            {type === "video" && (
-              // <video
-              //   className="w-full h-full object-cover rounded-md"
-              //   src={video}
-              //   autoPlay
-              //   loop
-              //   muted
-              // />
-              <h1>Video Supported Soon</h1>
+
+          {/* Video player section */}
+          <div className="h-[220px] absolute inset-0 hidden group-hover:block transition-all duration-300">
+            {activeVideo === id && type === "video" && (
+              <video
+                className="w-full h-full object-cover rounded-md"
+                src={video}
+                autoPlay
+                loop
+                muted={false}  // Unmute for active video
+                playsInline
+              />
             )}
-            {/* {type === "link" && (
+            {activeVideo === id && type === "link" && (
               <div className="w-full h-full object-cover rounded-md overflow-hidden">
                 <ReactPlayer
                   className="!w-full !h-full"
                   src={link}
-                  playing={true} // Auto-play
+                  playing={true}
                   width="100%"
                   height="100%"
-                  style={{ borderRadius: "16px" }}
+                  style={{ borderRadius: "16px", pointerEvents: 'none' }}
+                  controls={false}
+                  playsInline={true}
                 />
               </div>
-            )} */}
-            {!!is_promoted && <PromatedText />}
+            )}
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ import Avatars from "@/components/reuseable/avater";
 import { SmallCicle } from "@/components/reuseable/small-circle";
 import { Button, Input, Skeleton } from "@/components/ui";
 import FavIcon from "@/icon/admin/favIcon";
-import { cn } from "@/lib/utils";
+import { cn, IsToken } from "@/lib/utils";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 import {
@@ -26,6 +26,7 @@ export default function CommentBox({ id, commentCount }: any) {
   const [storeComments] = useStoreCommentsMutation();
   const [isModifyId, setIsModifyId] = useState<any>();
   const [isSmall, setIsSmall] = useState(false);
+  const isToken = IsToken() ? true : false;
   const { data: comments, isLoading: commentLoading } = useGetCommentQuery(
     {
       video_id: id,
@@ -158,7 +159,7 @@ export default function CommentBox({ id, commentCount }: any) {
       <h2 className="text-lg font-semibold">{commentCount} Comments</h2>
       {commentLoading ? (
         <CommentBoxSkeleton />
-      ) : (
+      ) : isToken ? (
         <div className="flex items-center gap-3 mt-4">
           <Avatars
             src={profileData?.data?.avatar}
@@ -171,6 +172,8 @@ export default function CommentBox({ id, commentCount }: any) {
             className="flex-1 h-11 rounded-full bg-white"
           />
         </div>
+      ) : (
+        ""
       )}
 
       <div className="mt-6">

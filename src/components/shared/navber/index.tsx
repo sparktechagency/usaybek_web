@@ -45,7 +45,7 @@ export default function Navber() {
 
             <Link href={"/"}>
               <Image
-                src={assets.logo}
+                src={assets.logo || '/blur.png'}
                 alt="MYTSV Logo"
                 width={160}
                 height={160}

@@ -119,13 +119,13 @@ export default function VideoDetails({ slug }: any) {
   // views count this video
   useEffect(() => {
     (async () => {
-      if (slug) {
+      if (slug && IsAccess) {
         const fromData = new FormData();
         fromData.append("video_id", slug);
         await storeHistory(fromData).unwrap();
       }
     })();
-  }, [slug, storeHistory]);
+  }, [slug, storeHistory, IsAccess]);
 
   return (
     <div className="container py-10">
