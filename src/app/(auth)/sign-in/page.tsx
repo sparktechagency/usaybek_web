@@ -76,7 +76,7 @@ export default function Login() {
     }
   };
 
-  // handleGoogle ss 55
+  // handleGoogle ss  ff 55
   const handleGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
