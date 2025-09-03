@@ -27,7 +27,7 @@ const settings = {
     },
     {
       breakpoint: 1024, // <= 1024px
-      settings: { slidesToShow: 1 },
+      settings: { slidesToShow: 2 },
     },
     {
       breakpoint: 640, // <= 640px

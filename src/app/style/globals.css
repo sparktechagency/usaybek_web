@@ -225,11 +225,11 @@
 /* home page grid  */
 
 .home {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6;
+  @apply grid grid-cols-1 md:grid-cols-2 lg:col-span-2 xl:col-span-3 2xl:grid-cols-4 gap-6;
 }
 
 .see-more {
-  @apply grid grid-cols-1 md:col-span-2 lg:col-span-3 2xl:col-span-4 gap-6;
+  @apply grid grid-cols-1 md:col-span-2 lg:col-span-2 xl:col-span-3 2xl:col-span-4 gap-6;
 }
 
 
