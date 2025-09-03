@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
 import Cookies from "js-cookie";
-import { authKey,roleKey } from "./constants";
+import { authKey, roleKey } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -57,9 +57,7 @@ export function IsToken() {
 
 // RoleSetCookie
 export function RoleSetCookie(value: string) {
-  return Cookies.set(roleKey,value, {
-    secure: true, 
-    sameSite: "Strict", 
-    path: "/",
+  return Cookies.set(roleKey, value, {
+    secure: process.env.NEXT_PUBLIC_NODE_ENV === "production" ? true : false,
   });
 }
