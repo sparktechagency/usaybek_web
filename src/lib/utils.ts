@@ -55,9 +55,3 @@ export function IsToken() {
   return Cookies.get(authKey);
 }
 
-// RoleSetCookie
-export function RoleSetCookie(value: string) {
-  return Cookies.set(roleKey, value, {
-    secure: process.env.NEXT_PUBLIC_NODE_ENV === "production" ? true : false,
-  });
-}

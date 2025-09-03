@@ -5,10 +5,11 @@ import {
   CardTitle,
   Input,
 } from "@/components/ui";
-import { authKey, modifyPayload, RoleSetCookie, setCookie } from "@/lib";
+import { authKey, modifyPayload, roleKey, setCookie } from "@/lib";
 import { useOtpVarifyMutation } from "@/redux/api/authApi";
 import React, { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
 import { useManageState } from ".";
+import Cookies from "js-cookie";
 
 export default function VarifyOtpOside({ isEmail, setIsEmail }: any) {
   const { isPayment, setIsPayment, setIsAccount, isAccount } = useManageState();
@@ -63,8 +64,8 @@ export default function VarifyOtpOside({ isEmail, setIsEmail }: any) {
         const res = await otpVarify(data).unwrap();
         if (res.status) {
           const { access_token: token, user: info } = res?.data;
+          Cookies.set(roleKey, info.role);
           setCookie(authKey, token);
-          RoleSetCookie(info.role);
           setIsEmail("");
           setIsAccount(!isAccount);
           setIsPayment(!isPayment);

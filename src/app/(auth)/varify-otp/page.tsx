@@ -20,9 +20,10 @@ import React, {
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useOtpVarifyMutation } from "@/redux/api/authApi";
-import { delay, modifyPayload, RoleSetCookie, setCookie } from "@/lib";
+import { delay, modifyPayload, roleKey, setCookie } from "@/lib";
 import { toast } from "sonner";
 import { authKey } from "@/lib";
+import Cookies from "js-cookie";
 
 function VarifyOtpChild() {
   const searchParams = useSearchParams();
@@ -79,8 +80,9 @@ function VarifyOtpChild() {
         const res = await otpVarify(data).unwrap();
         if (res.status) {
           const { access_token: token, user: info } = res?.data;
+          Cookies.set(roleKey, info.role);
           setCookie(authKey, token);
-          RoleSetCookie(info.role);
+
           toast.success("Login Successfull", {
             description: res?.message,
           });

@@ -14,7 +14,7 @@ import {
 import auth from "@/firebase.config";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import Icon from "@/icon";
-import { authKey, delay, modifyPayload, RoleSetCookie, setCookie } from "@/lib";
+import { authKey, delay, modifyPayload, roleKey, setCookie } from "@/lib";
 import { useSignInMutation, useSocialLoginMutation } from "@/redux/api/authApi";
 import { loginSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const [signIn, { isLoading }] = useSignInMutation();
@@ -52,8 +53,8 @@ export default function Login() {
       const res = await signIn(data).unwrap();
       if (res.status) {
         const { access_token: token, user: info } = res.data;
+        Cookies.set(roleKey, info.role);
         setCookie(authKey, token);
-        RoleSetCookie(info.role);
         toast.success("Login Successful", {
           description: "Welcome back! You're now logged in",
         });
@@ -100,7 +101,7 @@ export default function Login() {
       if (res.status) {
         const { access_token: token, user: info } = res.data;
         setCookie(authKey, token);
-        RoleSetCookie(info.role);
+        Cookies.set(roleKey, info.role);
         toast.success("Login Successful", {
           description: "Welcome back! You're now logged in",
         });
