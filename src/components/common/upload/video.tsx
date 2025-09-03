@@ -160,6 +160,7 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
                   autoPlay
                   loop
                   playsInline
+                    muted 
                   style={{
                     width: "100%",
                     height: "220px",
