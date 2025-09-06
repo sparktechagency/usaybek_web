@@ -6,7 +6,7 @@ import assets from "@/assets";
 import { adminLinks } from "./navdata";
 import { Button } from "@/components/ui";
 import Icon from "@/icon";
-import { authKey, removeCookie } from "@/lib";
+import { authKey, removeCookie, roleKey } from "@/lib";
 import { redirect } from "next/navigation";
 
 interface SidebarProps {
@@ -19,6 +19,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
   const handleSignOut = () => {
     removeCookie(authKey);
+    removeCookie(roleKey);
     redirect("/");
   };
 

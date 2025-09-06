@@ -1,17 +1,21 @@
 "use client";
 import { NoItemData } from "@/components/common/admin/reuseable/table-no-item";
+import HomeCarousel from "@/components/common/home-carousel";
 import HomePromotion from "@/components/common/home-promotion";
 import SeeNav from "@/components/common/see-nav";
 import FilterBox from "@/components/reuseable/filter-box";
 import { VideoCardSkeleton } from "@/components/reuseable/skeleton-item";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import { VideoCard } from "@/components/reuseable/video-card";
-import { capitalize } from "@/lib/utils";
+import { roleKey } from "@/lib";
+import { capitalize, getCookie } from "@/lib/utils";
+import { useGetBannerQuery } from "@/redux/api/admin/promotionalApi";
 import {
   useHomeVideosQuery,
   useRelatedVideosQuery,
 } from "@/redux/api/landing/videosApi";
 import { Loader } from "lucide-react";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import slugify from "slugify";
@@ -21,6 +25,16 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const [similarVideos, setSimilarVideos] = useState<any[]>([]);
   const [isCategory, setIsCategory] = useState({ id: "all", name: "All" });
+  const roleValue = getCookie(roleKey)
+  const { data: banners } = useGetBannerQuery({});
+
+  useEffect(() => {
+    if (roleValue === "ADMIN") {
+      redirect("/admin")
+    }
+
+  }, [roleValue])
+
 
   useEffect(() => {
     setPage(1);
@@ -54,7 +68,7 @@ export default function Home() {
 
   const isNoVideos = relatedVideos?.data?.length === 0;
 
- 
+
   // ✅ Only trigger when loader in view + has more
   useEffect(() => {
     if (inView && !isFetching && isCategory.id !== "all" && !relatedLoading) {
@@ -66,16 +80,25 @@ export default function Home() {
     <div>
       <FilterBox isCategory={isCategory} setIsCategory={setIsCategory} />
       <div>
-        <h1 className="text-xl font-medium pt-8 pb-3">
+
+        {isCategory.id !== "all" && (
+          <h1 className="text-xl font-medium pt-5 pb-3">
+            {capitalize(isCategory.name)}
+          </h1>
+        )}
+
+        {/* <h1 className="text-xl font-medium pt-8 pb-3">
           {isCategory.id === "all"
             ? "Promotional videos"
             : capitalize(isCategory.name)}
-        </h1>
+        </h1> */}
 
         {isCategory.id === "all" ? (
           <>
             <div>
-            <HomePromotion />
+              <HomeCarousel />
+              <h1 className={`${!banners?.is_banner_active && "pt-5"} text-xl font-medium pb-3`}>Promotional videos</h1>
+              <HomePromotion />
             </div>
             {videoLoading ? (
               <div className="home gap-6 mt-5">{Skeleton(8)}</div>

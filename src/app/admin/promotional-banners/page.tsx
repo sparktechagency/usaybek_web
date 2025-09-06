@@ -8,6 +8,7 @@ import {
   useGetBannerQuery,
   useStoreBannerMutation,
   useUpdateBannerMutation,
+  useUpdateSystemMutation,
 } from "@/redux/api/admin/promotionalApi";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import { Button, Skeleton } from "@/components/ui";
@@ -17,6 +18,7 @@ import { Pagination } from "@/components/reuseable/pagination";
 import { Plus } from "lucide-react";
 
 export default function PromoBanners() {
+   const [checked, setChecked] = useState(false);
   const { confirm } = useConfirmation();
   const [isPage, setIsPage] = useState<number>(1);
   const { data: banners, isLoading } = useGetBannerQuery({ page: isPage });
@@ -24,6 +26,7 @@ export default function PromoBanners() {
   const [active, setActive] = useState<number | null>(null);
   const [storeBanner, { isLoading: storeLoading }] = useStoreBannerMutation();
   const [updateBanner] = useUpdateBannerMutation();
+  const [updateSystem]=useUpdateSystemMutation()
 
   useEffect(() => {
     const close = (e: any) => !e.target.closest(".menu") && setActive(null);
@@ -44,12 +47,47 @@ export default function PromoBanners() {
       }
     }
   };
+
+  useEffect(()=>{
+    if(banners){
+       setChecked(banners?.is_banner_active)
+    }
+
+  },[banners])
+
+  const handleToggle = async() => {
+    const res=await updateSystem({}).unwrap()
+    if(res.status){
+      setChecked(res?.data?.is_banner_active)
+
+    }
+
+  };
   return (
     <div>
       <NavTitle
         title="Promotional"
         subTitle="You can manage your promotional banner / ads of your website from here"
       />
+     <div className="flex justify-end mb-4">
+  <label className="inline-flex items-center cursor-pointer">
+    <input
+      type="checkbox"
+      checked={checked}
+      onChange={handleToggle}
+      className="sr-only peer"
+    />
+    <div
+      className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none  rounded-full peer 
+        peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full 
+        peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] 
+        after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full 
+        after:h-5 after:w-5 after:transition-all 
+        peer-checked:bg-reds"
+    ></div>
+  </label>
+</div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {isLoading ? (
           <SkeletonCount count={9}>

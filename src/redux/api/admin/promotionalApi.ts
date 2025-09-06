@@ -12,7 +12,11 @@ export const promotionalApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.getProBanner],
       transformResponse: (res: any) => {
-        return buildResponse(res?.data);
+        const rest = buildResponse(res?.data)
+        return {
+          is_banner_active: res?.system_settings?.is_banner_active,
+          ...rest,
+        }
       },
     }),
     storeBanner: build.mutation({
@@ -33,6 +37,13 @@ export const promotionalApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.getProBanner],
     }),
+    updateSystem: build.mutation({
+      query: () => ({
+        url: `/admin/update-system-setting`,
+        method: "POST",
+      }),
+      invalidatesTags: [tagTypes.getProBanner],
+    }),
     deleteBanner: build.mutation({
       query: (id) => ({
         url: `/admin/banners/${id}`,
@@ -48,4 +59,5 @@ export const {
   useStoreBannerMutation,
   useUpdateBannerMutation,
   useDeleteBannerMutation,
+  useUpdateSystemMutation
 } = promotionalApi;

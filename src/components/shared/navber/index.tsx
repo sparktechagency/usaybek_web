@@ -11,7 +11,7 @@ import SidebarFixed from "@/components/common/sideber/sideber-fixed";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 import { authKey, getCookie } from "@/lib";
 import NavberSearchBox from "@/components/common/navber-search-box";
-import logo2 from "@/assets/Logo_3.png"
+
 
 
 export default function Navber() {
@@ -29,8 +29,8 @@ export default function Navber() {
   );
 
   return (
-    <div className="py-8">
-      <div className="container">
+    <div className="py-4">
+      <div className="w-11/12 mx-auto">
         <ul className="relative  flex items-center  justify-between">
           <li className="flex space-x-5 items-center">
             {token && (
@@ -48,12 +48,8 @@ export default function Navber() {
               <Image
                 src={assets.logo || '/blur.png'}
                 alt="MYTSV Logo"
-                width={200}
+                width={180}
                 height={160}
-                className="object-contain"
-                priority={true}
-                loading="eager"
-                quality={100}
               />
             </Link>
           </li>

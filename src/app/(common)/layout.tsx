@@ -4,24 +4,19 @@ import Footer from "@/components/shared/footer";
 import Navber from "@/components/shared/navber";
 import { childrenProps } from "@/types";
 import Sidebar from "@/components/common/sideber/sideber";
-import { usePathname } from "next/navigation";
-import HomeCarousel from "@/components/common/home-carousel";
 import { useSidebar } from "@/context/useSideber";
 
 // ✅ Memoize the MainContent to prevent it from re-rendering when sidebar state changes
 const MainContent = React.memo(function MainContent({ children }: childrenProps) {
-  return <main className="flex-1 p-6 overflow-y-auto">{children}</main>;
+  return <main className="flex-1 p-4 lg:px-6 lg:py-4 overflow-y-auto">{children}</main>;
 });
 
 export default function CommonLayout({ children }: childrenProps) {
-  const pathname = usePathname();
   const { isExpanded } = useSidebar();
 
   return (
     <div className="flex flex-col min-h-screen">
-      {pathname !== "/" && <Navber />}
-      {pathname === "/" && <HomeCarousel />}
-
+      <Navber />
       <div className="flex flex-1">
         {/* Sidebar must be inside a tall parent */}
         <div

@@ -12,9 +12,9 @@ export default function PromotionPage() {
 
   return (
     <div>
-      <SubTilte title="Promotions" className="pb-7" />
+      <SubTilte title="Promotions" className="pb-0" />
       {videoLoading ? (
-        <div className="home gap-6 mt-5">
+        <div className="home gap-6 mt-2">
           <SkeletonCount count={16}>
             <VideoCardSkeleton />
           </SkeletonCount>
@@ -23,7 +23,7 @@ export default function PromotionPage() {
         proItem?.map((channel: any) => 
           channel?.videos?.length ? (
             <div key={channel.id}>
-              <SeeNav title={channel.name} href={`/promotions/${channel.id}`} />
+              <SeeNav title={channel.name} className="first:mt-4" href={`/promotions/${channel.id}`} />
               <div className="home gap-6">
                 {channel.videos.map((video: any) => (
                   <VideoCard key={video.id} item={video} />
