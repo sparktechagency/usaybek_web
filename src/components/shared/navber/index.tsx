@@ -11,6 +11,7 @@ import SidebarFixed from "@/components/common/sideber/sideber-fixed";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 import { authKey, getCookie } from "@/lib";
 import NavberSearchBox from "@/components/common/navber-search-box";
+import logo2 from "@/assets/Logo_3.png"
 
 
 export default function Navber() {
@@ -47,9 +48,12 @@ export default function Navber() {
               <Image
                 src={assets.logo || '/blur.png'}
                 alt="MYTSV Logo"
-                width={160}
+                width={200}
                 height={160}
                 className="object-contain"
+                priority={true}
+                loading="eager"
+                quality={100}
               />
             </Link>
           </li>

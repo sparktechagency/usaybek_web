@@ -8,6 +8,11 @@ import { usePathname } from "next/navigation";
 import HomeCarousel from "@/components/common/home-carousel";
 import { useSidebar } from "@/context/useSideber";
 
+// ✅ Memoize the MainContent to prevent it from re-rendering when sidebar state changes
+const MainContent = React.memo(function MainContent({ children }: childrenProps) {
+  return <main className="flex-1 p-6 overflow-y-auto">{children}</main>;
+});
+
 export default function CommonLayout({ children }: childrenProps) {
   const pathname = usePathname();
   const { isExpanded } = useSidebar();
@@ -20,7 +25,7 @@ export default function CommonLayout({ children }: childrenProps) {
       <div className="flex flex-1">
         {/* Sidebar must be inside a tall parent */}
         <div
-          className={`hidden md:block  transition-all duration-300 ease-in-out ${
+          className={`hidden md:block transition-all duration-300 ease-in-out ${
             isExpanded ? "w-sideber-md" : "w-sideber-xs"
           } shrink-0`}
         >
@@ -29,8 +34,8 @@ export default function CommonLayout({ children }: childrenProps) {
           </div>
         </div>
 
-        {/* Main content scrolls */}
-        <main className="flex-1 p-6 overflow-y-auto">{children}</main>
+        {/* ✅ Use the memoized MainContent component */}
+        <MainContent>{children}</MainContent>
       </div>
 
       <Footer />
