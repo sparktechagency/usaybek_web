@@ -27,6 +27,7 @@ import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
+import FavIcon from "@/icon/admin/favIcon";
 
 export default function Login() {
   const [signIn, { isLoading }] = useSignInMutation();
@@ -147,13 +148,7 @@ export default function Login() {
           <div>
             <Card className="w-full clip-path-[polygon(0_0,100%_0,100%_90%,50%_100%,0_90%)] max-w-md rounded-md lg:rounded-none lg:rounded-t-xl px-4 py-8 bg-body border-none mx-auto lg:absolute right-10 2xl:right-0 md:bottom-0">
               <CardHeader className="flex flex-col items-center space-y-0 gap-0 pt-6">
-                <Image
-                  src={assets.logo}
-                  alt="MYTSV Logo"
-                  width={150}
-                  height={50}
-                  className="object-contain"
-                />
+                <FavIcon className="w-fit h-[50px]" name="logo" />
                 <CardTitle className="text-2xl font-bold text-reds mt-3">
                   Welcome back
                 </CardTitle>

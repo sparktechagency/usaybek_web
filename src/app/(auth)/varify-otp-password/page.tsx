@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useOtpVarifyMutation } from "@/redux/api/authApi";
 import { modifyPayload } from "@/lib";
+import FavIcon from "@/icon/admin/favIcon";
 
 function VarifyOtpPasswordChild() {
   const searchParams = useSearchParams();
@@ -104,13 +105,7 @@ function VarifyOtpPasswordChild() {
                   <ArrowLeft size={20} />
                 </h1>
               </Link>
-              <Image
-                src={assets.logo}
-                alt="MYTSV Logo"
-                width={150}
-                height={50}
-                className="object-contain"
-              />
+              <FavIcon className="w-fit h-[50px]" name="logo" />
               <h1 className="opacity-0">0</h1>
             </div>
             <CardTitle className="text-2xl font-bold text-reds mt-3">

@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import React, { Suspense } from "react";
 import { FromInputs } from "@/components/reuseable/from-inputs";
 import { passwordSchema11 } from "@/schema";
+import FavIcon from "@/icon/admin/favIcon";
 
 function ResetPasswordChild() {
   const searchParams = useSearchParams();
@@ -66,13 +67,7 @@ function ResetPasswordChild() {
         <Card className="w-full max-w-md rounded-md lg:rounded-none lg:rounded-t-xl px-4 pt-8 pb-15 lg:pb-50 bg-body border-none mx-auto lg:absolute lg:left-1/2 lg:[transform:translateX(-50%)] lg:bottom-0">
           <CardHeader className="flex flex-col items-center space-y-0 gap-0 pt-6">
             <div className="mb-1 flex items-center justify-center w-full">
-              <Image
-                src={assets.logo}
-                alt="MYTSV Logo"
-                width={150}
-                height={50}
-                className="object-contain"
-              />
+               <FavIcon className="w-fit h-[50px]" name="logo" />
             </div>
             <CardTitle className="text-2xl font-bold text-reds mt-3">
               Enter new password

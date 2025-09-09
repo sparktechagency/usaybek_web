@@ -21,6 +21,7 @@ import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import { delay, modifyPayload } from "@/lib";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import FavIcon from "@/icon/admin/favIcon";
 
 export default function SignUp() {
   const router = useRouter();
@@ -74,13 +75,7 @@ export default function SignUp() {
           <div>
             <Card className="w-full max-w-lg rounded-md lg:rounded-none lg:rounded-t-xl px-4 py-8 bg-body border-none mx-auto lg:absolute left-10 2xl:left-0 lg:bottom-0">
               <CardHeader className="flex flex-col items-center space-y-0 gap-0 pt-6">
-                <Image
-                  src={assets.logo}
-                  alt="MYTSV Logo"
-                  width={150}
-                  height={50}
-                  className="object-contain"
-                />
+                <FavIcon className="w-fit h-[50px]" name="logo" />
                 <CardTitle className="text-2xl font-bold text-reds mt-3">
                   Create an account
                 </CardTitle>

@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
+import FavIcon from "@/icon/admin/favIcon";
 import { delay, modifyPayload } from "@/lib";
 import { useForgotPasswordMutation } from "@/redux/api/authApi";
 import { ForgotSchema } from "@/schema";
@@ -72,13 +73,7 @@ function ForgotPasswordChild() {
                   <ArrowLeft size={20} />
                 </h1>
               </Link>
-              <Image
-                src={assets.logo}
-                alt="MYTSV Logo"
-                width={150}
-                height={50}
-                className="object-contain"
-              />
+               <FavIcon className="w-fit h-[50px]" name="logo" />
               <h1 className="opacity-0">0</h1>
             </div>
             <CardTitle className="text-2xl font-bold text-reds mt-3">

@@ -45,12 +45,7 @@ export default function Navber() {
             )}
 
             <Link href={"/"}>
-              <Image
-                src={assets.logo || '/blur.png'}
-                alt="MYTSV Logo"
-                width={180}
-                height={160}
-              />
+              <FavIcon className="w-fit h-[50px]" name="logo"/>
             </Link>
           </li>
           <li>

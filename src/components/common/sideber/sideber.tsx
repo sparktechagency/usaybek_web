@@ -37,7 +37,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <div className={cn("flex flex-col h-full bg-white rounded-tr-md")}>
+      <div className={cn("flex flex-col h-screen overflow-scroll scrollbar-hide bg-white rounded-tr-md")}>
         <SidebarHeader isExpanded={isExpanded} toggleSidebar={toggleSidebar} />
         <UserProfile
           token={token}

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui";
 import Icon from "@/icon";
 import { authKey, removeCookie, roleKey } from "@/lib";
 import { redirect } from "next/navigation";
+import FavIcon from "@/icon/admin/favIcon";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -34,18 +35,18 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
       )}
       {/* Sidebar */}
       <aside
-        className={`absolute left-0 top-0 z-20 bg-reds flex h-screen  transition-transform transform duration-300 ease-linear flex-col overflow-y-hidden  text-white w-[240px] lg:static lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`absolute left-0 top-0 z-20 bg-reds flex h-screen  transition-transform transform duration-300 ease-linear flex-col overflow-y-hidden  text-white w-[240px] lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
-        <div className="flex flex-col h-full relative">
+        <div className="flex flex-col h-screen relative">
           <div className="flex items-center justify-center bg-white m-2 rounded-md py-1">
-            <Image className="" src={assets.logo} alt="logo" />
+            <FavIcon className="w-fit h-[50px]" name="logo" />
           </div>
-          <nav>
+         <div className="h-[calc(100vh-80px)] flex flex-col justify-between overflow-y-scroll scrollbar-hide">
+             <nav>
             <NavItem item={links} />
           </nav>
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-max">
+          <div className="w-full my-3 flex justify-center">
             <Button
               onClick={() => handleSignOut()}
               variant="primary"
@@ -55,6 +56,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
               Sign Out
             </Button>
           </div>
+         </div>
         </div>
       </aside>
     </div>

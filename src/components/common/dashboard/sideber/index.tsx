@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import SideberFixed from "../../sideber/sideber-fixed";
+import FavIcon from "@/icon/admin/favIcon";
 
 // main side ber component
 export default function Sidebar({ sidebarOpen, setSidebarOpen }: any) {
@@ -46,9 +47,8 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: any) {
         />
       )}
       <aside
-        className={`absolute left-0 top-0 w-64 z-20 bg-white flex h-screen  transition-transform transform duration-300 ease-linear flex-col overflow-y-hidden  text-white  lg:static lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`absolute left-0 top-0 w-64 z-20 bg-white flex h-screen  transition-transform transform duration-300 ease-linear flex-col overflow-y-hidden  text-white  lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="flex flex-col ">
           <div>
@@ -61,14 +61,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: any) {
                 className="cursor-pointer"
               />
               <Link href={"/"} className="ml-4">
-                <div className="relative w-40 h-13 overflow-hidden">
-                  <Image
-                    src={assets.logo}
-                    alt={"author.name"}
-                    fill
-                    className="object-fill"
-                  />
-                </div>
+                <FavIcon className="w-fit h-[50px]" name="logo" />
               </Link>
             </div>
             <nav className="flex-1 py-2 mx-2 space-y-3">

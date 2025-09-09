@@ -24,6 +24,7 @@ import { delay, modifyPayload, roleKey, setCookie } from "@/lib";
 import { toast } from "sonner";
 import { authKey } from "@/lib";
 import Cookies from "js-cookie";
+import FavIcon from "@/icon/admin/favIcon";
 
 function VarifyOtpChild() {
   const searchParams = useSearchParams();
@@ -118,13 +119,7 @@ function VarifyOtpChild() {
                   <ArrowLeft size={20} />
                 </h1>
               </Link>
-              <Image
-                src={assets.logo}
-                alt="MYTSV Logo"
-                width={150}
-                height={50}
-                className="object-contain"
-              />
+              <FavIcon className="w-fit h-[50px]" name="logo" />
               <h1 className="opacity-0">0</h1>
             </div>
             <CardTitle className="text-2xl font-bold text-reds mt-3">
