@@ -1,7 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import Icon from "@/icon";
-import assets from "@/assets";
+import FavIcon from "@/icon/admin/favIcon";
 
 export default function Footer() {
   return (
@@ -10,13 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           <div className="space-y-2">
             <Link href={"/"}>
-              <Image
-                src={assets.logo}
-                alt="MYTSV Logo"
-                width={160}
-                height={160}
-                className="object-contain"
-              />
+               <FavIcon className="w-fit h-[50px]" name="logo"/>
             </Link>
             <h3 className="text-xl font-semibold text-blacks">
               Meet your town specialists

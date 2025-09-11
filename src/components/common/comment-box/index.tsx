@@ -155,7 +155,7 @@ export default function CommentBox({ id, commentCount }: any) {
   // comment item box end =======
 
   return (
-    <div className="border-gray-200">
+    <div className="border-gray-200 hidden lg:block">
       <h2 className="text-lg font-semibold">{commentCount} Comments</h2>
       {commentLoading ? (
         <CommentBoxSkeleton />

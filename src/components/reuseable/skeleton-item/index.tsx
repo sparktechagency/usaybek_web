@@ -24,7 +24,7 @@ export function VideoCardSkeleton({ className }:any) {
 
 // video details
 export function PlayerSkeleton() {
-  return <Skeleton className="h-[650px] w-full bg-blacks/10"></Skeleton>;
+  return <Skeleton className="h-[300px] lg:h-[650px] w-full bg-blacks/10"></Skeleton>;
 }
 
 export function DetailsSkeleton() {
