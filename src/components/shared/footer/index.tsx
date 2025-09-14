@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Icon from "@/icon";
 import FavIcon from "@/icon/admin/favIcon";
+import AppStore from "../app-store";
 
 export default function Footer() {
   return (
@@ -85,6 +86,7 @@ export default function Footer() {
                 <Icon name="fyoutube" width={24} height={24} />
               </Link>
             </div>
+           <AppStore/>
           </div>
         </div>
 

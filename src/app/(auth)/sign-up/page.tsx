@@ -124,7 +124,7 @@ export default function SignUp() {
                   className="w-full rounded-full"
                   disabled={isLoading}
                 >
-                  Sign in
+                  Sign up
                 </Button>
               </Form>
               <div className="text-center text-sm flex justify-center font-medium">
