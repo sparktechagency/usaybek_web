@@ -35,7 +35,6 @@ export default function Notification() {
     if (!order) {
       await markNotification(id).unwrap();
     }
-    console.log(order)
     router.push(`/admin/reports/${id}`);
   };
 

@@ -23,7 +23,6 @@ export default function Analytics() {
   const { data, isLoading } = useGetAnalyticsQuery(query);
   const { analytics, total_views, total_likes, total_dislikes } =
     data?.data || {};
-    console.log(analytics);
   return (
     <div>
       <NavItem title="Analytics" search={false} />

@@ -59,7 +59,6 @@ export default function OnSideAccount() {
         });
       }
     } catch (err: any) {
-      console.log(err);
       if (err?.data) {
         ResponseApiErrors(err?.data, from);
       }

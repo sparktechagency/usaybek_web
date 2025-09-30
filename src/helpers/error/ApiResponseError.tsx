@@ -1,6 +1,5 @@
 
   export const ResponseApiErrors = (res: any, form: any) => {
-    console.log(res?.errors)
     if (res?.errors) {
       Object.entries(res.errors).forEach(([field, messages]) => {
         let msg: string = 'Invalid value';

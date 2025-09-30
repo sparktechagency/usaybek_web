@@ -48,7 +48,7 @@ export const usePayment = (amount: number, reason: string) => {
           user_id: id,
         });
       } catch (error) {
-        console.error("Payment initialization failed:", error);
+        // console.error("Payment initialization failed:", error);
       }
     };
 

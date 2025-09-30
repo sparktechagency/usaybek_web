@@ -112,7 +112,6 @@ export default function Login() {
         }
       }
     } catch (error) {
-      console.error("Error during Google login:", error);
       toast.error("Login Failed");
     }
   };

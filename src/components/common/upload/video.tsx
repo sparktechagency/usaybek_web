@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CircleAlert, Loader, Upload } from "lucide-react";
+import { CircleAlert,Upload } from "lucide-react";
 import { FieldValues, useForm } from "react-hook-form";
 import Form from "@/components/reuseable/from";
 import { FromInput } from "@/components/reuseable/from-input";
