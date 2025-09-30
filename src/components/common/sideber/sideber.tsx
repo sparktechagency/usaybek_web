@@ -25,15 +25,15 @@ export default function Sidebar() {
     {},
     { refetchOnFocus: true, skip: !token }
   );
-  const { name, avatar } = profileData?.data || {};
+  const { name, avatar,role } = profileData?.data || {};
 
-  useEffect(() => {
-    if (token && !isLoading) {
+   useEffect(() => {
+    if (token && role == "USER") {
       setIsNavItem(navItems);
     } else {
       setIsNavItem(signOutItems);
     }
-  }, [token, isLoading]);
+  }, [token, isLoading, role]);
 
   return (
     <>
