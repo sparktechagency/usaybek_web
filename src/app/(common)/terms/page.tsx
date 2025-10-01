@@ -4,6 +4,7 @@ import { Seo } from "@/lib";
 import { termsApi } from "@/redux/api/landing/termsApi";
 import { makeStore } from "@/redux/store";
 import { Metadata } from "next";
+import "react-quill-new/dist/quill.snow.css";
 
 export const metadata: Metadata = Seo({
   title: "Terms & Conditions | MyTsv",
@@ -39,10 +40,10 @@ export default async function Terms() {
         read them carefully before using the site
       </h1>
       <Card>
-        <div className="space-y-5">
+        <div className="ql-container ql-snow">
           {terms?.data?.map((term: any) => (
             <div key={term.id} className="space-y-1">
-              <div dangerouslySetInnerHTML={{ __html: term.text }}></div>
+              <div className="ql-editor" dangerouslySetInnerHTML={{ __html: term.text }}></div>
             </div>
           ))}
         </div>
