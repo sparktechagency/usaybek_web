@@ -1,16 +1,21 @@
+"use client";
 import Link from "next/link";
 import Icon from "@/icon";
 import FavIcon from "@/icon/admin/favIcon";
 import AppStore from "../app-store";
+import { useGetContactQuery } from "@/redux/api/landing/contactApi";
 
 export default function Footer() {
+  const { data: contact} = useGetContactQuery({});
+  const data = contact?.data;
+
   return (
     <footer className="bg-white">
       <div className="container m-auto pt-10 pb-5">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           <div className="space-y-2">
             <Link href={"/"}>
-               <FavIcon className="w-fit h-[50px]" name="logo"/>
+              <FavIcon className="w-fit h-[50px]" name="logo" />
             </Link>
             <h3 className="text-xl font-semibold text-blacks">
               Meet your town specialists
@@ -21,18 +26,8 @@ export default function Footer() {
               businesses in their local communities.
             </p>
             <div className="space-y-3 text-sm mt-4">
-              <div className="flex items-center gap-2">
-                <Icon name="femail" width={20} height={20} />
-                <Link href="mailto:info@mytsv.com" className="text-blacks">
-                  info@mytsv.com
-                </Link>
-              </div>
-              <div className="flex items-center gap-2">
-                <Icon name="fphone" width={20} height={20} />
-                <Link href="tel:+16302977501" className="text-blacks ">
-                  +1 630 297 7501
-                </Link>
-              </div>
+              <ContactItem icon="femail" text={data?.email || "N/A"} />
+              <ContactItem icon="fphone" text={data?.phone || "N/A"} />
             </div>
           </div>
 
@@ -86,7 +81,7 @@ export default function Footer() {
                 <Icon name="fyoutube" width={24} height={24} />
               </Link>
             </div>
-           <AppStore/>
+            <AppStore />
           </div>
         </div>
 
@@ -99,5 +94,15 @@ export default function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+// conteact item
+function ContactItem({ icon, text }: any) {
+  return (
+    <div className="flex items-center gap-2">
+      <Icon name={icon} width={20} height={20} />
+      <div className="text-blacks">{text}</div>
+    </div>
   );
 }
