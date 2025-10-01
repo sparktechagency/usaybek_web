@@ -1,43 +1,26 @@
 "use client";
-import { cn, getCookie } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui";
 import Img from "@/components/reuseable/img";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Icon from "@/icon";
 import { useSidebar } from "@/context/useSideber";
-import { navItems, signOutItems } from "./nav-data";
-import {useMemo, useState } from "react";
+import { useState } from "react";
 import Modal from "@/components/reuseable/modal";
 import TabList from "../upload/tab";
-import { authKey, roleKey } from "@/lib";
-import { useGetProfileQuery } from "@/redux/api/authApi";
 import { useHandleLogout } from "@/lib/logout";
-import Cookies from "js-cookie";
+import { useAuth } from "@/context/auth";
 
 export default function Sidebar() {
   const logout = useHandleLogout();
   const [isUpload, setIsUpload] = useState(false);
   const { isExpanded, toggleSidebar } = useSidebar();
   const pathname = usePathname();
-  const token = getCookie(authKey);
-  const { data: profileData, isLoading } = useGetProfileQuery(
-    {},
-    { refetchOnFocus: true, skip: !token }
-  );
-  const { name, avatar } = profileData?.data || {};
+  const { auth, navItem} = useAuth();
+  const isUser = !!auth?.email;
 
-  const role = Cookies.get(roleKey);
-  const navItem = useMemo(() => {
-    if (!isLoading && role == "USER") {
-      return navItems;
-    } else {
-      return signOutItems;
-    }
-  }, [role, token, name,isLoading]);
-
-
-
+ 
   return (
     <>
       <div
@@ -47,10 +30,9 @@ export default function Sidebar() {
       >
         <SidebarHeader isExpanded={isExpanded} toggleSidebar={toggleSidebar} />
         <UserProfile
-          token={token}
-          isLoading={isLoading}
-          name={name}
-          avatar={avatar}
+          isUser={isUser}
+          name={auth?.name}
+          avatar={auth?.avatar}
           isExpanded={isExpanded}
         />
         <NavigationLinks
@@ -59,8 +41,7 @@ export default function Sidebar() {
           isExpanded={isExpanded}
           setIsUpload={setIsUpload}
           logout={logout}
-          token={token}
-          isLoading={isLoading}
+          isUser={isUser}
         />
       </div>
 
@@ -95,7 +76,7 @@ const SidebarHeader = ({ isExpanded, toggleSidebar }: any) => (
 );
 
 // ============== UserProfile ================
-const UserProfile = ({ token, isLoading, name, avatar, isExpanded }: any) => (
+const UserProfile = ({ isUser,name, avatar, isExpanded }: any) => (
   <div className="p-4">
     <div
       className={cn(
@@ -103,7 +84,7 @@ const UserProfile = ({ token, isLoading, name, avatar, isExpanded }: any) => (
         isExpanded ? "justify-start border" : "justify-center"
       )}
     >
-      {token && !isLoading ? (
+      {isUser ? (
         <Link
           href="/dashboard"
           className="flex items-center gap-3 py-1  px-1  transition-colors"
@@ -139,8 +120,7 @@ const NavigationLinks = ({
   isExpanded,
   setIsUpload,
   logout,
-  token,
-  isLoading,
+  isUser,
 }: any) => (
   <nav className="flex-1 py-2 mx-2 space-y-3">
     {navItem?.map((item: any, index: any) =>
@@ -171,7 +151,7 @@ const NavigationLinks = ({
         </Link>
       )
     )}
-    {!isLoading && token && (
+    {isUser && (
       <div
         className={`flex cursor-pointer items-center gap-3 rounded-full hover:bg-gray-100 transition-colors text-red-500 ${
           isExpanded

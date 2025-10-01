@@ -1,19 +1,15 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { navItems, signOutItems } from "./nav-data";
+import { useEffect, useState } from "react";
 import { Separator } from "@/components/ui";
-import { cn, getCookie } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import Img from "@/components/reuseable/img";
-import Icon from "@/icon";
-import { authKey, roleKey } from "@/lib";
-import { useGetProfileQuery } from "@/redux/api/authApi";
 import { useHandleLogout } from "@/lib/logout";
 import Modal from "@/components/reuseable/modal";
 import TabList from "../upload/tab";
-import Cookies from "js-cookie";
-
+import { useAuth } from "@/context/auth";
+import Icon from "@/icon";
 
 type SidebarFixedProps = {
   isSide: boolean;
@@ -25,23 +21,8 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
   const [isUpload, setIsUpload] = useState(false);
   const logout = useHandleLogout();
   const pathname = usePathname();
-  const token = getCookie(authKey);
-  const { data: profileData, isLoading } = useGetProfileQuery(
-    {},
-    { refetchOnFocus: true, skip: !token }
-  );
-  const { name, avatar } = profileData?.data || {};
-
-  const role = Cookies.get(roleKey);
-  const navItem = useMemo(() => {
-    if (!isLoading && role == "USER") {
-      return navItems;
-    } else {
-      return signOutItems;
-    }
-  }, [role, token, name,isLoading]);
-
-
+  const { auth, navItem } = useAuth();
+  const isUser = !!auth?.email;
 
   // ✅ Prevent background scroll when sidebar is open
   useEffect(() => {
@@ -86,11 +67,11 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
           >
             <Img
               className="size-9 rounded-full"
-              src={avatar || "/blur.png"}
+              src={auth?.avatar || "/blur.png"}
               title="User avatar"
             ></Img>
             <span className="font-medium text-gray-800 whitespace-nowrap">
-              {name}
+              {auth?.name}
             </span>
           </Link>
 
@@ -120,7 +101,7 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
                 </Link>
               )
             )}
-            {token && !isLoading && (
+            {isUser && (
               <div
                 className={`flex items-center gap-3 px-3 py-2 rounded-full cursor-pointer hover:bg-gray-100 transition-colors text-red-500 justify-start`}
                 onClick={() => {
@@ -145,7 +126,7 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
         titleStyle="text-center"
         className="sm:max-w-4xl"
       >
-        <TabList setIsUpload={setIsUpload}/>
+        <TabList setIsUpload={setIsUpload} />
       </Modal>
     </div>
   );

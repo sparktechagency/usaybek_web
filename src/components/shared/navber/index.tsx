@@ -1,39 +1,27 @@
 "use client";
 import { Button } from "@/components/ui";
-import Image from "next/image";
 import Img from "@/components/reuseable/img";
 import Link from "next/link";
-import assets from "@/assets";
 import { usePathname } from "next/navigation";
 import FavIcon from "@/icon/admin/favIcon";
 import { useState } from "react";
 import SidebarFixed from "@/components/common/sideber/sideber-fixed";
-import { useGetProfileQuery } from "@/redux/api/authApi";
-import { authKey, getCookie } from "@/lib";
 import NavberSearchBox from "@/components/common/navber-search-box";
-
-
+import { useAuth } from "@/context/auth";
 
 export default function Navber() {
   const [isSide, setIsSide] = useState(false);
   const path = usePathname();
   const patterns = [/^\/video\/.+/, /^\/profile$/];
   const isMenu = patterns.some((regex) => regex.test(path));
-  const token = getCookie(authKey);
-  const { data: profileData, isLoading } = useGetProfileQuery(
-    {},
-    {
-      refetchOnFocus: true,
-      skip: !token,
-    }
-  );
+  const { auth } = useAuth();
 
   return (
     <div className="py-4">
       <div className="w-11/12 mx-auto">
         <ul className="relative  flex items-center  justify-between">
           <li className="flex space-x-5 items-center">
-            { !isLoading && token && (
+            {!!auth?.email && (
               <span onClick={() => setIsSide(!isSide)}>
                 <FavIcon
                   name="menu"
@@ -45,27 +33,21 @@ export default function Navber() {
             )}
 
             <Link href={"/"}>
-              <FavIcon className="w-fit h-[50px]" name="logo"/>
+              <FavIcon className="w-fit h-[50px]" name="logo" />
             </Link>
           </li>
           <li>
             <NavberSearchBox />
           </li>
           <li>
-            {token && !isLoading ? (
+            {!!auth?.email ? (
               <Link href={"/dashboard"}>
                 <Button
                   variant={"primary"}
                   className="h-12 px-1 md:pl-2 md:pr-4 rounded-full"
                 >
-                  <Img
-                    src={profileData?.data?.avatar}
-                    className="size-10"
-                    title="img"
-                  />
-                  <span className="hidden md:block">
-                    {profileData?.data?.name}
-                  </span>
+                  <Img src={auth?.avatar} className="size-10" title="img" />
+                  <span className="hidden md:block">{auth?.name}</span>
                 </Button>
               </Link>
             ) : (
