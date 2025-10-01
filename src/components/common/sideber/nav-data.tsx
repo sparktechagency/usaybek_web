@@ -1,5 +1,5 @@
 import Icon from "@/icon";
-import { authKey, getCookie } from "@/lib";
+
 
 export const navItems = [
   {

@@ -1,26 +1,29 @@
 "use client";
-import { X } from "lucide-react";
+import { NoItemData } from "@/components/common/admin/reuseable/table-no-item";
+import { ImgBox } from "@/components/common/admin/reuseable";
+import { Pagination } from "@/components/reuseable/pagination";
+import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import { Button } from "@/components/ui/button";
-import Icon from "@/icon";
 import {
   useGetLinkeVideosQuery,
   useRemoveLikeMutation,
 } from "@/redux/api/landing/videosApi";
-import { ImgBox } from "@/components/common/admin/reuseable";
-import { Pagination } from "@/components/reuseable/pagination";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui";
-import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import historyImg from "@/assets/historyImg.jpg";
-import { cn } from "@/lib";
 import { useRouter } from "next/navigation";
-import { NoItemData } from "@/components/common/admin/reuseable/table-no-item";
+import { X } from "lucide-react";
+import Link from "next/link";
+import { cn } from "@/lib";
+import Icon from "@/icon";
 
 export default function LinkVideos() {
   const router = useRouter();
   const [isPage, setIsPage] = useState<number>(1);
   const query: Record<string, any> = { page: isPage };
   const { data: likeVideos, isLoading } = useGetLinkeVideosQuery({ ...query });
+
+  const topVideos = likeVideos?.data[0] || {};
 
   return (
     <div>
@@ -29,11 +32,11 @@ export default function LinkVideos() {
       </h1>
       <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-10">
         {/* Right Column: Search and Actions */}
-        <ul className="space-y-6 like-gradient p-2 rounded-t-2xl [&>li>h1]:text-white">
+        <ul className="space-y-6 like-gradient p-2 h-full rounded-t-2xl [&>li>h1]:text-white">
           <li>
             {" "}
             <ImgBox
-              src={historyImg || "/blur.png"}
+              src={topVideos?.video?.thumbnail || historyImg || "/blur.png"}
               className="rounded-md h-[150px] border-7 w-full"
               alt="video"
             />
@@ -43,13 +46,15 @@ export default function LinkVideos() {
             <h1>{likeVideos?.data?.length} videos</h1>
           </li>
           <li>
-            <Button
-              variant={"primary"}
-              className="text-blacks bg-white px-10 rounded-full"
-            >
-              <Icon name="playBlack" />
-              Play all
-            </Button>
+            <Link href={`/video/${topVideos?.video?.id}`}>
+              <Button
+                variant={"primary"}
+                className="text-blacks bg-white px-10 rounded-full"
+              >
+                <Icon name="playBlack" />
+                Play all
+              </Button>
+            </Link>
           </li>
         </ul>
         {/* Left Column: Watch History List */}

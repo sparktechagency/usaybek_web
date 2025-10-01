@@ -33,7 +33,7 @@ export default function Navber() {
       <div className="w-11/12 mx-auto">
         <ul className="relative  flex items-center  justify-between">
           <li className="flex space-x-5 items-center">
-            {token && (
+            { !isLoading && token && (
               <span onClick={() => setIsSide(!isSide)}>
                 <FavIcon
                   name="menu"

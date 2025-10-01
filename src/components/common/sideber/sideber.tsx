@@ -7,16 +7,16 @@ import Link from "next/link";
 import Icon from "@/icon";
 import { useSidebar } from "@/context/useSideber";
 import { navItems, signOutItems } from "./nav-data";
-import { useEffect, useState } from "react";
+import {useMemo, useState } from "react";
 import Modal from "@/components/reuseable/modal";
 import TabList from "../upload/tab";
-import { authKey } from "@/lib";
+import { authKey, roleKey } from "@/lib";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 import { useHandleLogout } from "@/lib/logout";
+import Cookies from "js-cookie";
 
 export default function Sidebar() {
   const logout = useHandleLogout();
-  const [navItem, setIsNavItem] = useState<any>(signOutItems);
   const [isUpload, setIsUpload] = useState(false);
   const { isExpanded, toggleSidebar } = useSidebar();
   const pathname = usePathname();
@@ -25,19 +25,26 @@ export default function Sidebar() {
     {},
     { refetchOnFocus: true, skip: !token }
   );
-  const { name, avatar,role } = profileData?.data || {};
+  const { name, avatar } = profileData?.data || {};
 
-   useEffect(() => {
-    if (token && role == "USER") {
-      setIsNavItem(navItems);
+  const role = Cookies.get(roleKey);
+  const navItem = useMemo(() => {
+    if (!isLoading && role == "USER") {
+      return navItems;
     } else {
-      setIsNavItem(signOutItems);
+      return signOutItems;
     }
-  }, [token, isLoading, role]);
+  }, [role, token, name,isLoading]);
+
+
 
   return (
     <>
-      <div className={cn("flex flex-col h-screen overflow-scroll scrollbar-hide bg-white rounded-tr-md")}>
+      <div
+        className={cn(
+          "flex flex-col h-screen overflow-scroll scrollbar-hide bg-white rounded-tr-md"
+        )}
+      >
         <SidebarHeader isExpanded={isExpanded} toggleSidebar={toggleSidebar} />
         <UserProfile
           token={token}
@@ -71,7 +78,7 @@ export default function Sidebar() {
   );
 }
 
-// SidebarHeader
+// =============== SidebarHeader ================
 const SidebarHeader = ({ isExpanded, toggleSidebar }: any) => (
   <div
     className={`flex items-center p-4 h-20 ${
@@ -87,7 +94,7 @@ const SidebarHeader = ({ isExpanded, toggleSidebar }: any) => (
   </div>
 );
 
-// UserProfile
+// ============== UserProfile ================
 const UserProfile = ({ token, isLoading, name, avatar, isExpanded }: any) => (
   <div className="p-4">
     <div
@@ -125,7 +132,7 @@ const UserProfile = ({ token, isLoading, name, avatar, isExpanded }: any) => (
   </div>
 );
 
-// NavigationLinks
+// ================== NavigationLinks ======================
 const NavigationLinks = ({
   navItem,
   pathname,
@@ -133,7 +140,7 @@ const NavigationLinks = ({
   setIsUpload,
   logout,
   token,
-  isLoading
+  isLoading,
 }: any) => (
   <nav className="flex-1 py-2 mx-2 space-y-3">
     {navItem?.map((item: any, index: any) =>

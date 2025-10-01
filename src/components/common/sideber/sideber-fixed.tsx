@@ -1,17 +1,18 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { navItems, signOutItems } from "./nav-data";
 import { Separator } from "@/components/ui";
 import { cn, getCookie } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import Img from "@/components/reuseable/img";
 import Icon from "@/icon";
-import { authKey } from "@/lib";
+import { authKey, roleKey } from "@/lib";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 import { useHandleLogout } from "@/lib/logout";
 import Modal from "@/components/reuseable/modal";
 import TabList from "../upload/tab";
+import Cookies from "js-cookie";
 
 
 type SidebarFixedProps = {
@@ -23,7 +24,6 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
   const router = useRouter();
   const [isUpload, setIsUpload] = useState(false);
   const logout = useHandleLogout();
-  const [navItem, setIsNavItem] = useState<any>(signOutItems);
   const pathname = usePathname();
   const token = getCookie(authKey);
   const { data: profileData, isLoading } = useGetProfileQuery(
@@ -32,13 +32,15 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
   );
   const { name, avatar } = profileData?.data || {};
 
-  useEffect(() => {
-    if (token && !isLoading) {
-      setIsNavItem(navItems);
+  const role = Cookies.get(roleKey);
+  const navItem = useMemo(() => {
+    if (!isLoading && role == "USER") {
+      return navItems;
     } else {
-      setIsNavItem(signOutItems);
+      return signOutItems;
     }
-  }, [token, isLoading]);
+  }, [role, token, name,isLoading]);
+
 
 
   // ✅ Prevent background scroll when sidebar is open

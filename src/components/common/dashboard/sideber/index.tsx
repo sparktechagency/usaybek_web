@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-import assets from "@/assets";
 import Link from "next/link";
 import Icon from "@/icon";
 import { cn } from "@/lib/utils";
@@ -8,12 +6,14 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import SideberFixed from "../../sideber/sideber-fixed";
 import FavIcon from "@/icon/admin/favIcon";
+import { Button } from "@/components/ui";
+import { useHandleLogout } from "@/lib/logout";
 
 // main side ber component
 export default function Sidebar({ sidebarOpen, setSidebarOpen }: any) {
   const pathname = usePathname();
   const [isSide, setIsSide] = useState(false);
-
+  const logout = useHandleLogout();
   const navItems = [
     { icon: <Icon name="sdashboard" />, text: "Dashboard", href: "/dashboard" },
     {
@@ -47,8 +47,9 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: any) {
         />
       )}
       <aside
-        className={`absolute left-0 top-0 w-64 z-20 bg-white flex h-screen  transition-transform transform duration-300 ease-linear flex-col overflow-y-hidden  text-white  lg:static lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`absolute left-0 top-0 w-64 z-20 bg-white flex h-screen  transition-transform transform duration-300 ease-linear flex-col overflow-y-hidden  text-white  lg:static lg:translate-x-0 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         <div className="flex flex-col ">
           <div>
@@ -81,6 +82,16 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: any) {
                 </Link>
               ))}
             </nav>
+          </div>
+          <div className="w-full absolute bottom-10  flex justify-center">
+            <Button
+              onClick={logout}
+              variant="primary"
+              className="border-reds/20 text-reds hover:text-reds bg-[#FFE9E9]"
+            >
+              <Icon name="ssignout" />
+              Sign Out
+            </Button>
           </div>
         </div>
       </aside>
