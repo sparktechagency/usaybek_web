@@ -28,8 +28,8 @@ export default function Footer() {
               businesses in their local communities.
             </p>
             <div className="space-y-3 text-sm mt-4">
-              <ContactItem icon="femail" text={data?.email || "N/A"} />
-              <ContactItem icon="fphone" text={data?.phone || "N/A"} />
+              <ContactItem icon="femail" text={data?.email || "info@mytsv.com"} />
+              <ContactItem icon="fphone" text={data?.phone || "+1 630 297 7501"} />
             </div>
           </div>
 

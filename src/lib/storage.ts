@@ -4,7 +4,7 @@ export const toggleItem = (key: string): void => {
   localStorage.setItem(key, newValue);
 };
 
-export const setItem = (key: string, value: string): void => {
+export const setItem = (key: string, value:any): void => {
   localStorage.setItem(key, value);
 };
 

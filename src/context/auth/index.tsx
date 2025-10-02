@@ -4,11 +4,10 @@ import React, {
   useContext,
   useState,
   ReactNode,
-  useEffect,
-  useCallback,
+  useMemo,
 } from "react";
 import Cookies from "js-cookie";
-import { authKey} from "@/lib";
+import { authKey } from "@/lib";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 import { navItems, signOutItems } from "@/components/common/sideber/nav-data";
 
@@ -22,19 +21,16 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [auth, setAuth] = useState<any>(null);
+  const [auth, setAuth] = useState<any>({});
   const token = Cookies.get(authKey);
 
-  const {
-    data: profile,
-    isLoading
-  } = useGetProfileQuery({}, { refetchOnFocus: true, skip: !token });
-
- 
-  
-
-  const setprofile = useCallback(() => {
-    if (profile) {
+  const { data: profile, isLoading } = useGetProfileQuery(
+    {},
+    { refetchOnFocus: true, skip: !token }
+  );
+  // ======== set user info ========
+  useMemo(() => {
+    if (profile && !isLoading) {
       setAuth({
         name: profile?.data?.name,
         email: profile?.data?.email,
@@ -43,24 +39,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         role: profile?.data?.role,
       });
     }
-  }, [profile]);
+  }, [profile, isLoading]);
 
-  useEffect(() => {
-    setprofile();
-  }, [setprofile]);
-
-  // ======== role base route ========
-  const getNavItem = useCallback(() => {
+  // ======== role-based route ========
+  const getNavItem = useMemo(() => {
     if (auth?.role === "USER") {
       return navItems;
     }
     return signOutItems;
   }, [auth]);
 
-  const navItem = getNavItem();
-
   return (
-    <AuthContext.Provider value={{ auth, setAuth, isLoading, navItem }}>
+    <AuthContext.Provider
+      value={{ auth, setAuth, isLoading, navItem: getNavItem }}
+    >
       {children}
     </AuthContext.Provider>
   );

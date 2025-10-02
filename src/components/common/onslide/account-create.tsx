@@ -13,6 +13,7 @@ import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import VarifyOtpOside from "./varify-otp-onside";
 import { toast } from "sonner";
+import FavIcon from "@/icon/admin/favIcon";
 
 export default function OnSideAccount() {
   const [isEmail, setIsEmail] = useState("");
@@ -70,14 +71,9 @@ export default function OnSideAccount() {
   return (
     <div>
       <Card className="border-none p-0 gap-0 py-6">
-        <Image
-          src={assets.logo}
-          alt="MYTSV Logo"
-          width={150}
-          height={50}
-          className="object-contain mx-auto"
-        />
-
+        <div className="flex justify-center">
+           <FavIcon className="w-fit h-[50px]" name="logo" />
+        </div>
         {isVarify ? (
           <>
             <CardHeader className="flex flex-col items-center space-y-0 gap-0  pb-4">

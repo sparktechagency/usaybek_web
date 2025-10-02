@@ -25,16 +25,16 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const [similarVideos, setSimilarVideos] = useState<any[]>([]);
   const [isCategory, setIsCategory] = useState({ id: "all", name: "All" });
-  const roleValue = getCookie(roleKey)
+  const roleValue = getCookie(roleKey);
   const { data: banners } = useGetBannerQuery({});
 
+  const isAdmin = roleValue === "ADMIN";
+
   useEffect(() => {
-    if (roleValue === "ADMIN") {
-      redirect("/admin")
+    if (isAdmin) {
+      redirect("/admin");
     }
-
-  }, [roleValue])
-
+  }, [isAdmin]);
 
   useEffect(() => {
     setPage(1);
@@ -68,7 +68,6 @@ export default function Home() {
 
   const isNoVideos = relatedVideos?.data?.length === 0;
 
-
   // ✅ Only trigger when loader in view + has more
   useEffect(() => {
     if (inView && !isFetching && isCategory.id !== "all" && !relatedLoading) {
@@ -80,7 +79,6 @@ export default function Home() {
     <div>
       <FilterBox isCategory={isCategory} setIsCategory={setIsCategory} />
       <div>
-
         {isCategory.id !== "all" && (
           <h1 className="text-xl font-medium pt-5 pb-3">
             {capitalize(isCategory.name)}
@@ -97,7 +95,13 @@ export default function Home() {
           <>
             <div>
               <HomeCarousel />
-              <h1 className={`${!banners?.is_banner_active && "pt-5"} text-xl font-medium pb-3`}>Promotional videos</h1>
+              <h1
+                className={`${
+                  !banners?.is_banner_active && "pt-5"
+                } text-xl font-medium pb-3`}
+              >
+                Promotional videos
+              </h1>
               <HomePromotion />
             </div>
             {videoLoading ? (

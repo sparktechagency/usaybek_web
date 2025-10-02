@@ -2,12 +2,12 @@
 import { Button } from "@/components/ui";
 import Img from "@/components/reuseable/img";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname} from "next/navigation";
 import FavIcon from "@/icon/admin/favIcon";
-import { useState } from "react";
 import SidebarFixed from "@/components/common/sideber/sideber-fixed";
 import NavberSearchBox from "@/components/common/navber-search-box";
 import { useAuth } from "@/context/auth";
+import { useState } from "react";
 
 export default function Navber() {
   const [isSide, setIsSide] = useState(false);
@@ -21,7 +21,7 @@ export default function Navber() {
       <div className="w-11/12 mx-auto">
         <ul className="relative  flex items-center  justify-between">
           <li className="flex space-x-5 items-center">
-            {!!auth?.email && (
+            {auth?.email ? (
               <span onClick={() => setIsSide(!isSide)}>
                 <FavIcon
                   name="menu"
@@ -30,6 +30,8 @@ export default function Navber() {
                   }`}
                 />
               </span>
+            ) : (
+              ""
             )}
 
             <Link href={"/"}>
@@ -40,10 +42,10 @@ export default function Navber() {
             <NavberSearchBox />
           </li>
           <li>
-            {!!auth?.email ? (
-              <Link href={"/dashboard"}>
+            {auth?.email ? (
+              <Link href="/dashboard">
                 <Button
-                  variant={"primary"}
+                  variant="primary"
                   className="h-12 px-1 md:pl-2 md:pr-4 rounded-full"
                 >
                   <Img src={auth?.avatar} className="size-10" title="img" />

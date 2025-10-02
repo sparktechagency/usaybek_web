@@ -20,12 +20,14 @@ import React, {
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useOtpVarifyMutation } from "@/redux/api/authApi";
-import {modifyPayload, roleKey, setCookie } from "@/lib";
+import { modifyPayload, roleKey, setCookie } from "@/lib";
 import { authKey } from "@/lib";
 import Cookies from "js-cookie";
 import FavIcon from "@/icon/admin/favIcon";
+import { useAuth } from "@/context/auth";
 
 function VarifyOtpChild() {
+  const { setAuth } = useAuth();
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
   const [otpVarify, { isLoading }] = useOtpVarifyMutation();
@@ -82,6 +84,13 @@ function VarifyOtpChild() {
           const { access_token: token, user: info } = res?.data;
           Cookies.set(roleKey, info.role);
           setCookie(authKey, token);
+          setAuth({
+            name: info?.name,
+            email: info?.email,
+            avatar: info?.avatar,
+            id: info?.id,
+            role: info?.role,
+          });
           if (info.role == "USER") {
             router.push("/");
           } else if (info.role == "ADMIN") {

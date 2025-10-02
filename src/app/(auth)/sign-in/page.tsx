@@ -13,7 +13,7 @@ import {
 } from "@/components/ui";
 import auth from "@/firebase.config";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
-import { authKey, delay, modifyPayload, roleKey, setCookie } from "@/lib";
+import { authKey, modifyPayload, roleKey, setCookie } from "@/lib";
 import { useSignInMutation, useSocialLoginMutation } from "@/redux/api/authApi";
 import { loginSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,8 +28,10 @@ import { toast } from "sonner";
 import Cookies from "js-cookie";
 import FavIcon from "@/icon/admin/favIcon";
 import Icon from "@/icon";
+import { useAuth } from "@/context/auth";
 
 export default function Login() {
+  const { setAuth } = useAuth();
   const [signIn, { isLoading }] = useSignInMutation();
   const [socialLogin, { isLoading: isLoadingSocial }] =
     useSocialLoginMutation();
@@ -56,6 +58,13 @@ export default function Login() {
         const { access_token: token, user: info } = res.data;
         Cookies.set(roleKey, info.role);
         setCookie(authKey, token);
+        setAuth({
+          name: info?.name,
+          email: info?.email,
+          avatar: info?.avatar,
+          id: info?.id,
+          role: info?.role,
+        });
         if (info.role == "USER") {
           router.push("/");
         } else if (info.role == "ADMIN") {

@@ -1,13 +1,14 @@
 "use client";
-import React from "react";
 import Footer from "@/components/shared/footer";
 import Navber from "@/components/shared/navber";
 import { childrenProps } from "@/types";
 import { useSidebar } from "@/context/useSideber";
 import Sidebar from "@/components/common/sideber/sideber";
+import { useRouter } from "next/navigation";
 
 export default function CommonLayout({ children }: childrenProps) {
   const { isExpanded } = useSidebar();
+
 
   return (
     <div className="flex flex-col min-h-screen">
