@@ -4,10 +4,12 @@ import Icon from "@/icon";
 import FavIcon from "@/icon/admin/favIcon";
 import AppStore from "../app-store";
 import { useGetContactQuery } from "@/redux/api/landing/contactApi";
+import { useAuth } from "@/context/auth";
 
 export default function Footer() {
-  const { data: contact} = useGetContactQuery({});
+  const { data: contact } = useGetContactQuery({});
   const data = contact?.data;
+  const { auth } = useAuth();
 
   return (
     <footer className="bg-white">
@@ -36,7 +38,10 @@ export default function Footer() {
             <h3 className="text-lg font-semibold text-blacks">Useful Links</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/faq" className="text-blacks">
+                <Link
+                  href={`${auth?.email ? "/faq" : "/"}`}
+                  className="text-blacks"
+                >
                   FAQ
                 </Link>
               </li>
@@ -53,12 +58,15 @@ export default function Footer() {
             <h3 className="text-lg font-semibold text-blacks">Company</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/about-us" className="text-blacks ">
+                <Link
+                  href={`${auth?.email ? "/about-us" : "/"}`}
+                  className="text-blacks "
+                >
                   About us
                 </Link>
               </li>
               <li>
-                <Link href="/contact-us" className="text-blacks ">
+                <Link  href={`${auth?.email ? "/contact-us" : "/"}`}  className="text-blacks ">
                   Contact
                 </Link>
               </li>
