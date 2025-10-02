@@ -48,7 +48,6 @@ function ForgotPasswordChild() {
           description: "Check your email to get the code",
         });
       }
-      await delay(4050);
       router.push(`/varify-otp-password?email=${values.email}`);
       from.reset();
     } catch (err: any) {

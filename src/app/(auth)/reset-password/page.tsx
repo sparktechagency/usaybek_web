@@ -9,13 +9,12 @@ import {
   CardTitle,
 } from "@/components/ui";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
-import { delay, modifyPayload } from "@/lib";
+import {modifyPayload } from "@/lib";
 import { useResetPasswordMutation } from "@/redux/api/authApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FieldValues, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import React, { Suspense } from "react";
 import { FromInputs } from "@/components/reuseable/from-inputs";
 import { passwordSchema11 } from "@/schema";
@@ -43,13 +42,9 @@ function ResetPasswordChild() {
       const data = modifyPayload(value);
       const res = await resetPassword(data).unwrap();
       if (res.status) {
-        toast.success("Password Changed Successfully", {
-          description: "Please login with your new password",
-        });
+        router.push(`/sign-in`);
+        from.reset();
       }
-      await delay();
-      router.push(`/sign-in`);
-      from.reset();
     } catch (err: any) {
       ResponseApiErrors(err.data, from);
     }
@@ -67,7 +62,7 @@ function ResetPasswordChild() {
         <Card className="w-full max-w-md rounded-md lg:rounded-none lg:rounded-t-xl px-4 pt-8 pb-15 lg:pb-50 bg-body border-none mx-auto lg:absolute lg:left-1/2 lg:[transform:translateX(-50%)] lg:bottom-0">
           <CardHeader className="flex flex-col items-center space-y-0 gap-0 pt-6">
             <div className="mb-1 flex items-center justify-center w-full">
-               <FavIcon className="w-fit h-[50px]" name="logo" />
+              <FavIcon className="w-fit h-[50px]" name="logo" />
             </div>
             <CardTitle className="text-2xl font-bold text-reds mt-3">
               Enter new password

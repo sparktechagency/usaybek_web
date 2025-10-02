@@ -13,15 +13,15 @@ import { useSignUpMutation } from "@/redux/api/authApi";
 import { SignUpSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues, useForm } from "react-hook-form";
+import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
+import {modifyPayload } from "@/lib";
+import { useRouter } from "next/navigation";
+import FavIcon from "@/icon/admin/favIcon";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import Icon from "@/icon";
-import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
-import { delay, modifyPayload } from "@/lib";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import FavIcon from "@/icon/admin/favIcon";
+
 
 export default function SignUp() {
   const router = useRouter();
@@ -50,13 +50,9 @@ export default function SignUp() {
       const data = modifyPayload(value);
       const res = await signUp(data).unwrap();
       if (res.status) {
-        toast.success("Create Account Successful", {
-          description: res?.message,
-        });
+        router.push(`/varify-otp?email=${values?.email}`);
+        from.reset();
       }
-      await delay(4050);
-      router.push(`/varify-otp?email=${values?.email}`);
-      from.reset();
     } catch (err: any) {
       ResponseApiErrors(err?.data, from);
     }

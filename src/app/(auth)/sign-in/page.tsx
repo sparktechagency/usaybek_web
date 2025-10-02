@@ -13,7 +13,6 @@ import {
 } from "@/components/ui";
 import auth from "@/firebase.config";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
-import Icon from "@/icon";
 import { authKey, delay, modifyPayload, roleKey, setCookie } from "@/lib";
 import { useSignInMutation, useSocialLoginMutation } from "@/redux/api/authApi";
 import { loginSchema } from "@/schema";
@@ -28,6 +27,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import FavIcon from "@/icon/admin/favIcon";
+import Icon from "@/icon";
 
 export default function Login() {
   const [signIn, { isLoading }] = useSignInMutation();
@@ -56,10 +56,6 @@ export default function Login() {
         const { access_token: token, user: info } = res.data;
         Cookies.set(roleKey, info.role);
         setCookie(authKey, token);
-        toast.success("Login Successful", {
-          description: "Welcome back! You're now logged in",
-        });
-        await delay(4050);
         if (info.role == "USER") {
           router.push("/");
         } else if (info.role == "ADMIN") {
@@ -103,10 +99,6 @@ export default function Login() {
         const { access_token: token, user: info } = res.data;
         setCookie(authKey, token);
         Cookies.set(roleKey, info.role);
-        toast.success("Login Successful", {
-          description: "Welcome back! You're now logged in",
-        });
-        await delay(4050);
         if (info.role == "USER") {
           router.push("/");
         }

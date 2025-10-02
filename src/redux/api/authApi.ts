@@ -18,6 +18,7 @@ export const authApi = baseApi.injectEndpoints({
         ContentType: "multipart/form-data",
         data,
       }),
+      invalidatesTags: [tagTypes.profile],
     }),
     forgotPassword: build.mutation({
       query: (data) => ({
@@ -34,6 +35,7 @@ export const authApi = baseApi.injectEndpoints({
         ContentType: "multipart/form-data",
         data,
       }),
+      invalidatesTags: [tagTypes.profile],
     }),
     resetPassword: build.mutation({
       query: (data) => ({
@@ -88,5 +90,5 @@ export const {
   useLazyGetProfileQuery,
   useSocialLoginMutation,
   useUpdateProfileMutation,
-  useUpdatePasswordMutation
+  useUpdatePasswordMutation,
 } = authApi;

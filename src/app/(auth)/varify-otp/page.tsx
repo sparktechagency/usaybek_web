@@ -20,8 +20,7 @@ import React, {
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useOtpVarifyMutation } from "@/redux/api/authApi";
-import { delay, modifyPayload, roleKey, setCookie } from "@/lib";
-import { toast } from "sonner";
+import {modifyPayload, roleKey, setCookie } from "@/lib";
 import { authKey } from "@/lib";
 import Cookies from "js-cookie";
 import FavIcon from "@/icon/admin/favIcon";
@@ -83,13 +82,10 @@ function VarifyOtpChild() {
           const { access_token: token, user: info } = res?.data;
           Cookies.set(roleKey, info.role);
           setCookie(authKey, token);
-
-          toast.success("Login Successfull", {
-            description: res?.message,
-          });
-          await delay(4050);
           if (info.role == "USER") {
             router.push("/");
+          } else if (info.role == "ADMIN") {
+            router.push("/admin");
           }
         }
 

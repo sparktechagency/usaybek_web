@@ -61,6 +61,7 @@ export default function VideoDetails({ slug }: any) {
     issue: "",
   });
 
+
   // scroll refresh
   // Call to scroll to the top
   useScrollToTop();
