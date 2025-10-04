@@ -161,6 +161,7 @@ export default function EditVideo({ slug }: { slug: string }) {
       if (res.status) {
         from.reset();
         setIsImg(intImg);
+        setIsLink("")
       }
     } catch (err: any) {
       ResponseApiErrors(err?.data, from);
@@ -173,6 +174,7 @@ export default function EditVideo({ slug }: { slug: string }) {
       from.reset();
     }
     setIsImg(intImg);
+    setIsLink("")
   };
 
   return (
