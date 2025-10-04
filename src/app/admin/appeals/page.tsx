@@ -129,7 +129,7 @@ export default function Appeals() {
             appeal?.data?.map((item: any, index: any) => (
               <TableRow key={index}>
                 {/* Sl No */}
-                <TableCell>{item.id}</TableCell>
+                <TableCell>{index+1}</TableCell>
 
                 <TableCell className="relative">
                   <div className="flex items-center gap-3">

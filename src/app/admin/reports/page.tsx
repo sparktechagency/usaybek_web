@@ -123,10 +123,10 @@ export default function Reports() {
               tdStyle="!pl-0 !bg-background"
             />
           ) : reports?.data?.length > 0 ? (
-            reports?.data?.map((item: any) => (
+            reports?.data?.map((item: any,index:any) => (
               <TableRow key={item?.id}>
                 {/* Sl No */}
-                <TableCell>{item.id}</TableCell>
+                <TableCell>{index+1}</TableCell>
 
                 <TableCell className="relative">
                   <div className="flex items-center gap-3">

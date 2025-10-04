@@ -13,13 +13,14 @@ import Icon from "@/icon";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, {useState } from "react";
 import MonthlyBox from "@/components/reuseable/date-box";
 import { useUserDashboardQuery } from "@/redux/api/dashboard/simpleApi";
 import { ChartAreaOverView } from "@/components/common/chats/area";
 import { Skeleton } from "@/components/ui/skeleton";
 import assets from "@/assets";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
+
 
 export default function Dashboard() {
   const [isMonth, setIsMonth] = useState({
@@ -56,6 +57,9 @@ export default function Dashboard() {
       icon: assets.dashboard.likes,
     },
   ];
+
+
+  
 
   return (
     <div>

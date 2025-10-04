@@ -41,7 +41,7 @@ export default function Details() {
   return (
     <div className="pb-10">
       <NavTitle
-        title="Channel details"
+        title="Channel Details"
         subTitle="You can see & manage all the channels of MyTSV from here."
       />
       {/* body section */}

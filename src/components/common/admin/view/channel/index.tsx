@@ -173,8 +173,7 @@ export default function ChannelDetails({ channel, rest }: any) {
                 {services?.length ? (
                   services?.map((item: any, index: any) => (
                     <h1 key={index}>
-                      {" "}
-                      {index + 1} {item},
+                       {item},
                     </h1>
                   ))
                 ) : (

@@ -31,7 +31,7 @@ const CategorySchema = z.object({
 export default function ManageCategory() {
   const { confirm } = useConfirmation();
   const [isPage, setIsPage] = useState<number>(1);
-  const { data: categories, isLoading } = useGetCategoryQuery({ page: isPage });
+  const { data: categories, isLoading } = useGetCategoryQuery({ page: isPage,per_page:20 });
   const [storeCategory, { isLoading: storeLoading }] =
     useStoreCategoryMutation();
   const [updateCategory, { isLoading: updateLoading }] =
@@ -126,7 +126,9 @@ export default function ManageCategory() {
         title="Manage category"
         subTitle="You can manage your video categories of your website from here."
       />
-      <div className="flex gap-6 flex-wrap">
+      <div className="flex  flex-col h-[calc(100vh-150px)]  justify-between">
+        <div>
+           <div className="flex gap-6 flex-wrap">
         {isLoading ? (
           <SkeletonCount count={10}>
             <Skeleton className="w-50 h-12 rounded-xl" />
@@ -156,15 +158,16 @@ export default function ManageCategory() {
           ))
         )}
       </div>
-      <div className="flex items-center justify-between">
+        </div>
+      <div className="flex mt-6 lg:mt-0  items-center w-full justify-between">
         <Button
           onClick={() => setIsStore(!isStore)}
           variant="primary"
           size="lg"
-          className="rounded-full mt-7"
+          className="rounded-full"
         >
           <Plus className="text-white size-5" />
-          Add more
+           <span className="hidden mr-2 lg:mr-0 lg:block">Add more</span>
         </Button>
         <Pagination
           onPageChange={(v: any) => setIsPage(v)}
@@ -172,6 +175,7 @@ export default function ManageCategory() {
           activeStyle="!rounded-full !bg-reds !border-none !text-white hover:!text-white"
           itemStyle="rounded-full"
         ></Pagination>
+      </div>
       </div>
       {/* store */}
       <Modal

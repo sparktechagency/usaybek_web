@@ -108,7 +108,7 @@ export default function SalesrepResentatives() {
             salesRepresen?.data?.map((item: any, index: any) => (
               <TableRow key={index}>
                 {/* Sl No */}
-                <TableCell>{item.id}</TableCell>
+                <TableCell>{index + 1}</TableCell>
 
                 {/* Channel Name with Image */}
                 <TableCell className="relative">

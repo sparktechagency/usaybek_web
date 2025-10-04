@@ -1,7 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import { Skeleton } from "@/components/ui";
+import React from "react";
+import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import { cn } from "@/lib";
 import FavIcon from "@/icon/admin/favIcon";
 
@@ -20,33 +19,21 @@ const ProfileMapbox: React.FC<ProfileMapboxProps> = ({
   locations = [],
   className,
 }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    if (locations?.length > 0) {
-      setIsLoading(false);
-    }
-  }, [locations]);
 
   return (
     <div className={cn("w-full h-[300px] md:h-full", className)}>
-      {isLoading ? (
-        <div className="w-full h-full flex justify-center items-center">
-          <Skeleton className="w-full h-full" />
-        </div>
-      ) : locations?.length > 0 ? (
-        <LoadScript
-          googleMapsApiKey={
-            process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string
-          }
+      {locations?.length > 0 ? (
+        <APIProvider
+          apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
         >
-          <GoogleMap
-            mapContainerStyle={{ width: "100%", height: "100%" }}
-            center={{
+          <Map
+            style={{ width: "100%", height: "100%" }}
+            defaultCenter={{
               lat: Number(locations[0].lat),
               lng: Number(locations[0].long),
             }}
-            zoom={12}
+            defaultZoom={12}
           >
             {locations?.map((loc, index) => (
               <Marker
@@ -58,8 +45,8 @@ const ProfileMapbox: React.FC<ProfileMapboxProps> = ({
                 title={loc.location}
               />
             ))}
-          </GoogleMap>
-        </LoadScript>
+          </Map>
+        </APIProvider>
       ) : (
         <div className="flex flex-col items-center justify-center h-full">
           <FavIcon
@@ -67,7 +54,9 @@ const ProfileMapbox: React.FC<ProfileMapboxProps> = ({
             color="#888"
             className="mx-auto size-20"
           />
-          <h1 className="text-center text-gray1">Location is not available</h1>
+          <h1 className="text-center text-gray1 font-semibold">
+            Location is not Available
+          </h1>
         </div>
       )}
     </div>

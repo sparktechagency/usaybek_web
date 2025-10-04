@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui";
 import Img from "@/components/reuseable/img";
 import Link from "next/link";
-import { usePathname} from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import FavIcon from "@/icon/admin/favIcon";
 import SidebarFixed from "@/components/common/sideber/sideber-fixed";
 import NavberSearchBox from "@/components/common/navber-search-box";
@@ -15,6 +15,34 @@ export default function Navber() {
   const patterns = [/^\/video\/.+/, /^\/profile$/];
   const isMenu = patterns.some((regex) => regex.test(path));
   const { auth } = useAuth();
+
+  const renderItem = () => {
+    if (auth?.email) {
+      return (
+        <Link href="/dashboard">
+          <Button
+            variant="primary"
+            className="h-12 px-1 md:pl-2 md:pr-4 rounded-full"
+          >
+            <Img src={auth?.avatar} className="size-10" title="img" />
+            <span className="hidden md:block">{auth?.name}</span>
+          </Button>
+        </Link>
+      );
+    }
+
+    return (
+      <Link href="/sign-in">
+        <Button
+          variant="primary"
+          className="h-12 has-[>svg]:px-1 md:!px-4 rounded-full"
+        >
+          <FavIcon name="unUser" color="#ffffff" className="size-10 md:hidden" />
+          <span className="hidden md:block">Sign in to your Account</span>
+        </Button>
+      </Link>
+    );
+  };
 
   return (
     <div className="py-4">
@@ -42,34 +70,7 @@ export default function Navber() {
             <NavberSearchBox />
           </li>
           <li>
-            {auth?.email ? (
-              <Link href="/dashboard">
-                <Button
-                  variant="primary"
-                  className="h-12 px-1 md:pl-2 md:pr-4 rounded-full"
-                >
-                  <Img src={auth?.avatar} className="size-10" title="img" />
-                  <span className="hidden md:block">{auth?.name}</span>
-                </Button>
-              </Link>
-            ) : (
-              <Link href="/sign-in">
-                <Button
-                  variant={"primary"}
-                  className="h-12 has-[>svg]:px-1 md:!px-4  rounded-full"
-                >
-                  <FavIcon
-                    name="unUser"
-                    color="#ffffff"
-                    className="size-10 md:hidden"
-                  />
-                  <span className="hidden md:block">
-                    {" "}
-                    Sign in to your Account
-                  </span>
-                </Button>
-              </Link>
-            )}
+           {renderItem()}
           </li>
         </ul>
         {/* navber fixed */}
