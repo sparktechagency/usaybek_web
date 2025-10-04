@@ -10,7 +10,6 @@ import { FromTagInputs } from "@/components/reuseable/from-tag-inputs";
 import { FromTextAreas } from "@/components/reuseable/from-textareas";
 import ImgUpload from "@/components/reuseable/img-uplod";
 import { Button, Input, Label } from "@/components/ui";
-import Icon from "@/icon";
 import {
   useCategoriesQuery,
   useVideosDetailsQuery,
@@ -22,9 +21,11 @@ import FavIcon from "@/icon/admin/favIcon";
 import VideoUpload from "@/components/reuseable/video-uplod";
 import { useVideoEditMutation } from "@/redux/api/dashboard/videosApi";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
+import { useGetCitiesQuery, useGetStatesQuery } from "@/redux/api/commonApi";
 import { modifyPayloadAll } from "@/lib";
 import Image from "next/image";
 import Link from "next/link";
+import Icon from "@/icon";
 
 const intImg = {
   videoPreview: "",
@@ -41,11 +42,29 @@ export default function EditVideo({ slug }: { slug: string }) {
   });
   const { data, isLoading } = useVideosDetailsQuery(slug);
   const [videoEdit, { isLoading: editLoading }] = useVideoEditMutation();
+
+  const [isSelect, setIsSelect] = useState({
+    state: [],
+    city: [],
+  });
+  //  ============ state ================
+  const { data: states } = useGetStatesQuery({});
+  useEffect(() => {
+    if (!states?.length) return;
+    setIsSelect((prev) => ({
+      ...prev,
+      state: states.map(({ name, id }: any) => ({
+        label: name,
+        value: id?.toString(),
+      })),
+    }));
+  }, [states]);
+
   const {
     video,
     thumbnail,
     title,
-    states,
+    states: state,
     city,
     description,
     visibility,
@@ -54,12 +73,16 @@ export default function EditVideo({ slug }: { slug: string }) {
     type,
     link,
   } = data || {};
+  const defaultId = states?.find(
+    (i: any) => i.name.toLowerCase() === state?.toLowerCase()
+  )?.id;
 
+  // ============== from ==============
   const from = useForm({
     defaultValues: {
       title: title || "",
       description: description || "",
-      state: states || "",
+      state: defaultId?.toString() || "",
       city: city || "",
       category_id: category_id?.toString(),
       visibility: visibility,
@@ -67,13 +90,36 @@ export default function EditVideo({ slug }: { slug: string }) {
     },
   });
 
-  // This effect correctly sets the initial form values when data loads
+  //  ============= city===========
+  const stateId = from.watch("state");
+  const { data: citys } = useGetCitiesQuery(stateId, {
+    skip: !stateId,
+  });
+
+
+
+  const stateName =
+    stateId &&
+    states?.find((item: any) => item?.id === parseInt(stateId))?.name;
+
+  useEffect(() => {
+    if (!citys?.length) return;
+    setIsSelect((prev) => ({
+      ...prev,
+      city: citys.map(({ name, id }: any) => ({
+        label: name,
+        value: name,
+      })),
+    }));
+  }, [citys, stateId]);
+
+  //  ============== from set value===============
   useEffect(() => {
     if (data) {
       from.reset({
         title,
         description,
-        state: states,
+        state: stateId || defaultId?.toString(),
         city,
         category_id: category_id?.toString(),
         visibility,
@@ -93,16 +139,19 @@ export default function EditVideo({ slug }: { slug: string }) {
     tags,
     title,
     link,
+    defaultId,
+    stateId,
   ]);
 
+  // handleSubmit
   const handleSubmit = async (values: FieldValues, id: string) => {
     const { state, category_id, ...rest } = values;
     const value = {
       ...rest,
       category_id: parseInt(values.category_id),
-      states: state,
+      states: stateName,
       _method: "PUT",
-      ...(isLink && {link:isLink}),
+      ...(isLink && { link: isLink }),
       ...(isImg?.thumbnail && { thumbnail: isImg?.thumbnail }),
       ...(isImg.video && { video: isImg.video }),
     };
@@ -215,15 +264,21 @@ export default function EditVideo({ slug }: { slug: string }) {
               />
             </div>
             <div className="space-y-8 border px-3 py-5  rounded-md">
-              <FromInputs
+              <InputSelectField
+                items={isSelect?.state}
                 label="State"
                 name="state"
-                placeholder="State name here"
+                placeholder="Select State"
+                className="py-[23px]"
+                itemStyle="py-2"
               />
-              <FromInputs
+              <InputSelectField
+                items={isSelect?.city}
                 label="City"
                 name="city"
-                placeholder="City name here"
+                placeholder="Select City"
+                className="py-[23px]"
+                itemStyle="py-2"
               />
               <InputSelectField
                 items={categories?.data?.map((item: any) => ({
