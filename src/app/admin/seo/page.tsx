@@ -9,6 +9,7 @@ import { Button } from "@/components/ui";
 import { useGetSeoQuery, useUpdateSeoMutation } from "@/redux/api/admin/seoApi";
 import React, { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface SocialMediaLinkType {
   id: string;
@@ -17,7 +18,7 @@ interface SocialMediaLinkType {
 }
 
 export default function Seo() {
-  const { data, isLoading } = useGetSeoQuery({});
+  const { data } = useGetSeoQuery({});
   const [updateSeo, { isLoading: updateLoading }] = useUpdateSeoMutation();
   const [socialLinks, setSocialLinks] = useState<SocialMediaLinkType[]>([]);
   const form = useForm({
@@ -44,8 +45,15 @@ export default function Seo() {
         return acc;
       }, [] as { key: string; value: string[] }[]),
     };
+
     // api call all ok
-    await updateSeo(value).unwrap();
+    const res = await updateSeo(value).unwrap();
+    if (res.status) {
+      toast.success("Your SEO updates have been saved", {
+        description:
+          "The changes may take up to 72 hours to appear on MyTSV",
+      });
+    }
   };
 
   // Reset form + socialLinks when data changes

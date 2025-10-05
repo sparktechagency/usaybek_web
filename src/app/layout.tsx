@@ -15,6 +15,7 @@ const poppins = Poppins({
 export async function generateMetadata() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-seo`, {
     cache: "force-cache",
+    next: { revalidate: 72 * 60 * 60 },
   });
   const { data } = await res.json();
   return {

@@ -9,6 +9,7 @@ export async function generateMetadata({ params }: SlugParams): Promise<any> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/videos/${slug}`, {
     headers: { Authorization: `Bearer ${tokon}` },
     cache: "force-cache",
+    next: { revalidate: 72 * 60 * 60 },
   });
   const data = await res.json();
   const {
