@@ -3,31 +3,27 @@ import React from "react";
 import { Alert, AlertDescription } from "@/components/ui";
 import Icon from "@/icon";
 import OnSideBox from "@/components/common/onslide";
-import { makeStore } from "@/redux/store";
-import { pricingApi } from "@/redux/api/admin/pricingApi";
+import OnsidePricingCard from "@/components/common/onslide/pricing-card";
+import { Seo } from "@/lib";
 
-// export const metadata = Seo({
-//   title: "Get Discovered Locally: Sign Up Your Business on MyTSV.com",
-//   description:
-//     'Our representatives are visiting local businesses like yours to offer an exclusive opportunity to join "MyTSV.com"—the video-first platform connecting local services with real local customers.',
-//   keywords: [
-//     "Onside",
-//     "Onsite Account",
-//     "Business Registration",
-//     "MyTSV",
-//     "Local Business",
-//     "Video Platform",
-//   ],
-//   url: `/onside-account`,
-//   image: "/images/onsideImg.jpg",
-// });
+
+export const metadata = Seo({
+  title: "Get Discovered Locally: Sign Up Your Business on MyTSV.com",
+  description:
+    'Our representatives are visiting local businesses like yours to offer an exclusive opportunity to join "MyTSV.com"—the video-first platform connecting local services with real local customers.',
+  keywords: [
+    "Onside",
+    "Onsite Account",
+    "Business Registration",
+    "MyTSV",
+    "Local Business",
+    "Video Platform",
+  ],
+  url: `/onside-account`,
+  image: "/images/onsideImg.jpg",
+});
 
 export default async function OnSidePage() {
-  const store = makeStore();
-  const { data: pricing } = await store.dispatch(
-    pricingApi.endpoints.getPrice.initiate({})
-  );
-
   return (
     <div className="max-w-6xl m-auto">
       <div className="relative h-48 md:h-64">
@@ -101,28 +97,7 @@ export default async function OnSidePage() {
           </ul>
         </div>
         {/* Pricing Card Section */}
-        <div className="col-span-1 md:col-span-2">
-          <div className="relative onside-free p-8 rounded-4xl shadow-lg text-white flex flex-col items-start">
-            <div className="absolute -left-8 top-1/2 -translate-y-1/2 bg-body p-2 rounded-full">
-              <Icon name="phoned" />
-            </div>
-            <div className="mx-auto">
-              <h3 className="text-[22px] font-semibold mb-5 w-full text-center">
-                One-Time Sign-Up Fee: {`${pricing?.onsite_account_creation || 0}`}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-lg">
-                <ul className="list-none space-y-3">
-                  <li>🎥 Video recording on-site</li>
-                  <li>🔍 Local SEO Optimization</li>
-                </ul>
-                <ul className="list-none space-y-3">
-                  <li>📲 Upload + Profile Setup</li>
-                  <li>📢 Promotion across MyTSV.com channels</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        <OnsidePricingCard/>
       </div>
 
       {/* Ready to Get Started? */}
