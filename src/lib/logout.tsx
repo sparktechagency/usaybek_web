@@ -11,7 +11,7 @@ export function useHandleLogout() {
   const logout = () => {
     removeCookie(authKey);
     removeCookie(roleKey);
-    setAuth(null);
+    setAuth({});
     router.push("/");
   };
   return logout;

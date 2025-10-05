@@ -27,6 +27,7 @@ export default async function AboutUs() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/about-us`, {
     headers: { Authorization: `Bearer ${tokon}` },
     cache: "force-cache",
+    next: { revalidate: 3600 },
   });
 
   const { data } = await res.json();
