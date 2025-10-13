@@ -98,15 +98,15 @@ export default function ProfileBox() {
                   <Icon name="locationGary" />
                   {channel?.locations?.find(
                     (item: any) => item?.type === "head-office"
-                  )?.location || "No location"}
+                  )?.location || "No Location"}
                 </li>
                 <li className="flex gap-x-2 items-center text-blacks">
                   <Icon name="phoneGray" />
-                  {channel?.contact}
+                  {channel?.contact || "No Contact"}
                 </li>
                 <li className="flex gap-x-2 items-center text-blacks">
                   <Icon name="mailGray" />
-                  {channel?.email}
+                  {channel?.email || "No Email"}
                 </li>
               </ul>
             </Card>

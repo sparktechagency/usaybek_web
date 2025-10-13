@@ -92,7 +92,7 @@ export default function MyVideos() {
         onClick={() => setIsUpload(!isUpload)}
         upload={true}
         onSearch={(text) => setIsSearch(text)}
-        placeholder="Search video"
+        placeholder="Search Videos"
       />
       <div>
         <div className="flex items-center space-x-4 pb-2 pt-10">
@@ -161,11 +161,19 @@ export default function MyVideos() {
                           <div className="font-semibold block break-all whitespace-normal text-blacks text-lg !truncate">
                             {item.title}
                           </div>
+
                           <div className="group w-full text-sm cursor-pointer text-grays relative">
                             <div className="group-hover:!hidden">
-                              <h1 className="block flex-1  break-all whitespace-normal !line-clamp-2">
-                                {item.description}
-                              </h1>
+                              <div className="h-[60px] mt-px overflow-hidden">
+                                <div className="ql-container ql-snow">
+                                  <div
+                                    className="ql-editor !p-0 !overflow-hidden"
+                                    dangerouslySetInnerHTML={{
+                                      __html: item.description,
+                                    }}
+                                  ></div>
+                                </div>
+                              </div>
                             </div>
 
                             <div className="hidden group-hover:block">
@@ -294,7 +302,7 @@ export default function MyVideos() {
       <Modal
         open={isUpload}
         setIsOpen={setIsUpload}
-        title="Upload a new video"
+        title="Upload a New Video"
         titleStyle="text-center"
         className="sm:max-w-4xl"
       >

@@ -37,10 +37,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
       [{ script: "sub" }, { script: "super" }],
       [{ align: [] }],
       [{ list: "ordered" }, { list: "bullet" }],
-      [{ indent: "-1" }, { indent: "+1" }],
-      ["blockquote", "code-block"],
-      ["link"],
-      ["clean"],
+      [{ indent: "-1" }, { indent: "+1" }]
     ],
   };
 
@@ -64,7 +61,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
 
   return (
     <div className="w-full space-y-1">
-      <div className="rounded-t-xl border border-gray-300 bg-gray-50/80 p-2">
+      <div className="rounded-xl border border-gray-300 bg-gray-50/80 p-2">
         <ReactQuill
           theme="snow"
           value={value}

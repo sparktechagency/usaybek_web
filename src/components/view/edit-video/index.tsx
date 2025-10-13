@@ -14,7 +14,7 @@ import {
   useCategoriesQuery,
   useVideosDetailsQuery,
 } from "@/redux/api/landing/videosApi";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CircleAlert } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import FavIcon from "@/icon/admin/favIcon";
@@ -26,6 +26,7 @@ import { modifyPayloadAll } from "@/lib";
 import Image from "next/image";
 import Link from "next/link";
 import Icon from "@/icon";
+import TextEditor from "@/components/common/admin/reuseable/text-editor";
 
 const intImg = {
   videoPreview: "",
@@ -37,10 +38,10 @@ const intImg = {
 export default function EditVideo({ slug }: { slug: string }) {
   const [isLink, setIsLink] = useState("");
   const [isImg, setIsImg] = useState<any>(intImg);
-  const { data: categories, isLoading: categoriLoading } = useCategoriesQuery({
+  const { data: categories } = useCategoriesQuery({
     per_page: 1000,
   });
-  const { data, isLoading } = useVideosDetailsQuery(slug);
+  const { data } = useVideosDetailsQuery(slug);
   const [videoEdit, { isLoading: editLoading }] = useVideoEditMutation();
 
   const [isSelect, setIsSelect] = useState({
@@ -95,8 +96,6 @@ export default function EditVideo({ slug }: { slug: string }) {
   const { data: citys } = useGetCitiesQuery(stateId, {
     skip: !stateId,
   });
-
-
 
   const stateName =
     stateId &&
@@ -161,7 +160,7 @@ export default function EditVideo({ slug }: { slug: string }) {
       if (res.status) {
         from.reset();
         setIsImg(intImg);
-        setIsLink("")
+        setIsLink("");
       }
     } catch (err: any) {
       ResponseApiErrors(err?.data, from);
@@ -174,7 +173,7 @@ export default function EditVideo({ slug }: { slug: string }) {
       from.reset();
     }
     setIsImg(intImg);
-    setIsLink("")
+    setIsLink("");
   };
 
   return (
@@ -258,12 +257,21 @@ export default function EditVideo({ slug }: { slug: string }) {
                 name="title"
                 placeholder="Enter your title"
               />
-              <FromTextAreas
-                label="Description"
-                name="description"
-                placeholder="Enter your Description"
-                className="min-h-44 rounded-3xl"
-              />
+              <div>
+                <TextEditor
+                  className="min-h-[180px]"
+                  value={from.watch("description") || ""}
+                  onChange={(v) => {
+                    from.setValue("description", v);
+                  }}
+                />
+                {from?.formState?.errors?.description && (
+                  <p className="text-reds justify-end mt-1 flex items-center gap-1 text-sm">
+                    {from?.formState?.errors?.description?.message as string}
+                    <CircleAlert size={14} />
+                  </p>
+                )}
+              </div>
             </div>
             <div className="space-y-8 border px-3 py-5  rounded-md">
               <InputSelectField

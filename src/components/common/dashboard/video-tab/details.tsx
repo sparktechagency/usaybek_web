@@ -33,7 +33,7 @@ export default function Details({ slug, isTab, setIsTab }: any) {
     category,
     visibility,
     tags,
-    link
+    link,
   } = (!isLoading && data) || {};
 
   //handleDelete
@@ -98,7 +98,12 @@ export default function Details({ slug, isTab, setIsTab }: any) {
             className="md:h-[450px]"
           />
           <h1 className="text-xl font-medium mt-6">{title}</h1>
-          <p className="text-grays mt-3">{description}</p>
+          <div className="ql-container ql-snow">
+            <div
+              className="ql-editor !overflow-hidden"
+              dangerouslySetInnerHTML={{ __html: description }}
+            ></div>
+          </div>
         </div>
         <div className="border p-3 py-6 rounded-xl">
           <div className="space-y-8">

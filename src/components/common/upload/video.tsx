@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CircleAlert,Upload } from "lucide-react";
+import { CircleAlert, Upload } from "lucide-react";
 import { FieldValues, useForm } from "react-hook-form";
 import Form from "@/components/reuseable/from";
 import { FromInput } from "@/components/reuseable/from-input";
@@ -9,21 +9,21 @@ import {
   InputSelectFieldIcon,
 } from "@/components/reuseable/from-select";
 import { FromTagInputs } from "@/components/reuseable/from-tag-inputs";
-import { FromTextAreas } from "@/components/reuseable/from-textareas";
-import Icon from "@/icon";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { uploadVideo } from "@/schema";
 import { useCategoriesQuery } from "@/redux/api/landing/videosApi";
 import ImgUpload from "@/components/reuseable/img-uplod";
 import VideoUpload from "@/components/reuseable/video-uplod";
-import FavIcon from "@/icon/admin/favIcon";
 import { useGetCitiesQuery, useGetStatesQuery } from "@/redux/api/commonApi";
 import { useStoreVideosMutation } from "@/redux/api/dashboard/videosApi";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
-import { toast } from "sonner";
 import { delay, modifyPayloadAll, reasonType } from "@/lib";
 import Modal from "@/components/reuseable/modal";
 import StripePaymentWrapper from "../stripe";
+import TextEditor from "../admin/reuseable/text-editor";
+import FavIcon from "@/icon/admin/favIcon";
+import { toast } from "sonner";
+import Icon from "@/icon";
 
 // local preview state
 const intImg = {
@@ -160,7 +160,7 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
                   autoPlay
                   loop
                   playsInline
-                    muted 
+                  muted
                   style={{
                     width: "100%",
                     height: "220px",
@@ -223,28 +223,6 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
               {!isPay && <span className="text-gray1 ml-3">/ Optional</span>}
             </div>
           )}
-
-          {/* State Dropdown */}
-          <InputSelectField
-            items={isSelect?.state}
-            label="State"
-            name="states"
-            placeholder="Select State"
-            matching={true}
-            className="py-4"
-            itemStyle="py-2"
-          />
-
-          {/* City Dropdown */}
-          <InputSelectField
-            items={isSelect?.city}
-            label="City"
-            name="city"
-            placeholder="Select City"
-            matching={true}
-            className="py-4"
-            itemStyle="py-2"
-          />
         </div>
 
         {/* Right Column */}
@@ -306,13 +284,26 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
             )}
           </div>
 
-          {/* Description */}
-          <FromTextAreas
-            label="Description"
-            name="description"
-            placeholder="Enter your Description"
-            className="min-h-40 rounded-3xl"
+          {/* State Dropdown */}
+          <InputSelectField
+            items={isSelect?.state}
+            label="State"
+            name="states"
+            placeholder="Select State"
             matching={true}
+            className="py-4"
+            itemStyle="py-2"
+          />
+
+          {/* City Dropdown */}
+          <InputSelectField
+            items={isSelect?.city}
+            label="City"
+            name="city"
+            placeholder="Select City"
+            matching={true}
+            className="py-4"
+            itemStyle="py-2"
           />
 
           {/* Visibility Dropdown */}
@@ -338,6 +329,22 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
           />
         </div>
 
+        <div className="col-span-1 lg:col-span-2">
+          {/* Description */}
+          <TextEditor
+            className="min-h-[180px]"
+            value={from.watch("description")}
+            onChange={(v) => {
+              from.setValue("description", v);
+            }}
+          />
+          {from?.formState?.errors?.description && (
+            <p className="text-reds justify-end mt-1 flex items-center gap-1 text-sm">
+              {from?.formState?.errors?.description?.message as string}
+              <CircleAlert size={14} />
+            </p>
+          )}
+        </div>
         <div className="col-span-1 lg:col-span-2">
           <FromTagInputs
             label="Tags"

@@ -47,6 +47,7 @@ const useScrollToTop = () => {
 };
 
 export default function VideoDetails({ slug }: any) {
+  const [isMore, setIsMore] = useState(false);
   const path = usePathname();
   const [storeLikeDisLike] = useStoreLikeDisLikeMutation();
   const { data, isLoading } = useVideosDetailsQuery(slug);
@@ -60,7 +61,6 @@ export default function VideoDetails({ slug }: any) {
     reason: "Sexual content",
     issue: "",
   });
-
 
   // scroll refresh
   // Call to scroll to the top
@@ -155,7 +155,7 @@ export default function VideoDetails({ slug }: any) {
                       <Link href={`/channel-details/${user_id}`}>
                         <Avatars
                           src={user?.avatar}
-                          fallback={user?.name}
+                          fallback={user?.channel_name}
                           alt={user?.name}
                         />
                       </Link>
@@ -248,14 +248,34 @@ export default function VideoDetails({ slug }: any) {
                   </div>
                 </div>
 
-                {/* Channel Info */}
+                {/* ============  Channel Info  =============*/}
                 <div className="border p-4 rounded-md my-5">
                   <p className="text-sm text-blacks font-semibold">
                     {publish_time_formated}
                   </p>
-                  <p className="mt-1 text-sm text-grays leading-relaxed">
-                    {description}
-                  </p>
+                  <div
+                    className={`mt-1 relative text-sm ${
+                      isMore ? "h-full" : "h-[50px] !overflow-hidden"
+                    }  text-grays leading-relaxed`}
+                  >
+                    <div className="ql-container ql-snow">
+                      <div
+                        className="ql-editor !overflow-hidden"
+                        dangerouslySetInnerHTML={{ __html: description }}
+                      ></div>
+                    </div>
+                    {isMore && (
+                      <h1 className="cursor-pointer" onClick={() => setIsMore(false)}>Show Less</h1>
+                    )}
+                    {!isMore && (
+                      <h1
+                        onClick={() => setIsMore(true)}
+                        className="absolute left-0 bottom-0 cursor-pointer" 
+                      >
+                        See More....
+                      </h1>
+                    )}
+                  </div>
                 </div>
               </>
             )}

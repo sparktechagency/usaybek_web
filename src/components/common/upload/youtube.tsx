@@ -9,7 +9,6 @@ import {
   InputSelectFieldIcon,
 } from "@/components/reuseable/from-select";
 import { FromTagInputs } from "@/components/reuseable/from-tag-inputs";
-import { FromTextAreas } from "@/components/reuseable/from-textareas";
 import Icon from "@/icon";
 import { useGetCitiesQuery, useGetStatesQuery } from "@/redux/api/commonApi";
 import { useStoreVideosMutation } from "@/redux/api/dashboard/videosApi";
@@ -23,6 +22,7 @@ import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import FavIcon from "@/icon/admin/favIcon";
 import StripePaymentWrapper from "../stripe";
 import Modal from "@/components/reuseable/modal";
+import TextEditor from "../admin/reuseable/text-editor";
 
 const intImg = {
   thumbnailPreview: "",
@@ -117,7 +117,7 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
         });
         setIsUpload(false);
       }
-      await delay()
+      await delay();
       from.reset();
       setIsImg(intImg);
     } catch (err: any) {
@@ -276,13 +276,21 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
           />
         </div>
         <div className="col-span-1 lg:col-span-2 space-y-5">
-          <FromTextAreas
-            label="Description"
-            name="description"
-            placeholder="Enter your Description"
-            className="min-h-40 rounded-3xl"
-            matching={true}
-          />
+          <div>
+            <TextEditor
+              className="min-h-[180px]"
+              value={from.watch("description") || ""}
+              onChange={(v) => {
+                from.setValue("description", v);
+              }}
+            />
+            {from?.formState?.errors?.description && (
+              <p className="text-reds justify-end mt-1 flex items-center gap-1 text-sm">
+                {from?.formState?.errors?.description?.message as string}
+                <CircleAlert size={14} />
+              </p>
+            )}
+          </div>
           <FromTagInputs
             label="Tags"
             name="tags"
