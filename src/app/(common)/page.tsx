@@ -22,7 +22,9 @@ import slugify from "slugify";
 
 export default function Home() {
   const { ref, inView } = useInView();
+  const { ref: ref1, inView: inView1 } = useInView();
   const [page, setPage] = useState(1);
+  const [homePage, setHomePage] = useState(1);
   const [similarVideos, setSimilarVideos] = useState<any[]>([]);
   const [isCategory, setIsCategory] = useState({ id: "all", name: "All" });
   const roleValue = getCookie(roleKey);
@@ -41,9 +43,27 @@ export default function Home() {
     setSimilarVideos([]);
   }, [isCategory]);
 
-  const { data: chVideos, isLoading: videoLoading } = useHomeVideosQuery({});
-  const query = { page };
+  // === chnanel video by category =======
+  const { data: chVideos, isLoading: videoLoading } = useHomeVideosQuery({
+    page: homePage,
+  });
 
+  const [totalVideos, setTotalVideos] = useState<any>([]);
+  const isNoVideo = chVideos?.data?.length === 0;
+  useEffect(() => {
+    if (inView1 && !videoLoading) {
+      setHomePage((prevPage) => prevPage + 1);
+    }
+  }, [inView1, videoLoading]);
+
+  useEffect(() => {
+    if (chVideos?.data) {
+      setTotalVideos((prev: any) => [...prev, ...chVideos?.data]);
+    }
+  }, [chVideos]);
+
+  // ========= category by related video ========
+  const query = { page };
   const {
     data: relatedVideos,
     isFetching,
@@ -53,7 +73,6 @@ export default function Home() {
     { skip: isCategory.id === "all" }
   );
 
-  // ✅ Append new videos only when new data comes
   useEffect(() => {
     if (relatedVideos?.data) {
       setSimilarVideos((prev: any) => {
@@ -68,7 +87,6 @@ export default function Home() {
 
   const isNoVideos = relatedVideos?.data?.length === 0;
 
-  // ✅ Only trigger when loader in view + has more
   useEffect(() => {
     if (inView && !isFetching && isCategory.id !== "all" && !relatedLoading) {
       setPage((p) => p + 1);
@@ -104,27 +122,37 @@ export default function Home() {
               </h1>
               <HomePromotion />
             </div>
-            {videoLoading ? (
-              <div className="home gap-6 mt-5">{Skeleton(8)}</div>
-            ) : (
-              chVideos?.data?.map((channel: any) =>
-                channel?.videos?.length ? (
-                  <div key={channel.id}>
-                    <SeeNav
-                      title={channel.name}
-                      href={`/videos/${channel.id}_${slugify(channel.name, {
-                        strict: true,
-                      })}`}
-                    />
-                    <div className="home gap-6">
-                      {channel.videos.map((video: any) => (
-                        <VideoCard key={video.id} item={video} />
-                      ))}
+            <div>
+              {videoLoading ? (
+                <div className="home gap-6 mt-5">{Skeleton(8)}</div>
+              ) : (
+                totalVideos?.map((channel: any) =>
+                  channel?.videos?.length ? (
+                    <div key={channel.id}>
+                      <SeeNav
+                        title={channel.name}
+                        href={`/videos/${channel.id}_${slugify(channel.name, {
+                          strict: true,
+                        })}`}
+                      />
+                      <div className="home gap-6">
+                        {channel.videos.map((video: any) => (
+                          <VideoCard key={video.id} item={video} />
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ) : null
-              )
-            )}
+                  ) : null
+                )
+              )}
+              {!isNoVideo && !videoLoading && (
+                <div
+                  ref={ref1}
+                  className="mx-auto opacity-0 flex justify-center mt-5"
+                >
+                  <Loader className="animate-spin text-blacks/20" />
+                </div>
+              )}
+            </div>
           </>
         ) : (
           <div>
