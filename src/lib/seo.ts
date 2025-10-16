@@ -16,19 +16,14 @@ export function Seo({
   image,
 }: SeoProps): Metadata {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL as string
-  const fullUrl = new URL(url, baseUrl).toString();
-  const fullImageUrl = new URL(image, baseUrl).toString();
+  const fullUrl = new URL(url, baseUrl)?.toString();
+  const fullImageUrl = new URL(image, baseUrl)?.toString();
 
   return {
     title,
     description,
     keywords,
     metadataBase: new URL(baseUrl),
-    robots: {
-      index: false,
-      follow: false,
-      nocache: true,
-    },
     openGraph: {
       title,
       description,

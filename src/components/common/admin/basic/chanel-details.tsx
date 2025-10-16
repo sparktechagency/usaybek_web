@@ -33,6 +33,7 @@ export default function ChannelBox({ totalVideos }: any) {
   const [takeInfo, setTakeInfo] = useState<any>(initTakeInfo);
   const [isShow, setIsShow] = useState<boolean>(false);
   const [isTake, setIsTake] = useState<boolean>(false);
+  const [isMore,setIsMore]=useState<boolean>(false)
   const [isVideo, setIsVideo] = useState<any>();
   const [reportAction, { isLoading }] = useReportActionMutation();
 
@@ -125,14 +126,39 @@ export default function ChannelBox({ totalVideos }: any) {
             <h1 className="text-lg lg:text-xl font-semibold text-blacks">
               {isVideo?.title}
             </h1>
-            <div className="border p-3 rounded-md my-5 shadow-xs">
-              <p className="text-sm text-blacks font-semibold">
-                {isVideo?.created_at_format}
-              </p>
-              <p className="mt-1  text-sm text-grays leading-relaxed">
-                {isVideo?.description}
-              </p>
-            </div>
+              <div className="border p-2 rounded-md my-5">
+                  <p className="text-sm text-blacks font-semibold">
+                   {isVideo?.created_at_format}
+                  </p>
+                  <div
+                    className={`mt-1 relative text-sm ${
+                      isMore ? "h-full" : "h-[50px] !overflow-hidden"
+                    }  text-grays leading-relaxed`}
+                  >
+                    <div className="ql-container ql-snow">
+                      <div
+                        className="ql-editor !overflow-hidden"
+                        dangerouslySetInnerHTML={{ __html: isVideo?.description }}
+                      ></div>
+                    </div>
+                    {isMore && (
+                      <h1
+                        className="cursor-pointer"
+                        onClick={() => setIsMore(false)}
+                      >
+                        Show Less
+                      </h1>
+                    )}
+                    {!isMore && (
+                      <h1
+                        onClick={() => setIsMore(true)}
+                        className="absolute left-0 bottom-0 cursor-pointer"
+                      >
+                        See More....
+                      </h1>
+                    )}
+                  </div>
+                </div>
             {/* CommentChanel ======== */}
             <div className="border rounded-md p-3">
               {!!isVideo?.id && <CommentChanel id={isVideo?.id} />}

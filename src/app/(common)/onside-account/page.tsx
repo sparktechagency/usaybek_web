@@ -6,20 +6,20 @@ import OnSideBox from "@/components/common/onslide";
 import OnsidePricingCard from "@/components/common/onslide/pricing-card";
 import { Seo } from "@/lib";
 
-
 export const metadata = Seo({
-  title: "Get Discovered Locally: Sign Up Your Business on MyTSV.com",
+  title: "OnSide Account - Unlock New Opportunities",
   description:
-    'Our representatives are visiting local businesses like yours to offer an exclusive opportunity to join "MyTSV.com"—the video-first platform connecting local services with real local customers.',
+    "Take your business to the next level with MyTSV.com. Our team is visiting local businesses to offer an exclusive opportunity to join a video-first platform that connects your services with real, engaged customers in your area.",
   keywords: [
-    "Onside",
-    "Onsite Account",
-    "Business Registration",
-    "MyTSV",
-    "Local Business",
-    "Video Platform",
+    "mytsv account",
+    "MyTSV sign up",
+    "onside account",
+    "MyTSV account setup",
+    "mytsc sign-up",
+    "youtube",
+    "videos",
   ],
-  url: `/onside-account`,
+  url: "/onside-account",
   image: "/images/onsideImg.jpg",
 });
 
@@ -97,7 +97,7 @@ export default async function OnSidePage() {
           </ul>
         </div>
         {/* Pricing Card Section */}
-        <OnsidePricingCard/>
+        <OnsidePricingCard />
       </div>
 
       {/* Ready to Get Started? */}
