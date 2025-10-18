@@ -32,7 +32,11 @@ function GlobalSearchChild() {
 
   useEffect(() => {
     if (videos?.data) {
-      setTotalVideos((prev: any) => [...prev, ...videos?.data]);
+      setTotalVideos((prev: any) => {
+        const existingIds = new Set(prev.map((v: any) => v.id));
+        const newOnes = videos?.data.filter((v: any) => !existingIds.has(v.id));
+        return [...prev, ...newOnes];
+      });
     }
   }, [videos]);
 
@@ -48,8 +52,8 @@ function GlobalSearchChild() {
           <SkeletonCount count={8}>
             <VideoCardSkeleton />
           </SkeletonCount>
-        ) : videos?.data?.length > 0 ? (
-          videos?.data?.map((video: any) => (
+        ) : totalVideos?.length > 0 ? (
+          totalVideos?.map((video: any) => (
             <VideoCard key={video.id} item={video} />
           ))
         ) : (
@@ -60,7 +64,7 @@ function GlobalSearchChild() {
         )}
       </div>
       {hasMore && !isLoading && (
-        <div ref={ref} className="mx-auto opacity-0 flex justify-center mt-5">
+        <div ref={ref} className="mx-auto  flex justify-center mt-5">
           <Loader className="animate-spin text-blacks/20" />
         </div>
       )}

@@ -15,6 +15,11 @@
       to: "/admin/channels",
     },
     {
+      label: "Videos",
+      icon:"video",
+      to: "/admin/videos",
+    },
+    {
       label: "Sales representatives",
       icon: "sales",
       to: "/admin/sales-representative",

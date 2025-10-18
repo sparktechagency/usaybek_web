@@ -177,10 +177,6 @@ export default function ChannelBox({ totalVideos }: any) {
         <h1 className="text-lg text-center font-semibold text-blacks">
           {takeInfo?.title}
         </h1>
-        {/* <h1 className="flex items-center justify-center my-2 text-reds">
-          <FavIcon name="question" className="mr-2" />
-          Spreading misinformation
-        </h1> */}
         <h1 className="flex items-center justify-center my-5 text-white alart py-3">
           <FavIcon name="alert" className="mr-2" />
           {takeInfo?.action_name}

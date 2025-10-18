@@ -6,6 +6,7 @@ import NavTitle from "@/components/common/admin/reuseable/nav-title";
 import { useGetOverviewQuery } from "@/redux/api/admin/overviewApi";
 import { Card } from "@/components/ui/card";
 import FavIcon from "@/icon/admin/favIcon";
+import Link from "next/link";
 
 export default function Home() {
   const { data } = useGetOverviewQuery({});
@@ -23,16 +24,19 @@ export default function Home() {
       title: "Total channels",
       value: total_channels,
       icon: <FavIcon name="chanel" />,
+      href: "/admin/channels",
     },
     {
       title: "Total videos",
       value: total_videos,
       icon: <FavIcon name="videos" />,
+      href: "/admin/videos",
     },
     {
       title: "Earnings",
       value: total_earnings,
       icon: <FavIcon name="earnings" />,
+      href: "/admin/transactions",
     },
   ];
 
@@ -44,18 +48,23 @@ export default function Home() {
       />
       <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
         {stats?.map((item, idx) => (
-          <Card
-            key={idx}
-            className="flex flex-row shadow-none bg-white gap-0 border-1  py-7 px-4 justify-between"
-          >
-            <div>
-              <h1 className="text-xl font-medium  text-blacks">{item.title}</h1>
-              <h1 className="text-3xl font-semibold mt-1">{item.value || 0}</h1>
-            </div>
-            <div className="bg-red-100 size-14 grid place-items-center rounded-full">
-              {item.icon}
-            </div>
-          </Card>
+          <Link key={idx} href={item.href || ""}>
+            <Card
+              className="flex flex-row shadow-none bg-white gap-0 border-1  py-7 px-4 justify-between"
+            >
+              <div>
+                <h1 className="text-xl font-medium  text-blacks">
+                  {item.title}
+                </h1>
+                <h1 className="text-3xl font-semibold mt-1">
+                  {item.value || 0}
+                </h1>
+              </div>
+              <div className="bg-red-100 size-14 grid place-items-center rounded-full">
+                {item.icon}
+              </div>
+            </Card>
+          </Link>
         ))}
       </div>
 
