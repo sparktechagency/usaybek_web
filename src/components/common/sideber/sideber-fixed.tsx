@@ -104,7 +104,8 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
             {isUser && (
               <div
                 className={`flex items-center gap-3 px-3 py-2 rounded-full cursor-pointer hover:bg-gray-100 transition-colors text-red-500 justify-start`}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setIsSide(false);
                   router.push("/");
                   logout();

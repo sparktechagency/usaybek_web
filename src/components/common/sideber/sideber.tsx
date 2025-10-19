@@ -17,10 +17,9 @@ export default function Sidebar() {
   const [isUpload, setIsUpload] = useState(false);
   const { isExpanded, toggleSidebar } = useSidebar();
   const pathname = usePathname();
-  const { auth, navItem} = useAuth();
+  const { auth, navItem } = useAuth();
   const isUser = !!auth?.email;
 
- 
   return (
     <>
       <div
@@ -76,7 +75,7 @@ const SidebarHeader = ({ isExpanded, toggleSidebar }: any) => (
 );
 
 // ============== UserProfile ================
-const UserProfile = ({ isUser,name, avatar, isExpanded }: any) => (
+const UserProfile = ({ isUser, name, avatar, isExpanded }: any) => (
   <div className="p-4">
     <div
       className={cn(
@@ -158,7 +157,10 @@ const NavigationLinks = ({
             ? "justify-start px-3 py-2"
             : "justify-center m-auto my-3 size-10"
         }`}
-        onClick={logout}
+        onClick={(e) => {
+          e.stopPropagation();
+          logout();
+        }}
       >
         <Icon name="ssignout" />
         {isExpanded && (
