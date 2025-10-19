@@ -164,16 +164,12 @@ export default function MyVideos() {
 
                           <div className="group w-full text-sm cursor-pointer text-grays relative">
                             <div className="group-hover:!hidden">
-                              <div className="h-[60px] mt-px overflow-hidden">
-                                <div className="ql-container ql-snow">
-                                  <div
-                                    className="ql-editor !p-0 !overflow-hidden"
-                                    dangerouslySetInnerHTML={{
-                                      __html: item.description,
-                                    }}
-                                  ></div>
-                                </div>
-                              </div>
+                              <div
+                                className="*:!font-normal !h-[60px] overflow-hidden"
+                                dangerouslySetInnerHTML={{
+                                  __html: item.description,
+                                }}
+                              ></div>
                             </div>
 
                             <div className="hidden group-hover:block">
