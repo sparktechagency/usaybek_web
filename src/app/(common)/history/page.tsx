@@ -73,7 +73,7 @@ export default function History() {
         {/* Left Column: Watch History List */}
         <div className="space-y-4 order-2 lg:order-1">
           {isLoading ? (
-              <SkeletonCount count={10}>
+            <SkeletonCount count={10}>
               <div className="flex flex-col md:flex-row  gap-4 p-4 border-b">
                 <Skeleton className="rounded-sm h-img-xs md:h-[125px] w-full md:w-[200px]" />
                 <div className="flex-1 grid gap-1 space-y-1">
@@ -132,9 +132,15 @@ export default function History() {
                     <span className="inline-block w-2 h-2 bg-[#D9D9D9] rounded-full"></span>
                     <span>{item?.video?.upload_time}</span>
                   </div>
-                  <p className="text-sm text-grays line-clamp-2">
+                  {/* <p className="text-sm text-grays line-clamp-2">
                     {item?.video?.description}
-                  </p>
+                  </p> */}
+                  <div
+                    className="*:!font-normal !h-[50px] overflow-hidden"
+                    dangerouslySetInnerHTML={{
+                      __html: item?.video?.description,
+                    }}
+                  ></div>
                 </div>
 
                 {/* Remove Button  hidden md:block */}

@@ -16,6 +16,7 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib";
 import Icon from "@/icon";
+import QlEditor from "@/components/reuseable/ql-editor";
 
 export default function LinkVideos() {
   const router = useRouter();
@@ -112,9 +113,12 @@ export default function LinkVideos() {
                     <span className="inline-block w-2 h-2 bg-[#D9D9D9] rounded-full"></span>
                     <span>{item?.video?.upload_time}</span>
                   </div>
-                  <p className="text-sm text-grays line-clamp-2">
-                    {item?.video?.description}
-                  </p>
+                  <div 
+                  className="*:!font-normal !h-[50px] overflow-hidden"
+                    dangerouslySetInnerHTML={{
+                      __html: item?.video?.description,
+                    }}
+                  ></div>
                 </div>
                 <RemoveVideoButton
                   videoId={item?.id}

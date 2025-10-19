@@ -58,7 +58,13 @@ export default function Home() {
 
   useEffect(() => {
     if (chVideos?.data) {
-      setTotalVideos((prev: any) => [...prev, ...chVideos?.data]);
+     setTotalVideos((prev: any) => {
+        const existingIds = new Set(prev.map((v: any) => v.id));
+        const newOnes = chVideos?.data?.filter(
+          (v: any) => !existingIds.has(v.id)
+        );
+        return [...prev, ...newOnes];
+      });
     }
   }, [chVideos]);
 
@@ -77,7 +83,7 @@ export default function Home() {
     if (relatedVideos?.data) {
       setSimilarVideos((prev: any) => {
         const existingIds = new Set(prev.map((v: any) => v.id));
-        const newOnes = relatedVideos.data.filter(
+        const newOnes = relatedVideos?.data?.filter(
           (v: any) => !existingIds.has(v.id)
         );
         return [...prev, ...newOnes];
