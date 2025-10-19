@@ -17,7 +17,6 @@ type SidebarFixedProps = {
 };
 
 export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
-  const router = useRouter();
   const [isUpload, setIsUpload] = useState(false);
   const logout = useHandleLogout();
   const pathname = usePathname();
@@ -107,7 +106,6 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsSide(false);
-                  router.push("/");
                   logout();
                 }}
               >
