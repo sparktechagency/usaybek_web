@@ -123,6 +123,7 @@ export default function SignIn() {
         src={assets.auth.loginImg}
         alt="title"
         fill
+        loading="eager"
         className="object-cover z-0 md:rounded-md"
       />
       <div className="relative z-10 max-w-7xl h-full mx-auto flex flex-col  justify-center">

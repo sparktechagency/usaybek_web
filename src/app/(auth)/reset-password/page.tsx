@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
-import {modifyPayload } from "@/lib";
+import { modifyPayload } from "@/lib";
 import { useResetPasswordMutation } from "@/redux/api/authApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -56,6 +56,7 @@ function ResetPasswordChild() {
         src={assets.auth.forgotImg}
         alt="title"
         fill
+        loading="eager"
         className="object-cover z-0 md:rounded-md"
       />
       <div className="relative z-10 max-w-7xl h-full mx-auto flex flex-col  justify-center">

@@ -61,6 +61,7 @@ function ForgotPasswordChild() {
         src={assets.auth.forgotImg}
         alt="title"
         fill
+        loading="eager"
         className="object-cover z-0 md:rounded-md"
       />
       <div className="relative z-10 max-w-7xl h-full mx-auto flex flex-col  justify-center">
@@ -72,7 +73,7 @@ function ForgotPasswordChild() {
                   <ArrowLeft size={20} />
                 </h1>
               </Link>
-               <FavIcon className="w-fit h-[50px]" name="logo" />
+              <FavIcon className="w-fit h-[50px]" name="logo" />
               <h1 className="opacity-0">0</h1>
             </div>
             <CardTitle className="text-2xl font-bold text-reds mt-3">

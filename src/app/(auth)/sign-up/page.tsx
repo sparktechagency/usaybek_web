@@ -14,14 +14,13 @@ import { SignUpSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues, useForm } from "react-hook-form";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
-import {modifyPayload } from "@/lib";
+import { modifyPayload } from "@/lib";
 import { useRouter } from "next/navigation";
 import FavIcon from "@/icon/admin/favIcon";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import Icon from "@/icon";
-
 
 export default function SignUp() {
   const router = useRouter();
@@ -64,6 +63,7 @@ export default function SignUp() {
         src={assets.auth.signImg}
         alt="title"
         fill
+        loading="eager"
         className="object-cover z-0 md:rounded-md"
       />
       <div className="relative z-10 max-w-7xl h-full mx-auto flex flex-col  justify-center">
