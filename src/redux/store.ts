@@ -10,6 +10,7 @@ export const makeStore = () =>
       auth:authReducer,
       [baseApi.reducerPath]: baseApi.reducer,
     },
+    devTools: false,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(baseApi.middleware),
   })
