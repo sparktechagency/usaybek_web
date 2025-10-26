@@ -48,6 +48,7 @@ export default function HomePromotion() {
     sliderRef.current?.slickGoTo(0);
   }, [isExpanded]);
 
+
   return (
     <div
       className={`overflow-hidden w-full transition-all duration-300 ${
@@ -60,14 +61,22 @@ export default function HomePromotion() {
             <VideoCardSkeleton />
           </SkeletonCount>
         </div>
-      ) : (
+      ) : promoVideos?.data?.length > 4 ? (
         <Slider ref={sliderRef} {...settings}>
           {promoVideos?.data?.map((video: any) => (
-            <div key={video.id} className="px-2"> 
+            <div key={video.id} className="px-2">
               <VideoCard item={video} />
             </div>
           ))}
         </Slider>
+      ) : (
+        <div className="home gap-6">
+          {promoVideos?.data?.map((video: any) => (
+            <div key={video.id} className="px-2">
+              <VideoCard item={video} />
+            </div>
+          ))}
+        </div>
       )}
 
       <style jsx global>{`

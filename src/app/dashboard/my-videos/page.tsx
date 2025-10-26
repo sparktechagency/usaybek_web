@@ -286,14 +286,16 @@ export default function MyVideos() {
           </TableBody>
         </Table>
       </div>
-      <ul className="flex flex-wrap justify-end my-7">
-        <li className="font-medium">
-          <Pagination
-            onPageChange={(v: any) => setIsPage(v)}
-            {...userVideos?.meta}
-          ></Pagination>
-        </li>
-      </ul>
+      {!isLoading && (
+        <ul className="flex flex-wrap justify-end my-7">
+          <li className="font-medium">
+            <Pagination
+              onPageChange={(v: any) => setIsPage(v)}
+              {...userVideos?.meta}
+            ></Pagination>
+          </li>
+        </ul>
+      )}
       {/* modal upload */}
       <Modal
         open={isUpload}
