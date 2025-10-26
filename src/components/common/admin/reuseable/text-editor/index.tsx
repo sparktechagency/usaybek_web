@@ -59,6 +59,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
     "link",
   ];
 
+
+
   return (
     <div className="w-full space-y-1">
       <div className="rounded-xl border border-gray-300 bg-gray-50/80 p-2">

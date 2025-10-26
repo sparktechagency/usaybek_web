@@ -20,6 +20,7 @@ export default function SectionNav({ title, src,className ,titleStyle,imgStyle,i
                     alt={title}
                     fill
                     className={cn("object-cover object-left-top",imgStyles)}
+                    quality={100}
                 />
             </div>
             <div className={cn("py-3 px-5 m-auto bg-white rounded-xl text-xl lg:text-2xl text-center font-medium w-full max-w-xl text-blacks",titleStyle)}>

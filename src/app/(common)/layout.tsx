@@ -4,7 +4,7 @@ import Navber from "@/components/shared/navber";
 import { childrenProps } from "@/types";
 import { useSidebar } from "@/context/useSideber";
 import Sidebar from "@/components/common/sideber/sideber";
-import { useRouter } from "next/navigation";
+
 
 export default function CommonLayout({ children }: childrenProps) {
   const { isExpanded } = useSidebar();

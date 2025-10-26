@@ -66,6 +66,7 @@
         { to: "/admin/setting/change-password", icon:"key", label: "Change Password" },
         { to: "/admin/setting/about-us", icon:"about", label: "About us" },
         { to: "/admin/setting/terms", icon:"terms", label: "Terms & Conditions" },
+        { to: "/admin/setting/privacy", icon:"privacy1", label: "Privacy Policy" },
         { to: "/admin/setting/fqa", icon:"fqa", label: "FAQ" },
         { to: "/admin/setting/contacts", icon:"contact", label: "Contacts" },
       ],

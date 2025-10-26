@@ -1,6 +1,5 @@
 import Icon from "@/icon";
 
-
 export const navItems = [
   {
     icon: <Icon name="supload" />,
@@ -34,6 +33,11 @@ export const navItems = [
     text: "Terms & Conditions",
     href: "/terms",
   },
+  {
+    icon: <Icon name="privacy" />,
+    text: "Privacy Policy",
+    href: "/privacy",
+  },
   { text: "separator" },
   { icon: <Icon name="slikeup" />, text: "Liked videos", href: "/like-videos" },
   { icon: <Icon name="shistory" />, text: "History", href: "/history" },
@@ -56,6 +60,11 @@ export const signOutItems = [
     icon: <Icon name="strams" />,
     text: "Terms & Conditions",
     href: "/terms",
+  },
+  {
+    icon: <Icon name="privacy" />,
+    text: "Privacy Policy",
+    href: "/privacy",
   },
   // { icon: <Icon name="sabout" />, text: "About us", href: "/about-us" },
   {

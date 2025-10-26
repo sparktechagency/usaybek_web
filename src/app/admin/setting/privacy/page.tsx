@@ -13,14 +13,14 @@ import { toast } from "sonner";
 
 export default function Terms() {
   const { data: terms, isLoading: termsLoading } = useGetTermsQuery({
-    type: "Terms",
+    type: "privacy",
   });
   const [storeTerms, { isLoading }] = useStoreTermsMutation();
 
   const [content, setContent] = useState<string>("");
 
   useEffect(() => {
-    if (terms?.data?.[0]?.type === "Terms & Conditions") {
+    if (terms?.data?.[0]?.type === "privacy") {
       setContent(terms.data[0].text);
     }
   }, [terms]);
@@ -28,7 +28,7 @@ export default function Terms() {
   const handleSave = async () => {
     try {
       const value = {
-        type: "Terms & Conditions",
+        type: "privacy",
         text: content,
       };
       const data = modifyPayload(value);
@@ -36,12 +36,12 @@ export default function Terms() {
 
       if (res.status) {
         toast.success("Update Successful", {
-          description: "Terms & Conditions have been updated",
+          description: "Privacy Policy have been updated",
         });
       }
     } catch (error) {
       toast.error("Update Failed", {
-        description: "Failed to update Terms & Conditions",
+        description: "Failed to update Privacy Policy",
       });
     }
   };
@@ -49,15 +49,15 @@ export default function Terms() {
   return (
     <div>
       <NavTitle
-        title="Terms & Conditions"
-        subTitle="You can manage the Terms & Conditions section of MyTSV from here."
+        title="Privacy Policy"
+        subTitle="You can manage the Privacy Policy section of MyTSV from here."
       />
       {termsLoading ? (
         <div className="mx-auto min-h-[280px] flex items-center justify-center">
           <Loader className="animate-spin text-reds" />
         </div>
       ) : (
-        <TextEditor key="terms" value={content} onChange={setContent} />
+        <TextEditor key="privacy" value={content} onChange={setContent} />
       )}
 
       <div className="mt-3 flex justify-end">
