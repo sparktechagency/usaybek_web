@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Separator } from "@/components/ui";
 import { cn } from "@/lib/utils";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname} from "next/navigation";
 import Img from "@/components/reuseable/img";
 import { useHandleLogout } from "@/lib/logout";
 import Modal from "@/components/reuseable/modal";
@@ -60,19 +60,21 @@ export default function SidebarFixed({ isSide, setIsSide }: SidebarFixedProps) {
             <h1 className="ml-4 text-2xl font-semibold text-blacks">Menu</h1>
           </div>
           {/* sign in /sign out */}
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-3 py-1 border mx-3  my-3  px-1  rounded-full transition-colors justify-start"
-          >
-            <Img
-              className="size-9 rounded-full"
-              src={auth?.avatar || "/blur.png"}
-              title="User avatar"
-            ></Img>
-            <span className="font-medium text-gray-800 whitespace-nowrap">
-              {auth?.name}
-            </span>
-          </Link>
+          {isUser && (
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-3 py-1 border mx-3  my-3  px-1  rounded-full transition-colors justify-start"
+            >
+              <Img
+                className="size-9 rounded-full"
+                src={auth?.avatar || "/blur.png"}
+                title="User avatar"
+              ></Img>
+              <span className="font-medium text-gray-800 whitespace-nowrap">
+                {auth?.name}
+              </span>
+            </Link>
+          )}
 
           <nav className="flex-1 py-2 mx-2 space-y-3">
             {navItem.map((item: any, index: any) =>

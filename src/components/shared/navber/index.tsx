@@ -37,7 +37,11 @@ export default function Navber() {
           variant="primary"
           className="h-12 has-[>svg]:px-1 md:!px-4 rounded-full"
         >
-          <FavIcon name="unUser" color="#ffffff" className="size-10 md:hidden" />
+          <FavIcon
+            name="unUser"
+            color="#ffffff"
+            className="size-10 md:hidden"
+          />
           <span className="hidden md:block">Sign in to your Account</span>
         </Button>
       </Link>
@@ -49,18 +53,17 @@ export default function Navber() {
       <div className="w-11/12 mx-auto">
         <ul className="relative  flex items-center  justify-between">
           <li className="flex space-x-5 items-center">
-            {auth?.email ? (
-              <span onClick={() => setIsSide(!isSide)}>
-                <FavIcon
-                  name="menu"
-                  className={`size-6 cursor-pointer ${
-                    isMenu ? "block" : "block md:hidden"
-                  }`}
-                />
-              </span>
-            ) : (
-              ""
-            )}
+            <span
+              className="block md:hidden"
+              onClick={() => setIsSide(!isSide)}
+            >
+              <FavIcon
+                name="menu"
+                className={`size-6 cursor-pointer ${
+                  isMenu ? "block" : "block md:hidden"
+                }`}
+              />
+            </span>
 
             <Link href={"/"}>
               <FavIcon className="w-fit h-[50px]" name="logo" />
@@ -69,9 +72,7 @@ export default function Navber() {
           <li>
             <NavberSearchBox />
           </li>
-          <li>
-           {renderItem()}
-          </li>
+          <li>{renderItem()}</li>
         </ul>
         {/* navber fixed */}
         <SidebarFixed isSide={isSide} setIsSide={setIsSide} />

@@ -15,10 +15,9 @@ import {
   useToggleReactionMutation,
   useToggleReplayReactionMutation,
 } from "@/redux/api/landing/commentApi";
-import {modifyPayload } from "@/lib";
+import { modifyPayload } from "@/lib";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import { useInView } from "react-intersection-observer";
-
 
 export default function CommentBox({ id, commentCount }: any) {
   const { ref, inView } = useInView();
@@ -172,8 +171,6 @@ export default function CommentBox({ id, commentCount }: any) {
   );
   // comment item box end =======
 
-
-
   return (
     <div className="border-gray-200 lg:block">
       <h2 className="text-lg font-semibold">{commentCount} Comments</h2>
@@ -221,11 +218,12 @@ export default function CommentBox({ id, commentCount }: any) {
 
         {/* small device start */}
         <div className="block lg:hidden space-y-6  rounded-md">
-          <ul className="border p-3 *:text-grays rounded-xl cursor-pointer  justify-between">
+          <ul className="border p-3 *:text-grays rounded-xl  justify-between">
             <li>
               <ul className="flex items-center justify-between">
                 <li>See all Comments</li>
                 <li
+                  className="cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsSmall(!isSmall);
