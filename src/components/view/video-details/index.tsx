@@ -249,7 +249,7 @@ export default function VideoDetails({ slug }: any) {
                 </div>
 
                 {/* ============  Channel Info  =============*/}
-                <div className="border p-4 rounded-md my-5">
+                <div className="border px-4 pt-4 pb-1 rounded-md my-5">
                   <p className="text-sm text-blacks font-semibold">
                     {publish_time_formated}
                   </p>
@@ -264,18 +264,18 @@ export default function VideoDetails({ slug }: any) {
                         dangerouslySetInnerHTML={{ __html: description }}
                       ></div>
                     </div>
-                    {isMore && (
-                      <h1 className="cursor-pointer" onClick={() => setIsMore(false)}>Show Less</h1>
+                  </div>
+                   {isMore && (
+                      <h1 className="cursor-pointer pt-1 font-medium text-sm" onClick={() => setIsMore(false)}>Show Less</h1>
                     )}
                     {!isMore && (
                       <h1
                         onClick={() => setIsMore(true)}
-                        className="absolute left-0 bottom-0 cursor-pointer" 
+                        className="cursor-pointer pt-1 font-medium text-sm"
                       >
                         See More....
                       </h1>
                     )}
-                  </div>
                 </div>
               </>
             )}

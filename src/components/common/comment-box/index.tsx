@@ -5,7 +5,7 @@ import { SmallCicle } from "@/components/reuseable/small-circle";
 import { Button, Input, Skeleton } from "@/components/ui";
 import FavIcon from "@/icon/admin/favIcon";
 import { cn, IsToken } from "@/lib/utils";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, MessageSquareDiff } from "lucide-react";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 import {
   useGetCommentQuery,
@@ -15,9 +15,10 @@ import {
   useToggleReactionMutation,
   useToggleReplayReactionMutation,
 } from "@/redux/api/landing/commentApi";
-import { modifyPayload } from "@/lib";
+import {modifyPayload } from "@/lib";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import { useInView } from "react-intersection-observer";
+
 
 export default function CommentBox({ id, commentCount }: any) {
   const { ref, inView } = useInView();
@@ -40,7 +41,6 @@ export default function CommentBox({ id, commentCount }: any) {
   const [openReplies, setOpenReplies] = useState<number | null>(null);
   const [openReplyBox, setOpenReplyBox] = useState<number | null>(null);
   const [totalComment, setTotalComment] = useState<any>([]);
-
   const [isSubmitting, setIsSubmitting] = useState(false); // New state to track submission status
 
   // Pagination
@@ -93,30 +93,48 @@ export default function CommentBox({ id, commentCount }: any) {
   }, [isModifyId]);
 
   // Handlers
-  const handleCommentSubmit = async (
-    e: React.KeyboardEvent<HTMLInputElement>
-  ) => {
-    e.stopPropagation(); // Prevent event bubbling
-    if (e.key !== "Enter") return; // Handle only Enter key
-    e.preventDefault();
+  // const handleCommentSubmit = async (
+  //   e: React.KeyboardEvent<HTMLInputElement>
+  // ) => {
+  //   e.stopPropagation(); // Prevent event bubbling
+  //   if (e.key !== "Enter") return; // Handle only Enter key
+  //   e.preventDefault();
 
-    // Prevent multiple submissions
-    if (isSubmitting) return;
+  //   // Prevent multiple submissions
+  //   if (isSubmitting) return;
+  //   setIsSubmitting(true);
+
+  //   const target = e.target as HTMLInputElement;
+  //   const value = { video_id: id, comment: target.value };
+  //   const data = modifyPayload(value);
+
+  //   // Store the comment
+  //   const res = await storeComments(data).unwrap();
+
+  //   // Reset the input value if submission is successful
+  //   if (res?.status) target.value = "";
+
+  //   setIsSubmitting(false); // Re-enable submission
+  // };
+
+  // == handleCommentSubmit ==
+  const [commentText, setCommentText] = useState("");
+  const submitComment = async () => {
+    const value = commentText.trim();
+    if (!value || isSubmitting) return;
+
     setIsSubmitting(true);
-
-    const target = e.target as HTMLInputElement;
-    const value = { video_id: id, comment: target.value };
-    const data = modifyPayload(value);
-
-    // Store the comment
-    const res = await storeComments(data).unwrap();
-
-    // Reset the input value if submission is successful
-    if (res?.status) target.value = "";
-
-    setIsSubmitting(false); // Re-enable submission
+    try {
+      const payload = modifyPayload({ video_id: id, comment: value });
+      const res = await storeComments(payload).unwrap();
+      if (res?.status) setCommentText("");
+    } catch (err) {
+      // handle/log error if needed
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-
+  //  == toggle Replies==
   const toggleReplies = useCallback((id: number) => {
     setOpenReplies((prev) => (prev === id ? null : id));
   }, []);
@@ -154,8 +172,10 @@ export default function CommentBox({ id, commentCount }: any) {
   );
   // comment item box end =======
 
+
+
   return (
-    <div className="border-gray-200 hidden lg:block">
+    <div className="border-gray-200 lg:block">
       <h2 className="text-lg font-semibold">{commentCount} Comments</h2>
       {commentLoading ? (
         <CommentBoxSkeleton />
@@ -167,10 +187,26 @@ export default function CommentBox({ id, commentCount }: any) {
             alt={profileData?.data?.name}
           />
           <Input
-            onKeyDown={handleCommentSubmit}
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                submitComment();
+              }
+            }}
             placeholder={`Comment as ${profileData?.data?.name}`}
             className="flex-1 h-11 rounded-full bg-white"
           />
+          <div className="block lg:hidden">
+            <button
+              onClick={submitComment}
+              disabled={isSubmitting || commentText?.trim()?.length === 0}
+              className="size-11 border  grid place-items-center cursor-pointer rounded-full"
+            >
+              <MessageSquareDiff size={20} className="text-[#888888] text-xs" />
+            </button>
+          </div>
         </div>
       ) : (
         ""
@@ -185,14 +221,18 @@ export default function CommentBox({ id, commentCount }: any) {
 
         {/* small device start */}
         <div className="block lg:hidden space-y-6  rounded-md">
-          <ul
-            onClick={() => setIsSmall(!isSmall)}
-            className="border p-3 *:text-grays rounded-xl cursor-pointer  justify-between"
-          >
+          <ul className="border p-3 *:text-grays rounded-xl cursor-pointer  justify-between">
             <li>
               <ul className="flex items-center justify-between">
                 <li>See all Comments</li>
-                <li>{isSmall ? <ChevronUp /> : <ChevronDown />}</li>
+                <li
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsSmall(!isSmall);
+                  }}
+                >
+                  {isSmall ? <ChevronUp /> : <ChevronDown />}
+                </li>
               </ul>
             </li>
             {isSmall && (

@@ -137,7 +137,7 @@ export default function MyVideos() {
               userVideos?.data?.map((item: any) => (
                 <TableRow key={item.id}>
                   <TableCell>
-                    <div className="flex gap-5 items-center mr-5 w-[700px] overflow-hidden">
+                    <div className="flex gap-5 items-center mr-5 w-[500px] md:w-[650px] overflow-hidden">
                       {isCheck && (
                         <div className="flex items-center space-x-2">
                           <Checkbox
@@ -162,8 +162,8 @@ export default function MyVideos() {
                             {item.title}
                           </div>
 
-                          <div className="group w-full text-sm cursor-pointer text-grays relative">
-                            <div className="group-hover:!hidden">
+                          <div className="md:group w-full text-sm cursor-pointer text-grays relative">
+                            <div className="hidden md:block md:group-hover:!hidden">
                               <div
                                 className="*:!font-normal !h-[60px] overflow-hidden"
                                 dangerouslySetInnerHTML={{
@@ -172,7 +172,7 @@ export default function MyVideos() {
                               ></div>
                             </div>
 
-                            <div className="hidden group-hover:block">
+                            <div className="md:hidden  md:group-hover:block">
                               <ul className="flex items-center space-x-2 mt-3">
                                 <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
                                   <Link
@@ -243,14 +243,15 @@ export default function MyVideos() {
                   </TableCell>
 
                   <TableCell>
-                    <div className="inline-flex items-center space-x-1 border rounded-full px-2 py-1 text-blacks">
+                    <div className="inline-flex w-max items-center space-x-1 border rounded-full px-2 py-1 text-blacks">
                       <Icon name="internetBlack" width={17} height={17} />
                       <span>{item.visibility}</span>
                     </div>
                   </TableCell>
 
                   <TableCell>
-                    <ul className="[&>li]:text-grays space-y-1">
+                    <div className="w-[120px] md:w-fit">
+                        <ul className="[&>li]:text-grays space-y-1">
                       <li className="flex items-center space-x-2">
                         <Icon name="calenderGarys" width={17} height={17} />
                         <span>{item?.created_date}</span>
@@ -260,6 +261,7 @@ export default function MyVideos() {
                         <span>{item?.created_time}</span>
                       </li>
                     </ul>
+                    </div>
                   </TableCell>
 
                   <TableCell>
