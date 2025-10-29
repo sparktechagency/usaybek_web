@@ -26,7 +26,7 @@ export const commentApi = baseApi.injectEndpoints({
         ContentType: "multipart/form-data",
         data,
       }),
-      invalidatesTags: [tagTypes.allcomment],
+      invalidatesTags: [tagTypes.allcomment,tagTypes.sinlgeVideo],
     }),
     commentDelete: build.mutation({
       query: (id) => ({
@@ -62,7 +62,7 @@ export const commentApi = baseApi.injectEndpoints({
         ContentType: "multipart/form-data",
         data,
       }),
-      invalidatesTags: [tagTypes.allReplay],
+      invalidatesTags: [tagTypes.allReplay,tagTypes.sinlgeVideo],
     }),
     toggleReplayReaction: build.mutation({
       query: (data) => ({
