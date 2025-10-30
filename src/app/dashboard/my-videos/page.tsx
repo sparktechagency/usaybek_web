@@ -158,12 +158,12 @@ export default function MyVideos() {
                           />
                         </div>
                         <div className="flex-1">
-                          <div className="font-semibold block break-all whitespace-normal text-blacks text-lg !truncate">
+                          <div className="font-semibold block break-all whitespace-normal text-blacks text-lg !line-clamp-2 lg:truncate">
                             {item.title}
                           </div>
 
-                          <div className="md:group w-full text-sm cursor-pointer text-grays relative">
-                            <div className="hidden md:block md:group-hover:!hidden">
+                          <div className="lg:group w-full text-sm cursor-pointer text-grays relative">
+                            <div className="hidden lg:block lg:group-hover:!hidden">
                               <div
                                 className="*:!font-normal !h-[60px] overflow-hidden"
                                 dangerouslySetInnerHTML={{
@@ -172,7 +172,7 @@ export default function MyVideos() {
                               ></div>
                             </div>
 
-                            <div className="md:hidden  md:group-hover:block">
+                            <div className="lg:hidden  lg:group-hover:block">
                               <ul className="flex items-center space-x-2 mt-3">
                                 <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
                                   <Link
