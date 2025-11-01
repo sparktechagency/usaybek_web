@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui";
 import Icon from "@/icon";
+import { IsToken } from "@/lib";
 import { useChannelLandDetailsQuery } from "@/redux/api/landing/videosApi";
 import { Loader } from "lucide-react";
 import Image from "next/image";
@@ -23,6 +24,7 @@ import { useInView } from "react-intersection-observer";
 
 export default function ProfileBox() {
   const { id } = useParams();
+  const IsAccess = IsToken() ? true : false;
   const { ref, inView } = useInView();
   const [page, setPage] = useState(1);
   const { data: channelData, isLoading } = useChannelLandDetailsQuery({
@@ -59,7 +61,13 @@ export default function ProfileBox() {
 
   useEffect(() => {
     if (videoAll?.data) {
-      setTotalVideos((prev: any) => [...prev, ...videoAll?.data]);
+      setTotalVideos((prev: any) => {
+        const existingIds = new Set(prev.map((v: any) => v.id));
+        const newOnes = videoAll?.data?.filter(
+          (v: any) => !existingIds.has(v.id)
+        );
+        return [...prev, ...newOnes];
+      });
     }
   }, [videoAll]);
 
@@ -85,31 +93,43 @@ export default function ProfileBox() {
                   {channel?.channel_name?.slice(0, 2)}
                 </AvatarFallback>
               </Avatar>
-              <h2 className="text-xl font-semibold text-blacks relative">
+              <h2
+                className={`text-xl font-semibold text-blacks relative ${
+                  channel?.channel_name?.length > 5 && "-left-5"
+                }`}
+              >
                 {channel?.channel_name}
               </h2>
             </div>
           </div>
-          <div className="flex justify-between gap-4 py-3">
-            <h2 className="opacity-0">left</h2>
-            <Card className="w-fit">
-              <ul className="space-y-1">
-                <li className="flex gap-x-2 items-center text-blacks">
-                  <Icon name="locationGary" />
-                  {channel?.locations?.find(
-                    (item: any) => item?.type === "head-office"
-                  )?.location || "No Location"}
-                </li>
-                <li className="flex gap-x-2 items-center text-blacks">
-                  <Icon name="phoneGray" />
-                  {channel?.contact || "No Contact"}
-                </li>
-                <li className="flex gap-x-2 items-center text-blacks">
-                  <Icon name="mailGray" />
-                  {channel?.email || "No Email"}
-                </li>
-              </ul>
-            </Card>
+          <div
+            className={`flex justify-between gap-4 py-3 mt-18 ${
+              IsAccess ? "md:mt-0" : "md:mt-16"
+            }`}
+          >
+            {IsAccess && (
+              <>
+                <h2 className="hidden md:block opacity-0">left</h2>
+                <Card className="w-full md:w-fit">
+                  <ul className="space-y-1">
+                    <li className="flex gap-x-2 items-center text-blacks">
+                      <Icon name="locationGary" />
+                      {channel?.locations?.find(
+                        (item: any) => item?.type === "head-office"
+                      )?.location || "No Location"}
+                    </li>
+                    <li className="flex gap-x-2 items-center text-blacks">
+                      <Icon name="phoneGray" />
+                      {channel?.contact || "No Contact"}
+                    </li>
+                    <li className="flex gap-x-2 items-center text-blacks">
+                      <Icon name="mailGray" />
+                      {channel?.email || "No Email"}
+                    </li>
+                  </ul>
+                </Card>
+              </>
+            )}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {ViewItem.map((item, index) => (

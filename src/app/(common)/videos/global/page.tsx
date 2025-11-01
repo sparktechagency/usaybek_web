@@ -32,6 +32,7 @@ function GlobalSearchChild() {
 
   useEffect(() => {
     if (videos?.data) {
+      setTotalVideos([])
       setTotalVideos((prev: any) => {
         const existingIds = new Set(prev.map((v: any) => v.id));
         const newOnes = videos?.data.filter((v: any) => !existingIds.has(v.id));

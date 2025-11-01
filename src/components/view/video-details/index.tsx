@@ -50,7 +50,7 @@ const useScrollToTop = () => {
 export default function VideoDetails({ slug }: any) {
   const path = usePathname();
   const [isMore, setIsMore] = useState(false);
-  const [isSign,setIsSign]=useState(false)
+  const [isSign, setIsSign] = useState(false);
   const [storeLikeDisLike] = useStoreLikeDisLikeMutation();
   const { data, isLoading } = useVideosDetailsQuery(slug);
   const [storeReport, { isLoading: ReportLoading }] = useStoreReportMutation();
@@ -182,11 +182,11 @@ export default function VideoDetails({ slug }: any) {
                       </div>
                       <div
                         onClick={(e) => {
-                          e.stopPropagation()
+                          e.stopPropagation();
                           if (IsAccess) {
                             handleLikeDislike(id, "like");
-                          }else {
-                            setIsSign(!isSign)
+                          } else {
+                            setIsSign(!isSign);
                           }
                         }}
                         className={`flex border px-3 h-8 space-x-1 items-center rounded-full cursor-pointer`}
@@ -202,11 +202,11 @@ export default function VideoDetails({ slug }: any) {
                       </div>
                       <div
                         onClick={(e) => {
-                          e.stopPropagation()
+                          e.stopPropagation();
                           if (IsAccess) {
                             handleLikeDislike(id, "dislike");
-                          }else {
-                            setIsSign(!isSign)
+                          } else {
+                            setIsSign(!isSign);
                           }
                         }}
                         className={`flex border  px-3 h-8 items-center space-x-1 rounded-full cursor-pointer`}
@@ -426,14 +426,27 @@ export default function VideoDetails({ slug }: any) {
       </Modal>
       {/* ========== sign In user modal */}
       <Modal2 open={isSign} title="Sign In" setIsOpen={setIsSign}>
-        <div className="mb-10">
-          <h1 className="text-2xl font-bold text-blacks text-center">Permition Is  Required</h1>
-          <p className="text-center text-grays">Please sign in to continue</p>
+        <div className="my-4">
+          <h1 className="text-2xl mb-3 font-bold text-blacks text-center">
+            Permission Unavailable
+          </h1>
+          <p className="text-center text-grays">
+            Please sign in to your account to access this feature. Logging in
+            ensures the best experience and unlocks all available features
+          </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <Button onClick={()=>setIsSign(false)} variant="secondary" className="rounded-full border">Close</Button>
-          <Link href="/sign-in">  
-            <Button variant="primary" className="rounded-full w-full">Sign In</Button>
+          <Button
+            onClick={() => setIsSign(false)}
+            variant="secondary"
+            className="rounded-full border"
+          >
+            Close
+          </Button>
+          <Link href="/sign-in">
+            <Button variant="primary" className="rounded-full w-full">
+              Sign In
+            </Button>
           </Link>
         </div>
       </Modal2>

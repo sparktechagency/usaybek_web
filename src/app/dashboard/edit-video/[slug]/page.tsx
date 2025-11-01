@@ -42,7 +42,7 @@ export default function EditVideo() {
   const { data: categories } = useCategoriesQuery({
     per_page: 1000,
   });
-  const { data } = useVideosDetailsQuery(slug);
+  const { data,refetch } = useVideosDetailsQuery(slug);
   const [videoEdit, { isLoading: editLoading }] = useVideoEditMutation();
 
   const [isSelect, setIsSelect] = useState({
@@ -114,6 +114,7 @@ export default function EditVideo() {
   }, [citys, stateId]);
 
   //  ============== from set value===============
+
   useEffect(() => {
     if (data) {
       from.reset({
@@ -125,8 +126,9 @@ export default function EditVideo() {
         visibility,
         tags: tags,
       });
+      setIsLink(link);
     }
-    setIsLink(link);
+    
   }, [
     data,
     from,
@@ -172,9 +174,11 @@ export default function EditVideo() {
   const handleUndoChanges = () => {
     if (data) {
       from.reset();
+      refetch()
     }
     setIsImg(intImg);
-    setIsLink("");
+    setIsLink(link);
+
   };
 
   return (
@@ -194,22 +198,24 @@ export default function EditVideo() {
             <Button
               variant={"primary"}
               size={"lg"}
-              className="rounded-full bg-transparent text-blacks border shadow-none text-base"
+              className="rounded-full bg-transparent text-blacks border p-3 md:px-6 shadow-none text-base"
               // ✅ **UPDATED: Use the new handler function**
               onClick={handleUndoChanges}
               type="button" // Add type="button" to prevent form submission
             >
-              <Icon name="undoBlack" width={16} /> Undo changes
+              <Icon name="undoBlack" width={16} /> 
+              <span className="hidden md:block">Undo changes</span>
+              
             </Button>
             <Button
               variant={"primary"}
               size={"lg"}
-              className="rounded-full text-base"
+              className="rounded-full text-base p-3 md:px-6"
               type="submit"
               disabled={editLoading}
             >
               <Icon name="saveWhite" width={16} />
-              Save changes
+              <span className="hidden md:block"> Save changes</span>
             </Button>
           </li>
         </ul>

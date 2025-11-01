@@ -141,19 +141,40 @@ export default function Settings() {
               </ImgUpload>
             </div>
           </div>
-          <ImgUpload
-            onFileSelect={(file: File) => {
-              setIsImg({
-                ...isImg,
-                cover_image: file,
-                coverPreview: URL.createObjectURL(file),
-              });
-            }}
-          >
-            <div className="size-8 absolute cursor-pointer grid place-items-center rounded-md  top-3 right-3 backdrop-blur-3xl bg-black/50">
-              <FavIcon className="size-4" name="editprofile" />
+
+          <div className="absolute  top-3 right-3">
+            <div className="flex space-x-3">
+              {isImg?.coverPreview && (
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsImg({
+                      ...isImg,
+                      cover_image: null,
+                      coverPreview: "",
+                    });
+                  }}
+                  className="size-8  cursor-pointer grid place-items-center rounded-md  backdrop-blur-3xl bg-black/50"
+                >
+                  <FavIcon className="size-4" name="delete" />
+                </div>
+              )}
+
+              <ImgUpload
+                onFileSelect={(file: File) => {
+                  setIsImg({
+                    ...isImg,
+                    cover_image: file,
+                    coverPreview: URL.createObjectURL(file),
+                  });
+                }}
+              >
+                <div className="size-8  cursor-pointer grid place-items-center rounded-md  backdrop-blur-3xl bg-black/50">
+                  <FavIcon className="size-4" name="editprofile" />
+                </div>
+              </ImgUpload>
             </div>
-          </ImgUpload>
+          </div>
         </div>
       </div>
       <Form className="mt-20" from={from} onSubmit={handleSubmit}>
