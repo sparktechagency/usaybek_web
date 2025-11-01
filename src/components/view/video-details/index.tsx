@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { usePathname } from "next/navigation";
 import RelatedVideosRight from "@/components/common/releted-videos";
 import { useStoreHistoryMutation } from "@/redux/api/landing/historyApi";
+import Modal2 from "@/components/reuseable/modal2";
 
 const options = [
   { value: "Sexual content", label: "Sexual content" },
@@ -47,8 +48,9 @@ const useScrollToTop = () => {
 };
 
 export default function VideoDetails({ slug }: any) {
-  const [isMore, setIsMore] = useState(false);
   const path = usePathname();
+  const [isMore, setIsMore] = useState(false);
+  const [isSign,setIsSign]=useState(false)
   const [storeLikeDisLike] = useStoreLikeDisLikeMutation();
   const { data, isLoading } = useVideosDetailsQuery(slug);
   const [storeReport, { isLoading: ReportLoading }] = useStoreReportMutation();
@@ -179,14 +181,15 @@ export default function VideoDetails({ slug }: any) {
                         </span>
                       </div>
                       <div
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation()
                           if (IsAccess) {
                             handleLikeDislike(id, "like");
+                          }else {
+                            setIsSign(!isSign)
                           }
                         }}
-                        className={`flex border px-3 h-8 space-x-1 items-center rounded-full ${
-                          IsAccess && "cursor-pointer"
-                        }`}
+                        className={`flex border px-3 h-8 space-x-1 items-center rounded-full cursor-pointer`}
                       >
                         <FavIcon
                           name="likeUp"
@@ -198,14 +201,15 @@ export default function VideoDetails({ slug }: any) {
                         </span>
                       </div>
                       <div
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation()
                           if (IsAccess) {
                             handleLikeDislike(id, "dislike");
+                          }else {
+                            setIsSign(!isSign)
                           }
                         }}
-                        className={`flex border  px-3 h-8 items-center space-x-1 rounded-full ${
-                          IsAccess && "cursor-pointer"
-                        }`}
+                        className={`flex border  px-3 h-8 items-center space-x-1 rounded-full cursor-pointer`}
                       >
                         <FavIcon
                           name="likeDown"
@@ -265,17 +269,22 @@ export default function VideoDetails({ slug }: any) {
                       ></div>
                     </div>
                   </div>
-                   {isMore && (
-                      <h1 className="cursor-pointer pt-1 font-medium text-sm" onClick={() => setIsMore(false)}>Show Less</h1>
-                    )}
-                    {!isMore && (
-                      <h1
-                        onClick={() => setIsMore(true)}
-                        className="cursor-pointer pt-1 font-medium text-sm"
-                      >
-                        See More....
-                      </h1>
-                    )}
+                  {isMore && (
+                    <h1
+                      className="cursor-pointer pt-1 font-medium text-sm"
+                      onClick={() => setIsMore(false)}
+                    >
+                      Show Less
+                    </h1>
+                  )}
+                  {!isMore && (
+                    <h1
+                      onClick={() => setIsMore(true)}
+                      className="cursor-pointer pt-1 font-medium text-sm"
+                    >
+                      See More....
+                    </h1>
+                  )}
                 </div>
               </>
             )}
@@ -297,7 +306,8 @@ export default function VideoDetails({ slug }: any) {
         </div>
       </div>
 
-      {/* Report Modal */}
+      {/* =================================== All Modals================================== */}
+      {/* ============ Report Modal =============*/}
       <Modal open={isReprot} title="Report this video" setIsOpen={setIsReport}>
         <div>
           <RadioGroup
@@ -345,7 +355,7 @@ export default function VideoDetails({ slug }: any) {
         </div>
       </Modal>
 
-      {/* Report Text Modal */}
+      {/* ============ Report Text Modal =============*/}
       <Modal open={isText} title={reportText?.reason} setIsOpen={setIsText}>
         <div>
           <Textarea
@@ -378,7 +388,7 @@ export default function VideoDetails({ slug }: any) {
         </div>
       </Modal>
 
-      {/* Share Modal */}
+      {/* ============ Share Modal =============*/}
       <Modal open={isShare} title="Share" setIsOpen={setIsShare}>
         <div>
           <ul>
@@ -414,6 +424,19 @@ export default function VideoDetails({ slug }: any) {
           </div>
         </div>
       </Modal>
+      {/* ========== sign In user modal */}
+      <Modal2 open={isSign} title="Sign In" setIsOpen={setIsSign}>
+        <div className="mb-10">
+          <h1 className="text-2xl font-bold text-blacks text-center">Permition Is  Required</h1>
+          <p className="text-center text-grays">Please sign in to continue</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <Button onClick={()=>setIsSign(false)} variant="secondary" className="rounded-full border">Close</Button>
+          <Link href="/sign-in">  
+            <Button variant="primary" className="rounded-full w-full">Sign In</Button>
+          </Link>
+        </div>
+      </Modal2>
     </div>
   );
 }
