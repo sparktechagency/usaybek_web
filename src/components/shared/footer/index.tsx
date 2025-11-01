@@ -87,12 +87,12 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-blacks">Follow Us</h3>
             <div className="flex items-center space-x-4">
-              <Link href="#" aria-label="Facebook">
+              <a href="https://www.facebook.com/share/16ewFZJ5s6" target="_blank">
                 <Icon name="ffacebook" width={23} height={23} />
-              </Link>
-              <Link href="#" aria-label="YouTube">
+              </a>
+              <a href="https://www.youtube.com/@meet-your-town-specialists" target="_blank">
                 <Icon name="fyoutube" width={24} height={24} />
-              </Link>
+              </a>
             </div>
             <AppStore />
           </div>
