@@ -3,7 +3,6 @@ import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useInView } from "react-intersection-observer";
 import { Loader } from "lucide-react";
-
 import { VideoCard } from "@/components/reuseable/video-card";
 import { VideoCardSkeleton } from "@/components/reuseable";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
@@ -57,9 +56,9 @@ function GlobalSearchChild() {
 
   return (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center pb-10">
         <Back />
-        <SubTilte title="All Videos" />
+        <SubTilte className="pb-0" title="All Videos" />
         <div className="opacity-0">0</div>
       </div>
 
