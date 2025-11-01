@@ -127,6 +127,15 @@ export default function NavberSearchBox({ className }: any) {
     }
   };
 
+
+  const handleCityClear=()=>{
+    setIsValue(intValue); // reset service, state, city
+    setIsSelect((prev) => ({
+      ...prev,
+      city: [], // also clear cities when state is cleared
+    }));
+  }
+
   return (
     <div>
       <div className="hidden md:block">
@@ -248,13 +257,7 @@ export default function NavberSearchBox({ className }: any) {
                 size="lg"
                 variant="primary"
                 className="rounded-full bg-[#F0F0F0] text-blacks px-10"
-                onClick={() => {
-                  setIsValue(intValue); // reset service, state, city
-                  setIsSelect((prev) => ({
-                    ...prev,
-                    city: [], // also clear cities when state is cleared
-                  }));
-                }}
+                onClick={() =>handleCityClear()}
               >
                 Clear
               </Button>
@@ -262,7 +265,11 @@ export default function NavberSearchBox({ className }: any) {
                 size="lg"
                 variant="primary"
                 className="rounded-full px-10"
-                onClick={() => setIsLocation(false)}
+                onClick={() => {
+                  handleSearch();
+                  handleCityClear()
+                  setIsLocation(false);
+                }}
               >
                 Go
               </Button>
@@ -379,6 +386,7 @@ export default function NavberSearchBox({ className }: any) {
                     className="rounded-full px-8"
                     onClick={() => {
                       handleSearch();
+                      handleColse()
                       // overflow remove
                       setTimeout(() => {
                         if (typeof document !== "undefined") {

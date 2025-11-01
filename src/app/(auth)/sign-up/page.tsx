@@ -19,12 +19,13 @@ import { useRouter } from "next/navigation";
 import FavIcon from "@/icon/admin/favIcon";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import Icon from "@/icon";
 
 export default function SignUp() {
   const router = useRouter();
   const [signUp, { isLoading }] = useSignUpMutation();
+  const [isError, setIsError] = useState("");
   const from = useForm({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
@@ -51,9 +52,13 @@ export default function SignUp() {
       if (res.status) {
         router.push(`/varify-otp?email=${values?.email}`);
         from.reset();
+      }else if(res.status === false){
+        setIsError(res?.message)
       }
     } catch (err: any) {
-      ResponseApiErrors(err?.data, from);
+      if (err?.data?.errors) {
+        ResponseApiErrors(err.data, from);
+      }
     }
   };
 
@@ -113,6 +118,10 @@ export default function SignUp() {
                   type="password"
                   placeholder="Enter your Confirm Password"
                 />
+
+                {isError && (
+                  <h1 className="text-reds text-sm text-center">{isError}</h1>
+                )}
 
                 <Button
                   type="submit"
