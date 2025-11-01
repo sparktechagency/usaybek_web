@@ -28,21 +28,21 @@ jobs:
  
             cd ${{ env.PROJECT_PATH }}
  
-            # git stash
-            # git pull
-            # git stash pop
+            git stash
+            git pull
+            git stash pop
  
-            # npm install
-            # npm run build
+            npm install
+            npm run build
  
-            # if pm2 list | grep -q "${{ env.PM2_APP_NAME }}"; then
-            #   echo "Restarting existing PM2 process..."
-            #   pm2 restart "${{ env.PM2_APP_NAME }}"
-            # else
-            #   echo "Starting new PM2 process..."
-            #   pm2 start npm --name "${{ env.PM2_APP_NAME }}" -- start
-            # fi
+            if pm2 list | grep -q "${{ env.PM2_APP_NAME }}"; then
+              echo "Restarting existing PM2 process..."
+              pm2 restart "${{ env.PM2_APP_NAME }}"
+            else
+              echo "Starting new PM2 process..."
+              pm2 start npm --name "${{ env.PM2_APP_NAME }}" -- start
+            fi
  
-            # pm2 save
+            pm2 save
  
             echo "Deployment finished successfully."
