@@ -26,6 +26,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import VideoPlayer from "@/components/common/video-player";
+import ContentBox from "@/components/reuseable/content-box";
 
 const intId = {
   id: "",
@@ -36,7 +37,6 @@ const intId = {
 export default function Appeals() {
   const { confirm } = useConfirmation();
   const [reportView, setReportView] = useState<boolean>(false);
-  const [isTake, setIsTake] = useState<boolean>(false);
   const [isView, setIsView] = useState<boolean>(false);
   const [isPage, setIsPage] = useState<number>(1);
   const { data: appeal, isLoading } = useGetAappealsQuery({ page: isPage });
@@ -129,7 +129,7 @@ export default function Appeals() {
             appeal?.data?.map((item: any, index: any) => (
               <TableRow key={index}>
                 {/* Sl No */}
-                <TableCell>{index+1}</TableCell>
+                <TableCell>{index + 1}</TableCell>
 
                 <TableCell className="relative">
                   <div className="flex items-center gap-3">
@@ -329,12 +329,10 @@ export default function Appeals() {
             <h1 className="text-lg lg:text-xl font-semibold text-blacks">
               {info?.video?.title}
             </h1>
-            <div className="border p-3 rounded-md  shadow-xs">
-              <p className="text-sm text-blacks font-semibold">10 hours ago</p>
-              <p className="mt-1  text-sm text-grays leading-relaxed">
-                {info?.video?.description}
-              </p>
-            </div>
+            <ContentBox
+              time={info?.video?.created_at_format}
+              description={info?.video?.description}
+            />
             <ul className="flex justify-between h-12 border rounded-full items-center px-2">
               <li>Reason</li>
               <li className="text-reds flex  items-center">

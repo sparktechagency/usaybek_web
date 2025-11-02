@@ -6,42 +6,41 @@ import { NoItemData } from "@/components/common/admin/reuseable/table-no-item";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import { AdminVideoCard } from "@/components/reuseable/video-card";
 import { usePromoVideosSliderQuery } from "@/redux/api/landing/promotionApi";
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import PlayerBox from "@/components/common/video-player";
 import { VideoCardSkeleton } from "@/components/reuseable";
 import { useInView } from "react-intersection-observer";
 import Modal from "@/components/reuseable/modal";
 import { useDebounce } from "use-debounce";
 import { Loader } from "lucide-react";
+import ContentBox from "@/components/reuseable/content-box";
 
 export default function PromotionsAll() {
   const [isShow, setIsShow] = useState(false);
   const [isVideo, setIsVideo] = useState<any>();
-  const [isMore, setIsMore] = useState(false);
   const [isSearch, setIsSearch] = useState("");
   const { ref, inView } = useInView();
   const [page, setPage] = useState(1);
   const [debouncedSearch] = useDebounce(isSearch, 500);
-  const query = { page: page,search:debouncedSearch};
+  const query = { page: page, search: debouncedSearch };
   const { data: videos, isLoading } = usePromoVideosSliderQuery({ ...query });
   const [totalVideos, setTotalVideos] = useState<any>([]);
   const hasMore = totalVideos?.length < videos?.meta.total;
 
   // Debounced search term
 
-
   useEffect(() => {
     setPage(1);
     setTotalVideos([]);
   }, [debouncedSearch]);
-  
+
   // Infinite scroll
   useEffect(() => {
     if (inView && hasMore && !isLoading) {
       setPage((prevPage) => prevPage + 1);
     }
   }, [inView, hasMore, isLoading]);
-  
+
   // Update totalVideos on fetching new videos
   useEffect(() => {
     if (videos?.data) {
@@ -61,9 +60,9 @@ export default function PromotionsAll() {
       />
       <div>
         <SearchBox
-        placeholder="Search Videos"
-        onSearch={(text) => setIsSearch(text)}
-      />
+          placeholder="Search Videos"
+          onSearch={(text) => setIsSearch(text)}
+        />
       </div>
       <div className="mt-10">
         <div className="home gap-6">
@@ -78,7 +77,6 @@ export default function PromotionsAll() {
                 onClick={() => {
                   setIsVideo(video);
                   setIsShow(!isShow);
-                  setIsMore(false);
                 }}
               >
                 <AdminVideoCard item={video} />
@@ -118,39 +116,10 @@ export default function PromotionsAll() {
               <h1 className="text-lg lg:text-xl font-semibold text-blacks">
                 {isVideo?.title}
               </h1>
-              <div className="border p-2 rounded-md my-5">
-                <p className="text-sm text-blacks font-semibold">
-                  {isVideo?.created_at_format}
-                </p>
-                <div
-                  className={`mt-1 relative text-sm ${
-                    isMore ? "h-full" : "h-[50px] !overflow-hidden"
-                  } text-grays leading-relaxed`}
-                >
-                  <div className="ql-container ql-snow">
-                    <div
-                      className="ql-editor !overflow-hidden"
-                      dangerouslySetInnerHTML={{ __html: isVideo?.description }}
-                    ></div>
-                  </div>
-                  {isMore && (
-                    <h1
-                      className="cursor-pointer"
-                      onClick={() => setIsMore(false)}
-                    >
-                      Show Less
-                    </h1>
-                  )}
-                  {!isMore && (
-                    <h1
-                      onClick={() => setIsMore(true)}
-                      className="absolute left-0 bottom-0 cursor-pointer"
-                    >
-                      See More....
-                    </h1>
-                  )}
-                </div>
-              </div>
+              <ContentBox
+                time={isVideo?.created_at_format}
+                description={isVideo?.description}
+              />
             </div>
           </div>
           <div>

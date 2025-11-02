@@ -4,13 +4,11 @@ import Avatars from "@/components/reuseable/avater";
 import Link from "next/link";
 import FavIcon from "@/icon/admin/favIcon";
 import SelectBox from "@/components/reuseable/select-box";
+import ContentBox from "@/components/reuseable/content-box";
 
 export default function ReportView({ onChange, options, item }: any) {
-  const {
-    video,
-    reason,
-    issue
-  } = item || {};
+  const { video, reason, issue } = item || {};
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6 pb-8">
       <div>
@@ -86,12 +84,10 @@ export default function ReportView({ onChange, options, item }: any) {
         <h1 className="text-lg lg:text-xl font-semibold text-blacks">
           {video?.title}
         </h1>
-        <div className="border p-3 rounded-md  shadow-xs">
-          <p className="text-sm text-blacks font-semibold">10 hours ago</p>
-          <p className="mt-1  text-sm text-grays leading-relaxed">
-            {video?.description}
-          </p>
-        </div>
+        <ContentBox
+          time={video?.created_at_format}
+          description={video?.description}
+        />
         <ul className="flex justify-between h-12 border rounded-full items-center px-2">
           <li>Reason</li>
           <li className="text-reds flex  items-center">

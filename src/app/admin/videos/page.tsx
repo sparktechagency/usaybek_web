@@ -5,6 +5,7 @@ import SearchBox from "@/components/common/admin/reuseable/search";
 import { NoItemData } from "@/components/common/admin/reuseable/table-no-item";
 import PlayerBox from "@/components/common/video-player";
 import { VideoCardSkeleton } from "@/components/reuseable";
+import ContentBox from "@/components/reuseable/content-box";
 import Modal from "@/components/reuseable/modal";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import { AdminVideoCard } from "@/components/reuseable/video-card";
@@ -12,19 +13,18 @@ import { Button } from "@/components/ui";
 import { useGolbalSearchQuery } from "@/redux/api/commonApi";
 import { Loader } from "lucide-react";
 import Link from "next/link";
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useDebounce } from "use-debounce";
 
 export default function TotalVideos() {
   const [isShow, setIsShow] = useState(false);
   const [isVideo, setIsVideo] = useState<any>();
-  const [isMore, setIsMore] = useState(false);
   const [isSearch, setIsSearch] = useState("");
   const { ref, inView } = useInView();
   const [page, setPage] = useState(1);
   const [debouncedSearch] = useDebounce(isSearch, 500);
-  const query = { page: page,search:debouncedSearch};
+  const query = { page: page, search: debouncedSearch };
   const { data: videos, isLoading } = useGolbalSearchQuery({ ...query });
   const [totalVideos, setTotalVideos] = useState<any>([]);
   const hasMore = totalVideos?.length < videos?.meta.total;
@@ -33,14 +33,14 @@ export default function TotalVideos() {
     setPage(1);
     setTotalVideos([]);
   }, [debouncedSearch]);
-  
+
   // Infinite scroll
   useEffect(() => {
     if (inView && hasMore && !isLoading) {
       setPage((prevPage) => prevPage + 1);
     }
   }, [inView, hasMore, isLoading]);
-  
+
   // Update totalVideos on fetching new videos
   useEffect(() => {
     if (videos?.data) {
@@ -65,7 +65,9 @@ export default function TotalVideos() {
         />
         <Link href="/admin/promotions">
           {" "}
-          <Button size="lg" variant="primary" className="rounded-full">Promotions</Button>
+          <Button size="lg" variant="primary" className="rounded-full">
+            Promotions
+          </Button>
         </Link>
       </div>
       <div className="mt-10">
@@ -81,7 +83,6 @@ export default function TotalVideos() {
                 onClick={() => {
                   setIsVideo(video);
                   setIsShow(!isShow);
-                  setIsMore(false);
                 }}
               >
                 <AdminVideoCard item={video} />
@@ -121,40 +122,10 @@ export default function TotalVideos() {
               <h1 className="text-lg lg:text-xl font-semibold text-blacks">
                 {isVideo?.title}
               </h1>
-              <div className="border px-4 pt-4 pb-1 rounded-md my-5">
-                  <p className="text-sm text-blacks font-semibold">
-                  {isVideo?.created_at_format}
-                  </p>
-                  <div
-                    className={`mt-1 relative text-sm ${
-                      isMore ? "h-full" : "h-[50px] !overflow-hidden"
-                    }  text-grays leading-relaxed`}
-                  >
-                    <div className="ql-container ql-snow">
-                      <div
-                        className="ql-editor !overflow-hidden"
-                        dangerouslySetInnerHTML={{ __html: isVideo?.description }}
-                      ></div>
-                    </div>
-                  </div>
-                  {isMore && (
-                    <h1
-                      className="cursor-pointer pt-1 font-medium text-sm"
-                      onClick={() => setIsMore(false)}
-                    >
-                      Show Less
-                    </h1>
-                  )}
-                  {!isMore && (
-                    <h1
-                      onClick={() => setIsMore(true)}
-                      className="cursor-pointer pt-1 font-medium text-sm"
-                    >
-                      See More....
-                    </h1>
-                  )}
-                </div>
-            
+              <ContentBox
+                time={isVideo?.created_at_format}
+                description={isVideo?.description}
+              />
             </div>
           </div>
           <div>

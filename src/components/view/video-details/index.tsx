@@ -21,6 +21,7 @@ import { usePathname } from "next/navigation";
 import RelatedVideosRight from "@/components/common/releted-videos";
 import { useStoreHistoryMutation } from "@/redux/api/landing/historyApi";
 import Modal2 from "@/components/reuseable/modal2";
+import ContentBox from "@/components/reuseable/content-box";
 
 const options = [
   { value: "Sexual content", label: "Sexual content" },
@@ -49,7 +50,6 @@ const useScrollToTop = () => {
 
 export default function VideoDetails({ slug }: any) {
   const path = usePathname();
-  const [isMore, setIsMore] = useState(false);
   const [isSign, setIsSign] = useState(false);
   const [storeLikeDisLike] = useStoreLikeDisLikeMutation();
   const { data, isLoading } = useVideosDetailsQuery(slug);
@@ -253,39 +253,10 @@ export default function VideoDetails({ slug }: any) {
                 </div>
 
                 {/* ============  Channel Info  =============*/}
-                <div className="border px-4 pt-4 pb-1 rounded-md my-5">
-                  <p className="text-sm text-blacks font-semibold">
-                    {publish_time_formated}
-                  </p>
-                  <div
-                    className={`mt-1 relative text-sm ${
-                      isMore ? "h-full" : "h-[50px] !overflow-hidden"
-                    }  text-grays leading-relaxed`}
-                  >
-                    <div className="ql-container ql-snow">
-                      <div
-                        className="ql-editor !overflow-hidden"
-                        dangerouslySetInnerHTML={{ __html: description }}
-                      ></div>
-                    </div>
-                  </div>
-                  {isMore && (
-                    <h1
-                      className="cursor-pointer pt-1 font-medium text-sm"
-                      onClick={() => setIsMore(false)}
-                    >
-                      Show Less
-                    </h1>
-                  )}
-                  {!isMore && (
-                    <h1
-                      onClick={() => setIsMore(true)}
-                      className="cursor-pointer pt-1 font-medium text-sm"
-                    >
-                      See More....
-                    </h1>
-                  )}
-                </div>
+                <ContentBox
+                  time={publish_time_formated}
+                  description={description}
+                />
               </>
             )}
             {/* Comments */}
