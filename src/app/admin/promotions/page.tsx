@@ -3,20 +3,18 @@ import CommentChanel from "@/components/common/admin/basic/chanel-com";
 import NavTitle from "@/components/common/admin/reuseable/nav-title";
 import SearchBox from "@/components/common/admin/reuseable/search";
 import { NoItemData } from "@/components/common/admin/reuseable/table-no-item";
-import PlayerBox from "@/components/common/video-player";
-import { VideoCardSkeleton } from "@/components/reuseable";
-import Modal from "@/components/reuseable/modal";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import { AdminVideoCard } from "@/components/reuseable/video-card";
-import { Button } from "@/components/ui";
-import { useGolbalSearchQuery } from "@/redux/api/commonApi";
-import { Loader } from "lucide-react";
-import Link from "next/link";
+import { usePromoVideosSliderQuery } from "@/redux/api/landing/promotionApi";
 import React, { useEffect,useState } from "react";
+import PlayerBox from "@/components/common/video-player";
+import { VideoCardSkeleton } from "@/components/reuseable";
 import { useInView } from "react-intersection-observer";
+import Modal from "@/components/reuseable/modal";
 import { useDebounce } from "use-debounce";
+import { Loader } from "lucide-react";
 
-export default function TotalVideos() {
+export default function PromotionsAll() {
   const [isShow, setIsShow] = useState(false);
   const [isVideo, setIsVideo] = useState<any>();
   const [isMore, setIsMore] = useState(false);
@@ -25,9 +23,12 @@ export default function TotalVideos() {
   const [page, setPage] = useState(1);
   const [debouncedSearch] = useDebounce(isSearch, 500);
   const query = { page: page,search:debouncedSearch};
-  const { data: videos, isLoading } = useGolbalSearchQuery({ ...query });
+  const { data: videos, isLoading } = usePromoVideosSliderQuery({ ...query });
   const [totalVideos, setTotalVideos] = useState<any>([]);
   const hasMore = totalVideos?.length < videos?.meta.total;
+
+  // Debounced search term
+
 
   useEffect(() => {
     setPage(1);
@@ -55,18 +56,14 @@ export default function TotalVideos() {
   return (
     <div>
       <NavTitle
-        title="All Videos"
-        subTitle="View and manage all videos in MyTSV"
+        title="Promotions Videos"
+        subTitle="View and manage all Promotions in MyTSV"
       />
-      <div className="flex items-center justify-between">
+      <div>
         <SearchBox
-          placeholder="Search Videos"
-          onSearch={(text) => setIsSearch(text)}
-        />
-        <Link href="/admin/promotions">
-          {" "}
-          <Button size="lg" variant="primary" className="rounded-full">Promotions</Button>
-        </Link>
+        placeholder="Search Videos"
+        onSearch={(text) => setIsSearch(text)}
+      />
       </div>
       <div className="mt-10">
         <div className="home gap-6">
@@ -74,8 +71,8 @@ export default function TotalVideos() {
             <SkeletonCount count={8}>
               <VideoCardSkeleton />
             </SkeletonCount>
-          ) : totalVideos.length > 0 ? (
-            totalVideos.map((video: any) => (
+          ) : totalVideos?.length > 0 ? (
+            totalVideos?.map((video: any) => (
               <div
                 key={video.id}
                 onClick={() => {
@@ -121,25 +118,24 @@ export default function TotalVideos() {
               <h1 className="text-lg lg:text-xl font-semibold text-blacks">
                 {isVideo?.title}
               </h1>
-              <div className="border px-4 pt-4 pb-1 rounded-md my-5">
-                  <p className="text-sm text-blacks font-semibold">
+              <div className="border p-2 rounded-md my-5">
+                <p className="text-sm text-blacks font-semibold">
                   {isVideo?.created_at_format}
-                  </p>
-                  <div
-                    className={`mt-1 relative text-sm ${
-                      isMore ? "h-full" : "h-[50px] !overflow-hidden"
-                    }  text-grays leading-relaxed`}
-                  >
-                    <div className="ql-container ql-snow">
-                      <div
-                        className="ql-editor !overflow-hidden"
-                        dangerouslySetInnerHTML={{ __html: isVideo?.description }}
-                      ></div>
-                    </div>
+                </p>
+                <div
+                  className={`mt-1 relative text-sm ${
+                    isMore ? "h-full" : "h-[50px] !overflow-hidden"
+                  } text-grays leading-relaxed`}
+                >
+                  <div className="ql-container ql-snow">
+                    <div
+                      className="ql-editor !overflow-hidden"
+                      dangerouslySetInnerHTML={{ __html: isVideo?.description }}
+                    ></div>
                   </div>
                   {isMore && (
                     <h1
-                      className="cursor-pointer pt-1 font-medium text-sm"
+                      className="cursor-pointer"
                       onClick={() => setIsMore(false)}
                     >
                       Show Less
@@ -148,13 +144,13 @@ export default function TotalVideos() {
                   {!isMore && (
                     <h1
                       onClick={() => setIsMore(true)}
-                      className="cursor-pointer pt-1 font-medium text-sm"
+                      className="absolute left-0 bottom-0 cursor-pointer"
                     >
                       See More....
                     </h1>
                   )}
                 </div>
-            
+              </div>
             </div>
           </div>
           <div>
