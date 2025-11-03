@@ -9,7 +9,7 @@ import { Button } from "@/components/ui";
 import useConfirmation from "@/context/delete-modal";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import FavIcon from "@/icon/admin/favIcon";
-import { delay, modifyPayload } from "@/lib";
+import {modifyPayload } from "@/lib";
 import {
   useDeleteBlogMutation,
   useSingleBlogQuery,
@@ -27,7 +27,6 @@ export default function AddBlog() {
   const { slug } = useParams();
   const ids = slug as string;
   const { data } = useSingleBlogQuery(ids);
-
   const router = useRouter();
   const [updateBlogs, { isLoading: isUpdating }] = useUpdateBlogMutation();
   const [deleteBlog, { isLoading }] = useDeleteBlogMutation();
@@ -64,7 +63,6 @@ export default function AddBlog() {
         toast.success("Blog Updated Successfully", {
           description: "Your blog has been successfully updated and stored",
         });
-        await delay();
         router.push(`/admin/manage-blogs`);
         from.reset();
       }
@@ -82,10 +80,8 @@ export default function AddBlog() {
     if (con) {
       const res = await deleteBlog(id).unwrap();
       if (res.status) {
-        await delay();
         router.push(`/admin/manage-blogs`);
         from.reset();
-
       }
     }
   };
