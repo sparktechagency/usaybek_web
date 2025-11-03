@@ -112,8 +112,8 @@ export default function SignIn() {
           router.push("/");
         }
       }
-    } catch (error) {
-      toast.error("Login Failed");
+    } catch (error:any) {
+      toast.error(error?.message as string);
     }
   };
 
