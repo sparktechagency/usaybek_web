@@ -40,9 +40,7 @@ export default function AddBlog() {
       image: null as File | null,
     },
   });
-
-  const { id, title, description, image } = data || {};
-
+  const { title, description, image,slug:slug2} = data || {};
   useEffect(() => {
     if (data) {
       from.reset({
@@ -50,7 +48,7 @@ export default function AddBlog() {
         description,
       });
     }
-  }, [data, from, id, title, description, image]);
+  }, [data, from, title,slug2, description, image]);
 
   const handleSubmit = async (values: FieldValues) => {
     const { image, ...rest } = values;
@@ -61,7 +59,7 @@ export default function AddBlog() {
     };
     try {
       const data = modifyPayload(value);
-      const res = await updateBlogs({ id, data }).unwrap();
+      const res = await updateBlogs({id:slug2, data }).unwrap();
       if (res.status) {
         toast.success("Blog Updated Successfully", {
           description: "Your blog has been successfully updated and stored",
@@ -110,7 +108,7 @@ export default function AddBlog() {
                 >
                   <ImgUpload
                     onFileSelect={(file: File) => {
-                      from.setValue("image", file); // Correctly sets the file
+                      from.setValue("image", file); 
                       setImgPreview(URL.createObjectURL(file));
                     }}
                     className="size-8 absolute cursor-pointer grid place-items-center rounded-md  top-2 right-2 backdrop-blur-3xl bg-black/50"
@@ -121,7 +119,7 @@ export default function AddBlog() {
               </div>
               <button
                 type="button"
-                onClick={(event: any) => handleDeleteBlog(id, event)}
+                onClick={(event: any) => handleDeleteBlog(slug2, event)}
                 disabled={isLoading}
                 className="size-[37px] grid place-items-center text-[#FF5353] bg-[#FFE8E8] rounded-lg cursor-pointer"
               >
