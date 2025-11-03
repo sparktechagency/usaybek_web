@@ -111,9 +111,11 @@ export default function SignIn() {
         if (info.role == "USER") {
           router.push("/");
         }
+      }else if(res?.message){
+        toast.error(res?.message)
       }
-    } catch (error:any) {
-      toast.error(error?.message as string);
+    } catch (error) {
+      toast.error("Login Failed,Try Again");
     }
   };
 
