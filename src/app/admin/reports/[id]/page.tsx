@@ -1,21 +1,20 @@
 "use client";
-
-import ReportView from "@/components/common/admin/basic/report-view";
 import { TakeOptions } from "@/dummy-data";
 import FavIcon from "@/icon/admin/favIcon";
 import { delay, modifyPayload } from "@/lib";
 import { useReportActionMutation } from "@/redux/api/admin/channelApi";
 import { useGetReportADetailsQuery } from "@/redux/api/admin/reportsApi";
 import { useParams } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
 import VideoPlayer from "@/components/common/video-player";
 import Avatars from "@/components/reuseable/avater";
-import Link from "next/link";
 import SelectBox from "@/components/reuseable/select-box";
 import { Button, Textarea } from "@/components/ui";
 import Modal from "@/components/reuseable/modal";
 import NavTitle from "@/components/common/admin/reuseable/nav-title";
+import ContentBox from "@/components/reuseable/content-box";
+import { useState } from "react";
+import { toast } from "sonner";
+import Link from "next/link";
 
 const initTakeInfo = {
   id: "",
@@ -144,12 +143,10 @@ export default function ReportDetails() {
           <h1 className="text-lg lg:text-xl font-semibold text-blacks">
             {video?.title}
           </h1>
-          <div className="border p-3 rounded-md  shadow-xs">
-            <p className="text-sm text-blacks font-semibold">10 hours ago</p>
-            <p className="mt-1  text-sm text-grays leading-relaxed">
-              {video?.description}
-            </p>
-          </div>
+          <ContentBox
+            time={video?.created_at_format}
+            description={video?.description}
+          />
           <ul className="flex justify-between h-12 border rounded-full items-center px-2">
             <li>Reason</li>
             <li className="text-reds flex  items-center">

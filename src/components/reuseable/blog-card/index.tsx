@@ -2,9 +2,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 import Link from "next/link";
 
-export function BlogsCard({ id, title, image, description }: any) {
+export function BlogsCard({title, image,slug, description }: any) {
   return (
-    <Link href={`/blogs/${id}`}>
+    <Link href={`/blogs/${slug}`}>
       <div className="relative">
         <div className="">
           <Image
