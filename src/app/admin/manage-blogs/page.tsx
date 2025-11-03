@@ -25,7 +25,7 @@ export default function ManageBlogs() {
         ) : (
           blogItem?.data?.map((item: any) => (
             <Link
-              href={`/admin/manage-blogs/${item.id}`}
+              href={`/admin/manage-blogs/${item.slug}`}
               key={item.id}
               className="bg-white rounded-lg  h-[170px]  overflow-hidden  duration-200  p-2"
             >
