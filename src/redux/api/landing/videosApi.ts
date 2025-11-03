@@ -42,6 +42,13 @@ export const videosApi = baseApi.injectEndpoints({
         return response.data;
       },
     }),
+    VideosDetailsTwo: build.query({
+      query: (id: string) => ({
+        url: `/videos/${id}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.sinlgeVideo]
+    }),
     RelatedVideos: build.query({
       query: ({ id, arg }: Args) => ({
         url: `/get-related-video/${id}`,
@@ -117,4 +124,5 @@ export const {
   useGetLinkeVideosQuery,
   useRemoveLikeMutation,
   useChannelLandDetailsQuery,
+  useVideosDetailsTwoQuery
 } = videosApi;

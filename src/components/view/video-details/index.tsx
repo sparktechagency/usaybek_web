@@ -10,14 +10,14 @@ import FavIcon from "@/icon/admin/favIcon";
 import {
   useStoreLikeDisLikeMutation,
   useStoreReportMutation,
-  useVideosDetailsQuery,
+  useVideosDetailsTwoQuery,
 } from "@/redux/api/landing/videosApi";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { DetailsSkeleton } from "@/components/reuseable/skeleton-item";
 import { delay, IsToken, modifyPayload } from "@/lib";
 import { toast } from "sonner";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import RelatedVideosRight from "@/components/common/releted-videos";
 import { useStoreHistoryMutation } from "@/redux/api/landing/historyApi";
 import Modal2 from "@/components/reuseable/modal2";
@@ -50,9 +50,10 @@ const useScrollToTop = () => {
 
 export default function VideoDetails({ slug }: any) {
   const path = usePathname();
+  const router=useRouter()
   const [isSign, setIsSign] = useState(false);
   const [storeLikeDisLike] = useStoreLikeDisLikeMutation();
-  const { data, isLoading } = useVideosDetailsQuery(slug);
+  const {data, isLoading}= useVideosDetailsTwoQuery(slug)
   const [storeReport, { isLoading: ReportLoading }] = useStoreReportMutation();
   const [storeHistory] = useStoreHistoryMutation();
   const [isReprot, setIsReport] = useState(false);
@@ -86,8 +87,15 @@ export default function VideoDetails({ slug }: any) {
     link,
     category_id,
     user_id,
-  } = data || {};
+  } = data?.data || {};
 
+  useEffect(()=>{
+    if(!isLoading && data?.status === false){
+      router.back()
+    }
+  },[data,router,isLoading])
+
+  // SubmitReport
   const SubmitReport = async () => {
     const value = {
       video_id: slug,
