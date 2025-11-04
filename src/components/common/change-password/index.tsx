@@ -1,17 +1,16 @@
-"use client";
 import Form from "@/components/reuseable/from";
-import { FromInput } from "@/components/reuseable/from-input";
-import { Button } from "@/components/ui/button";
+import { FromInputs } from "@/components/reuseable/from-inputs";
+import { Button } from "@/components/ui";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import { modifyPayload } from "@/lib";
 import { useUpdatePasswordMutation } from "@/redux/api/authApi";
 import { passwordChangeSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-export default function ChangePassword() {
+export default function ChangePassword({ setIsPassword }: any) {
   const [isError, setIsError] = useState("");
   const [updatePassword, { isLoading }] = useUpdatePasswordMutation();
   const from = useForm({
@@ -23,16 +22,18 @@ export default function ChangePassword() {
     },
   });
 
-  const handleChange = async (values: any) => {
+  const handleSubmit = async (values: FieldValues) => {
     try {
+      setIsError("");
       const data = modifyPayload(values);
       const res = await updatePassword(data).unwrap();
       if (res.status) {
         toast.success("Password Changed Successfully", {
           description: "You can now login with new password",
         });
+        setIsPassword(false);
+        from.reset();
       }
-      from.reset();
     } catch (err: any) {
       if (err?.data?.message) {
         setIsError(err?.data?.message);
@@ -41,38 +42,44 @@ export default function ChangePassword() {
       }
     }
   };
+
   return (
-    <Form className="space-y-4" from={from} onSubmit={handleChange}>
-      <FromInput
-        className="bg-white border-none rounded-md"
+    <Form className="space-y-6 pt-5" from={from} onSubmit={handleSubmit}>
+      <FromInputs
+        eye={true}
         label="Current Password"
         name="current_password"
-        placeholder="********"
-        matching={true}
-        eye={true}
+        type="password"
+        placeholder="Enter your Current Password"
+        stylelabel="bg-white"
       />
-      <FromInput
-        className="bg-white border-none rounded-md"
+      <FromInputs
+        eye={true}
         label="New Password"
-        eye={true}
         name="new_password"
-        placeholder="********"
-        matching={true}
+        type="password"
+        placeholder="Enter your New  Password"
+        stylelabel="bg-white"
       />
-      <FromInput
-        className="bg-white border-none rounded-md"
-        label="Confirm Password"
+      <FromInputs
         eye={true}
+        label="Confirm Password"
         name="c_password"
-        placeholder="********"
-        matching={true}
+        type="password"
+        placeholder="Enter your Confirm Password"
+        stylelabel="bg-white"
       />
+
       {isError && <p className="text-red-400 text-center">{isError}</p>}
-      <div className="flex justify-center">
-        <Button disabled={isLoading} variant={"primary"} className="px-8">
-          Save
-        </Button>
-      </div>
+
+      <Button
+        type="submit"
+        variant="primary"
+        className="w-full rounded-full"
+        disabled={isLoading}
+      >
+        Update Password
+      </Button>
     </Form>
   );
 }

@@ -18,6 +18,8 @@ import { modifyPayloadAll } from "@/lib";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import avaterImg from "@/assets/avaterImg.svg";
 import { toast } from "sonner";
+import Modal from "@/components/reuseable/modal";
+import ChangePassword from "@/components/common/change-password";
 
 const intImg = {
   coverPreview: "",
@@ -27,6 +29,7 @@ const intImg = {
 };
 
 export default function Settings() {
+  const [isPassword, setIsPassword] = useState(false);
   const [editProfile, { isLoading }] = useEditProfileMutation();
   const { data } = useGetProfileQuery({});
   const [isImg, setIsImg] = useState<any>(intImg);
@@ -126,19 +129,34 @@ export default function Settings() {
                   {channel_name?.toUpperCase()?.slice(0, 2)}
                 </AvatarFallback>
               </Avatar>
-              <ImgUpload
-                onFileSelect={(file: File) => {
-                  setIsImg({
-                    ...isImg,
-                    avatar: file,
-                    avatarPreview: URL.createObjectURL(file),
-                  });
-                }}
-              >
-                <div className="size-9 absolute cursor-pointer grid place-items-center rounded-full bottom-0 right-0">
-                  <Image src={avaterImg} alt={"avaterimg"} fill />
+              {isImg?.avatarPreview ? (
+                <div
+                  onClick={() =>
+                    setIsImg({
+                      ...isImg,
+                      avatar: null,
+                      avatarPreview: "",
+                    })
+                  }
+                  className="size-9 bg-white absolute cursor-pointer grid place-items-center rounded-full bottom-0 right-0"
+                >
+                  <FavIcon name="delete" />
                 </div>
-              </ImgUpload>
+              ) : (
+                <ImgUpload
+                  onFileSelect={(file: File) => {
+                    setIsImg({
+                      ...isImg,
+                      avatar: file,
+                      avatarPreview: URL.createObjectURL(file),
+                    });
+                  }}
+                >
+                  <div className="size-9 absolute cursor-pointer grid place-items-center rounded-full bottom-0 right-0">
+                    <Image src={avaterImg} alt={"avaterimg"} fill />
+                  </div>
+                </ImgUpload>
+              )}
             </div>
           </div>
 
@@ -176,8 +194,19 @@ export default function Settings() {
             </div>
           </div>
         </div>
+        <div className="flex justify-end pt-3">
+          <Button
+            type="button"
+            onClick={() => setIsPassword(!isPassword)}
+            className="rounded-full bg-white *:text-blacks shadow-none"
+            variant="primary"
+          >
+            <FavIcon color="#000000" name="passwords" />
+            <span className="hidden md:block">Change Password</span>
+          </Button>
+        </div>
       </div>
-      <Form className="mt-20" from={from} onSubmit={handleSubmit}>
+      <Form className="mt-14" from={from} onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 [&>div]:space-y-6">
           <div>
             <FromInputs
@@ -230,6 +259,15 @@ export default function Settings() {
           </div>
         </div>
       </Form>
+      <Modal
+        title="Change Password"
+        open={isPassword}
+        setIsOpen={setIsPassword}
+        className="sm:max-w-xl"
+        titleStyle="text-center"
+      >
+        <ChangePassword setIsPassword={setIsPassword} />
+      </Modal>
     </div>
   );
 }
