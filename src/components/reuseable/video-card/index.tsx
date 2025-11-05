@@ -13,7 +13,6 @@ export function VideoCard({ item, className, imgStyle }: any) {
     title,
     thumbnail,
     user,
-    views_count_formated,
     created_at_format,
     is_promoted,
     video,
@@ -32,7 +31,7 @@ export function VideoCard({ item, className, imgStyle }: any) {
 
   return (
     <div className={className}>
-      <Link href={`/video/${id}`}>
+      <Link href={`/video/${id}` || ""}>
         <div
           className="relative group"
           onMouseEnter={() => handleVideoHover(id)}
@@ -80,7 +79,7 @@ export function VideoCard({ item, className, imgStyle }: any) {
         </div>
         <div>
           <div className="flex gap-2 pt-2">
-            <Link href={`/channel-details/${user_id}`}>
+            <Link href={`/channel-details/${user_id}` || ""}>
               <Avatars
                 className="size-13"
                 alt={title}
@@ -92,9 +91,9 @@ export function VideoCard({ item, className, imgStyle }: any) {
               <li className="text-lg font-semibold line-clamp-2">{title}</li>
               <li>{user?.channel_name}</li>
               <li className="text-grays flex space-x-2 items-center">
-                <span className="text-sm">{views_count_formated} views</span>
+                {/* <span className="text-sm">{views_count_formated} views</span> */}
                 <span className="flex items-center text-sm">
-                  <span className="inline-block w-2 h-2 bg-[#D9D9D9] rounded-full mr-1"></span>
+                  {/* <span className="inline-block w-2 h-2 bg-[#D9D9D9] rounded-full mr-1"></span> */}
                   {created_at_format}
                 </span>
               </li>
@@ -300,9 +299,7 @@ export function AdminVideoCard({ item, className, imgStyle }: any) {
             <li className="text-lg font-semibold line-clamp-2">{title}</li>
             <li>{user?.channel_name}</li>
             <li className="text-grays flex space-x-2 items-center">
-              <span className="text-sm">{views_count_formated} views</span>
               <span className="flex items-center text-sm">
-                <span className="inline-block w-2 h-2 bg-[#D9D9D9] rounded-full mr-1"></span>
                 {created_at_format}
               </span>
             </li>

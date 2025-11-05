@@ -126,15 +126,8 @@ export default function History() {
                     {item?.video?.user?.channel_name}
                   </p>
                   <div className="flex items-center gap-1 text-xs text-gray-500">
-                    <span className="mr-2">
-                      {item?.video?.views_count} views
-                    </span>
-                    <span className="inline-block w-2 h-2 bg-[#D9D9D9] rounded-full"></span>
                     <span>{item?.video?.upload_time}</span>
                   </div>
-                  {/* <p className="text-sm text-grays line-clamp-2">
-                    {item?.video?.description}
-                  </p> */}
                   <div
                     className="*:!font-normal !h-[50px] overflow-hidden"
                     dangerouslySetInnerHTML={{

@@ -26,6 +26,7 @@ export async function generateMetadata() {
     openGraph: {
       title: data?.title,
       description: data?.description,
+      url: process.env.NEXT_PUBLIC_APP_URL,
       images: data?.links.map((link: any) => link.value).flat(),
     },
   };
