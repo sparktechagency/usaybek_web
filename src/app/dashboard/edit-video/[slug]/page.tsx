@@ -36,13 +36,13 @@ const intImg = {
 };
 
 export default function EditVideo() {
-  const {slug}=useParams() as any
+  const { slug } = useParams() as any;
   const [isLink, setIsLink] = useState("");
   const [isImg, setIsImg] = useState<any>(intImg);
   const { data: categories } = useCategoriesQuery({
     per_page: 1000,
   });
-  const { data,refetch } = useVideosDetailsQuery(slug);
+  const { data, refetch } = useVideosDetailsQuery(slug);
   const [videoEdit, { isLoading: editLoading }] = useVideoEditMutation();
 
   const [isSelect, setIsSelect] = useState({
@@ -63,6 +63,7 @@ export default function EditVideo() {
   }, [states]);
 
   const {
+    id,
     video,
     thumbnail,
     title,
@@ -128,7 +129,6 @@ export default function EditVideo() {
       });
       setIsLink(link);
     }
-    
   }, [
     data,
     from,
@@ -174,15 +174,14 @@ export default function EditVideo() {
   const handleUndoChanges = () => {
     if (data) {
       from.reset();
-      refetch()
+      refetch();
     }
     setIsImg(intImg);
     setIsLink(link);
-
   };
 
   return (
-    <Form from={from} onSubmit={(values) => handleSubmit(values, slug)}>
+    <Form from={from} onSubmit={(values) => handleSubmit(values, id)}>
       <div className="pb-10">
         <ul className="flex justify-between items-center my-4">
           <li>
@@ -203,9 +202,8 @@ export default function EditVideo() {
               onClick={handleUndoChanges}
               type="button" // Add type="button" to prevent form submission
             >
-              <Icon name="undoBlack" width={16} /> 
+              <Icon name="undoBlack" width={16} />
               <span className="hidden md:block">Undo changes</span>
-              
             </Button>
             <Button
               variant={"primary"}

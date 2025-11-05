@@ -19,6 +19,7 @@ import { NoItemData } from "@/components/common/admin/reuseable/table-no-item";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 import { useRouter } from "next/navigation";
 
+
 export default function History() {
   const router = useRouter();
   const [isPage, setIsPage] = useState<number>(1);
@@ -95,7 +96,7 @@ export default function History() {
                 className="flex flex-col md:flex-row gap-4 cursor-pointer p-4 border-b"
                 onClick={(e) => {
                   e.stopPropagation();
-                  router.push(`/video/${item?.video?.id}`);
+                  router.push(`/video/${item?.video?.slug}`);
                 }}
               >
                 <div>

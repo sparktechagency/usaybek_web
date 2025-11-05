@@ -64,7 +64,7 @@ export default function Details({ slug, isTab, setIsTab }: any) {
           </Link>
         </li>
         <li className="flex gap-x-2">
-          <Link href={`/dashboard/edit-video/${id}`}>
+          <Link href={`/dashboard/edit-video/${slug}`}>
             <Button
               variant={"primary"}
               size={"lg"}

@@ -50,10 +50,10 @@ const useScrollToTop = () => {
 
 export default function VideoDetails({ slug }: any) {
   const path = usePathname();
-  const router=useRouter()
+  const router = useRouter();
   const [isSign, setIsSign] = useState(false);
   const [storeLikeDisLike] = useStoreLikeDisLikeMutation();
-  const {data, isLoading}= useVideosDetailsTwoQuery(slug)
+  const { data, isLoading } = useVideosDetailsTwoQuery(slug);
   const [storeReport, { isLoading: ReportLoading }] = useStoreReportMutation();
   const [storeHistory] = useStoreHistoryMutation();
   const [isReprot, setIsReport] = useState(false);
@@ -89,11 +89,11 @@ export default function VideoDetails({ slug }: any) {
     user_id,
   } = data?.data || {};
 
-  useEffect(()=>{
-    if(!isLoading && data?.status === false){
-      router.back()
+  useEffect(() => {
+    if (!isLoading && data?.status === false) {
+      router.back();
     }
-  },[data,router,isLoading])
+  }, [data, router, isLoading]);
 
   // SubmitReport
   const SubmitReport = async () => {
@@ -130,13 +130,13 @@ export default function VideoDetails({ slug }: any) {
   // views count this video
   useEffect(() => {
     (async () => {
-      if (slug && IsAccess) {
+      if (id && IsAccess) {
         const fromData = new FormData();
-        fromData.append("video_id", slug);
+        fromData.append("video_id", id);
         await storeHistory(fromData).unwrap();
       }
     })();
-  }, [slug, storeHistory, IsAccess]);
+  }, [id, storeHistory, IsAccess]);
 
   return (
     <div className="container py-10">

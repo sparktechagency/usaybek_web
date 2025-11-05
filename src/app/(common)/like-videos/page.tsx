@@ -25,6 +25,7 @@ export default function LinkVideos() {
   const { data: likeVideos, isLoading } = useGetLinkeVideosQuery({ ...query });
 
   const topVideos = likeVideos?.data[0] || {};
+  console.log(likeVideos)
 
   return (
     <div>
@@ -47,7 +48,7 @@ export default function LinkVideos() {
             <h1>{likeVideos?.data?.length} videos</h1>
           </li>
           <li>
-            <Link href={`/video/${topVideos?.video?.id}`}>
+            <Link href={`/video/${topVideos?.video?.slug}`}>
               <Button
                 variant={"primary"}
                 className="text-blacks bg-white px-10 rounded-full"
@@ -83,7 +84,7 @@ export default function LinkVideos() {
                 className="flex flex-col md:flex-row gap-4 cursor-pointer p-4 border-b"
                 onClick={(e) => {
                   e.stopPropagation();
-                  router.push(`/video/${item?.video?.id}`);
+                  router.push(`/video/${item?.video?.slug}`);
                 }}
               >
                 <div>

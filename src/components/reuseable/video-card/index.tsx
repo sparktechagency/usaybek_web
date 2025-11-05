@@ -21,6 +21,7 @@ export function VideoCard({ item, className, imgStyle }: any) {
     type,
     link,
     user_id,
+    slug
   } = item || {};
 
   const handleVideoHover = (id: string) => {
@@ -33,7 +34,7 @@ export function VideoCard({ item, className, imgStyle }: any) {
 
   return (
     <div className={className}>
-      <Link href={`/video/${id}` || ""}>
+      <Link href={`/video/${slug}` || ""}>
         <div
           className="relative group"
           onMouseEnter={() => handleVideoHover(id)}

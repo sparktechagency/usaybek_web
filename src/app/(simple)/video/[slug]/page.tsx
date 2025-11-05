@@ -1,5 +1,5 @@
 import VideoDetails from "@/components/view/video-details";
-import { authKey } from "@/lib";
+import { authKey, PlanText } from "@/lib";
 import { SlugParams } from "@/types";
 import { cookies } from "next/headers";
 
@@ -14,11 +14,12 @@ export async function generateMetadata({ params }: SlugParams): Promise<any> {
   const data = await res.json();
   const {
     title,
-    description,
+    description: content,
     thumbnail: image,
     video,
     tags,
   } = data?.data || {};
+  const description = PlanText(content);
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
   const url = `${baseUrl}/video/${slug}`;
   return {

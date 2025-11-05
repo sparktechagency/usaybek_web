@@ -82,7 +82,7 @@ export default function RelatedVideosRight({ id }: any) {
 const LaptopAndDesktopView = ({ item, className }: any) => {
   return (
     <Link
-      href={`/video/${item.id}`}
+      href={`/video/${item.slug}`}
       className={cn("flex gap-3 group", className)}
     >
       <div className="relative w-37 h-22 flex-shrink-0 rounded-md overflow-hidden">
@@ -102,9 +102,7 @@ const LaptopAndDesktopView = ({ item, className }: any) => {
             {item?.user?.channel_name}
           </li>
           <li className="text-grays flex space-x-2 items-center text-sm">
-            <span className="text-xs">{item.views_count_formated} views</span>
             <span className="flex items-center text-sm">
-              <span className="inline-block w-2 h-2 bg-[#D9D9D9] rounded-full mr-1"></span>
               {item.created_at_format}
             </span>
           </li>

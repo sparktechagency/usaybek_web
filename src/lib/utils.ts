@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
 import Cookies from "js-cookie";
-import { authKey} from "./constants";
+import { authKey } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -55,3 +55,10 @@ export function IsToken() {
   return Cookies.get(authKey);
 }
 
+// plan text
+export const PlanText = (text: any) => {
+  return text
+    ?.replace(/<[^>]+>/g, "")
+    ?.replace(/\s+/g, " ")
+    ?.trim();
+};

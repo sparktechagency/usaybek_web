@@ -176,7 +176,7 @@ export default function MyVideos() {
                               <ul className="flex items-center space-x-2 mt-3">
                                 <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
                                   <Link
-                                    href={`/dashboard/video-details/${item.id}?tab=details`}
+                                    href={`/dashboard/video-details/${item.slug}?tab=details`}
                                   >
                                     <FavIcon
                                       name="eye"
@@ -200,7 +200,7 @@ export default function MyVideos() {
                                 </li>
                                 <li className="hover:border rounded-md size-8 grid place-items-center hover:bg-white">
                                   <Link
-                                    href={`/dashboard/edit-video/${item.id}`}
+                                    href={`/dashboard/edit-video/${item.slug}`}
                                   >
                                     <FavIcon
                                       name="edit"
