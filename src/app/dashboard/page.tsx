@@ -149,7 +149,6 @@ export default function Dashboard() {
                 </Link>
               </div>
               <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3  gap-4">
-                {/* last:col-span-2 last:mx-30 2x:col-span-1 */}
                 {ViewItem.map((item, index) => (
                   <Card key={index} className="gap-0 p-2   border-1">
                     <div className="flex justify-between px-4 py-3">

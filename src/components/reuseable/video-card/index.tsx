@@ -5,8 +5,10 @@ import { ImgBox } from "@/components/common/admin/reuseable";
 import ReactPlayer from "react-player";
 import { cn } from "@/lib";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function VideoCard({ item, className, imgStyle }: any) {
+  const router = useRouter();
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const {
     id,
@@ -79,14 +81,21 @@ export function VideoCard({ item, className, imgStyle }: any) {
         </div>
         <div>
           <div className="flex gap-2 pt-2">
-            <Link href={`/channel-details/${user_id}` || ""}>
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                router.push(`/channel-details/${user_id}` || "");
+              }}
+              tabIndex={0}
+            >
               <Avatars
                 className="size-13"
                 alt={title}
                 src={user?.avatar}
                 fallback={user?.channel_name}
               />
-            </Link>
+            </div>
             <ul className="[&>li]:text-blacks">
               <li className="text-lg font-semibold line-clamp-2">{title}</li>
               <li>{user?.channel_name}</li>

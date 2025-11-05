@@ -15,6 +15,7 @@ import {
 } from "@/components/ui";
 import Icon from "@/icon";
 import { IsToken } from "@/lib";
+import { useGetProfileQuery } from "@/redux/api/authApi";
 import { useChannelLandDetailsQuery } from "@/redux/api/landing/videosApi";
 import { Loader } from "lucide-react";
 import Image from "next/image";
@@ -30,11 +31,20 @@ export default function ProfileBox() {
     id,
     arg: { page },
   });
-  const IsAccess = !isLoading &&  IsToken() ? true : false;
-  const { channel, total_likes, total_videos,videoAll } =
+  const IsAccess = !isLoading && IsToken() ? true : false;
+  const { channel, total_likes, total_videos, total_views, videoAll } =
     channelData || {};
+  const { data: profileData } = useGetProfileQuery({ id });
+  const isMatch = IsAccess && profileData?.data?.id == id;
+
+
 
   const ViewItem = [
+    {
+      label: "Views",
+      value: total_views,
+      icon: assets.dashboard.views,
+    },
     {
       label: "Videos",
       value: total_videos,
@@ -98,11 +108,35 @@ export default function ProfileBox() {
             </div>
           </div>
           <div
-            className={`flex justify-between gap-4 py-3 mt-18`}
+            className={`flex justify-between gap-4 py-3 mt-18 ${
+              isMatch ? "md:mt-0" : "md:mt-16"
+            }`}
           >
-          
+            {isMatch && (
+              <>
+                <h2 className="hidden md:block opacity-0">left</h2>
+                <Card className="w-full md:w-fit">
+                  <ul className="space-y-1">
+                    <li className="flex gap-x-2 items-center text-blacks">
+                      <Icon name="locationGary" />
+                      {channel?.locations?.find(
+                        (item: any) => item?.type === "head-office"
+                      )?.location || "No Location"}
+                    </li>
+                    <li className="flex gap-x-2 items-center text-blacks">
+                      <Icon name="phoneGray" />
+                      {channel?.contact || "No Contact"}
+                    </li>
+                    <li className="flex gap-x-2 items-center text-blacks">
+                      <Icon name="mailGray" />
+                      {channel?.email || "No Email"}
+                    </li>
+                  </ul>
+                </Card>
+              </>
+            )}
           </div>
-          <div className={`grid grid-cols-1 ${IsAccess ? "sm:grid-cols-3" :"sm:grid-cols-2"} gap-4`}>
+          <div className={`grid grid-cols-1 lg:grid-cols-3 gap-4`}>
             {ViewItem.map((item, index) => (
               <Card key={index} className="gap-0 p-2  border-1">
                 <div className="flex justify-between px-4 py-3">
@@ -121,28 +155,6 @@ export default function ProfileBox() {
                 </div>
               </Card>
             ))}
-            {IsAccess && (
-              <>
-                <Card className="p-2  border-1">
-                  <ul className="space-y-1">
-                    <li className="flex gap-x-2 items-center text-blacks">
-                      <Icon className="size-5" name="locationGary" />
-                      {channel?.locations?.find(
-                        (item: any) => item?.type === "head-office"
-                      )?.location || "No Location"}
-                    </li>
-                    <li  className="flex gap-x-2 items-center text-blacks">
-                      <Icon className="size-4" name="phoneGray" />
-                      {channel?.contact || "No Contact"}
-                    </li>
-                    <li className="flex gap-x-2 items-center text-blacks">
-                      <Icon className="size-[18px]" name="mailGray" />
-                      {channel?.email || "No Email"}
-                    </li>
-                  </ul>
-                </Card>
-              </>
-            )}
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
             <Card className="p-3 border-1 gap-0">

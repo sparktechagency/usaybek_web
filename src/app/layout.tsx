@@ -23,6 +23,10 @@ export async function generateMetadata() {
     title: data?.title,
     description: data?.description,
     keywords: data?.tags.join(", "),
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_APP_URL,
+    },
+
     openGraph: {
       title: data?.title,
       description: data?.description,
