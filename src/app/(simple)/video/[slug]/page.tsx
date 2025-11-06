@@ -8,8 +8,7 @@ export async function generateMetadata({ params }: SlugParams): Promise<any> {
   const tokon = (await cookies()).get(authKey)?.value;
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/videos/${slug}`, {
     headers: { Authorization: `Bearer ${tokon}` },
-    cache: "force-cache",
-    next: { revalidate: 72 * 60 * 60 },
+    cache: "no-cache",
   });
   const data = await res.json();
   const {
