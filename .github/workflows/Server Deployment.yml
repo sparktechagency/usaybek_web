@@ -27,7 +27,9 @@ jobs:
             echo "Deployment started on server..."
  
             cd ${{ env.PROJECT_PATH }}
- 
+
+            rm -rf .next
+
             # git stash
             git pull
             # git stash pop
