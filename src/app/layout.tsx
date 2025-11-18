@@ -4,7 +4,7 @@ import Providers from "@/components/providers";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import "react-quill-new/dist/quill.snow.css";
-
+import NextTopLoader from 'nextjs-toploader';
 // Load Poppins font
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -44,6 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} antialiased`}>
+      <NextTopLoader color="#ef4444" height={4} showSpinner={false} />
         <Providers>{children}</Providers>
       </body>
     </html>

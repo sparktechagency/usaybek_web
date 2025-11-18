@@ -9,6 +9,7 @@ import { makeStore } from "@/redux/store";
 import { Toaster } from "../ui";
 import { AuthProvider } from "@/context/auth";
 
+
 export default function Providers({ children }: childrenProps) {
   const store = makeStore();
   return (

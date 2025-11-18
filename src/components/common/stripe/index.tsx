@@ -73,6 +73,7 @@ export const usePayment = (amount: number, reason: string) => {
     setLoading(true);
     try {
       const res = await successPayment(modifyPayload(paymentInfo)).unwrap();
+      console.log(res)
       if (res.status) {
         toast.success("Payment Successful!", {
           description: "Your payment has been processed successfully.",
@@ -81,7 +82,7 @@ export const usePayment = (amount: number, reason: string) => {
         setIsPaymentSuccessful(true);
       }
     } catch (error) {
-      setErrorMessage("Payment processing failed.");
+      setErrorMessage("Payment processing failed 77.");
     } finally {
       setLoading(false);
     }
