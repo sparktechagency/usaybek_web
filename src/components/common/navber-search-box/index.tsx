@@ -159,7 +159,7 @@ export default function NavberSearchBox({ className }: any) {
                 <SelectTrigger className="!w-full  cursor-pointer py-0 my-0 border-l !h-5 border-[#A0A0A0]  border-r-0 border-y-0 rounded-none shadow-none">
                   <SelectValue placeholder="Select Service" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="h-100">
                   <SelectGroup>
                     {isSelect.service.map((item) => (
                       <SelectItem key={item.value} value={item.value}>
@@ -220,7 +220,7 @@ export default function NavberSearchBox({ className }: any) {
               <SelectTrigger className="w-full cursor-pointer rounded-full py-[20px] shadow-none">
                 <SelectValue placeholder="Select State" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="h-60">
                 <SelectGroup>
                   {isSelect.state.map((item) => (
                     <SelectItem key={item.value} value={item.value}>
@@ -242,7 +242,7 @@ export default function NavberSearchBox({ className }: any) {
               <SelectTrigger className="w-full rounded-full cursor-pointer py-[20px] shadow-none mt-3">
                 <SelectValue placeholder="Select City" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="h-60">
                 <SelectGroup>
                   {isSelect.city.map((item) => (
                     <SelectItem key={item.value} value={item.value}>
