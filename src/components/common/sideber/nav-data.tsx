@@ -67,6 +67,7 @@ export const signOutItems = [
     href: "/privacy",
   },
   // { icon: <Icon name="sabout" />, text: "About us", href: "/about-us" },
+  { icon: <Icon name="scontact" />, text: "Contact us", href: "/contact-us" },
   {
     icon: <Icon name="sonSide" />,
     text: "Onsite account creation",

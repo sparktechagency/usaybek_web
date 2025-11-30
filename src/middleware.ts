@@ -15,7 +15,6 @@ const authRoutes = [
 const userLanding = [
   "/fqa",
   "/about-us",
-  "/contact-us",
   "/history",
   "/like-videos",
 ];
@@ -60,7 +59,6 @@ export const config = {
     "/admin/:path*",
     "/fqa",
     "/about-us",
-    "/contact-us",
     "/history",
     "/like-videos",
     "/sign-in",
