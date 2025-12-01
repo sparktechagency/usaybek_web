@@ -28,9 +28,9 @@ const nextConfig: NextConfig = {
   },
 
   // ✔ Remove console logs in production
-  compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
-  },
+  // compiler: {
+  //   removeConsole: process.env.NODE_ENV === "production",
+  // },
 
   // ✔ Force updated JS chunks (prevents ChunkLoadError)
   async headers() {
