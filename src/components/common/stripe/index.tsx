@@ -12,7 +12,7 @@ import {
   useSuccessPaymentMutation,
 } from "@/redux/api/stripeApi";
 import { toast } from "sonner";
-import { delay, modifyPayload } from "@/lib";
+import {modifyPayload } from "@/lib";
 import { useGetProfileQuery } from "@/redux/api/authApi";
 
 // Custom Hook for managing the payment process
@@ -78,7 +78,6 @@ export const usePayment = (amount: number, reason: string) => {
         toast.success("Payment Successful!", {
           description: "Your payment has been processed successfully.",
         });
-        await delay();
         setIsPaymentSuccessful(true);
       }
     } catch (error) {
