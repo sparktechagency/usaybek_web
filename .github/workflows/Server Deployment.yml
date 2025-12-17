@@ -30,7 +30,8 @@ jobs:
 
             rm -rf .next
 
-            # git stash
+            git stash
+            
             git pull -f
             # git stash pop
  
