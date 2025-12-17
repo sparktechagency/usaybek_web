@@ -5,13 +5,12 @@ import { SidebarControl } from "@/context/useSideber";
 import { ConfirmDialogProvider } from "@/context/delete-modal";
 import { SuccessDialogProvider } from "@/context/success-modal";
 import { Provider } from "react-redux";
-import { makeStore } from "@/redux/store";
 import { Toaster } from "../ui";
 import { AuthProvider } from "@/context/auth";
+import { store } from "@/redux/store";
 
 
 export default function Providers({ children }: childrenProps) {
-  const store = makeStore();
   return (
     <Provider store={store}>
       <AuthProvider>

@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import "react-quill-new/dist/quill.snow.css";
 import NextTopLoader from 'nextjs-toploader';
+import Script from "next/script";
 // Load Poppins font
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -43,6 +44,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+    <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-D94SJCXC0J"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-D94SJCXC0J');
+          `}
+        </Script>
+      </head>
+
       <body className={`${poppins.variable} antialiased`}>
       <NextTopLoader color="#ef4444" height={4} showSpinner={false} />
         <Providers>{children}</Providers>
