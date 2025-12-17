@@ -31,7 +31,7 @@ jobs:
             rm -rf .next
 
             # git stash
-            git pull
+            git pull -f
             # git stash pop
  
             npm install
