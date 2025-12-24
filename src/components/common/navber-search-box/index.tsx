@@ -103,10 +103,10 @@ export default function NavberSearchBox({ className }: any) {
       service: isValue.service,
     };
 
+
     const res = Object.fromEntries(
       Object.entries(value).filter(([_, v]) => v?.length)
     );
-
     const params = new URLSearchParams(res);
     router.push(`/videos/global?${params.toString()}`);
     setTimeout(() => setIsValue(intValue), 1000);
@@ -162,7 +162,7 @@ export default function NavberSearchBox({ className }: any) {
                 <SelectContent className="h-100">
                   <SelectGroup>
                     {isSelect.service.map((item) => (
-                      <SelectItem key={item.value} value={item.value}>
+                      <SelectItem key={item.value} value={item.label}>
                         {item.label}
                       </SelectItem>
                     ))}
@@ -318,7 +318,7 @@ export default function NavberSearchBox({ className }: any) {
                   <SelectContent>
                     <SelectGroup>
                       {isSelect.service.map((item) => (
-                        <SelectItem key={item.value} value={item.value}>
+                        <SelectItem key={item.value} value={item.label}>
                           {item.label}
                         </SelectItem>
                       ))}
