@@ -16,18 +16,29 @@ const {image,title,description}= data || {}
       {" "}
       <BackBtn className="pb-2 mb-2" />
     </Link>
-    <div className="w-full">
-      <ImgBox
-        src={image || "/blur.png"}
-        className="w-full xl:w-[600px] h-[400px] 2xl:w-[800px] 2xl:h-[450px] float-left mb-4 xl:mb-[6px] mr-5"
-        alt='title box'
-      />
-      <h1 className="text-xl lg:text-2xl font-bold leading-tight pb-3">
+    <div className="w-full relative">
+       <h1 className="text-xl lg:text-2xl font-bold leading-tight pb-3">
         {title}
       </h1>
-      <SafeHTML html={description} />
-      {/* <div dangerouslySetInnerHTML={{ __html:htmlContent}} /> */}
+      <ImgBox
+        src={image || "/blur.png"}
+        className="w-full h-100 max-w-4xl my-10 mx-auto 2xl:h-[450px]"
+        alt='title box'
+      />
+     
+      <article className='mb-10'>
+          <div className="ql-container ql-snow">
+          <div
+            className="ql-editor !p-0"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
+        </div>
+      </article>
     </div>
   </div>
   )
 }
+
+
+      {/* <SafeHTML html={description} /> */}
+      {/* <div dangerouslySetInnerHTML={{ __html:htmlContent}} /> */}

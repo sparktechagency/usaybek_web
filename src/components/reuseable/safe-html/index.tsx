@@ -18,6 +18,7 @@ export default function SafeHTML({ html }: SafeHTMLProps) {
 
   return (
     <div
+      className=""
       dangerouslySetInnerHTML={{ __html: cleanHTML }}
     />
   );
