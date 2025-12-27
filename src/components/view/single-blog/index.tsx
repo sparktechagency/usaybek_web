@@ -1,7 +1,6 @@
 "use client"
 import { ImgBox } from '@/components/common/admin/reuseable'
 import { BackBtn } from '@/components/reuseable/icon-list'
-import SafeHTML from '@/components/reuseable/safe-html'
 import { useSingleBlogQuery } from '@/redux/api/landing/blogApi'
 import Link from 'next/link'
 import React from 'react'
