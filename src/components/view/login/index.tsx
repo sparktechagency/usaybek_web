@@ -168,12 +168,14 @@ export default function SignIn() {
                   label="Email"
                   name="email"
                   placeholder="Enter your Email"
+                  type="email"
                 />
                 <FromInputs
                   eye={true}
                   label="Password"
                   name="password"
                   placeholder="Enter your Password"
+                  type="password"
                 />
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-center space-x-2">

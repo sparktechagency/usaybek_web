@@ -20,7 +20,7 @@ export default function Footer() {
               <FavIcon className="w-fit h-[50px]" name="logo" />
             </Link>
             <h3 className="text-xl font-semibold text-blacks">
-              Meet your town specialists
+              My Trusted Services Videos
             </h3>
             <p className="text-sm text-blacks  leading-relaxed">
               Expanding from the Chicagoland area to a nationwide reach, we aim

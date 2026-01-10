@@ -32,12 +32,12 @@ const TextEditor: React.FC<TextEditorProps> = ({
         { header: [1, 2, 3, false] },
         { size: ["small", false, "large", "huge"] },
       ],
-      ["bold", "italic", "underline", "strike"],
+      ["bold", "italic", "underline", "strike", "link"],
       [{ color: [] }, { background: [] }],
       [{ script: "sub" }, { script: "super" }],
       [{ align: [] }],
       [{ list: "ordered" }, { list: "bullet" }],
-      [{ indent: "-1" }, { indent: "+1" }]
+      [{ indent: "-1" }, { indent: "+1" }],
     ],
   };
 
@@ -58,8 +58,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
     "code-block",
     "link",
   ];
-
-
 
   return (
     <div className="w-full space-y-1">

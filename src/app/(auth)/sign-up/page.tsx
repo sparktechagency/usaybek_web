@@ -103,6 +103,7 @@ export default function SignUp() {
                   label="Email"
                   name="email"
                   placeholder="Enter your Email"
+                  type=""
                 />
                 <FromInputs
                   eye={true}
