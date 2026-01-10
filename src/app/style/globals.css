@@ -183,6 +183,9 @@
 }
 
 .ql-toolbar {
+  position: sticky;
+  top:80px;
+  z-index: 10;
   border-top: none !important;
   border-left: none !important;
   border-right: none !important;
@@ -232,7 +235,6 @@
   @apply grid grid-cols-1 md:col-span-2 lg:col-span-2 xl:col-span-3 2xl:col-span-4 gap-6;
 }
 
-
 .sticky-custom {
   position: sticky !important;
   top: 0;
@@ -244,11 +246,7 @@
   display: none !important;
 }
 
-
-
-
 @layer utilities {
-
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
