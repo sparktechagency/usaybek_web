@@ -22,6 +22,7 @@ import RelatedVideosRight from "@/components/common/releted-videos";
 import { useStoreHistoryMutation } from "@/redux/api/landing/historyApi";
 import Modal2 from "@/components/reuseable/modal2";
 import ContentBox from "@/components/reuseable/content-box";
+import ShareBox from "@/components/reuseable/share-box";
 
 const options = [
   { value: "Sexual content", label: "Sexual content" },
@@ -369,39 +370,12 @@ export default function VideoDetails({ slug }: any) {
 
       {/* ============ Share Modal =============*/}
       <Modal open={isShare} title="Share" setIsOpen={setIsShare}>
-        <div>
-          <ul>
-            <li className="text-xl text-blacks font-semibold text-center">
-              Link for this video
-            </li>
-            <li className="text-center text-grays px-3">
-              Copy this link and share to your friends through anything you want
-            </li>
-          </ul>
-          <div className="w-full rounded-full h-12 border select-none flex justify-center items-center text-center text-lg text-grays my-4">
-            {`${process.env.NEXT_PUBLIC_APP_URL}${path}`}
-          </div>
-
-          <div className="flex justify-center">
-            <Button
-              onClick={async () => {
-                navigator.clipboard.writeText(
-                  `${process.env.NEXT_PUBLIC_APP_URL}${path}`
-                );
-                toast.success("Link copied to clipboard!", {
-                  description: "You can now share this video link with others",
-                  duration: 2000,
-                });
-                await delay(2400);
-                setIsShare(false);
-              }}
-              className="rounded-full px-6 py-2 h-auto text-center text-base bg-transparent hover:bg-transparent shadow-none border border-input"
-            >
-              <FavIcon name="copy1" className="size-6" />
-              <span className="text-blacks"> Copy link</span>
-            </Button>
-          </div>
-        </div>
+        <ShareBox
+          setIsShare={setIsShare}
+          title="Link for this video"
+          description="Copy this link and share to your friends through anything you want"
+          message="You can now share this video link with others"
+        />
       </Modal>
       {/* ========== sign In user modal */}
       <Modal2 open={isSign} title="Sign In" setIsOpen={setIsSign}>
