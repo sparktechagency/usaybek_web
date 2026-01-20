@@ -135,6 +135,7 @@ export default function AddBlog() {
                 value={from.watch("description")}
                 onChange={(v) => from.setValue("description", v)}
                 className="bg-body !min-h-[400px] ql-div"
+                img={false}
               />
               {from?.formState?.errors?.description && (
                 <p className="text-reds flex mt-2 justify-end items-center gap-1 text-sm">

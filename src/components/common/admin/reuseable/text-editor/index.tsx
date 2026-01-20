@@ -19,45 +19,61 @@ interface TextEditorProps {
   value: string;
   onChange: (content: string) => void;
   className?: string;
+  img?: boolean;
 }
 
 const TextEditor: React.FC<TextEditorProps> = ({
   value,
   onChange,
   className,
+  img = true,
 }) => {
-  const modules = {
-    toolbar: [
-      [
-        { header: [1, 2, 3, false] },
-        { size: ["small", false, "large", "huge"] },
-      ],
-      ["bold", "italic", "underline", "strike", "link"],
-      [{ color: [] }, { background: [] }],
-      [{ script: "sub" }, { script: "super" }],
-      [{ align: [] }],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ indent: "-1" }, { indent: "+1" }],
-    ],
-  };
-
-  const formats = [
-    "header",
-    "size",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "color",
-    "background",
-    "script",
-    "align",
-    "list",
-    "indent",
-    "blockquote",
-    "code-block",
-    "link",
+  // const modules = {
+  //   toolbar: [
+  //     [
+  //       { header: [1, 2, 3, false] },
+  //       { size: ["small", false, "large", "huge"] },
+  //     ],
+  //     ["bold", "italic", "underline", "strike", "link"],
+  //     [{ color: [] }, { background: [] }],
+  //     [{ script: "sub" }, { script: "super" }],
+  //     [{ align: [] }],
+  //     [{ list: "ordered" }, { list: "bullet" }],
+  //     [{ indent: "-1" }, { indent: "+1" }],
+  //     ["image", "video"],
+  //   ],
+  // };
+  const imgOptions = img ? ["link"] : ["link","image", "video"];
+  const toolbarOptions = [
+    [{ header: [1, 2, 3, 4, false] }],
+    [{ font: [] }],
+    ["bold", "italic", "underline", "strike"],
+    imgOptions,
+    [{ color: [] }, { background: [] }],
+    [{ align: [] }],
+    [{ script: "sub" }, { script: "super" }],
+    [{ indent: "-1" }, { indent: "+1" }],
   ];
+
+  // const formats = [
+  //   "header",
+  //   "size",
+  //   "bold",
+  //   "italic",
+  //   "underline",
+  //   "strike",
+  //   "color",
+  //   "background",
+  //   "script",
+  //   "align",
+  //   "list",
+  //   "indent",
+  //   "blockquote",
+  //   "code-block",
+  //   "link",
+  //   "image",
+  //   "video",
+  // ];
 
   return (
     <div className="w-full space-y-1">
@@ -66,8 +82,9 @@ const TextEditor: React.FC<TextEditorProps> = ({
           theme="snow"
           value={value}
           onChange={onChange}
-          modules={modules}
-          formats={formats}
+          modules={{
+            toolbar: toolbarOptions,
+          }}
           className={cn(`min-h-[280px] rounded-b-xl bg-white`, className)}
         />
       </div>

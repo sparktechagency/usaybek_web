@@ -238,7 +238,24 @@
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
 }
 
-/* home page grid  */
+.ql-editor img {
+  max-width: 100%; 
+  max-height: 400px; 
+  object-fit: contain; 
+  margin: 0 auto; 
+  border-radius:5px;
+}
+
+.ql-editor iframe {
+  display: block;            
+  margin-left: auto;        
+  margin-right: auto;        
+  width:800px;              
+  max-width: 800px;         
+  height:540px;             
+  max-height: 400px;         
+  object-fit: contain;       
+}
 
 .home {
   @apply grid grid-cols-1 md:grid-cols-2 lg:col-span-2 xl:col-span-3 2xl:grid-cols-4 gap-6;
