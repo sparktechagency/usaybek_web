@@ -19,6 +19,7 @@ export async function generateMetadata({ params }: SlugParams): Promise<any> {
     tags,
   } = data?.data || {};
   const description = PlanText(content);
+  console.log(description);
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
   const url = `${baseUrl}/video/${slug}`;
   return {

@@ -60,5 +60,5 @@ export function IsToken() {
 export function PlanText(content: string): string {
   const $ = cheerio.load(content);
   const plainText = $("body").text();
-  return plainText?.slice(0,160);
+  return plainText?.slice(0,500);
 }
