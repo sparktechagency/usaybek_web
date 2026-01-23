@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
 import Cookies from "js-cookie";
 import { authKey } from "./constants";
+import * as cheerio from 'cheerio';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -33,7 +34,7 @@ export const capitalize = (s: string | any) =>
 
 export const PlaceholderImg = (
   width: number = 600,
-  height: number = 400
+  height: number = 400,
 ): string => {
   return `https://placehold.co/${width}x${height}.png`;
 };
@@ -55,10 +56,9 @@ export function IsToken() {
   return Cookies.get(authKey);
 }
 
-// plan text
-export const PlanText = (text: any) => {
-  return text
-    ?.replace(/<[^>]+>/g, "")
-    ?.replace(/\s+/g, " ")
-    ?.trim();
-};
+
+export function PlanText(content: string): string {
+  const $ = cheerio.load(content);
+  const plainText = $("body").text();
+  return plainText?.slice(0,160);
+}
