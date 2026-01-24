@@ -16,25 +16,33 @@ export async function generateMetadata({ params }: SlugParams): Promise<any> {
     description: content,
     thumbnail: image,
     video,
+    type,
+    link,
     tags,
   } = data?.data || {};
   const description = PlanText(content);
-  console.log(description);
+ 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
   const url = `${baseUrl}/video/${slug}`;
+
+  const videolink = type === "link" ? link : video;
+
   return {
     title,
     keywords: tags,
+    alternates: {
+      canonical: url,
+    },
     description,
     openGraph: {
       title,
       description,
       url,
       images: [{ url: image, width: 800, height: 600, alt: title }],
-      videos: video
+      videos: videolink
         ? [
             {
-              url: video,
+              url: videolink,
               width: 1920,
               height: 1080,
               type: "video/*",

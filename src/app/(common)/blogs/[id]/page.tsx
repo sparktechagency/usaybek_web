@@ -26,6 +26,9 @@ export async function generateMetadata({ params }: IdParams): Promise<any> {
   return {
     title,
     keywords: tags.join(", "),
+     alternates: {
+      canonical: url,
+    },
     description,
     openGraph: {
       title,
