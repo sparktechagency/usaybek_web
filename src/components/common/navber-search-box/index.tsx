@@ -77,16 +77,21 @@ export default function NavberSearchBox({ className }: any) {
   }, [citys]);
 
   // service
-  useEffect(() => {
-    if (!categories?.data?.length) return;
-    setIsSelect((prev) => ({
-      ...prev,
-      service: categories?.data?.map(({ name, id }: any) => ({
-        label: name,
-        value: id?.toString(),
-      })),
-    }));
-  }, [categories]);
+useEffect(() => {
+  if (!categories?.data?.length) return;
+
+  const sortedCategories = [...categories?.data].sort((a: any, b: any) =>
+    a?.name?.toLowerCase()?.localeCompare(b?.name?.toLowerCase())
+  );
+
+  setIsSelect((prev) => ({
+    ...prev,
+    service: sortedCategories.map(({ name, id }: any) => ({
+      label: name,
+      value: id?.toString(),
+    })),
+  }));
+}, [categories]);
 
   // Selected state & city name
   const state_name =
