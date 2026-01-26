@@ -1,11 +1,10 @@
 import { ImgBox } from "@/components/common/admin/reuseable";
-import Img from "@/components/reuseable/img";
 import SectionNav from "@/components/reuseable/section-nav";
+import Img from "@/components/reuseable/img";
 import { Card } from "@/components/ui/card";
-import { authKey } from "@/lib";
 import { Seo } from "@/lib/seo";
 import { Metadata } from "next";
-import { cookies } from "next/headers";
+
 
 export const metadata: Metadata = Seo({
   title: "About Us | MyTsv",
@@ -23,20 +22,15 @@ export const metadata: Metadata = Seo({
 });
 
 export default async function AboutUs() {
-  const tokon = (await cookies()).get(authKey)?.value;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/about-us`, {
-    headers: { Authorization: `Bearer ${tokon}` },
-    cache: "force-cache",
-    next: { revalidate: 3600 },
-  });
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/about-us`);
 
   const { data } = await res.json();
   if (!data || !Array.isArray(data)) return null;
 
   // group items
-  const firstGroup = data.slice(0, 2);
-  const secondGroup = data.slice(2, 4);
-  const lastItem = data[4];
+  const firstGroup = data?.slice(0, 2);
+  const secondGroup = data?.slice(2, 4);
+  const lastItem = data?.[4];
 
   // reusable renderer
   const renderCard = (item: any) => (
@@ -81,21 +75,16 @@ export default async function AboutUs() {
         </p>
       </div>
 
-      {/* Dynamic Groups */}
       <div>
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-3">
-          {/* first group (left side) */}
           <div className="col-span-1 lg:col-span-2 space-y-2">
             {firstGroup.map(renderCard)}
           </div>
-
-          {/* second group (right side) */}
           <div className="col-span-1 lg:col-span-3 space-y-2">
             {secondGroup.map(renderCard, "h-1/2")}
           </div>
         </div>
 
-        {/* Last Item */}
         {lastItem && (
           <Card key={lastItem.id} className="gap-3 mt-3">
             <div className="flex items-center justify-center gap-x-5">

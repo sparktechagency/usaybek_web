@@ -10,10 +10,11 @@ import { Loader } from "lucide-react";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import { titleCase } from "title-case";
 
 export default function CategoriVideoList() {
   const { id } = useParams();
-  const [num, name] = (id as string)?.split("_");
+  const [num, ...name] = (id as string)?.split("-");
   const { ref, inView } = useInView();
   const [page, setPage] = useState(1);
   const query: Record<string, any> = { page };
@@ -57,7 +58,7 @@ export default function CategoriVideoList() {
     <div>
       <div className="flex justify-between">
         <Back />
-        <SubTilte title={name?.replace(/-/g, ' ')} />
+        <SubTilte title={titleCase(name?.join(" ")) as string} />
         <h1 className="opacity-0">0</h1>
       </div>
       <div>

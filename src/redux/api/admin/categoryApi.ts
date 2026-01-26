@@ -15,6 +15,13 @@ export const categoryApi = baseApi.injectEndpoints({
         return buildResponse(res?.data);
       },
     }),
+    singleCategory: build.query({
+      query: (id) => ({
+        url: `/categories/${id}`,
+        method: "GET",
+      }),
+      providesTags: [tagTypes.singleCategory]
+    }),
     storeCategory: build.mutation({
       query: (data) => ({
         url: "/admin/categories",
@@ -48,4 +55,5 @@ export const {
   useStoreCategoryMutation,
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,
+  useSingleCategoryQuery
 } = categoryApi;

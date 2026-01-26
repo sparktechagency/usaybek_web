@@ -1,4 +1,4 @@
-import PromotionPage from "@/components/view/promotion";
+import PromoVideoListAll from "@/components/view/promotion";
 import { Metadata } from "next";
 import React from "react";
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function Promotions() {
   return (
     <>
-      <PromotionPage />
+      <PromoVideoListAll />
     </>
   );
 }

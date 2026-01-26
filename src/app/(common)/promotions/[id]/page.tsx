@@ -1,66 +1,43 @@
-"use client";
-import { VideoCardSkeleton } from "@/components/reuseable";
-import { Back } from "@/components/reuseable/icon-list";
-import SkeletonCount from "@/components/reuseable/skeleton-item/count";
-import SubTilte from "@/components/reuseable/sub-title";
-import { VideoCard } from "@/components/reuseable/video-card";
-import { usePromoVideosSliderQuery } from "@/redux/api/landing/promotionApi";
-import { useCategoriesQuery } from "@/redux/api/landing/videosApi";
-import { Loader } from "lucide-react";
-import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
+import PromotionVideoList from '@/components/common/categori-video-list/promotion-video-list'
+import { envs } from '@/lib';
+import { IdParams } from '@/types';
+import React from 'react'
 
-export default function PromotionAll() {
-  const { id } = useParams();
-  const { ref, inView } = useInView();
-  const [page, setPage] = useState(1);
-  const { data: promoVideos, isLoading } = usePromoVideosSliderQuery({
-    category_id: id,
-    page,
+
+export async function generateMetadata({ params }: IdParams): Promise<any> {
+  const { id } = await params;
+  const [id2, ...rest] = (id as string)?.split("-");
+  const res = await fetch(`${envs.api_url}/categories/${id2}`, {
+    cache: "no-cache",
   });
-  const { data: categories } = useCategoriesQuery({ per_page: 1000 });
-  const name = categories?.data?.find((item: any) => item.id == id)?.name;
+  const data = await res.json();
+  const {name, description } = data?.data || {};
+  const app_url = `${envs.app_url}/videos/${id}`
+  const img = `${envs.app_url}/mytsv2.png`
 
-  const [totalVideos, setTotalVideos] = useState<any>([]);
-  const hasMore = totalVideos?.length < promoVideos?.meta.total;
-  useEffect(() => {
-    if (inView && hasMore) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  }, [inView, hasMore]);
+  return {
+    title: name,
+     alternates: {
+      canonical:app_url,
+    },
+    description,
+    openGraph: {
+      title: name,
+      description,
+      app_url,
+      images: [{ url: img, width: 800, height: 600, alt: name }],
+      type: "website",
+      siteName: "MY TSV",
+    },
+    other: {
+      facebook: ["website", app_url, name, description, img],
+      linkedin: [app_url, name, description, img],
+    },
+  };
+}
 
-  useEffect(() => {
-    if (promoVideos?.data) {
-      setTotalVideos((prev: any) => [...prev, ...promoVideos?.data]);
-    }
-  }, [promoVideos]);
-
+export default function PromotionalVideo() {
   return (
-    <div>
-      <div className="flex justify-between">
-        <Back />
-        <SubTilte title={name} />
-        <h1 className="opacity-0">0</h1>
-      </div>
-      <div className="home gap-6">
-        {isLoading ? (
-          <SkeletonCount count={8}>
-            <VideoCardSkeleton />
-          </SkeletonCount>
-        ) : (
-          totalVideos?.map((video: any) => (
-            <VideoCard key={video.id} item={video} />
-          ))
-        )}
-      </div>
-      <div>
-        {hasMore && !isLoading && (
-          <div ref={ref} className="mx-auto opacity-0 flex justify-center mt-5">
-            <Loader className="animate-spin text-blacks/20" />
-          </div>
-        )}
-      </div>
-    </div>
-  );
+    <PromotionVideoList/>
+  )
 }

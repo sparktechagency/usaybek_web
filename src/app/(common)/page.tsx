@@ -68,6 +68,7 @@ export default function Home() {
     }
   }, [chVideos]);
 
+
   // ========= category by related video ========
   const query = { page };
   const {
@@ -137,8 +138,9 @@ export default function Home() {
                     <div key={channel.id}>
                       <SeeNav
                         title={channel.name}
-                        href={`/videos/${channel.id}_${slugify(channel.name, {
+                        href={`/videos/${channel.id}-${slugify(channel.name, {
                           strict: true,
+                          lower: true,
                         })}`}
                       />
                       <div className="home gap-6">

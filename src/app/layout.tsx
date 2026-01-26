@@ -6,11 +6,13 @@ import "slick-carousel/slick/slick.css";
 import "react-quill-new/dist/quill.snow.css";
 import NextTopLoader from 'nextjs-toploader';
 import Script from "next/script";
-// Load Poppins font
+
+
+
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"], // Add desired weights
+  weight: ["400", "500", "600", "700"], 
   display: "swap",
 });
 

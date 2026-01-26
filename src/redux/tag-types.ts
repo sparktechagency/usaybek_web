@@ -30,6 +30,7 @@ export enum tagTypes {
   transactionsAdmin = "transactionsAdmin",
   getProBanner = "getProBanner",
   categoriesAdmin = "categoriesAdmin",
+  singleCategory = "singleCategory",
   adminSeo = "adminSeo",
   fqaAdmin = "fqaAdmin",
   termsAdmin = "termsAdmin",

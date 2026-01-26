@@ -12,10 +12,8 @@ export default function robots(): MetadataRoute.Robots {
           "/admin/",
           "/dashboard/",
           "/fqa",
-          "/about-us",
           "/history",
           "/like-videos",
-          "/contact-us"
         ],
       },
     ],
