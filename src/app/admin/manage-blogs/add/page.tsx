@@ -37,7 +37,6 @@ export default function AddBlog() {
         toast.success("Blog Created Successfully", {
           description: "Your blog has been successfully created and stored",
         });
-        await delay();
         router.push(`/admin/manage-blogs`);
         from.reset();
       }

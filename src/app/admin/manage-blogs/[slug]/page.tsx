@@ -60,12 +60,10 @@ export default function AddBlog() {
     try {
       const data = modifyPayload(value);
       const res = await updateBlogs({id:slug2, data }).unwrap();
-      if (res.status) {
+      if (res?.status) {
         toast.success("Blog Updated Successfully", {
           description: "Your blog has been successfully updated and stored",
         });
-        await delay();
-        router.push(`/admin/manage-blogs`);
         from.reset();
       }
     } catch (err: any) {
