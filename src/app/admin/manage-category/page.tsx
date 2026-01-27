@@ -3,6 +3,7 @@ import { Deletebtn, Editbtn } from "@/components/common/admin/reuseable";
 import NavTitle from "@/components/common/admin/reuseable/nav-title";
 import Form from "@/components/reuseable/from";
 import { FromInput } from "@/components/reuseable/from-input";
+import { FromTextAreaResizing } from "@/components/reuseable/from-textarea-resizing";
 import Modal from "@/components/reuseable/modal";
 import { Pagination } from "@/components/reuseable/pagination";
 import SkeletonCount from "@/components/reuseable/skeleton-item/count";
@@ -26,12 +27,16 @@ import z from "zod";
 // schema
 const CategorySchema = z.object({
   name: z.string().nonempty("Category is required"),
+  description: z.string().nonempty("Description is required"),
 });
 
 export default function ManageCategory() {
   const { confirm } = useConfirmation();
   const [isPage, setIsPage] = useState<number>(1);
-  const { data: categories, isLoading } = useGetCategoryQuery({ page: isPage,per_page:20 });
+  const { data: categories, isLoading } = useGetCategoryQuery({
+    page: isPage,
+    per_page: 20,
+  });
   const [storeCategory, { isLoading: storeLoading }] =
     useStoreCategoryMutation();
   const [updateCategory, { isLoading: updateLoading }] =
@@ -40,8 +45,8 @@ export default function ManageCategory() {
   const [isEditId, setIsEditId] = useState({
     id: "",
     name: "",
+    description: "",
   });
-
   const [isStore, setIsStore] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -50,6 +55,7 @@ export default function ManageCategory() {
     resolver: zodResolver(CategorySchema),
     defaultValues: {
       name: "",
+      description: "",
     },
   });
 
@@ -74,17 +80,21 @@ export default function ManageCategory() {
     resolver: zodResolver(CategorySchema),
     defaultValues: {
       name: isEditId?.name,
+      description: isEditId?.description,
     },
   });
   useEffect(() => {
     editfrom.reset({
       name: isEditId?.name,
+      description: isEditId?.description || "",
     });
   }, [isEditId, editfrom]);
 
+  //  == edit submit ==
   const EditSubmit = async (values: FieldValues) => {
     const value = {
       name: values.name,
+      description: values.description,
       _method: "PUT",
     };
     try {
@@ -105,6 +115,7 @@ export default function ManageCategory() {
     setIsEditId({
       id: "",
       name: "",
+      description: "",
     });
     editfrom.reset();
   };
@@ -123,59 +134,60 @@ export default function ManageCategory() {
   return (
     <div>
       <NavTitle
-        title="Manage category"
-        subTitle="You can manage your video categories of your website from here."
+        title="Manage Category"
+        subTitle="You can manage your video categories of your website from here"
       />
-      <div className="flex  flex-col h-[calc(100vh-150px)]  justify-between">
+      <div className="flex flex-col h-[calc(100vh-150px)]  justify-between">
         <div>
-           <div className="flex gap-6 flex-wrap">
-        {isLoading ? (
-          <SkeletonCount count={10}>
-            <Skeleton className="w-50 h-12 rounded-xl" />
-          </SkeletonCount>
-        ) : (
-          categories?.data?.map((item: any) => (
-            <div
-              key={item.id}
-              className="bg-white rounded-2xl p-3 flex items-center justify-between"
-            >
-              <span className="text-lg font-semibold text-blacks flex-1">
-                {item?.name}
-              </span>
-              <div className="flex items-center gap-2 ml-3">
-                <Editbtn
-                  onClick={() => {
-                    setIsEditId({
-                      id: item?.id,
-                      name: item?.name,
-                    });
-                    setIsEdit(!isEdit);
-                  }}
-                />
-                <Deletebtn onClick={() => handleDelete(item?.id)} />
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {isLoading ? (
+              <SkeletonCount count={15}>
+                <Skeleton className="w-full h-35 rounded-xl" />
+              </SkeletonCount>
+            ) : (
+              categories?.data?.map((item: any) => (
+                <div key={item.id} className="bg-white rounded-2xl p-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-semibold text-blacks flex-1">
+                      {item?.name}
+                    </span>
+                    <div className="flex items-center gap-2 ml-3">
+                      <Editbtn
+                        onClick={() => {
+                          setIsEditId({
+                            id: item?.id,
+                            name: item?.name,
+                            description: item?.description,
+                          });
+                          setIsEdit(!isEdit);
+                        }}
+                      />
+                      <Deletebtn onClick={() => handleDelete(item?.id)} />
+                    </div>
+                  </div>
+                  <p className="text-[#535353] text-base mt-px line-clamp-3 w-fit">{item?.description || "N/A"}</p>
+                </div>
+              ))
+            )}
+          </div>
         </div>
-      <div className="flex mt-6 lg:mt-0  items-center w-full justify-between">
-        <Button
-          onClick={() => setIsStore(!isStore)}
-          variant="primary"
-          size="lg"
-          className="rounded-full"
-        >
-          <Plus className="text-white size-5" />
-           <span className="hidden mr-2 lg:mr-0 lg:block">Add more</span>
-        </Button>
-        <Pagination
-          onPageChange={(v: any) => setIsPage(v)}
-          {...categories?.meta}
-          activeStyle="!rounded-full !bg-reds !border-none !text-white hover:!text-white"
-          itemStyle="rounded-full"
-        ></Pagination>
-      </div>
+        <div className="flex mt-6 lg:mt-0  items-center w-full justify-between">
+          <Button
+            onClick={() => setIsStore(!isStore)}
+            variant="primary"
+            size="lg"
+            className="rounded-full"
+          >
+            <Plus className="text-white size-5" />
+            <span className="hidden mr-2 lg:mr-0 lg:block">Add more</span>
+          </Button>
+          <Pagination
+            onPageChange={(v: any) => setIsPage(v)}
+            {...categories?.meta}
+            activeStyle="!rounded-full !bg-reds !border-none !text-white hover:!text-white"
+            itemStyle="rounded-full"
+          ></Pagination>
+        </div>
       </div>
       {/* store */}
       <Modal
@@ -193,8 +205,14 @@ export default function ManageCategory() {
             className="bg-white border rounded-2xl"
             label="Category name"
             name="name"
-            placeholder="Type here"
+            placeholder="Enter category name"
             matching={true}
+          />
+          <FromTextAreaResizing
+            className="bg-white border  min-h-30 repeat-infinite rounded-2xl"
+            label="Description"
+            name="description"
+            placeholder="Enter category description"
           />
           <Button
             variant="primary"
@@ -206,7 +224,7 @@ export default function ManageCategory() {
           </Button>
         </Form>
       </Modal>
-      {/* edit */}
+      {/* ================== edit ==================== */}
       <Modal
         open={isEdit}
         setIsOpen={setIsEdit}
@@ -218,8 +236,14 @@ export default function ManageCategory() {
             className="bg-white border rounded-2xl"
             label="Category name"
             name="name"
-            placeholder="Type here"
+            placeholder="Enter category name"
             matching={true}
+          />
+          <FromTextAreaResizing
+            className="bg-white border  min-h-30 repeat-infinite rounded-2xl"
+            label="Description"
+            name="description"
+            placeholder="Enter category description"
           />
           <Button
             disabled={updateLoading}

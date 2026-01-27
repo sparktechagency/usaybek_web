@@ -70,7 +70,9 @@ export default function PromoBanners() {
         subTitle="You can manage your promotional banner / ads of your website from here"
       />
      <div className="flex justify-end mb-4">
-  <label className="inline-flex items-center cursor-pointer">
+    <div className="flex items-center space-x-2">
+      <span className="font-medium">Banner Visibility</span>
+    <label className="inline-flex items-center cursor-pointer">
     <input
       type="checkbox"
       checked={checked}
@@ -86,7 +88,8 @@ export default function PromoBanners() {
         peer-checked:bg-reds"
     ></div>
   </label>
-</div>
+    </div>
+ </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {isLoading ? (

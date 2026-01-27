@@ -9,7 +9,7 @@ import { Button } from "@/components/ui";
 import useConfirmation from "@/context/delete-modal";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import FavIcon from "@/icon/admin/favIcon";
-import { delay, modifyPayload } from "@/lib";
+import {modifyPayload } from "@/lib";
 import {
   useDeleteBlogMutation,
   useSingleBlogQuery,
