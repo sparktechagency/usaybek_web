@@ -5,7 +5,6 @@ import Modal from "@/components/reuseable/modal";
 import ShareBox from "@/components/reuseable/share-box";
 import FavIcon from "@/icon/admin/favIcon";
 import { useSingleBlogQuery } from "@/redux/api/landing/blogApi";
-import DOMPurify from "dompurify";
 import Link from "next/link";
 import React, { useState } from "react";
 
@@ -14,13 +13,7 @@ export default function SingleBlog({ id }: any) {
   const { image, title, description } = data || {};
   const [isShare, setIsShare] = useState(false);
 
-  const sanitizedContent = DOMPurify.sanitize(description, {
-    USE_PROFILES: { html: true },
-    ALLOWED_TAGS: ["p", "b", "i", "em", "strong", "a", "ul", "ol", "li", "br"],
-    ALLOWED_ATTR: ["href", "target", "rel"],
-  });
-  const cleanedContent = sanitizedContent.replace(/&nbsp;/g, " ");
-
+ 
   return (
     <div>
       <div className="flex justify-between gap-10">
@@ -49,7 +42,7 @@ export default function SingleBlog({ id }: any) {
           <div className="ql-container ql-snow">
             <div
               className="ql-editor !p-0"
-              dangerouslySetInnerHTML={{ __html: cleanedContent }}
+              dangerouslySetInnerHTML={{ __html:description }}
             />
           </div>
         </article>
