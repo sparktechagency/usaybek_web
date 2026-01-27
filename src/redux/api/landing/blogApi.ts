@@ -50,6 +50,42 @@ export const blogApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.blogs],
     }),
+    getBlogsComment: build.query({
+      query: (arg: Record<string, any>) => ({
+        url: "/blog-comments",
+        method: "GET",
+        params: arg,
+      }),
+      providesTags: [tagTypes.allBlogComment],
+      transformResponse: (response: any) => {
+        return buildResponse(response.data);
+      },
+    }),
+    storeComment: build.mutation({
+      query: (data) => ({
+        url: "/blog-comments",
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+      invalidatesTags: [tagTypes.allBlogComment],
+    }),
+    updateBlogComment: build.mutation({
+      query: ({ id, data }: any) => ({
+        url: `/blog-comments/${id}`,
+        method: "POST",
+        ContentType: "multipart/form-data",
+        data,
+      }),
+      invalidatesTags: [tagTypes.allBlogComment],
+    }),
+    deleteBlogComment: build.mutation({
+      query: (id) => ({
+        url: `/blog-comments/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [tagTypes.allBlogComment],
+    }),
   }),
 });
 
@@ -59,4 +95,8 @@ export const {
   useStoreBlogsMutation,
   useUpdateBlogMutation,
   useDeleteBlogMutation,
+  useGetBlogsCommentQuery,
+  useStoreCommentMutation,
+  useDeleteBlogCommentMutation,
+  useUpdateBlogCommentMutation
 } = blogApi;

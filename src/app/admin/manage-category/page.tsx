@@ -165,7 +165,7 @@ export default function ManageCategory() {
                       <Deletebtn onClick={() => handleDelete(item?.id)} />
                     </div>
                   </div>
-                  <p className="text-[#535353] text-base mt-px line-clamp-3 w-fit">{item?.description || "N/A"}</p>
+                  <p className="text-grays text-base mt-px line-clamp-3 w-fit">{item?.description || "N/A"}</p>
                 </div>
               ))
             )}

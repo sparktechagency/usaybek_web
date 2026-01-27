@@ -7,6 +7,7 @@ export enum tagTypes {
   videoDetails = "videoDetails",
   blogs = "blogs",
   singleBlog = "singleBlog",
+  allBlogComment=" allBlogComment",
   profile = "profile",
   userDashboard = "userDashboard",
   userAnalytics = "userAnalytics",
@@ -22,6 +23,7 @@ export enum tagTypes {
   getlikeVideo = "getlikeVideo",
   watchHistory = "watchHistory",
   channelLanDetails="channelLanDetails",
+
   // admin start ---------
   getChannels = "getChannels",
   salesRepresentatives = "salesRepresentatives",
@@ -83,5 +85,6 @@ export const tagTypesList = [
   tagTypes.reportDetailsAdmin,
   tagTypes.appealAdmin,
   tagTypes.channelLanDetails,
-  tagTypes.notifications
+  tagTypes.notifications,
+  tagTypes.allBlogComment
 ];
