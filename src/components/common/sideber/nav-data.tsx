@@ -68,6 +68,7 @@ export const signOutItems = [
   },
   { icon: <Icon name="sabout" />, text: "About us", href: "/about-us" },
   { icon: <Icon name="scontact" />, text: "Contact us", href: "/contact-us" },
+  { icon: <Icon name="scontract" />, text: "Contract", href: "/contract" },
   {
     icon: <Icon name="sonSide" />,
     text: "Onsite account creation",

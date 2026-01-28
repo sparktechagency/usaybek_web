@@ -11,7 +11,6 @@ interface SeoProps {
 export function Seo({
   title,
   description,
-  keywords = [],
   url,
   image,
 }: SeoProps): Metadata {
@@ -22,8 +21,10 @@ export function Seo({
   return {
     title,
     description,
-    keywords,
     metadataBase: new URL(baseUrl),
+    alternates: {
+      canonical:new URL(baseUrl),
+    },
     openGraph: {
       title,
       description,

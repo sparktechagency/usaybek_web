@@ -34,3 +34,50 @@ export const TakeOptions = [
   { label: "Give a warning", value: "Give a warning" },
   { label: "Suspend permanently", value: "Suspend permanently" },
 ];
+
+export const contractService = [
+  {
+    title: "Professional Video Production",
+    description:
+      "A high-quality video tailored to showcase your business's unique value",
+    icon: assets.contract.youtube,
+  },
+  {
+    title: "Custom Press Release",
+    description:
+      "Expertly written news copy ready to be distributed to major outlets",
+    icon: assets.contract.release,
+  },
+  {
+    title: "Dedicated MyTSV Channel",
+    description: "Your own branded space on mytsv.com featuring your video",
+    icon: assets.contract.channel,
+  },
+  {
+    title: "30-Day Featured Promotion",
+    description:
+      "High-visibility placement on our platform to drive immediate traffic",
+    icon: assets.contract.promotion,
+  },
+];
+
+export const processItem = [
+  {
+    title: "Sign & secure",
+    description: "Review the terms and complete your payment below",
+    icon: assets.contract.sign,
+    width: 231,
+  },
+  {
+    title: "Onboarding",
+    description: "Fill out our brief questionnaire so we can get your details",
+    icon: assets.contract.onboarding,
+    width:280,
+  },
+  {
+    title: "Launch",
+    description: "We produce your assets and go live within 30 business days",
+    icon: assets.contract.launch,
+    width: 280,
+  },
+];

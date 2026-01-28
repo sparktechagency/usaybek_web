@@ -53,6 +53,7 @@ import phoned from "@/icon/basic/phoned.svg"
 import sucessGreen from "@/icon/basic/sucessGreen.svg"
 import promoted from "@/icon/dash/promoted.svg"
 import privacy from "@/icon/sideber/privacy.svg"
+import scontract from "@/icon/sideber/scontract.svg"
 
 
 export const IconList = {
@@ -110,5 +111,6 @@ export const IconList = {
   phoned,
   sucessGreen,
   promoted,
-  privacy
+  privacy,
+  scontract
 };

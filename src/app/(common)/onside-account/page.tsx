@@ -10,15 +10,6 @@ export const metadata = Seo({
   title: "OnSide Account - Unlock New Opportunities",
   description:
     "Take your business to the next level with MyTSV.com. Our team is visiting local businesses to offer an exclusive opportunity to join a video-first platform that connects your services with real, engaged customers in your area.",
-  keywords: [
-    "mytsv account",
-    "MyTSV sign up",
-    "onside account",
-    "MyTSV account setup",
-    "mytsc sign-up",
-    "youtube",
-    "videos",
-  ],
   url: "/onside-account",
   image: "/images/onsideImg.jpg",
 });
