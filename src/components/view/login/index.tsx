@@ -122,7 +122,7 @@ export default function SignIn() {
   return (
     <div className="fixed inset-0 m-0 md:m-3">
       <Image
-        src={assets.auth.loginImg}
+        src={"/login.svg"}
         alt="title"
         fill
         loading="eager"

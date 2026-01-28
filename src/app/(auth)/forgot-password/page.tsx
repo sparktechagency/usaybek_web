@@ -1,5 +1,4 @@
 "use client";
-import assets from "@/assets";
 import Form from "@/components/reuseable/from";
 import { FromInputs } from "@/components/reuseable/from-inputs";
 import {
@@ -11,7 +10,7 @@ import {
 } from "@/components/ui";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import FavIcon from "@/icon/admin/favIcon";
-import { delay, modifyPayload } from "@/lib";
+import {modifyPayload } from "@/lib";
 import { useForgotPasswordMutation } from "@/redux/api/authApi";
 import { ForgotSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,7 +57,7 @@ function ForgotPasswordChild() {
   return (
     <div className="fixed inset-0 m-0 md:m-3">
       <Image
-        src={assets.auth.forgotImg}
+        src={"/forgot.svg"}
         alt="title"
         fill
         loading="eager"

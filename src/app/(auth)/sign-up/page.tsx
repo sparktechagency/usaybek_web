@@ -1,5 +1,4 @@
 "use client";
-import assets from "@/assets";
 import Form from "@/components/reuseable/from";
 import { FromInputs } from "@/components/reuseable/from-inputs";
 import {
@@ -65,7 +64,7 @@ export default function SignUp() {
   return (
     <div className="fixed inset-0 m-0 md:m-3">
       <Image
-        src={assets.auth.signImg}
+        src={"/sign-up.svg"}
         alt="title"
         fill
         loading="eager"

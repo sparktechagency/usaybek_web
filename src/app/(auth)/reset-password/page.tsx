@@ -53,7 +53,7 @@ function ResetPasswordChild() {
   return (
     <div className="fixed inset-0 m-0 md:m-3">
       <Image
-        src={assets.auth.forgotImg}
+        src={"/forgot.svg"}
         alt="title"
         fill
         loading="eager"
