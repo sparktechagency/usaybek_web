@@ -1,10 +1,7 @@
 "use client";
 import { ImgBox } from "@/components/common/admin/reuseable";
-<<<<<<< HEAD
-import Avatars from "@/components/reuseable/avater";
-=======
 import TextEditorPreview from "@/components/common/admin/reuseable/text-editor-preview";
->>>>>>> dc748a8c2e93287097a626ef416482bc34a4d2e2
+import Avatars from "@/components/reuseable/avater";
 import { BackBtn } from "@/components/reuseable/icon-list";
 import Modal from "@/components/reuseable/modal";
 import ShareBox from "@/components/reuseable/share-box";
@@ -104,17 +101,7 @@ export default function SingleBlog({ id }: any) {
           className="w-full h-100 max-w-4xl my-10  mx-auto 2xl:h-[450px]"
           alt="title box"
         />
-<<<<<<< HEAD
-
-        <article className="mb-10">
-          <div className="ql-container ql-snow">
-            <div
-              className="ql-editor !p-0"
-              dangerouslySetInnerHTML={{ __html:description }}
-            />
-          </div>
-        </article>
-
+         <TextEditorPreview value={description} />
         <div className="mt-10">
           <h1 className="text-xl font-bold mb-2">Comments</h1>
           {user?.data?.id && <form onSubmit={SubmitComment} className="w-full lg:w-1/2">
@@ -192,9 +179,6 @@ export default function SingleBlog({ id }: any) {
           )}
 
         </div>
-=======
-        <TextEditorPreview value={description} />
->>>>>>> dc748a8c2e93287097a626ef416482bc34a4d2e2
       </div>
       {/* blog box */}
       <Modal open={isShare} title="Share" setIsOpen={setIsShare}>
