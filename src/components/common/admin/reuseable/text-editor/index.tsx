@@ -5,7 +5,6 @@ import "react-quill-new/dist/quill.snow.css";
 import { cn } from "@/lib/utils";
 import { Loader } from "lucide-react";
 
-
 const ReactQuill = dynamic(() => import("react-quill-new"), {
   ssr: false,
   loading: () => (
@@ -40,6 +39,24 @@ const TextEditor: React.FC<TextEditorProps> = ({
     [{ indent: "-1" }, { indent: "+1" }],
   ];
 
+  const formats = [
+    "header",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "color",
+    "background",
+    "script",
+    "align",
+    "list",
+    "indent",
+    "blockquote",
+    "code-block",
+    "link",
+  ];
+
   return (
     <div className="w-full space-y-1">
       <div className="rounded-xl   border border-gray-300 bg-gray-50/80 p-2">
@@ -50,6 +67,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
           modules={{
             toolbar: toolbarOptions,
           }}
+          formats={formats}
           className={cn(`min-h-[280px] rounded-b-xl bg-white`, className)}
         />
       </div>
