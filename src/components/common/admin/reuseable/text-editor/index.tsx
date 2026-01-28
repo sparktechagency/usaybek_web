@@ -5,7 +5,6 @@ import "react-quill-new/dist/quill.snow.css";
 import { cn } from "@/lib/utils";
 import { Loader } from "lucide-react";
 
-
 const ReactQuill = dynamic(() => import("react-quill-new"), {
   ssr: false,
   loading: () => (
@@ -40,7 +39,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
     [{ indent: "-1" }, { indent: "+1" }],
   ];
 
-   const formats = [
+  const formats = [
     "header",
     "size",
     "bold",
@@ -56,7 +55,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
     "blockquote",
     "code-block",
     "link",
-    "br"
   ];
 
   return (
