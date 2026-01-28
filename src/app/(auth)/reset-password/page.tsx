@@ -1,5 +1,4 @@
 "use client";
-import assets from "@/assets";
 import Form from "@/components/reuseable/from";
 import {
   Button,
