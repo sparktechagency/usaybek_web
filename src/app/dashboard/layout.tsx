@@ -7,14 +7,14 @@ import React, { useEffect } from "react";
 import { roleKey } from "@/lib";
 
 export default function UserLayout({ children }: childrenProps) {
-  const pathname = usePathname();
-  const roleValue = Cookies.get(roleKey);
-  const isUser = roleValue === "USER";
+  // const pathname = usePathname();
+  // const roleValue = Cookies.get(roleKey);
+  // const isUser = roleValue === "USER";
 
-  useEffect(() => {
-    if (!isUser && /^\/dashboard\/*/.test(pathname)) {
-      return redirect("/");
-    }
-  }, [isUser,pathname]);
+  // useEffect(() => {
+  //   if (!isUser && /^\/dashboard\/*/.test(pathname)) {
+  //     return redirect("/");
+  //   }
+  // }, [isUser,pathname]);
   return <UserDashboardLayout>{children}</UserDashboardLayout>;
 }

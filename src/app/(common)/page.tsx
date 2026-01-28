@@ -30,13 +30,13 @@ export default function Home() {
   const roleValue = getCookie(roleKey);
   const { data: banners } = useGetBannerQuery({});
 
-  const isAdmin = roleValue === "ADMIN";
+  // const isAdmin = roleValue === "ADMIN";
 
-  useEffect(() => {
-    if (isAdmin) {
-      redirect("/admin");
-    }
-  }, [isAdmin]);
+  // useEffect(() => {
+  //   if (isAdmin) {
+  //     redirect("/admin");
+  //   }
+  // }, [isAdmin]);
 
   useEffect(() => {
     setPage(1);

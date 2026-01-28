@@ -111,15 +111,15 @@ export default function ContractView() {
                 the directory is free for users, certain advanced features such
                 as premium listings or additional visibility may require a paid
                 membership. MyTsv is committed to upholding transparency by
-                ensuring that service providers' profiles are accurate and that
+                ensuring that service providers&apos; profiles are accurate and that
                 any updates or changes to business information are reflected
                 promptly. User privacy and data security are at the forefront of
-                MyTsv's priorities. The platform complies with GDPR and other
+                MyTsv&apos;s priorities. The platform complies with GDPR and other
                 relevant data protection regulations, safeguarding user
                 information while maintaining a smooth and secure user
                 experience. MyTsv also provides clear guidelines on how users
                 can interact with the platform and service providers. However,
-                it's important to note that MyTsv is not directly involved in
+                it&apos;s important to note that MyTsv is not directly involved in
                 the financial transactions, agreements, or the actual service
                 delivery between users and service providers. It only
                 facilitates the connection and provides reviews, ratings, and
@@ -127,7 +127,7 @@ export default function ContractView() {
                 encourages users to submit honest, thoughtful reviews and
                 feedback to help others in the community. Users are also
                 encouraged to report any inappropriate content or reviews that
-                violate the platform's content policies, ensuring a safe and
+                violate the platform&apos;s content policies, ensuring a safe and
                 trustworthy environment for all. MyTsv reserves the right to
                 modify its terms and conditions, privacy policy, and other
                 aspects of the platform at any time, with appropriate notice
@@ -179,7 +179,7 @@ export default function ContractView() {
                 disputes through a dedicated resolution process. From time to
                 time, the platform may also offer promotions, discounts, or
                 special deals in collaboration with service providers. By using
-                MyTsv, users agree to comply with the platform's terms and
+                MyTsv, users agree to comply with the platform&apos;s terms and
                 conditions, fostering a fair, transparent, and trustworthy
                 ecosystem for users and service providers alike
               </div>
