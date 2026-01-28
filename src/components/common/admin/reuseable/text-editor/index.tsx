@@ -5,7 +5,7 @@ import "react-quill-new/dist/quill.snow.css";
 import { cn } from "@/lib/utils";
 import { Loader } from "lucide-react";
 
-// Dynamically import ReactQuill to avoid SSR issues
+
 const ReactQuill = dynamic(() => import("react-quill-new"), {
   ssr: false,
   loading: () => (
@@ -28,52 +28,17 @@ const TextEditor: React.FC<TextEditorProps> = ({
   className,
   img = true,
 }) => {
-  // const modules = {
-  //   toolbar: [
-  //     [
-  //       { header: [1, 2, 3, false] },
-  //       { size: ["small", false, "large", "huge"] },
-  //     ],
-  //     ["bold", "italic", "underline", "strike", "link"],
-  //     [{ color: [] }, { background: [] }],
-  //     [{ script: "sub" }, { script: "super" }],
-  //     [{ align: [] }],
-  //     [{ list: "ordered" }, { list: "bullet" }],
-  //     [{ indent: "-1" }, { indent: "+1" }],
-  //     ["image", "video"],
-  //   ],
-  // };
-  const imgOptions = img ? ["link"] : ["link","image", "video"];
+  const imgOptions = img ? ["link"] : ["link", "image", "video"];
   const toolbarOptions = [
     [{ header: [1, 2, 3, 4, false] }],
     [{ font: [] }],
-    ["bold", "italic", "underline", "strike"],
+    ["bold", "italic", "underline", "strike", "br"],
     imgOptions,
     [{ color: [] }, { background: [] }],
     [{ align: [] }],
     [{ script: "sub" }, { script: "super" }],
     [{ indent: "-1" }, { indent: "+1" }],
   ];
-
-  // const formats = [
-  //   "header",
-  //   "size",
-  //   "bold",
-  //   "italic",
-  //   "underline",
-  //   "strike",
-  //   "color",
-  //   "background",
-  //   "script",
-  //   "align",
-  //   "list",
-  //   "indent",
-  //   "blockquote",
-  //   "code-block",
-  //   "link",
-  //   "image",
-  //   "video",
-  // ];
 
   return (
     <div className="w-full space-y-1">
