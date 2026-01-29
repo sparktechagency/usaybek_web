@@ -27,6 +27,7 @@ import Link from "next/link";
 import Icon from "@/icon";
 import TextEditor from "@/components/common/admin/reuseable/text-editor";
 import { useParams } from "next/navigation";
+import { toast } from "sonner";
 
 const intImg = {
   videoPreview: "",
@@ -77,7 +78,7 @@ export default function EditVideo() {
     link,
   } = data || {};
   const defaultId = states?.find(
-    (i: any) => i.name.toLowerCase() === state?.toLowerCase()
+    (i: any) => i.name.toLowerCase() === state?.toLowerCase(),
   )?.id;
 
   // ============== from ==============
@@ -164,6 +165,10 @@ export default function EditVideo() {
         from.reset();
         setIsImg(intImg);
         setIsLink("");
+        toast.success("Updated Successfully", {
+          description: "Your video has been successfully updated.",
+          position: "bottom-right",
+        });
       }
     } catch (err: any) {
       ResponseApiErrors(err?.data, from);

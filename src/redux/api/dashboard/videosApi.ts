@@ -16,7 +16,7 @@ export const usersVideosApi = baseApi.injectEndpoints({
       },
     }),
     storeVideos: build.mutation({
-      query: ({data,onUploadProgress}) => ({
+      query: ({ data, onUploadProgress }) => ({
         url: "/videos",
         method: "POST",
         headers: {
@@ -63,6 +63,12 @@ export const usersVideosApi = baseApi.injectEndpoints({
         return res?.data;
       },
     }),
+    togglePromoted: build.query({
+      query: (id) => ({
+        url: `/toggle-promotional-video/${id}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -73,4 +79,5 @@ export const {
   useVideoEditMutation,
   useVideoAnalyticsQuery,
   useStoreVideosMutation,
+  useLazyTogglePromotedQuery
 } = usersVideosApi;

@@ -56,6 +56,12 @@ export function IsToken() {
   return Cookies.get(authKey);
 }
 
+export const getOneMonthAfter = () => {
+  const date = new Date();
+  date.setMonth(date.getMonth() + 1); 
+  return formatDate(date, "YYYY-MM-DD");
+};
+
 
 export function PlanText(content: string): string {
   const $ = cheerio.load(content);

@@ -19,6 +19,21 @@ export const ViewItem = [
   },
 ];
 
+export const videoFilterItem = [
+  {
+    value: "all",
+    label: "All",
+  },
+  {
+    value: "normal",
+    label: "Normal",
+  },
+  {
+    value: "promoted",
+    label: "Promoted",
+  },
+];
+
 // serviceItem
 export const serviceItem = [
   "Haircuts & Trims",
@@ -72,7 +87,7 @@ export const processItem = [
     title: "Onboarding",
     description: "Fill out our brief questionnaire so we can get your details",
     icon: assets.contract.onboarding,
-    width:280,
+    width: 280,
   },
   {
     title: "Launch",

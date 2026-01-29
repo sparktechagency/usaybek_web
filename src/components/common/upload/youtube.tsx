@@ -16,13 +16,20 @@ import { useCategoriesQuery } from "@/redux/api/landing/videosApi";
 import ImgUpload from "@/components/reuseable/img-uplod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { linkSchema } from "@/schema";
-import { delay, modifyPayloadAll, reasonType } from "@/lib";
+import {
+  delay,
+  formatDate,
+  getOneMonthAfter,
+  modifyPayloadAll,
+  reasonType,
+} from "@/lib";
 import { toast } from "sonner";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import FavIcon from "@/icon/admin/favIcon";
 import StripePaymentWrapper from "../stripe";
 import Modal from "@/components/reuseable/modal";
 import TextEditor from "../admin/reuseable/text-editor";
+import { SingleCalendar } from "../admin/reuseable/single-date";
 
 const intImg = {
   thumbnailPreview: "",
@@ -30,11 +37,11 @@ const intImg = {
 
 export default function YoutubeLink({ type, setIsUpload, price }: any) {
   const [isPayment, setIsPayment] = useState(false);
-  const [isColor, setIsColor] = useState(false);
   const [progress, setProgress] = useState<number>();
   const { data: states } = useGetStatesQuery({});
   const [isImg, setIsImg] = useState<any>(intImg);
   const [storeVideos, { isLoading }] = useStoreVideosMutation();
+  const [paymentStatus, setIsPaymentStatus] = useState(false);
   const { data: categories } = useCategoriesQuery({
     per_page: 1000,
   });
@@ -43,6 +50,7 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
     city: [],
   });
 
+  const afterMonth = getOneMonthAfter();
 
   const [isPay, setIsPay] = useState(false);
   const from = useForm({
@@ -57,6 +65,7 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
       tags: [],
       description: "",
       thumbnail: null,
+      promoted_until: "",
     },
   });
 
@@ -92,45 +101,47 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
 
   //  handleSubmit
   const handleSubmit = async (values: FieldValues) => {
-    const { states, ...rest } = values;
+    const { states, promoted_until, ...rest } = values;
     const value = {
       ...rest,
       states: stateName,
       type,
-      is_promoted: isColor ? 1 : 0,
+      is_promoted: paymentStatus ? 1 : 0,
+      ...(paymentStatus && { promoted_until: promoted_until || afterMonth }),
     };
-    try {
-      const data = modifyPayloadAll(value);
-      const res = await storeVideos({
-        data,
-        onUploadProgress: (progressEvent: ProgressEvent) => {
-          if (progressEvent.total) {
-            const progress = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            );
-            setProgress(progress);
-          }
-        },
-      }).unwrap();
-      if (res.status) {
-        toast.success("Uploaded Successful", {
-          description: "Your video has been uploaded successfully",
-        });
-        setIsUpload(false);
-      }
-      await delay();
-      from.reset();
-      setIsImg(intImg);
-    } catch (err: any) {
-      ResponseApiErrors(err?.data, from);
-    }
+    console.log("Submitted values:", value);
+    // try {
+    //   const data = modifyPayloadAll(value);
+    //   const res = await storeVideos({
+    //     data,
+    //     onUploadProgress: (progressEvent: ProgressEvent) => {
+    //       if (progressEvent.total) {
+    //         const progress = Math.round(
+    //           (progressEvent.loaded * 100) / progressEvent.total,
+    //         );
+    //         setProgress(progress);
+    //       }
+    //     },
+    //   }).unwrap();
+    //   if (res.status) {
+    //     toast.success("Uploaded Successful", {
+    //       description: "Your video has been uploaded successfully",
+    //     });
+    //     setIsUpload(false);
+    //   }
+    //   await delay();
+    //   from.reset();
+    //   setIsImg(intImg);
+    // } catch (err: any) {
+    //   ResponseApiErrors(err?.data, from);
+    // }
   };
 
   // handlePaymentSuccess
   const handlePaymentSuccess = () => {
     setIsPayment(false);
     setIsPay(false);
-    setIsColor(true);
+    setIsPaymentStatus(true);
   };
 
   return (
@@ -169,31 +180,37 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
             itemStyle="py-2"
           />
           {/* Promoted Button */}
-          {isColor ? (
+          <div className={`flex items-center ${isPay && "gap-2"}`}>
             <Button
               variant="primary"
+              onClick={() => setIsPay(!isPay)}
               type="button"
-              className="rounded-full cursor-default text-white font-normal text-base"
+              className={`rounded-full ${
+                !isPay && "bg-[#EFEFEF] text-blacks"
+              } font-normal text-base`}
             >
               <Icon name="promoted" width={20} />
               <span>{` Promote for ${price || 0} / Month`}</span>
             </Button>
-          ) : (
-            <div>
-              <Button
-                variant="primary"
-                onClick={() => setIsPay(!isPay)}
-                type="button"
-                className={`rounded-full ${
-                  !isPay && "bg-[#EFEFEF] text-blacks"
-                } font-normal text-base`}
-              >
-                <Icon name="promoted" width={20} />
-                <span>{` Promote for ${price || 0} / Month`}</span>
-              </Button>
-              {!isPay && <span className="text-gray1 ml-3">/ Optional</span>}
-            </div>
-          )}
+            {isPay && (
+              <div>
+                <SingleCalendar
+                  defaultDate={afterMonth}
+                  onChange={(date: any) => {
+                    const value = formatDate(date, "YYYY-MM-DD");
+                    from.setValue("promoted_until", value);
+                  }}
+                />
+                {from?.formState?.errors?.promoted_until && (
+                  <p className="text-reds justify-end mt-1 flex items-center gap-1 text-sm">
+                    {from?.formState?.errors?.promoted_until?.message as string}
+                    <CircleAlert size={14} />
+                  </p>
+                )}
+              </div>
+            )}
+            {!isPay && <span className="text-gray1 mt-3 ml-2">/ Optional</span>}
+          </div>
         </div>
 
         {/* Right Column */}

@@ -1,6 +1,7 @@
 "use client";
 import NavItem from "@/components/common/dashboard/navber";
 import {
+  Button,
   Checkbox,
   Skeleton,
   Table,
@@ -18,6 +19,7 @@ import Modal from "@/components/reuseable/modal";
 import TabList from "@/components/common/upload/tab";
 import {
   useBulkDeleteMutation,
+  useLazyTogglePromotedQuery,
   useSingleDeleteMutation,
   useUserVideosQuery,
 } from "@/redux/api/dashboard/videosApi";
@@ -29,10 +31,15 @@ import FavIcon from "@/icon/admin/favIcon";
 import { modifyPayloadBulk } from "@/lib";
 import Icon from "@/icon";
 import Link from "next/link";
+import { videoFilterItem } from "@/dummy-data";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Switch } from "@/components/ui/switch";
+import { toast } from "sonner";
 
 export default function MyVideos() {
   const { confirm } = useConfirmation();
   const [isSearch, setIsSearch] = useState("");
+  const [activeFilter, setActiveFilter] = useState<string>("");
   const [value] = useDebounce(isSearch, 1000);
   const [isUpload, setIsUpload] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
@@ -40,18 +47,24 @@ export default function MyVideos() {
   const query: Record<string, any> = {
     page: isPage,
     ...(value && { search: value }),
+    ...(activeFilter && { type: activeFilter }),
   };
-  const { data: userVideos, isLoading } = useUserVideosQuery({ ...query });
+  const {
+    data: userVideos,
+    isLoading,
+    refetch,
+  } = useUserVideosQuery({ ...query });
   const [selectedVideoIds, setSelectedVideoIds] = useState<string[]>([]);
   const [bulkDelete] = useBulkDeleteMutation();
   const [singleDelete] = useSingleDeleteMutation();
+  const [togglePromoted] = useLazyTogglePromotedQuery();
 
   const handleSelect = (id: string, checked: boolean) => {
     if (checked) {
       setSelectedVideoIds((prevIds) => [...prevIds, id]);
     } else {
       setSelectedVideoIds((prevIds) =>
-        prevIds.filter((videoId) => videoId !== id)
+        prevIds.filter((videoId) => videoId !== id),
       );
     }
   };
@@ -85,6 +98,27 @@ export default function MyVideos() {
     }
   };
 
+  const handleTogglePromoted = async (id: string) => {
+    try {
+      const res = await togglePromoted(id).unwrap();
+      if (res?.status) {
+        refetch();
+        const message = res?.data?.is_promoted
+          ? "Promotion Added"
+          : "Promotion Removed";
+        toast.success(message, {
+          description: res?.message,
+          position: "bottom-right",
+        });
+      }
+    } catch (err: any) {
+      toast.error("Promotion Failed", {
+        description: err?.data?.message,
+        position: "bottom-right",
+      });
+    }
+  };
+
   return (
     <div>
       <NavItem
@@ -95,17 +129,36 @@ export default function MyVideos() {
         placeholder="Search Videos"
       />
       <div>
-        <div className="flex items-center space-x-4 pb-2 pt-10">
-          <span className="font-medium text-blacks">
-            {isCheck
-              ? `Selected Videos : ${selectedVideoIds?.length || 0}`
-              : `Total Videos: ${userVideos?.meta?.total || 0}`}
-          </span>
-          {selectedVideoIds?.length > 0 && (
-            <>
-              <DeleteBtn onClick={handleDeleteAll} />
-            </>
-          )}
+        <div className="flex flex-col lg:flex-row justify-between items-center">
+          <div className="flex items-center  space-x-4 pb-2 pt-10">
+            <span className="font-medium text-blacks">
+              {isCheck
+                ? `Selected Videos : ${selectedVideoIds?.length || 0}`
+                : `Total Videos: ${userVideos?.meta?.total || 0}`}
+            </span>
+            {selectedVideoIds?.length > 0 && (
+              <>
+                <DeleteBtn onClick={handleDeleteAll} />
+              </>
+            )}
+          </div>
+          <ButtonGroup>
+            {videoFilterItem?.map((btn) => (
+              <Button
+                key={btn.value}
+                size="sm"
+                variant="outline"
+                className={
+                  activeFilter === btn.value
+                    ? "bg-transparent text-reds hover:text-reds "
+                    : "shadow-none"
+                }
+                onClick={() => setActiveFilter(btn.value)}
+              >
+                {btn.label}
+              </Button>
+            ))}
+          </ButtonGroup>
         </div>
 
         <Table>
@@ -150,12 +203,18 @@ export default function MyVideos() {
                         </div>
                       )}
                       <div className="flex group space-x-4">
-                        <div className="w-[150px] h-[95px]">
+                        <div className="w-[150px] h-[95px] relative">
                           <ImgBox
                             src={item.thumbnail}
                             alt={item.title}
                             className="w-[150px] h-[95px] rounded-md"
                           />
+
+                          {!!item.is_promoted && (
+                            <div className="absolute top-1 right-1  bg-reds/80 size-8 grid place-items-center rounded-full">
+                              <FavIcon name="rocket" className="size-4 mr-1" />
+                            </div>
+                          )}
                         </div>
                         <div className="flex-1">
                           <div className="font-semibold block break-all whitespace-normal text-blacks text-lg !line-clamp-2 lg:truncate">
@@ -234,6 +293,15 @@ export default function MyVideos() {
                                     hoverColor="#ef4444"
                                   />
                                 </li>
+                                <li className="hover:border rounded-md h-8 w-9  grid place-items-center hover:bg-white">
+                                  <Switch
+                                    className="cursor-pointer data-[state=checked]:bg-[#535353]"
+                                    checked={!!item.is_promoted}
+                                    onClick={() =>
+                                      handleTogglePromoted(item.id)
+                                    }
+                                  />
+                                </li>
                               </ul>
                             </div>
                           </div>
@@ -251,16 +319,16 @@ export default function MyVideos() {
 
                   <TableCell>
                     <div className="w-[120px] md:w-fit">
-                        <ul className="[&>li]:text-grays space-y-1">
-                      <li className="flex items-center space-x-2">
-                        <Icon name="calenderGarys" width={17} height={17} />
-                        <span>{item?.created_date}</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <Icon name="timegrays" width={17} height={17} />
-                        <span>{item?.created_time}</span>
-                      </li>
-                    </ul>
+                      <ul className="[&>li]:text-grays space-y-1">
+                        <li className="flex items-center space-x-2">
+                          <Icon name="calenderGarys" width={17} height={17} />
+                          <span>{item?.created_date}</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <Icon name="timegrays" width={17} height={17} />
+                          <span>{item?.created_time}</span>
+                        </li>
+                      </ul>
                     </div>
                   </TableCell>
 

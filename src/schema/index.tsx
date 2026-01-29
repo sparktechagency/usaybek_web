@@ -40,6 +40,7 @@ export const linkSchema = z.object({
   thumbnail: z.any().refine((file) => file instanceof File, {
     message: "Thumbnail is required",
   }),
+  promoted_until: z.string().optional(),
 });
 
 // loginSchema

@@ -27,8 +27,7 @@ const TextEditorPreview: React.FC<TextEditorProps> = ({ value }) => {
     "indent",
     "blockquote",
     "code-block",
-    "link",
-    "br",
+    "link"
   ];
 
   return (

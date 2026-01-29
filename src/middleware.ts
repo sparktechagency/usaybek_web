@@ -118,10 +118,13 @@ export async function middleware(request: NextRequest) {
   const isAdmin = matchRoute(adminRoutes, pathname);
 
   if (!token) {
+    cookieStore.delete(authKey);
+    cookieStore.delete(roleKey);
     if (isUser || isAdmin) {
       return NextResponse.redirect(new URL("/", request.url));
+    } else {
+      return NextResponse.next();
     }
-    return NextResponse.next();
   }
 
   if (isAuth) {
