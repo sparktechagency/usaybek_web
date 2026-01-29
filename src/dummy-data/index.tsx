@@ -1,4 +1,5 @@
 import assets from "@/assets";
+import { getDateAfterMonths } from "@/lib";
 
 //  ViewItem
 export const ViewItem = [
@@ -31,6 +32,29 @@ export const videoFilterItem = [
   {
     value: "promoted",
     label: "Promoted",
+  },
+];
+
+export const paymentDuration = [
+  {
+    label: "1 Month",
+    value: getDateAfterMonths(1),
+  },
+  {
+    label: "2 Month",
+    value: getDateAfterMonths(2),
+  },
+  {
+    label: "3 Month",
+    value: getDateAfterMonths(3),
+  },
+  {
+    label: "4 Month",
+    value: getDateAfterMonths(4),
+  },
+  {
+    label: "1 Year",  
+    value: getDateAfterMonths(12),
   },
 ];
 

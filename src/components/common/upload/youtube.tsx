@@ -16,13 +16,7 @@ import { useCategoriesQuery } from "@/redux/api/landing/videosApi";
 import ImgUpload from "@/components/reuseable/img-uplod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { linkSchema } from "@/schema";
-import {
-  delay,
-  formatDate,
-  getOneMonthAfter,
-  modifyPayloadAll,
-  reasonType,
-} from "@/lib";
+import { delay, formatDate, modifyPayloadAll, reasonType } from "@/lib";
 import { toast } from "sonner";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import FavIcon from "@/icon/admin/favIcon";
@@ -30,6 +24,7 @@ import StripePaymentWrapper from "../stripe";
 import Modal from "@/components/reuseable/modal";
 import TextEditor from "../admin/reuseable/text-editor";
 import { SingleCalendar } from "../admin/reuseable/single-date";
+import { paymentDuration } from "@/dummy-data";
 
 const intImg = {
   thumbnailPreview: "",
@@ -49,8 +44,6 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
     state: [],
     city: [],
   });
-
-  const afterMonth = getOneMonthAfter();
 
   const [isPay, setIsPay] = useState(false);
   const from = useForm({
@@ -107,7 +100,7 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
       states: stateName,
       type,
       is_promoted: paymentStatus ? 1 : 0,
-      ...(paymentStatus && { promoted_until: promoted_until || afterMonth }),
+      ...(paymentStatus && { promoted_until: promoted_until }),
     };
     console.log("Submitted values:", value);
     // try {
@@ -193,21 +186,29 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
               <span>{` Promote for ${price || 0} / Month`}</span>
             </Button>
             {isPay && (
-              <div>
-                <SingleCalendar
-                  defaultDate={afterMonth}
-                  onChange={(date: any) => {
-                    const value = formatDate(date, "YYYY-MM-DD");
-                    from.setValue("promoted_until", value);
-                  }}
-                />
-                {from?.formState?.errors?.promoted_until && (
-                  <p className="text-reds justify-end mt-1 flex items-center gap-1 text-sm">
-                    {from?.formState?.errors?.promoted_until?.message as string}
-                    <CircleAlert size={14} />
-                  </p>
-                )}
-              </div>
+              <InputSelectField
+                items={paymentDuration}
+                name="promoted_until"
+                placeholder="Select Category"
+                matching={true}
+                className="py-4"
+                itemStyle="py-2"
+              />
+              // <div>
+              //   <SingleCalendar
+              //     defaultDate={}
+              //     onChange={(date: any) => {
+              //       const value = formatDate(date, "YYYY-MM-DD");
+              //       from.setValue("promoted_until", value);
+              //     }}
+              //   />
+              //   {from?.formState?.errors?.promoted_until && (
+              //     <p className="text-reds justify-end mt-1 flex items-center gap-1 text-sm">
+              //       {from?.formState?.errors?.promoted_until?.message as string}
+              //       <CircleAlert size={14} />
+              //     </p>
+              //   )}
+              // </div>
             )}
             {!isPay && <span className="text-gray1 mt-3 ml-2">/ Optional</span>}
           </div>

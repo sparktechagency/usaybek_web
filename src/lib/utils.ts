@@ -56,9 +56,9 @@ export function IsToken() {
   return Cookies.get(authKey);
 }
 
-export const getOneMonthAfter = () => {
+export const getDateAfterMonths = (months:any) => {
   const date = new Date();
-  date.setMonth(date.getMonth() + 1); 
+  date.setMonth(date.getMonth() + months); 
   return formatDate(date, "YYYY-MM-DD");
 };
 
