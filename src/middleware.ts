@@ -68,11 +68,9 @@
 //   ],
 // };
 
-
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { authKey, roleKey } from "./lib";
-
 
 /* ---------------- ROUTES ---------------- */
 
@@ -95,24 +93,16 @@ const publicRoutes = [
   "/contract",
 ];
 
-const userRoutes = [
-  "/dashboard",
-  "/like-videos",
-  "/history",
-];
+const userRoutes = ["/dashboard", "/like-videos", "/history"];
 
-const adminRoutes = [
-  "/admin",
-];
+const adminRoutes = ["/admin"];
 
 /* ---------------- HELPERS ---------------- */
 
 const matchRoute = (routes: string[], pathname: string) =>
   routes.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`)
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
-
-/* ---------------- MIDDLEWARE ---------------- */
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -121,12 +111,12 @@ export async function middleware(request: NextRequest) {
   const token = cookieStore.get(authKey)?.value;
   const role = cookieStore.get(roleKey)?.value;
 
+  // == route matching ==
   const isAuth = matchRoute(authRoutes, pathname);
   const isPublic = matchRoute(publicRoutes, pathname);
   const isUser = matchRoute(userRoutes, pathname);
   const isAdmin = matchRoute(adminRoutes, pathname);
 
-  /* ---------- NOT LOGGED IN ---------- */
   if (!token) {
     if (isUser || isAdmin) {
       return NextResponse.redirect(new URL("/", request.url));
@@ -134,37 +124,30 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  /* ---------- LOGGED IN ---------- */
-
-  // prevent visiting auth pages after login
   if (isAuth) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  /* ---------- USER ROLE ---------- */
   if (role === "USER") {
     if (isAdmin) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
     return NextResponse.next();
   }
 
-  /* ---------- ADMIN ROLE ---------- */
   if (role === "ADMIN") {
+    if (isPublic) {
+      return NextResponse.redirect(new URL("/admin", request.url));
+    }
     if (isUser) {
       return NextResponse.redirect(new URL("/admin", request.url));
     }
     return NextResponse.next();
   }
 
-  /* ---------- FALLBACK ---------- */
   return NextResponse.redirect(new URL("/sign-in", request.url));
 }
 
-/* ---------------- MATCHER ---------------- */
-
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
