@@ -1,6 +1,6 @@
 import { tagTypes } from "@/redux/tag-types";
 import { baseApi } from "../baseApi";
-import { buildResponse } from "@/lib";
+
 
 export const categoryApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -12,15 +12,28 @@ export const categoryApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.categoriesAdmin],
       transformResponse: (res: any) => {
-        return buildResponse(res?.data);
+        const { current_page, per_page, total, data } = res?.data;
+        const categories = data || [];
+        const sortedCategories = categories?.sort((a: any, b: any) =>
+          a?.name?.localeCompare(b?.name, undefined, { sensitivity: "base" }),
+        );
+        return {
+          data: sortedCategories,
+          meta: {
+            current_page,
+            per_page,
+            total,
+          },
+        };
       },
     }),
+
     singleCategory: build.query({
       query: (id) => ({
         url: `/categories/${id}`,
         method: "GET",
       }),
-      providesTags: [tagTypes.singleCategory]
+      providesTags: [tagTypes.singleCategory],
     }),
     storeCategory: build.mutation({
       query: (data) => ({
@@ -55,5 +68,5 @@ export const {
   useStoreCategoryMutation,
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,
-  useSingleCategoryQuery
+  useSingleCategoryQuery,
 } = categoryApi;

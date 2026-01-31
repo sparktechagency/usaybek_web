@@ -57,11 +57,7 @@ function FilterBox({ isCategory, setIsCategory }: CategoryFiltersProps) {
     }
   };
 
-  const mapData = Array.isArray(categories?.data)
-    ? [...categories?.data].sort((a: any, b: any) =>
-        a?.name?.toLowerCase()?.localeCompare(b?.name?.toLowerCase())
-      )
-    : [];
+ 
 
 
   return (
@@ -103,7 +99,7 @@ function FilterBox({ isCategory, setIsCategory }: CategoryFiltersProps) {
             >
               All
             </Button>
-            {mapData?.map(({ id, name }: any) => (
+            {categories?.data?.map(({ id, name }: any) => (
               <Button
                 key={id}
                 onClick={() => setIsCategory({ id, name })}
