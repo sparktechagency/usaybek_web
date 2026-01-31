@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useStripe, useElements, PaymentElement, Elements } from "@stripe/react-stripe-js";
+import {
+  useStripe,
+  useElements,
+  PaymentElement,
+  Elements,
+} from "@stripe/react-stripe-js";
 import { toast } from "sonner";
 import { modifyPayload } from "@/lib";
 import {
@@ -53,7 +58,7 @@ export const usePayment = (paymentInfo: any) => {
         setLoading(false);
         return;
       }
-      console.log(paymentIntent)
+      console.log(paymentIntent);
 
       // Payment succeeded
       if (paymentIntent?.status === "succeeded") {
@@ -62,17 +67,23 @@ export const usePayment = (paymentInfo: any) => {
           payment_intent_id: paymentIntent.id,
           user_id: paymentInfo.user_id,
           reason: paymentInfo.reason,
+          ...(paymentInfo.promoted_until && {
+            promoted_until: paymentInfo.promoted_until,
+          }),
+          ...(paymentInfo.video_id && { video_id: paymentInfo.video_id }),
         };
 
-       const res= await successPayment(modifyPayload(paymentSuccessPayload)).unwrap();
+        const res = await successPayment(
+          modifyPayload(paymentSuccessPayload),
+        ).unwrap();
 
-       if(res.status){
-        toast.success("Payment Successful!", {
-          description: "Your payment has been processed.",
-        });
+        if (res.status) {
+          toast.success("Payment Successful!", {
+            description: "Your payment has been processed.",
+          });
 
-        setIsPaymentSuccessful(true);
-       }
+          setIsPaymentSuccessful(true);
+        }
       }
     } catch (err) {
       setErrorMessage("Payment failed. Try again.");
@@ -84,16 +95,15 @@ export const usePayment = (paymentInfo: any) => {
   return { loading, errorMessage, isPaymentSuccessful, handleSubmit };
 };
 
-// ---------------------------
-// StripeBox Component
-// ---------------------------
+// -------- StripeBox Component ----------
 interface StripeBoxProps {
   paymentInfo: any;
   onSuccess: () => void;
 }
 
 const StripeBox: React.FC<StripeBoxProps> = ({ paymentInfo, onSuccess }) => {
-  const { loading, errorMessage, isPaymentSuccessful, handleSubmit } = usePayment(paymentInfo);
+  const { loading, errorMessage, isPaymentSuccessful, handleSubmit } =
+    usePayment(paymentInfo);
 
   useEffect(() => {
     if (isPaymentSuccessful) {
@@ -114,42 +124,62 @@ const StripeBox: React.FC<StripeBoxProps> = ({ paymentInfo, onSuccess }) => {
         {loading ? "Processing..." : "Pay"}
       </Button>
 
-      {errorMessage && <p className="text-red-500 text-center mt-3">{errorMessage}</p>}
+      {errorMessage && (
+        <p className="text-red-500 text-center mt-3">{errorMessage}</p>
+      )}
     </form>
   );
 };
 
-// ---------------------------
-// StripePaymentWrapper Component
-// ---------------------------
+//  -------------------- StripePayment Wrapper -------------------
+// node: promoted_until , video_id added new value
+//  ---------------------- X --------------------------------
 interface StripePaymentWrapperProps {
   amount: number;
   reason: string;
   onSuccess: () => void;
+  promoted_until?: string;
+  video_id?: string;
 }
 
-const StripePaymentWrapper: React.FC<StripePaymentWrapperProps> = ({ amount, reason, onSuccess }) => {
+const StripePaymentWrapper: React.FC<StripePaymentWrapperProps> = ({
+  amount,
+  reason,
+  promoted_until,
+  video_id,
+  onSuccess,
+}) => {
   const [paymentInfo, setPaymentInfo] = useState<any>(null);
   const { data: profile } = useGetProfileQuery({});
   const { id: user_id } = profile?.data || {};
 
   const [storePayment] = useStorePaymentMutation();
 
-  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_CLIENT_KEY as string);
+  const stripePromise = loadStripe(
+    process.env.NEXT_PUBLIC_STRIPE_CLIENT_KEY as string,
+  );
+
+  console.log(paymentInfo);
 
   // STEP 1: Create PaymentIntent on mount
   useEffect(() => {
     const initializePayment = async () => {
       try {
-        const payload = modifyPayload({ amount, payment_method: "pm_card_visa", reason });
-        const res = await storePayment(payload).unwrap();
-      
-        setPaymentInfo({
+        const payload = modifyPayload({
+          amount,
+          payment_method: "pm_card_visa",
           reason,
+        });
+        const res = await storePayment(payload).unwrap();
+
+        setPaymentInfo({
+          reason: res?.data?.metadata?.service_name,
           amount: res?.data?.amount,
           payment_intent_id: res?.data?.id,
           user_id,
           client_secret: res?.data?.client_secret,
+          ...(promoted_until && { promoted_until }),
+          ...(video_id && { video_id }),
         });
       } catch (err) {
         console.error("Unable to initialize payment", err);
@@ -162,7 +192,10 @@ const StripePaymentWrapper: React.FC<StripePaymentWrapperProps> = ({ amount, rea
   if (!paymentInfo?.client_secret) return <p>Loading payment...</p>;
 
   return (
-    <Elements stripe={stripePromise} options={{ clientSecret: paymentInfo.client_secret }}>
+    <Elements
+      stripe={stripePromise}
+      options={{ clientSecret: paymentInfo.client_secret }}
+    >
       <StripeBox paymentInfo={paymentInfo} onSuccess={onSuccess} />
     </Elements>
   );

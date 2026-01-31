@@ -17,7 +17,7 @@ import VideoUpload from "@/components/reuseable/video-uplod";
 import { useGetCitiesQuery, useGetStatesQuery } from "@/redux/api/commonApi";
 import { useStoreVideosMutation } from "@/redux/api/dashboard/videosApi";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
-import { delay, getDateAfterMonths, modifyPayloadAll, reasonType } from "@/lib";
+import {getDateAfterMonths, modifyPayloadAll, reasonType } from "@/lib";
 import Modal from "@/components/reuseable/modal";
 import StripePaymentWrapper from "../stripe";
 import TextEditor from "../admin/reuseable/text-editor";
@@ -123,7 +123,6 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
         toast.success("Uploaded Successful", {
           description: "Your video has been uploaded successfully",
         });
-        await delay();
         setIsUpload(false);
         from.reset();
         setIsImg(intImg);
@@ -225,8 +224,9 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
               >
                 <Icon name="promoted" width={20} />
                 <span>
-                  {` Promote for $${isPay ? price * paymentCount || 0 : price || 0}`}
-                  {!isPay && " / Month"}
+                  {isPay
+                    ? `Promote at $${price * paymentCount || 0}`
+                    : `Promote for $${price || 0} /Month`}
                 </span>
               </Button>
               {isPay && (
@@ -425,7 +425,7 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
       >
         {price && (
           <StripePaymentWrapper
-            amount={price}
+           amount={price * paymentCount}
             reason={reasonType.uploading_video}
             onSuccess={handlePaymentSuccess}
           />

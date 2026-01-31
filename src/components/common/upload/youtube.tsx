@@ -122,7 +122,6 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
         });
         setIsUpload(false);
       }
-      await delay();
       from.reset();
       setIsImg(intImg);
     } catch (err: any) {
@@ -194,8 +193,9 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
               >
                 <Icon name="promoted" width={20} />
                 <span>
-                  {` Promote for $${isPay ? price * paymentCount || 0 : price || 0}`}
-                  {!isPay && " / Month"}
+                  {isPay
+                    ? `Promote at $${price * paymentCount || 0}`
+                    : `Promote for $${price || 0} /Month`}
                 </span>
               </Button>
               {isPay && (

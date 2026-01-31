@@ -79,5 +79,5 @@ export const {
   useVideoEditMutation,
   useVideoAnalyticsQuery,
   useStoreVideosMutation,
-  useLazyTogglePromotedQuery
+  useLazyTogglePromotedQuery,
 } = usersVideosApi;

@@ -28,13 +28,17 @@ import SkeletonCount from "@/components/reuseable/skeleton-item/count";
 import { TableNoItem } from "@/components/common/admin/reuseable/table-no-item";
 import { useDebounce } from "use-debounce";
 import FavIcon from "@/icon/admin/favIcon";
-import { modifyPayloadBulk } from "@/lib";
+import { getDateAfterMonths, modifyPayloadBulk } from "@/lib";
 import Icon from "@/icon";
 import Link from "next/link";
-import { videoFilterItem } from "@/dummy-data";
+import { paymentDuration, videoFilterItem } from "@/dummy-data";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import { InputMoneyDuration } from "@/components/reuseable/from-money-time";
+import { FieldValues, useForm } from "react-hook-form";
+import Form from "@/components/reuseable/from";
+import { useGetPriceQuery } from "@/redux/api/admin/pricingApi";
 
 export default function MyVideos() {
   const { confirm } = useConfirmation();
@@ -44,6 +48,9 @@ export default function MyVideos() {
   const [isUpload, setIsUpload] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
   const [isPage, setIsPage] = useState<number>();
+  const [isPromated, setIsPromated] = useState(false);
+  const [paymentCount, setPaymentCount] = useState(1);
+  const [isPay, setIsPay] = useState(false);
   const query: Record<string, any> = {
     page: isPage,
     ...(value && { search: value }),
@@ -58,7 +65,12 @@ export default function MyVideos() {
   const [bulkDelete] = useBulkDeleteMutation();
   const [singleDelete] = useSingleDeleteMutation();
   const [togglePromoted] = useLazyTogglePromotedQuery();
+  const { data } = useGetPriceQuery({});
 
+  console.log(data?.uploading_video);
+  console.log(data?.uploading_youTube_link);
+
+  //  == handleSelect ==
   const handleSelect = (id: string, checked: boolean) => {
     if (checked) {
       setSelectedVideoIds((prevIds) => [...prevIds, id]);
@@ -112,11 +124,22 @@ export default function MyVideos() {
         });
       }
     } catch (err: any) {
-      toast.error("Promotion Failed", {
-        description: err?.data?.message,
-        position: "bottom-right",
-      });
+      if (err?.data?.action === "payment") {
+        setIsPromated(true);
+      }
     }
+  };
+
+  //  payment form
+  const from = useForm({
+    defaultValues: {
+      video_id: "",
+      promoted_until: getDateAfterMonths(1),
+    },
+  });
+
+  const handleSubmit = async (values: FieldValues) => {
+    console.log(values);
   };
 
   return (
@@ -375,6 +398,72 @@ export default function MyVideos() {
         className="sm:max-w-4xl"
       >
         <TabList setIsUpload={setIsUpload} />
+      </Modal>
+      {/*   is promoted Modal */}
+      <Modal
+        open={isPromated}
+        setIsOpen={setIsPromated}
+        title={isPay ? "Pay to MyTSV" : "Promotion failed"}
+      >
+        <FavIcon
+          name="rocket"
+          color="#EF4444"
+          className="size-20 mx-auto my-2"
+        />
+        <ul>
+          <li className="text-xl font-semibold text-center">Promote Video</li>
+          <li className="text-center px-20">
+            {" "}
+            Please make the payment for promoting your video
+          </li>
+        </ul>
+        <div className="my-5">
+          <Form from={from} onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_150px] gap-5">
+              <InputMoneyDuration
+                items={paymentDuration}
+                name="promoted_until"
+                placeholder="Select Duration"
+                matching={true}
+                className="py-5 w-full"
+                itemStyle="py-2"
+                onChangeCount={(count) => {
+                  setPaymentCount(count);
+                }}
+              />
+              <div className="border w-full text-lg font-bold text-center py-1  flex items-center justify-center rounded-full">
+                $100
+              </div>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-3">
+              <Button className="bg-[#F0F0F0] hover:bg-[#F0F0F0] text-black w-full rounded-full h-11">
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                className="rounded-full px-2 h-11 w-full"
+              >
+                Pay now
+              </Button>
+            </div>
+          </Form>
+          {/* <div>
+            <div>
+              <InputMoneyDuration
+                items={paymentDuration}
+                name="promoted_until"
+                placeholder="Select Duration"
+                matching={true}
+                className="py-4"
+                itemStyle="py-2"
+                onChangeCount={(count) => {
+                  setPaymentCount(count);
+                }}
+              />
+            </div>
+            <div></div>
+          </div> */}
+        </div>
       </Modal>
     </div>
   );
