@@ -4,6 +4,7 @@ import { buildResponse } from "@/lib";
 import { Args } from "@/types";
 
 export const videosApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (build) => ({
     HomeVideos: build.query({
       query: (arg: Record<string, any>) => ({
@@ -27,8 +28,13 @@ export const videosApi = baseApi.injectEndpoints({
       }),
       providesTags: [tagTypes.categories],
       transformResponse: (response: any) => {
+        const categories = response?.data?.data || [];
+        const sortedCategories = categories?.sort((a: any, b: any) =>
+          a?.name?.localeCompare(b?.name, undefined, { sensitivity: "base" }),
+        );
+
         return {
-          data: response.data.data,
+          data: sortedCategories,
         };
       },
     }),
@@ -47,7 +53,7 @@ export const videosApi = baseApi.injectEndpoints({
         url: `/videos/${id}`,
         method: "GET",
       }),
-      providesTags: [tagTypes.sinlgeVideo]
+      providesTags: [tagTypes.sinlgeVideo],
     }),
     RelatedVideos: build.query({
       query: ({ id, arg }: Args) => ({
@@ -124,5 +130,5 @@ export const {
   useGetLinkeVideosQuery,
   useRemoveLikeMutation,
   useChannelLandDetailsQuery,
-  useVideosDetailsTwoQuery
+  useVideosDetailsTwoQuery,
 } = videosApi;
