@@ -25,6 +25,7 @@ export const uploadVideo = z.object({
   thumbnail: z.any().refine((file) => file instanceof File, {
     message: "Thumbnail is required",
   }),
+  promoted_until: z.string().optional(),
 });
 
 // linkSchema
@@ -78,7 +79,6 @@ export const SignUpSchema = loginSchema
     message: "Passwords must be match.",
   });
 
-
 export const onSideSchema = z
   .object({
     representative_secret_key: z.string().nonempty("Secret Key is required"),
@@ -110,11 +110,8 @@ export const passwordChangeSchema = z
     message: "Passwords must be match.",
   });
 
-
-
-
-  // forgot password
-  export const passwordSchema11 = z
+// forgot password
+export const passwordSchema11 = z
   .object({
     password: z.string().nonempty("Password is required"),
     c_password: z.string().nonempty("Confirm Password is required"),
@@ -124,9 +121,8 @@ export const passwordChangeSchema = z
     message: "Passwords must be match.",
   });
 
-
 // blogSchema
-  export const blogSchema = z.object({
+export const blogSchema = z.object({
   title: z.string().nonempty("Title is required"),
   description: z.string().nonempty("Description is required"),
   image: z.any().refine((file) => file instanceof File, {

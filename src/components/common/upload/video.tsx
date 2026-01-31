@@ -17,13 +17,15 @@ import VideoUpload from "@/components/reuseable/video-uplod";
 import { useGetCitiesQuery, useGetStatesQuery } from "@/redux/api/commonApi";
 import { useStoreVideosMutation } from "@/redux/api/dashboard/videosApi";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
-import { delay, modifyPayloadAll, reasonType } from "@/lib";
+import { delay, getDateAfterMonths, modifyPayloadAll, reasonType } from "@/lib";
 import Modal from "@/components/reuseable/modal";
 import StripePaymentWrapper from "../stripe";
 import TextEditor from "../admin/reuseable/text-editor";
 import FavIcon from "@/icon/admin/favIcon";
 import { toast } from "sonner";
 import Icon from "@/icon";
+import { InputMoneyDuration } from "@/components/reuseable/from-money-time";
+import { paymentDuration } from "@/dummy-data";
 
 // local preview state
 const intImg = {
@@ -32,12 +34,13 @@ const intImg = {
 };
 
 export default function UploadVideo({ type, price, setIsUpload }: any) {
-  const [isColor, setIsColor] = useState(false);
   const [isPay, setIsPay] = useState(false);
   const [isPayment, setIsPayment] = useState(false);
   const [progress, setProgress] = useState<number>();
   const { data: states } = useGetStatesQuery({});
   const [isImg, setIsImg] = useState<any>(intImg);
+  const [paymentStatus, setIsPaymentStatus] = useState(false);
+  const [paymentCount, setPaymentCount] = useState(1);
   const [storeVideos, { isLoading }] = useStoreVideosMutation();
   const { data: categories } = useCategoriesQuery({
     per_page: 1000,
@@ -59,6 +62,7 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
       description: "",
       video: null,
       thumbnail: null,
+      promoted_until: getDateAfterMonths(1),
     },
   });
 
@@ -93,13 +97,15 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
   }, [states]);
 
   const handleSubmit = async (values: FieldValues) => {
-    const { states, ...rest } = values;
+    const { states, promoted_until, ...rest } = values;
     const value = {
       ...rest,
       states: stateName,
       type,
-      is_promoted: isColor ? 1 : 0,
+      is_promoted: paymentStatus ? 1 : 0,
+      ...(paymentStatus && { promoted_until: promoted_until }),
     };
+
     try {
       const data = modifyPayloadAll(value);
       const res = await storeVideos({
@@ -107,7 +113,7 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
         onUploadProgress: (progressEvent: ProgressEvent) => {
           if (progressEvent.total) {
             const progress = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
+              (progressEvent.loaded * 100) / progressEvent.total,
             );
             setProgress(progress);
           }
@@ -131,7 +137,7 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
   const handlePaymentSuccess = () => {
     setIsPayment(false);
     setIsPay(false);
-    setIsColor(true);
+    setIsPaymentStatus(true);
   };
 
   return (
@@ -198,17 +204,17 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
           </VideoUpload>
 
           {/* Promoted Button */}
-          {isColor ? (
+          {paymentStatus ? (
             <Button
               variant="primary"
               type="button"
-              className="rounded-full cursor-default text-white font-normal text-base"
+              className={`rounded-full cursor-default font-normal text-base`}
             >
               <Icon name="promoted" width={20} />
-              <span>{` Promote for ${price || 0} / Month`}</span>
+              <span>Promoted</span>
             </Button>
           ) : (
-            <div>
+            <div className={`flex items-center ${isPay && "gap-2"}`}>
               <Button
                 variant="primary"
                 onClick={() => setIsPay(!isPay)}
@@ -218,9 +224,27 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
                 } font-normal text-base`}
               >
                 <Icon name="promoted" width={20} />
-                <span>{` Promote for ${price || 0} / Month`}</span>
+                <span>
+                  {` Promote for $${isPay ? price * paymentCount || 0 : price || 0}`}
+                  {!isPay && " / Month"}
+                </span>
               </Button>
-              {!isPay && <span className="text-gray1 ml-3">/ Optional</span>}
+              {isPay && (
+                <InputMoneyDuration
+                  items={paymentDuration}
+                  name="promoted_until"
+                  placeholder="Select Duration"
+                  matching={true}
+                  className="py-4"
+                  itemStyle="py-2"
+                  onChangeCount={(count) => {
+                    setPaymentCount(count);
+                  }}
+                />
+              )}
+              {!isPay && (
+                <span className="text-gray1 mt-3 ml-2">/ Optional</span>
+              )}
             </div>
           )}
         </div>
@@ -376,7 +400,7 @@ export default function UploadVideo({ type, price, setIsUpload }: any) {
                   After payment you will be returned here immediately.
                 </h1>
                 <Button type="button" variant="outline">
-                  ${price || 0}
+                  ${price * paymentCount || 0}
                 </Button>
                 <Button
                   type="button"

@@ -143,7 +143,7 @@ const StripePaymentWrapper: React.FC<StripePaymentWrapperProps> = ({ amount, rea
       try {
         const payload = modifyPayload({ amount, payment_method: "pm_card_visa", reason });
         const res = await storePayment(payload).unwrap();
-
+      
         setPaymentInfo({
           reason,
           amount: res?.data?.amount,

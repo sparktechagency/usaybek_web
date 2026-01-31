@@ -38,22 +38,27 @@ export const videoFilterItem = [
 export const paymentDuration = [
   {
     label: "1 Month",
+    count: 1,
     value: getDateAfterMonths(1),
   },
   {
     label: "2 Month",
+    count:2,
     value: getDateAfterMonths(2),
   },
   {
     label: "3 Month",
+    count:3,
     value: getDateAfterMonths(3),
   },
   {
     label: "4 Month",
+    count:4,
     value: getDateAfterMonths(4),
   },
   {
     label: "1 Year",  
+    count:12,
     value: getDateAfterMonths(12),
   },
 ];

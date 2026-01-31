@@ -36,7 +36,6 @@ export function InputSelectField({
   const { control } = useFormContext()
 
  
-
   const selectedLabel = (value: string) => {
     const item = items?.find((item) => item.value === value)
     return item?.label || ""

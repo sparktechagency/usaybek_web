@@ -16,15 +16,15 @@ import { useCategoriesQuery } from "@/redux/api/landing/videosApi";
 import ImgUpload from "@/components/reuseable/img-uplod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { linkSchema } from "@/schema";
-import { delay, formatDate, modifyPayloadAll, reasonType } from "@/lib";
+import { delay, getDateAfterMonths, modifyPayloadAll, reasonType } from "@/lib";
 import { toast } from "sonner";
 import { ResponseApiErrors } from "@/helpers/error/ApiResponseError";
 import FavIcon from "@/icon/admin/favIcon";
 import StripePaymentWrapper from "../stripe";
 import Modal from "@/components/reuseable/modal";
 import TextEditor from "../admin/reuseable/text-editor";
-import { SingleCalendar } from "../admin/reuseable/single-date";
 import { paymentDuration } from "@/dummy-data";
+import { InputMoneyDuration } from "@/components/reuseable/from-money-time";
 
 const intImg = {
   thumbnailPreview: "",
@@ -37,6 +37,8 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
   const [isImg, setIsImg] = useState<any>(intImg);
   const [storeVideos, { isLoading }] = useStoreVideosMutation();
   const [paymentStatus, setIsPaymentStatus] = useState(false);
+  const [paymentCount, setPaymentCount] = useState(1);
+  const [isPay, setIsPay] = useState(false);
   const { data: categories } = useCategoriesQuery({
     per_page: 1000,
   });
@@ -45,7 +47,6 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
     city: [],
   });
 
-  const [isPay, setIsPay] = useState(false);
   const from = useForm({
     resolver: zodResolver(linkSchema),
     defaultValues: {
@@ -58,7 +59,7 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
       tags: [],
       description: "",
       thumbnail: null,
-      promoted_until: "",
+      promoted_until: getDateAfterMonths(1),
     },
   });
 
@@ -102,32 +103,31 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
       is_promoted: paymentStatus ? 1 : 0,
       ...(paymentStatus && { promoted_until: promoted_until }),
     };
-    console.log("Submitted values:", value);
-    // try {
-    //   const data = modifyPayloadAll(value);
-    //   const res = await storeVideos({
-    //     data,
-    //     onUploadProgress: (progressEvent: ProgressEvent) => {
-    //       if (progressEvent.total) {
-    //         const progress = Math.round(
-    //           (progressEvent.loaded * 100) / progressEvent.total,
-    //         );
-    //         setProgress(progress);
-    //       }
-    //     },
-    //   }).unwrap();
-    //   if (res.status) {
-    //     toast.success("Uploaded Successful", {
-    //       description: "Your video has been uploaded successfully",
-    //     });
-    //     setIsUpload(false);
-    //   }
-    //   await delay();
-    //   from.reset();
-    //   setIsImg(intImg);
-    // } catch (err: any) {
-    //   ResponseApiErrors(err?.data, from);
-    // }
+    try {
+      const data = modifyPayloadAll(value);
+      const res = await storeVideos({
+        data,
+        onUploadProgress: (progressEvent: ProgressEvent) => {
+          if (progressEvent.total) {
+            const progress = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total,
+            );
+            setProgress(progress);
+          }
+        },
+      }).unwrap();
+      if (res.status) {
+        toast.success("Uploaded Successful", {
+          description: "Your video has been uploaded successfully",
+        });
+        setIsUpload(false);
+      }
+      await delay();
+      from.reset();
+      setIsImg(intImg);
+    } catch (err: any) {
+      ResponseApiErrors(err?.data, from);
+    }
   };
 
   // handlePaymentSuccess
@@ -173,45 +173,49 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
             itemStyle="py-2"
           />
           {/* Promoted Button */}
-          <div className={`flex items-center ${isPay && "gap-2"}`}>
+          {paymentStatus ? (
             <Button
               variant="primary"
-              onClick={() => setIsPay(!isPay)}
               type="button"
-              className={`rounded-full ${
-                !isPay && "bg-[#EFEFEF] text-blacks"
-              } font-normal text-base`}
+              className={`rounded-full cursor-default font-normal text-base`}
             >
               <Icon name="promoted" width={20} />
-              <span>{` Promote for ${price || 0} / Month`}</span>
+              <span>Promoted</span>
             </Button>
-            {isPay && (
-              <InputSelectField
-                items={paymentDuration}
-                name="promoted_until"
-                placeholder="Select Category"
-                matching={true}
-                className="py-4"
-                itemStyle="py-2"
-              />
-              // <div>
-              //   <SingleCalendar
-              //     defaultDate={}
-              //     onChange={(date: any) => {
-              //       const value = formatDate(date, "YYYY-MM-DD");
-              //       from.setValue("promoted_until", value);
-              //     }}
-              //   />
-              //   {from?.formState?.errors?.promoted_until && (
-              //     <p className="text-reds justify-end mt-1 flex items-center gap-1 text-sm">
-              //       {from?.formState?.errors?.promoted_until?.message as string}
-              //       <CircleAlert size={14} />
-              //     </p>
-              //   )}
-              // </div>
-            )}
-            {!isPay && <span className="text-gray1 mt-3 ml-2">/ Optional</span>}
-          </div>
+          ) : (
+            <div className={`flex items-center ${isPay && "gap-2"}`}>
+              <Button
+                variant="primary"
+                onClick={() => setIsPay(!isPay)}
+                type="button"
+                className={`rounded-full ${
+                  !isPay && "bg-[#EFEFEF] text-blacks"
+                } font-normal text-base`}
+              >
+                <Icon name="promoted" width={20} />
+                <span>
+                  {` Promote for $${isPay ? price * paymentCount || 0 : price || 0}`}
+                  {!isPay && " / Month"}
+                </span>
+              </Button>
+              {isPay && (
+                <InputMoneyDuration
+                  items={paymentDuration}
+                  name="promoted_until"
+                  placeholder="Select Duration"
+                  matching={true}
+                  className="py-4"
+                  itemStyle="py-2"
+                  onChangeCount={(count) => {
+                    setPaymentCount(count);
+                  }}
+                />
+              )}
+              {!isPay && (
+                <span className="text-gray1 mt-3 ml-2">/ Optional</span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Right Column */}
@@ -341,7 +345,7 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
                   After payment you will be returned here immediately.
                 </h1>
                 <Button type="button" variant="outline">
-                  ${price || 0}
+                  ${price * paymentCount || 0}
                 </Button>
                 <Button
                   type="button"
@@ -366,7 +370,7 @@ export default function YoutubeLink({ type, setIsUpload, price }: any) {
       >
         {price && (
           <StripePaymentWrapper
-            amount={price}
+            amount={price * paymentCount}
             reason={reasonType.youTube_link}
             onSuccess={handlePaymentSuccess}
           />
